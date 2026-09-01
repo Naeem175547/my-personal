@@ -3550,3 +3550,90 @@ export class AppController {
     return this.appService.updateProduct(id, price);
   }
 }
+
+--->
+rate limiting
+redis service:
+import {Injectable,OnModuleInit} from '@nestjs/common';
+import {RedisClientType, createClient} from 'redis';
+@Injectable()
+export class RedisService implements OnModuleInit {
+  private client: RedisClientType;
+  constructor() {
+    this.client = createClient({
+        url: 'redis://localhost:6379',
+    });
+  }
+
+  async onModuleInit() {
+    await this.client.connect();
+    console.log('Redis client connected');
+  }
+
+
+  gurads:
+  import {Injectable, CanActivate, ExecutionContext, BadRequestException} from '@nestjs/common';
+import { RedisService } from '../redis/redis.service';
+
+@Injectable()
+export class RateLimitGuard implements CanActivate {
+  constructor(private readonly redisService: RedisService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const ip = request.ip || 'unknown';
+    const key = `rate_limit:${ip}`;
+    const currentRequests = await this.redisService.client.incr(key);
+    
+    if (currentRequests === 1) {
+      await this.redisService.client.expire(key, 60);
+    }
+    
+    if (currentRequests > 5) {
+      throw new BadRequestException('Too many requests please try after some time');
+    }
+
+    return true;
+  }
+}
+
+}
+note->
+First Request:
+
+Key rate_limit:192.168.1.1 doesn't exist
+incr initializes it to 0, then increments to 1
+currentRequests = 1
+Then it sets expiration: expire(key, 60) → expires after 60 seconds
+
+second request:
+Key exists with value 1
+incr increments to 2
+currentRequests = 2
+No expiration set (already has 60s TTL)
+Continues until...
+
+6th Request:
+Value becomes 6
+currentRequests > 5 → ❌ Throws "Too many requests"
+How the TTL works:
+
+After 60 seconds expire, Redis auto-deletes the key
+Next request starts fresh at 1 again
+User can make 5 requests per 60-second window
+
+note->redis , RabbitMQ,email ,otp make seprate service for these and call from where you want to use
+
+Key exists with value 1
+incr increments to 2
+currentRequests = 2
+No expiration set (already has 60s TTL)
+Continues until...
+
+6th Request:
+Value becomes 6
+currentRequests > 5 → ❌ Throws "Too many requests"
+How the TTL works:
+
+After 60 seconds expire, Redis auto-deletes the key
+Next request starts fresh at 1 again
+User can make 5 requests per 60-second window

@@ -4,51 +4,61 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateUserInput } from './dto/create-user.input.js';
 import { UpdateUserInput } from './dto/update-user.input.js';
-import { UserRepository } from './user.repository.js';
+import { UserEntity } from './entities/user.entity.js';
 
 @Injectable()
 export class UserService {
   constructor(
-    private readonly userRepository: UserRepository,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
   ) {}
 
   // CREATE
   async create(createUserInput: CreateUserInput) {
-    const existingEmail = await this.userRepository.findByEmail(
-      createUserInput.email,
-    );
+    // Check email
+    const existingEmail = await this.userRepo.findOne({
+      where: {
+        email: createUserInput.email,
+      },
+    });
 
     if (existingEmail) {
-      throw new ConflictException(
-        'Email already exists',
-      );
+      throw new ConflictException('Email already exists');
     }
 
-    const existingUsername =
-      await this.userRepository.findByUsername(
-        createUserInput.username,
-      );
+    // Check username
+    const existingUsername = await this.userRepo.findOne({
+      where: {
+        username: createUserInput.username,
+      },
+    });
 
     if (existingUsername) {
-      throw new ConflictException(
-        'Username already exists',
-      );
+      throw new ConflictException('Username already exists');
     }
 
-    return this.userRepository.create(createUserInput);
+    // Create entity
+    const user = this.userRepo.create(createUserInput);
+
+    // Save to database
+    return await this.userRepo.save(user);
   }
 
   // FIND ALL
   async findAll() {
-    return this.userRepository.findAll();
+    return await this.userRepo.find();
   }
 
   // FIND ONE
   async findOne(id: number) {
-    const user = await this.userRepository.findOne(id);
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -62,30 +72,73 @@ export class UserService {
     id: number,
     updateUserInput: UpdateUserInput,
   ) {
-    const user = await this.userRepository.findOne(id);
+    // Check user exists
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    await this.userRepository.update(
-      id,
+    // Check email if email is being updated
+    if (updateUserInput.email) {
+      const existingEmail = await this.userRepo.findOne({
+        where: {
+          email: updateUserInput.email,
+        },
+      });
+
+      if (existingEmail && existingEmail.id !== id) {
+        throw new ConflictException('Email already exists');
+      }
+    }
+
+    // Check username if username is being updated
+    if (updateUserInput.username) {
+      const existingUsername = await this.userRepo.findOne({
+        where: {
+          username: updateUserInput.username,
+        },
+      });
+
+      if (
+        existingUsername &&
+        existingUsername.id !== id
+      ) {
+        throw new ConflictException(
+          'Username already exists',
+        );
+      }
+    }
+
+    // Update
+    await this.userRepo.update(
+      { id },
       updateUserInput,
     );
 
-    return this.userRepository.findOne(id);
+    // Return updated user
+    return await this.userRepo.findOne({
+      where: { id },
+    });
   }
 
   // DELETE
   async remove(id: number) {
-    const user = await this.userRepository.findOne(id);
+    // Check user exists
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
 
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    await this.userRepository.delete(id);
+    // Delete
+    await this.userRepo.delete({ id });
 
+    // Return deleted user
     return user;
   }
 }

@@ -14,6 +14,7 @@ export class CreateUserInput {
   @IsNotEmpty()
   email: string;
 
+
   @Field()
   @IsString()
   @IsNotEmpty()
@@ -21,6 +22,7 @@ export class CreateUserInput {
     message: 'Username must contain only letters and numbers',
   })
   username: string;
+  
 
   @Field()
   @IsString()
