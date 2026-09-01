@@ -1,0 +1,20 @@
+:root {
+  --app-bg: #4f8784;
+  --app-dark-teal: #2a4d4c;
+  --app-yellow: #ffd700;
+  --app-white: #ffffff;
+  --app-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  --app-radius: 30px;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--app-bg);
+  color: var(--app-white);
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}

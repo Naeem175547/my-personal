@@ -1,0 +1,115 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Like {
+  userId: Int!
+  postId: Int!
+}
+
+type Post {
+  id: Int!
+  title: String!
+  content: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: Int!
+  likes: [Like!]!
+  user: User!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PostsResponse {
+  posts: [Post!]!
+  currentPage: Int!
+  totalPages: Int!
+  totalPosts: Int!
+}
+
+type User {
+  id: Int!
+  name: String!
+  username: String!
+  email: String!
+  role: String!
+  key: String
+  posts: [Post!]!
+}
+
+type LoginResponse {
+  accessToken: String!
+  id: Float!
+}
+
+type FileUrlResponse {
+  url: String!
+}
+
+type Query {
+  me: User!
+  users: [User!]!
+  userById(id: Float!): User
+  userByUserName(username: String!): User
+  posts(page: Int, limit: Int): PostsResponse!
+  post(id: Int!): Post
+  getLikes: [Like!]!
+}
+
+type Mutation {
+  login(username: String!, password: String!): LoginResponse!
+  registerUser(input: UserCreateInput!): Boolean!
+  updateUser(id: Int!, input: UserUpdateInput!): Boolean!
+  deleteUser(id: Int!): Boolean!
+  createPost(userId: Int!, createPostInput: CreatePostInput!): Boolean!
+  updatePostAdmin(id: Int!, updatePostInput: UpdatePostInput!): Boolean!
+  updatePostUser(userId: Int!, id: Int!, updatePostInput: UpdatePostInput!): Boolean!
+  removePostAdmin(id: Int!): Boolean!
+  removePostUser(userId: Int!, id: Int!): Boolean!
+  addLikes(user_id: Int!, post_id: Int!): Boolean!
+  removeLikes(user_id: Int!, post_id: Int!): Boolean!
+  uploadFileUrl(key: String!, contentType: String!): FileUrlResponse!
+  getFileUrl(key: String!): FileUrlResponse!
+}
+
+input UserCreateInput {
+  name: String!
+  username: String!
+  email: String!
+  password: String!
+  key: String
+  contentType: String
+  role: UserRole!
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+input UserUpdateInput {
+  name: String!
+  username: String!
+  password: String!
+  key: String
+  contentType: String
+  role: UserRole!
+  email: String!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String
+}
+
+input UpdatePostInput {
+  title: String
+  content: String
+}
+
+type Subscription {
+  newPost: Post!
+}

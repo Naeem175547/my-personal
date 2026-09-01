@@ -1,0 +1,133 @@
+// Class in JS acts as a blueprint for creating objects.
+class User {
+    constructor(name, age) {
+        this.name = name
+        this.age = age
+    }
+
+    greet() {
+        console.log("Hello " + this.name)
+    }
+}
+
+const u1 = new User("Naeem", 21)
+console.log(u1)
+u1.greet()
+
+/*
+
+Explanation
+
+class User
+Creates a class named User.
+
+constructor()
+Special method automatically called when object is created.
+constructor does  not return anything
+
+constructor(name, age)
+Used to initialize object properties.
+
+this
+Refers to current object.
+this.name = name
+
+Methods
+greet() {
+    console.log("Hello")
+}
+
+Methods are automatically stored in:
+User.prototype
+
+So all objects share same method.
+Internally Classes Use Prototype
+
+This class:
+
+class User {
+    greet() {
+        console.log("Hello")
+    }
+}
+
+Internally becomes:
+
+function User() {}
+
+User.prototype.greet = function () {
+    console.log("Hello")
+}
+
+Inheritance Example
+class Animal {
+    eat() {
+        console.log("Eating")
+    }
+}
+
+class Dog extends Animal {
+    bark() {
+        console.log("Barking")
+    }
+}
+
+const d1 = new Dog()
+
+d1.eat()
+d1.bark()
+
+Output:
+
+Eating
+Barking
+*/
+
+
+// | Stored In Object    | Stored In Prototype      |
+// | ------------------- | ------------------------ |
+// | Properties          | Shared methods  |
+
+
+
+/*
+function User() {}
+const obj = new User()
+obj.name = "Imran"
+console.log(obj.name)
+
+Output:
+Imran
+
+Here:
+obj.name = "Imran"
+
+adds property or method directly inside object.
+
+Internal:
+
+obj
+ ├── name : "Imran"
+ │
+ ↓
+User.prototype
+
+Now Prototype Property Example:
+function User() {}
+User.prototype.name = "Imran"
+const obj = new User()
+console.log(obj.name)
+
+Output:
+Imran
+
+Here property is stored inside prototype.
+
+Internal:
+
+obj
+ │
+ ↓
+User.prototype
+ ├── name : "Imran"
+*/

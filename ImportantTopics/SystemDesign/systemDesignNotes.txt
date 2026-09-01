@@ -1,0 +1,3090 @@
+# 📘 System Design Notes
+## 🎯 Why Do We Need to Learn System Design?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🤔 What is System Design?
+
+System Design is the process of designing an application so that it can handle
+millions of users efficiently, reliably, and securely.
+
+It answers questions like:
+• How should users connect to the server?
+• How should data be stored?
+• How can the system handle millions of requests?
+• What happens if one server crashes?
+• How can we make the application fast?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ Why Can't We Use Just One Server?
+
+Imagine you build an Instagram clone.
+
+Initially:
+
+👤 Users: 100
+🖥 Server: 1
+💾 Database: 1
+
+Everything works perfectly.
+
+Now imagine:
+
+👤 Users: 10 Million
+📸 Photos: 500 Million
+❤️ Likes every second: 50,000
+💬 Messages every second: 100,000
+
+One server cannot handle this much traffic.
+
+The application becomes:
+❌ Slow
+❌ Crashes
+❌ Times Out
+❌ Loses users
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Purpose of System Design
+
+System Design teaches us how to build applications that are:
+
+✅ Fast
+✅ Scalable
+✅ Reliable
+✅ Highly Available
+✅ Secure
+✅ Easy to Maintain
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 Example
+
+Without System Design
+
+User
+   │
+   ▼
+One Server
+   │
+   ▼
+Database
+
+Problem:
+If the server crashes,
+the whole application stops.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+With System Design
+
+Users
+   │
+   ▼
+Load Balancer
+   │
+ ┌────┼────┐
+ ▼    ▼    ▼
+Server1 Server2 Server3
+   │
+   ▼
+Database
+
+If one server fails,
+other servers continue serving users.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 What Problems Does System Design Solve?
+
+✅ Server Crash
+→ Use Multiple Servers
+
+✅ Slow Response
+→ Use Cache (Redis)
+
+✅ Too Many Users
+→ Horizontal Scaling
+
+✅ Huge Database
+→ Sharding & Replication
+
+✅ Global Users
+→ CDN
+
+✅ Heavy Background Work
+→ Message Queue (Kafka/RabbitMQ)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 Real-World Example
+
+Suppose 20 Million users open YouTube at 8 PM.
+
+Without System Design:
+❌ Server crashes.
+
+With System Design:
+✅ Load Balancer distributes traffic.
+✅ Multiple servers handle requests.
+✅ Cache serves popular videos quickly.
+✅ CDN delivers videos from nearby locations.
+
+Users experience a smooth application.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Why Companies Ask System Design in Interviews?
+
+Companies like:
+
+• Google
+• Amazon
+• Microsoft
+• Meta
+• Netflix
+• Uber
+• Flipkart
+
+want engineers who can build applications that work for millions of users.
+
+They don't just test coding.
+They also test whether you can design a scalable system.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 Difference Between DSA and System Design
+
+DSA
+✔ Solves one programming problem efficiently.
+✔ Focuses on algorithms and data structures.
+
+System Design
+✔ Builds an entire application.
+✔ Focuses on architecture, scalability, reliability, and performance.
+
+Example:
+
+DSA:
+Find the shortest path in a graph.
+
+System Design:
+Design Google Maps.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 What Will We Learn in System Design?
+
+✅ Client-Server Architecture
+✅ DNS
+✅ HTTP & HTTPS
+✅ Load Balancer
+✅ Reverse Proxy
+✅ Database
+✅ SQL vs NoSQL
+✅ Indexing
+✅ Replication
+✅ Sharding
+✅ Caching (Redis)
+✅ CDN
+✅ Message Queue (Kafka/RabbitMQ)
+✅ Microservices
+✅ API Gateway
+✅ Scalability
+✅ High Availability
+✅ Fault Tolerance
+✅ Rate Limiting
+✅ Monitoring & Logging
+✅ Designing Real Applications
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⭐ Interview Questions
+
+Q. Why do we need System Design?
+✅ To build applications that can handle millions of users efficiently and reliably.
+
+Q. Why isn't one server enough?
+✅ A single server becomes slow, overloaded, or may crash when traffic increases.
+
+Q. What is the main goal of System Design?
+✅ Scalability, Reliability, Performance, Availability, and Maintainability.
+
+
+
+
+## 📌 Topic : What Happens When a User Opens an App?
+
+🎯 Example Apps:
+• Instagram
+• YouTube
+• Hotstar
+• WhatsApp
+• Amazon
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 Step 1: User Opens the App
+
+👤 User taps the app icon.
+
+⬇️ What happens?
+✅ App starts.
+✅ Splash screen/logo appears.
+✅ UI loads.
+✅ Cached data (if available) is shown.
+✅ App requests fresh data from the server.
+
+💡 Remember:
+The app is installed on your phone, but the latest data (videos, posts, messages, products) is stored on the server.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Step 2: App Sends an API Request
+
+The app sends an HTTP request to the server.
+
+Example:
+
+GET https://api.hotstar.com/homefeed
+
+📖 API = Application Programming Interface
+
+👉 API is a bridge that allows the Client (App) and the Server to communicate.
+
+Flow:
+
+📱 Client
+      │
+      ▼
+🌐 API Request
+      │
+      ▼
+🖥️ Server
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🍕 Real-Life Example
+
+👤 Customer
+      │
+      ▼
+🍽️ Waiter
+      │
+      ▼
+👨‍🍳 Kitchen
+
+Mapping:
+
+👤 Customer = User
+🍽️ Waiter = API
+👨‍🍳 Kitchen = Server
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌍 Step 3: Phone Asks DNS
+
+The app wants to connect to:
+api.hotstar.com
+But computers do NOT understand names.
+They only understand IP addresses like:
+
+142.xxx.xxx.xxx
+
+So the phone asks the DNS server:
+
+"What is the IP address of api.hotstar.com?"
+
+Flow:
+
+📱 Phone
+      │
+      ▼
+🌍 DNS Server
+      │
+      ▼
+Returns IP Address
+
+📖 DNS = Domain Name System
+
+💡 DNS is called the Internet's Phonebook.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📞 Real-Life Example of DNS
+
+Instead of remembering
+
+9876543210
+
+you save
+
+❤️ Mom
+
+Similarly,
+
+google.com
+        ↓
+142.xxx.xxx.xxx
+
+DNS converts Domain Name ➜ IP Address.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📡 Step 4: DNS Replies
+
+DNS returns the server's IP address.
+
+Example:
+
+api.hotstar.com
+          ↓
+142.xxx.xxx.xxx
+
+Now the phone knows where the server is located.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔗 Step 5: App Connects to the Server
+
+Using the IP address, the app establishes a connection.
+
+📱 Phone
+      │
+      ▼
+🖥️ Hotstar Server (or Load Balancer)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️ Step 6: Server Processes the Request
+
+The server receives:
+
+GET /homefeed
+
+The server collects data from the database.
+
+Examples:
+🎬 Movies
+📺 TV Shows
+🏏 Live Matches
+🔥 Trending
+❤️ Recommendations
+👤 User Profile
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📤 Step 7: Server Sends Response
+
+The server sends data back as JSON.
+
+Example:
+
+{
+  "movies": ["Avengers", "Iron Man"],
+  "trending": ["Cricket", "Football"]
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📲 Step 8: App Displays the Data
+
+The app receives the JSON response.
+
+It updates the UI and shows:
+
+🎬 Movies
+📺 TV Shows
+🔥 Trending
+🏏 Live Cricket
+❤️ Recommended Content
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Complete Flow
+
+👤 User
+      │
+      ▼
+📱 Open App/browser
+      │
+      ▼
+🌐 API Request
+      │
+      ▼
+🌍 DNS Lookup
+      │
+      ▼
+🖥️ Server Connection
+      │
+      ▼
+💾 Database
+      │
+      ▼
+📤 JSON Response
+      │
+      ▼
+📲 App Displays Data
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 🌐 How Browser, DNS & Express Work Together
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Example
+
+Frontend Code:
+
+fetch("https://api.myapp.com/users")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 Complete Flow
+
+1️⃣ React/Frontend calls API
+
+        │
+        ▼
+
+2️⃣ Browser checks DNS Cache
+
+        │
+        ▼
+
+3️⃣ If IP is NOT found,
+    Browser asks DNS Server
+
+api.myapp.com
+        │
+        ▼
+104.20.35.120
+
+📌 DNS converts Domain Name ➜ IP Address
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4️⃣ Browser creates a connection
+
+Connection is made to:
+
+104.20.35.120:443
+
+💡 Computers communicate using IP addresses, NOT domain names.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5️⃣ Browser sends HTTP Request
+
+Example:
+
+GET /users HTTP/1.1
+Host: api.myapp.com
+
+⚠️ Important:
+
+Although the connection is made using the IP address,
+the browser STILL sends the original domain name
+inside the "Host" header.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6️⃣ Express Server receives the request
+
+Example:
+
+app.get("/users",(req,res)=>{
+    console.log(req.headers.host);
+    console.log(req.ip);
+})
+
+Express understands the HTTP Request.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📖 What Express Can Read
+✅ req.headers.host
+
+Returns:
+
+api.myapp.com
+Meaning:
+➡️ Which domain the client requested.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ req.ip
+
+Returns:
+
+203.0.113.5
+
+Meaning:
+➡️ Client/User IP Address
+(Not the server's IP)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Important Difference
+
+🌍 DNS
+✔ Converts Domain Name ➜ IP Address
+
+🌐 Browser
+✔ Creates connection using IP Address
+
+📨 Browser
+✔ Sends HTTP Request
+✔ Includes Domain Name in Host Header
+
+🖥 Express
+✔ Reads HTTP Request
+✔ Can access:
+   • Domain Name (req.headers.host)
+   • Client IP (req.ip)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Common Misconception
+
+Wrong ❌
+Express converts domain name to IP.
+
+Correct ✅
+Browser performs DNS lookup BEFORE contacting Express.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧠 Easy Trick to Remember
+
+Domain Name
+        │
+        ▼
+DNS
+        │
+        ▼
+IP Address
+        │
+        ▼
+Browser connects to Server
+        │
+        ▼
+Browser sends HTTP Request
+        │
+        ▼
+Express receives Request
+        │
+        ▼
+Express processes Request
+        │
+        ▼
+Database
+        │
+        ▼
+JSON Response
+        │
+        ▼
+Browser
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⭐ Interview Points
+
+Q. Who converts Domain Name into IP Address?
+✅ DNS (used by Browser/Operating System)
+
+Q. Who establishes the network connection?
+✅ Browser/Operating System
+
+Q. Does Express know the server IP?
+❌ No. The Operating System has already accepted the connection.
+
+Q. What does Express understand?
+✅ HTTP Requests
+
+Q. How does Express know which domain was requested?
+✅ From req.headers.host
+
+Q. How does Express know the client's IP?
+✅ From req.ip
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 One-Line Revision
+
+👉 DNS converts Domain ➜ IP.
+👉 Browser connects using the IP.
+👉 Browser sends an HTTP request (including the Host header).
+👉 Express receives and processes the HTTP request.
+
+1. Browser gets the domain name
+        │
+        ▼
+2. Browser asks DNS for the IP address
+        │
+        ▼
+3. DNS returns the IP address
+        │
+        ▼
+4. Browser establishes a TCP connection with that IP
+        │
+        ▼
+5. If HTTPS, TLS/SSL handshake happens
+        │
+        ▼
+6. Browser sends the HTTP request
+        │
+        ▼
+7. Express receives req and res
+        │
+        ▼
+8. Controller executes
+        │
+        ▼
+9. Response goes back to the browser
+
+
+-----># 📘 Topic: Recursive Resolver (DNS Resolver)
+
+📌 Definition
+
+A Recursive Resolver is a DNS server that finds the IP address for a domain name on behalf of the client (browser or mobile app).
+Recursive Resolver = DNS server that finds and caches the IP address for the client.
+Think of it as a "middleman" between your browser and the entire DNS system.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ Why is it Needed?
+
+The browser does NOT know where every website's IP address is.
+
+Instead of searching the whole internet itself, it asks the Recursive Resolver.
+
+Browser
+   │
+   ▼
+Recursive Resolver
+   │
+   ▼
+Finds the IP Address
+   │
+   ▼
+Returns IP to Browser
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🛠 How It Works
+
+Suppose you open:
+
+https://www.google.com
+
+Step 1:
+Browser asks:
+
+"What is the IP of www.google.com?"
+
+        │
+        ▼
+
+Recursive Resolver
+
+Step 2:
+If the IP is already cached,
+
+✅ Returns it immediately.
+
+OR
+
+Step 3:
+If not cached,
+
+It asks other DNS servers
+(Root → TLD → Authoritative DNS)
+
+Step 4:
+
+Gets the IP
+
+142.250.xxx.xxx
+
+Step 5:
+
+Stores it in cache
+
+Step 6:
+
+Returns IP to Browser
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📦 Cache Advantage
+
+First User
+
+Browser
+   │
+   ▼
+Recursive Resolver
+   │
+   ▼
+Google DNS Servers
+
+(2-5 ms extra)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Second User
+
+Browser
+   │
+   ▼
+Recursive Resolver
+
+(Cache Hit ✅)
+
+Returns IP immediately
+
+No need to contact other DNS servers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Real-Life Example
+
+You ask your teacher:
+
+"Where is Room 305?"
+
+Teacher already knows.
+
+Teacher tells you immediately.
+
+You don't search the entire school.
+
+Recursive Resolver = Teacher
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+--->
+# 📘 Topic: Load Balancer
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Definition
+
+A Load Balancer is a server (or software) that distributes incoming user requests
+across multiple servers so that no single server becomes overloaded.
+
+Think of it as a Traffic Police for servers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚡ Why is it Needed?
+
+Imagine your application has only one server.
+
+               1,00,000 Users
+                      │
+                      ▼
+                 🖥 Server
+
+Problems:
+
+❌ Server becomes slow
+❌ High CPU usage
+❌ Crashes
+❌ Website goes down
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Solution: Load Balancer
+
+             1,00,000 Users
+                    │
+                    ▼
+             ⚖ Load Balancer
+             ┌────┼────┐
+             ▼    ▼    ▼
+         🖥 S1 🖥 S2 🖥 S3
+
+The Load Balancer receives all requests and distributes them among multiple servers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🛠 How It Works
+
+Step 1:
+Users send requests.
+
+        │
+        ▼
+
+Step 2:
+Load Balancer receives all requests.
+
+        │
+        ▼
+
+Step 3:
+It decides which server should handle each request.
+
+Example:
+
+User 1 → Server 1
+
+User 2 → Server 2
+
+User 3 → Server 3
+
+User 4 → Server 1
+
+User 5 → Server 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Real-Life Example
+
+Imagine three billing counters in a supermarket.
+
+Without Load Balancer
+
+Customer
+   │
+   ▼
+Counter 1
+
+Counter 2 and 3 are empty.
+
+Counter 1 becomes overcrowded.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+With Load Balancer
+
+Customer 1 → Counter 1
+
+Customer 2 → Counter 2
+
+Customer 3 → Counter 3
+
+Everyone gets served quickly.
+
+Load Balancer = Store Manager directing customers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⭐ Common Load Balancing Algorithms
+
+1️⃣ Round Robin
+
+Requests are sent one by one.
+
+Request 1 → S1
+
+Request 2 → S2
+
+Request 3 → S3
+
+Request 4 → S1
+
+Request 5 → S2
+
+Simple and most common.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2️⃣ Least Connections
+
+The request goes to the server with the fewest active users.
+
+Example:
+
+Server 1 → 100 users
+
+Server 2 → 20 users ✅
+
+Server 3 → 80 users
+
+Next request → Server 2
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3️⃣ IP Hash
+
+Same user's IP always goes to the same server.
+
+Useful for:
+
+✅ Chat Applications
+✅ Banking
+✅ Shopping Cart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💥 What if One Server Crashes?
+
+Without Load Balancer
+
+Users
+   │
+   ▼
+Server ❌
+
+Website Down
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+With Load Balancer
+
+           Load Balancer
+           ┌────┼────┐
+           ▼    ▼    ▼
+        S1❌   S2    S3
+
+The Load Balancer detects that Server 1 is down.
+
+New requests automatically go to:
+
+✅ Server 2
+✅ Server 3
+
+Users usually don't notice the failure.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💓 Health Check
+
+A Load Balancer continuously checks:
+
+"Are you alive?"
+
+Server 1 ✅
+
+Server 2 ✅
+
+Server 3 ❌
+
+If a server does not respond,
+
+Load Balancer removes it from the routing list until it becomes healthy again.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📍 Where is Load Balancer Placed?
+
+Users
+   │
+   ▼
+🌐 Internet
+   │
+   ▼
+⚖ Load Balancer
+   │
+   ├──────────────┐
+   ▼              ▼
+🖥 Server 1    🖥 Server 2
+      │             │
+      └──────┬──────┘
+             ▼
+         💾 Database
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Advantages
+
+✅ Prevents server overload
+✅ Improves performance
+✅ High Availability
+✅ Fault Tolerance
+✅ Better scalability
+✅ Easy to add more servers
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️ Disadvantages
+
+❌ Extra infrastructure cost
+❌ If only one Load Balancer exists, it can become a Single Point of Failure.
+(Production systems often use multiple load balancers.)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⭐ Interview Questions
+
+Q. What is a Load Balancer?
+
+✅ A component that distributes incoming requests across multiple servers.
+
+Q. Why do we need a Load Balancer?
+
+✅ To prevent server overload and improve availability.
+
+Q. Can a Load Balancer detect failed servers?
+
+✅ Yes, using health checks.
+
+Q. Name some Load Balancing algorithms.
+
+✅ Round Robin
+✅ Least Connections
+✅ IP Hash
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 📘 Topic: Types of Load Balancer
+
+There are 3 main types of Load Balancers.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 1️⃣ Hardware Load Balancer
+
+📌 Definition
+
+A physical machine (hardware device) that distributes traffic.
+
+Example:
+• F5 BIG-IP
+• Citrix ADC
+
+Flow:
+
+Users
+   │
+   ▼
+🖥 Hardware Load Balancer
+   │
+ ┌─┴─────┐
+ ▼       ▼
+S1       S2
+
+✅ Very Fast
+✅ High Performance
+❌ Very Expensive
+
+Used by:
+Banks, Telecom Companies, Large Enterprises
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 2️⃣ Software Load Balancer ⭐ (Most Common)
+
+📌 Definition
+
+A software application that runs on a server and distributes requests.
+
+Examples:
+• Nginx
+• HAProxy
+• Traefik
+
+Flow:
+
+Users
+   │
+   ▼
+💻 Nginx / HAProxy
+   │
+ ┌─┴─────┐
+ ▼       ▼
+S1       S2
+
+✅ Low Cost
+✅ Easy to Configure
+✅ Most Popular
+
+Used by:
+Most web applications and startups.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 3️⃣ Cloud Load Balancer
+
+📌 Definition
+
+A managed Load Balancer provided by cloud platforms.
+
+Examples:
+• AWS Elastic Load Balancer (ELB)
+• Google Cloud Load Balancer
+• Azure Load Balancer
+
+Flow:
+
+Users
+   │
+   ▼
+☁ Cloud Load Balancer
+   │
+ ┌─┴─────┐
+ ▼       ▼
+EC2-1   EC2-2
+
+✅ No setup required
+✅ Auto Scaling
+✅ Highly Available
+❌ Pay based on usage
+
+Used by:
+Applications hosted on AWS, Azure, Google Cloud.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+--->CDN
+
+A CDN (Content Delivery Network) is a network of geographically distributed Edge 
+Servers that cache and deliver content from the server closest to the user.
+
+Purpose: Faster content delivery, lower latency, reduced origin server load.
+
+Need for CDN
+Faster website loading
+Reduce latency
+Handle high traffic
+Reduce bandwidth cost
+Improve availability
+DDoS protection
+
+Key Components
+Origin Server: Stores original files.
+Edge Server: Caches and serves files near users.
+POP (Point of Presence): Physical location containing one or more edge servers.
+TTL (Time To Live): Duration cached content remains valid.
+Working
+
+User
+   |
+DNS
+   |
+Nearest CDN
+   |
+Cache Hit? ---- Yes ---> Return Content
+      |
+      No
+      |
+Origin Server
+      |
+Cache File
+      |
+Return Content
+
+
+Cache Hit
+File exists in CDN cache.
+Served immediately.
+Very fast.
+No request to origin server.
+
+Cache Miss
+File not in cache.
+CDN fetches it from the origin server.
+Stores it in cache.
+Returns it to the user.
+
+What CDN Caches
+
+✅ Static Content
+
+Images
+CSS
+JavaScript
+Videos
+Fonts
+PDFs
+
+❌ Usually Not Cached
+
+Login
+OTP
+Payment
+User Dashboard
+Bank Details
+Advantages
+Low latency
+Faster page load
+Reduced server load
+High availability
+Better scalability
+Improved security (DDoS mitigation)
+CDN in Architecture
+
+Users
+   |
+CDN
+   |
+Load Balancer
+   |
+Application Servers
+   |
+Database
+
+
+| CDN                     | Load Balancer                 |
+| ----------------------- | ----------------------------- |
+| Delivers cached content | Distributes incoming requests |
+| Mainly for static files | Mainly for backend servers    |
+| Improves speed          | Improves scalability          |
+
+Interview Points
+CDN: Global network of edge servers.
+Edge Server: Nearest server that serves cached content.
+POP: Physical CDN location.
+Cache Hit: Data found in cache.
+Cache Miss: Data fetched from the origin server.
+TTL: Cache expiration time.
+
+
+One-Line Definition
+
+CDN is a globally distributed network of edge servers that 
+caches and delivers content from the nearest location to reduce latency, improve performance, and reduce the load on the origin server.
+
+
+--->
+Proxy, Forward Proxy & Reverse Proxy (Short Notes)
+1. What is a Proxy?
+
+A Proxy Server is an intermediary server that sits between two systems and forwards requests/responses between them.
+
+Client  <---->  Proxy  <---->  Server
+
+Purpose
+
+Security
+Privacy
+Caching
+Filtering
+Load balancing (reverse proxy)
+
+2. Forward Proxy
+Definition
+
+A Forward Proxy sits in front of the clients. It receives requests from clients and forwards them to the internet.
+
+Client
+   |
+Forward Proxy
+   |
+Internet
+   |
+Server
+
+Who knows about the proxy?
+✅ Client knows.
+❌ Server does not know the real client.
+Uses
+Hide client's IP address.
+Access blocked websites.
+Internet filtering.
+Cache web pages.
+Corporate internet access.
+Example
+
+A company blocks social media. Employees access the internet through a forward proxy, which decides which websites are allowed.(VPN)
+
+3. Reverse Proxy (Backward Proxy)
+
+Backward Proxy is another name sometimes used for a Reverse Proxy.
+
+Definition
+
+A Reverse Proxy sits in front of the servers. Clients send requests to the reverse proxy, which forwards them to the appropriate backend server.
+
+Client
+   |
+Reverse Proxy
+   |
+-------------------
+|        |        |
+Server1 Server2 Server3
+
+Who knows about the proxy?
+
+❌ Client does not know which backend server handled the request.
+✅ Servers know the reverse proxy.
+
+
+Uses
+Load balancing
+SSL/TLS termination
+Caching
+Security (hide backend servers)
+Compression
+Rate limiting
+Example
+
+When you visit google.com, your request first reaches Google's reverse proxy, which forwards it to one of many backend servers.
+
+
+| Feature      | Forward Proxy            | Reverse Proxy                     |
+| ------------ | ------------------------ | --------------------------------- |
+| Position     | In front of clients      | In front of servers               |
+| Protects     | Clients                  | Servers                           |
+| Hides        | Client IP                | Server IP                         |
+| Used by      | Users/Organizations      | Websites/Applications             |
+| Main Purpose | Privacy & access control | Load balancing, security, caching |
+
+
+Real-World Examples
+Forward Proxy
+Employee
+   |
+Company Proxy
+   |
+Internet
+
+
+Reverse Proxy
+Users
+   |
+Nginx
+   |
+----------------
+|              |
+App 1      App 2
+
+Interview Questions
+What is a proxy?
+
+A server that acts as an intermediary between a client and another server.
+
+What is a forward proxy?
+A proxy that represents the client and forwards client requests to external servers.
+
+What is a reverse proxy?
+A proxy that represents the server, receives client requests, and forwards them to backend servers.
+
+Which proxy hides the client's IP?
+
+Forward Proxy
+
+Which proxy hides the backend servers?
+Reverse Proxy
+
+Examples of Reverse Proxy Software
+Nginx
+HAProxy
+Traefik
+Apache HTTP Server (as a reverse proxy)
+One-Line Summary
+Proxy: An intermediary between two systems.
+Forward Proxy: Represents and protects the client.
+Reverse Proxy (Backward Proxy): Represents and protects the server, often providing load balancing, caching, and security.
+
+
+--->
+SSL Certificate –
+Definition
+
+An SSL Certificate is a digital certificate that verifies a website's identity and 
+enables HTTPS by encrypting communication between the client and the server.
+SSL (Secure Sockets Layer) is now obsolete. Modern websites actually use TLS (Transport Layer Security),
+ but people still commonly say "SSL certificate."
+
+Why SSL is Needed
+
+Without SSL (HTTP):
+
+Data is sent in plain text.
+Hackers can read usernames, passwords, and card details.
+Vulnerable to Man-in-the-Middle (MITM) attacks.
+
+With SSL (HTTPS):
+
+Data is encrypted.
+Only the client and server can read it.
+The website's identity is verified.
+
+| HTTP              | HTTPS                  |
+| ----------------- | ---------------------- |
+| Not secure        | Secure                 |
+| No encryption     | Encrypted              |
+| Port 80           | Port 443               |
+| `http://`         | `https://`             |
+| Easy to intercept | Difficult to intercept |
+
+How SSL Works
+1. User opens https://example.com
+            |
+2. Server sends SSL Certificate
+            |
+3. Browser verifies certificate
+            |
+4. TLS Handshake
+            |
+5. Session Key Generated
+            |
+6. Encrypted Communication Starts
+
+SSL Handshake (Simplified)
+Client requests HTTPS connection.
+Server sends its SSL certificate.
+Browser verifies the certificate.
+Client and server agree on encryption algorithms.
+They generate a shared session key.
+All further communication uses this symmetric session key.
+
+
+What Does an SSL Certificate Contain?
+Domain name
+Public key
+Certificate Authority (CA)
+Expiry date
+Digital signature
+Organization details (for some certificate types)
+
+
+Public Key & Private Key
+Server
+ ├── Public Key  → Shared with everyone
+ └── Private Key → Secret, never shared
+Public Key: Encrypts data or verifies signatures.
+Private Key: Decrypts data or creates digital signatures.
+
+
+Certificate Authority (CA)
+
+A Certificate Authority (CA) is a trusted organization that issues and signs SSL certificates.
+
+Examples:
+
+Let's Encrypt
+DigiCert
+Sectigo
+GlobalSign
+
+
+
+Types of SSL Certificates
+1. Domain Validation (DV)
+Verifies domain ownership only.
+Fast and inexpensive.
+
+2. Organization Validation (OV)
+Verifies both domain ownership and organization identity.
+
+3. Extended Validation (EV)
+Highest level of verification.
+Used by banks and large organizations.
+
+
+
+Benefits of SSL
+Encrypts data
+Protects passwords and payment information
+Verifies website identity
+Improves user trust
+Required for many modern browser features
+Can improve SEO rankings
+
+
+SSL in System Design
+User
+   |
+HTTPS (Encrypted)
+   |
+Load Balancer / Reverse Proxy
+   |
+Application Server
+   |
+Database
+
+Often, the Load Balancer or Reverse Proxy handles SSL termination,
+ decrypts the traffic, and forwards it to backend servers (sometimes over HTTP within a trusted internal 
+ network, or over HTTPS for end-to-end encryption).
+
+
+ Interview Questions
+What is SSL?
+A protocol (now replaced by TLS) used to secure communication between a client and a server.
+
+What is an SSL Certificate?
+A digital certificate that verifies a website's identity and enables encrypted HTTPS communication.
+
+Why do we use HTTPS instead of HTTP?
+HTTPS encrypts data, protects against eavesdropping and tampering, and authenticates the server.
+
+What is a Certificate Authority (CA)?
+A trusted organization that issues and digitally signs SSL certificates.
+
+What is SSL Termination?
+The process where a load balancer or reverse proxy decrypts HTTPS traffic before forwarding requests to backend servers.
+
+
+---->
+Caching in System Design
+Caching is the process of storing frequently accessed data in fast memory so future requests 
+can be served quickly without repeatedly querying the database or another slow source.
+
+Goal: Reduce response time, decrease database load, and improve scalability.
+
+Why Caching?
+
+Without Cache
+
+User
+  |
+App Server
+  |
+Database
+
+Every request hits the database.
+
+Problems:
+
+High latency
+Database overload
+Poor scalability
+
+With Cache
+
+User
+  |
+App Server
+  |
+Cache (Redis)
+  |
+Database
+
+Frequently requested data comes from the cache instead of the database.
+
+How Caching Works
+1. User requests data
+        |
+2. Check Cache
+        |
+   Cache Hit?
+   /        \
+ Yes         No
+ |            |
+Return     Query DB
+Data          |
+              |
+         Store in Cache
+              |
+         Return Data
+
+Cache Hit
+Definition: Requested data is found in the cache.
+
+Fast response
+Database is not accessed
+
+Cache Miss
+Definition: Requested data is not in the cache.
+
+Read from the database
+Store data in cache
+Return data to the user
+Cache Eviction
+
+When the cache is full, some data must be removed.
+
+LRU (Least Recently Used)
+Removes the least recently accessed item.
+Most common policy.
+LFU (Least Frequently Used)
+Removes the item accessed the fewest times.
+FIFO (First In, First Out)
+Removes the oldest cached item.
+
+TTL (Time To Live)
+TTL specifies how long data stays in the cache.
+
+Example:
+
+User Profile
+TTL = 10 minutes
+
+After 10 minutes, the entry expires and is fetched from the database again.
+
+Types of Cache
+1. Browser Cache
+Stores static files (images, CSS, JS) in the user's browser.
+
+2. CDN Cache
+Stores content on edge servers close to users.
+
+3. Application Cache
+Stores frequently used data in memory (e.g., Redis, Memcached).
+
+4. Database Cache
+Caches database query results.
+
+Cache-Aside Pattern (Lazy Loading)
+
+Most commonly used.
+
+Read Request
+     |
+Check Cache
+     |
+ Hit? ------ Yes → Return Data
+     |
+     No
+     |
+Read Database
+     |
+Store in Cache
+     |
+Return Data
+
+Advantages
+
+Easy to implement
+Saves memory
+Only requested data is cached
+Write-Through Cache
+
+Write Data
+     |
+Cache
+     |
+Database
+
+Cache and database are updated together.
+Data remains consistent.
+Write operations are slower.
+Write-Back (Write-Behind)
+
+Write
+   |
+Cache
+   |
+(Return immediately)
+   |
+Later
+   |
+Database
+
+Very fast writes.
+Risk of data loss if the cache fails before syncing.
+
+Write-Around
+Write
+   |
+Database
+Writes go directly to the database.
+Cache updates only when data is read.
+Useful when data is rarely read after being written.
+Popular Caching Tools
+Redis (most popular)
+Memcached
+What Should Be Cached?
+
+✅ Product catalog
+
+✅ News articles
+
+✅ User sessions
+
+✅ API responses
+
+✅ Frequently accessed database queries
+
+❌ Passwords
+
+❌ OTPs
+
+❌ Payment transactions
+
+❌ Frequently changing financial data
+
+
+
+Disadvantages
+Data can become stale (outdated).
+Cache consistency is challenging.
+Additional memory cost.
+Cache invalidation can be complex.
+
+Cache in System Design
+Users
+   |
+Load Balancer
+   |
+Application Servers
+   |
+Redis Cache
+   |
+Database
+
+
+| Cache                | Database               |
+| -------------------- | ---------------------- |
+| Very fast            | Slower                 |
+| Temporary storage    | Permanent storage      |
+| In-memory            | Disk-based (typically) |
+| Used for performance | Used for persistence   |
+
+
+
+Interview Questions
+What is caching?
+Caching stores frequently accessed data in fast storage so future requests can be served more quickly.
+
+What is Cache Hit?
+The requested data is found in the cache.
+
+What is Cache Miss?
+The requested data is not found in the cache and must be fetched from the database.
+
+What is TTL?
+Time To Live—the duration before cached data expires.
+
+Difference between Redis and Memcached?
+Redis: Supports multiple data structures, persistence, replication, and pub/sub.
+Memcached: Simple in-memory key-value cache focused on speed.
+
+One-Line Definition
+Caching is the technique of storing frequently accessed data in high-speed memory to reduce latency,
+ improve performance, lower database load, and increase application scalability.
+
+
+ --->
+ Full Stack Request Flow (Complete Diagram)
+                                    USER
+                                     │
+                                     │
+                           1. Enter URL / Click
+                                     │
+                                     ▼
+                               DNS Resolution
+                                     │
+                                     ▼
+                           CDN (Static Content?)
+                          ┌──────────┴──────────┐
+                          │                     │
+                    Cache Hit              Cache Miss
+                          │                     │
+                          ▼                     ▼
+                  Return CSS/JS/Image     Forward Request
+                                                │
+                                                ▼
+                                         Load Balancer
+                                                │
+                                                ▼
+                                   Reverse Proxy (Nginx)
+                                                │
+                                                ▼
+                                      Application Server
+                                   (Node.js / Express API)
+                                                │
+                           ┌────────────────────┴────────────────────┐
+                           │                                         │
+                     Authentication                            Business Logic
+                           │                                         │
+                           └────────────────────┬────────────────────┘
+                                                │
+                                      Check Redis Cache
+                                      ┌─────────┴─────────┐
+                                      │                   │
+                                 Cache Hit           Cache Miss
+                                      │                   │
+                                      ▼                   ▼
+                               Return Data          Query Database
+                                                         │
+                                                         ▼
+                                              MySQL / PostgreSQL /
+                                                   MongoDB
+                                                         │
+                                                         ▼
+                                                Store in Redis
+                                                         │
+                                                         ▼
+                                            Response to App Server
+                                                         │
+                                                         ▼
+                                              JSON / HTML Response
+                                                         │
+                                                         ▼
+                                               Reverse Proxy
+                                                         │
+                                                         ▼
+                                                  Load Balancer
+                                                         │
+                                                         ▼
+                                                     Browser
+                                                         │
+                                                         ▼
+                                            Render React / HTML UI
+
+Request Flow (One Line)
+User
+ → DNS
+ → CDN
+ → Load Balancer
+ → Reverse Proxy (Nginx)
+ → Application Server (Node/Express)
+ → Authentication
+ → Redis Cache
+ → Database
+ → Redis
+ → Application Server
+ → Reverse Proxy
+ → Load Balancer
+ → Browser
+ → UI Render
+
+
+
+Static File Request
+Browser
+   │
+   ▼
+DNS
+   │
+   ▼
+CDN
+   │
+   ├── Cache Hit ─────► Browser
+   │
+   └── Cache Miss
+            │
+            ▼
+      Origin Server
+            │
+            ▼
+       Store in CDN
+            │
+            ▼
+         Browser
+
+
+
+
+API Request
+React Frontend
+      │
+      ▼
+HTTPS Request
+      │
+      ▼
+Load Balancer
+      │
+      ▼
+Reverse Proxy
+      │
+      ▼
+Express API
+      │
+      ▼
+Redis
+ ┌────┴────┐
+ │         │
+Hit       Miss
+ │         │
+ ▼         ▼
+Return   Database
+            │
+            ▼
+      Store in Redis
+            │
+            ▼
+       JSON Response
+            │
+            ▼
+      React Updates UI
+
+
+
+
+--->API
+
+--->
+Database Partitioning (Same Database)
+Definition
+Database Partitioning is the process of dividing a single large table into smaller partitions within the same database instance.
+
+Goal: Improve query performance, simplify maintenance, and manage very large tables.
+
+One Database
+One Table
+Multiple Partitions
+
+Without Partitioning
+Customer Table
+
+----------------------------------------
+ID | Name | City | Date | ...
+----------------------------------------
+1
+2
+3
+...
+100000000
+
+To find one record, the database may need to scan a huge table.
+
+With Partitioning
+Customer Table
+
+-------------------------------
+Partition 1 (2024)
+-------------------------------
+
+-------------------------------
+Partition 2 (2025)
+-------------------------------
+
+-------------------------------
+Partition 3 (2026)
+-------------------------------
+
+The database searches only the relevant partition instead of the entire table.
+
+Types of Partitioning
+1. Range Partitioning
+
+Rows are divided based on a range of values.
+Example:
+
+Orders
+
+2024 Orders → Partition 1
+
+2025 Orders → Partition 2
+
+2026 Orders → Partition 3
+
+Used for:
+
+Date
+Salary
+Age
+Order ID
+
+sql:
+CREATE TABLE Orders (
+    OrderID INT,
+    CustomerID INT,
+    OrderDate DATE,
+    Amount DECIMAL(10,2)
+)
+PARTITION BY RANGE (YEAR(OrderDate)) (
+    PARTITION p2024 VALUES LESS THAN (2025),
+    PARTITION p2025 VALUES LESS THAN (2026),
+    PARTITION p2026 VALUES LESS THAN (2027),
+    PARTITION pFuture VALUES LESS THAN MAXVALUE
+);
+
+
+2. List Partitioning
+Rows are divided based on specific values.
+
+
+
+Example:
+
+India Users → Partition 1
+
+USA Users → Partition 2
+
+UK Users → Partition 3
+sql:
+CREATE TABLE Customers (
+    ID INT,
+    Name VARCHAR(100),
+    Country VARCHAR(20)
+)
+PARTITION BY LIST COLUMNS (Country) (
+    PARTITION India VALUES IN ('India'),
+    PARTITION USA VALUES IN ('USA'),
+    PARTITION UK VALUES IN ('UK')
+);
+
+
+If you insert:
+
+INSERT INTO Customers VALUES
+(1, 'Naeem', 'India'),
+(2, 'John', 'USA');
+
+The data is stored as:
+
+India Partition
+---------------
+1 | Naeem | India
+
+USA Partition
+-------------
+2 | John | USA
+
+UK Partition
+------------
+Empty
+
+
+3. Hash Partitioning
+Database calculates a hash value.
+
+Partition = UserID % 4
+
+0 → P1
+
+1 → P2
+
+2 → P3
+
+3 → P4
+
+Provides more even data distribution.
+
+4. Key Partitioning
+
+Similar to hash partitioning, but the database chooses the hashing function automatically.
+
+Architecture
+Application
+      |
+      ▼
+Database
+      |
+-----------------------------
+|     |      |      |
+P1    P2     P3     P4
+
+Everything is inside one database.
+
+Advantages
+Faster queries
+Smaller indexes
+Easier backups
+Faster deletes (drop an old partition instead of deleting millions of rows)
+Better maintenance
+
+Disadvantages
+More complex schema design
+Poor partition key selection can hurt performance
+Some queries may still scan multiple partitions
+
+
+| Database Partitioning      | Sharding                                 |
+| -------------------------- | ---------------------------------------- |
+| Same database              | Multiple databases/servers               |
+| Improves query performance | Improves scalability                     |
+| Managed by the DBMS        | Managed by the application or middleware |
+| One database instance      | Many database instances                  |
+|vertical partitioning       | Horizontal partitioning                  |
+
+Real Example
+
+Suppose your Orders table stores data for 10 years.
+
+Without partitioning:
+
+Orders
+2020
+2021
+2022
+2023
+2024
+2025
+2026
+
+Query:
+
+SELECT * FROM Orders
+WHERE OrderDate BETWEEN '2026-01-01' AND '2026-12-31';
+
+Without partitioning:
+
+Scans the entire table.
+
+With range partitioning by year:
+
+Only the 2026 partition is scanned (called partition pruning), making the query much faster.
+Interview Definition
+
+Database partitioning is the technique of dividing a large table into smaller logical partitions within the same database instance,
+ allowing the database to scan only relevant partitions, which improves query performance and simplifies maintenance.
+
+
+ --->database sharding
+ Sharding
+Definition
+Sharding is a type of horizontal partitioning in which a large database is split into 
+multiple independent database servers (shards). Each shard stores a different subset of the data.
+
+Goal: Scale the database horizontally by distributing data across multiple servers.
+
+Architecture
+
+Application
+      |
+  Shard Router
+      |
+-------------------------
+|        |        |
+Shard1  Shard2  Shard3
+
+Example
+Shard 1 → User ID 1–1,000,000
+
+Shard 2 → User ID 1,000,001–2,000,000
+
+Shard 3 → User ID 2,000,001–3,000,000
+
+Each shard has the same schema but stores different rows.
+
+Sharding Strategies
+Range Sharding – Based on value ranges (e.g., IDs, dates).
+Hash Sharding – Uses a hash function (e.g., UserID % N).
+Geographic Sharding(list) – Based on region/country.
+
+
+Advantages
+Horizontal scalability
+Faster queries (smaller datasets per server)
+Reduced load on a single database
+Increased storage capacity
+Better fault isolation
+
+Disadvantages
+Complex implementation
+Cross-shard joins are difficult
+Distributed transactions are harder
+Data rebalancing is needed when adding shards
+
+---->
+Sharding – Short Notes
+Definition
+
+Sharding is a type of horizontal partitioning in which a large database is split into multiple independent database servers (shards). Each shard stores a different subset of the data.
+
+Goal: Scale the database horizontally by distributing data across multiple servers.
+
+Architecture
+Application
+      |
+  Shard Router
+      |
+-------------------------
+|        |        |
+Shard1  Shard2  Shard3
+Example
+Shard 1 → User ID 1–1,000,000
+
+Shard 2 → User ID 1,000,001–2,000,000
+
+Shard 3 → User ID 2,000,001–3,000,000
+
+Each shard has the same schema but stores different rows.
+
+Sharding Strategies
+Range Sharding – Based on value ranges (e.g., IDs, dates).
+Hash Sharding – Uses a hash function (e.g., UserID % N).
+Geographic Sharding – Based on region/country.
+Advantages
+Horizontal scalability
+Faster queries (smaller datasets per server)
+Reduced load on a single database
+Increased storage capacity
+Better fault isolation
+Disadvantages
+Complex implementation
+Cross-shard joins are difficult
+Distributed transactions are harder
+Data rebalancing is needed when adding shards
+
+--->
+CAP Theorem – Short Notes
+Definition
+
+CAP Theorem states that a distributed system can guarantee only two out of the following three properties at the same time:
+
+C – Consistency
+A – Availability
+P – Partition Tolerance
+
+Rule: In the presence of a network partition, you must choose between Consistency and Availability.
+
+The Three Properties
+1. Consistency (C)
+Every client sees the same, latest data after a write.
+
+Example
+User A updates balance = ₹1000
+
+↓
+
+User B immediately reads balance
+
+↓
+
+Gets ₹1000 ✅
+
+All users see the latest value.
+
+2. Availability (A)
+
+Every request receives a response, even if some servers have failed.
+
+Example
+Server 1 ❌
+
+↓
+
+Server 2 responds ✅
+
+The system always returns a response, but it may not be the latest data.
+
+3. Partition Tolerance (P)
+
+The system continues working even if communication between servers is interrupted.
+
+Example
+Server A  ❌ Network Failure ❌  Server B
+
+Users can still access each server.
+
+The network is split into partitions, but the system keeps operating.
+
+CAP Triangle
+          Consistency
+               ▲
+              / \
+             /   \
+            /     \
+           /       \
+Availability-------Partition Tolerance
+
+You can guarantee only two at the same time during a network partition.
+
+CP System (Consistency + Partition Tolerance)
+Network Failure
+
+↓
+
+Reject some requests
+
+↓
+
+Always return correct data
+
+Characteristics
+Latest data is always returned.
+Some requests may fail or wait.
+
+Examples
+MongoDB (configured for strong consistency)
+Apache HBase
+ZooKeeper
+
+
+AP System (Availability + Partition Tolerance)
+Network Failure
+
+↓
+
+Always respond
+
+↓
+
+Data may be stale
+
+Characteristics
+Always available.
+Different users may temporarily see different values.
+
+Examples
+Cassandra
+DynamoDB (eventual consistency mode)
+Riak
+
+CA System (Consistency + Availability)
+Single Database
+
+↓
+
+No Network Partition
+
+↓
+
+Latest Data + Always Available
+
+Characteristics
+Works only when there is no network partition.
+Not practical for distributed systems because network failures are always possible.
+Examples
+Traditional single-server SQL databases (before distribution)
+Why Can't We Have All Three?
+
+Suppose two database servers lose network connectivity.
+
+Server A   ❌ Network ❌   Server B
+
+A user writes data to Server A.
+
+A user reads from Server B.
+
+Now you have two choices:
+
+Choose Consistency (CP)
+Server B refuses request
+
+↓
+
+Correct data maintained
+
+Choose Availability (AP)
+Server B returns old data
+
+↓
+
+Always available
+
+You cannot both:
+
+return the latest data (Consistency), and
+always return a response (Availability),
+while also tolerating the network partition.
+
+| Property                    | Meaning                                |
+| --------------------------- | -------------------------------------- |
+| **Consistency (C)**         | Every read gets the latest data.       |
+| **Availability (A)**        | Every request gets a response.         |
+| **Partition Tolerance (P)** | System works despite network failures. |
+
+Interview Questions
+What is CAP Theorem?
+
+A distributed system can guarantee at most two of Consistency, Availability, and Partition Tolerance during a network partition.
+
+What is the difference between CP and AP?
+| CP                        | AP                    |
+| ------------------------- | --------------------- |
+| Correct data              | Always responds       |
+| May reject/delay requests | May return stale data |
+
+Why is Partition Tolerance important?
+Because network failures are inevitable in distributed systems, most real-world distributed systems must tolerate partitions.
+
+One-Line Definition
+
+CAP Theorem states that during a network partition, a distributed system can provide either Consistency or Availability,
+ but not both simultaneously, while maintaining Partition Tolerance.
+
+ ---->
+ Message Queue (MQ)
+Definition
+A Message Queue (MQ) is a system that allows applications to communicate asynchronously by 
+sending messages through a queue instead of communicating directly.
+
+Goal: Decouple services, improve scalability, reliability, and fault tolerance.
+
+Why Message Queue?
+
+Without MQ
+
+User
+  |
+Application
+  |
+Email Service
+
+If the email service is slow or down, the application also becomes slow or fails.
+
+With MQ
+
+User
+  |
+Application
+  |
+Message Queue
+  |
+Email Service
+
+The application quickly places a message in the queue and responds to the user. The email service processes it later.
+
+Components
+1. Producer
+Sends messages to the queue.
+
+Example:
+
+Order Service
+Payment Service
+
+2. Message Queue
+Temporarily stores messages until they are processed.
+
+3. Consumer
+Reads and processes messages from the queue.
+
+Example:
+
+Email Service
+Notification Service
+SMS Service
+
+Architecture
+          Producer
+              |
+              ▼
+      Message Queue
+              |
+              ▼
+          Consumer
+
+Example: Order Placed
+Customer
+    |
+Place Order
+    |
+Order Service
+    |
+Message Queue
+    |
+-------------------------
+|           |           |
+Email     SMS      Inventory
+Service   Service    Service
+
+When an order is placed:
+
+Order is saved immediately.
+Email is sent asynchronously.
+SMS is sent asynchronously.
+Inventory is updated asynchronously.
+
+The user doesn't have to wait for all these tasks to finish.
+
+How It Works
+Producer sends a message.
+Queue stores the message.
+Consumer reads the message.
+Consumer processes it.
+Message is removed from the queue (after successful processing).
+
+Advantages
+Asynchronous processing
+Decouples services
+Improves scalability
+Handles traffic spikes
+Reliable message delivery
+Better fault tolerance
+
+Disadvantages
+More complex architecture
+Message ordering can be challenging
+Duplicate message handling may be required
+Monitoring and retries add complexity
+
+Real-World Uses
+Email sending
+SMS notifications
+Order processing
+Payment processing
+Image/video processing
+Log processing
+Background jobs
+Popular Message Queue Systems
+RabbitMQ
+Apache Kafka
+Amazon SQS
+Apache ActiveMQ
+Redis Streams
+
+
+---->
+Horizontal Scaling vs Vertical Scaling – Short Notes
+Definition
+
+Scaling is the process of increasing a system's capacity to handle more users, traffic, or data.
+
+There are two types:
+
+Vertical Scaling (Scale Up)
+Horizontal Scaling (Scale Out)
+1. Vertical Scaling (Scale Up)
+Definition
+Increase the resources of one existing server.
+
+Example:
+
+More CPU
+More RAM
+More SSD storage
+
+Diagram
+Before
+
+App
+ |
+Server
+(4 CPU, 8GB RAM)
+
+↓
+
+After
+
+App
+ |
+Server
+(16 CPU, 64GB RAM)
+
+Advantages
+Easy to implement
+No application changes
+No load balancer required
+
+Disadvantages
+Hardware has a limit
+Expensive
+Single Point of Failure (SPOF)
+
+2. Horizontal Scaling (Scale Out)
+Definition
+Add more servers and distribute traffic among them.
+
+Diagram
+             Users
+               |
+         Load Balancer
+               |
+    -----------------------
+    |         |          |
+ Server1   Server2   Server3
+Advantages
+Handles millions of users
+High availability
+Fault tolerant
+Easy to scale by adding servers
+Disadvantages
+More complex
+Requires load balancer
+Data synchronization challenges
+
+| Vertical Scaling                   | Horizontal Scaling            |
+| ---------------------------------- | ----------------------------- |
+| Add resources to one server        | Add more servers              |
+| Scale Up                           | Scale Out                     |
+| Limited by hardware                | Nearly unlimited              |
+| Simple                             | More complex                  |
+| Single point of failure            | High availability             |
+| Usually more expensive per upgrade | Cost-effective at large scale |
+
+Real-World Examples
+Vertical Scaling
+Old Server
+4 CPU
+8 GB RAM
+
+↓
+
+Upgrade
+
+16 CPU
+64 GB RAM
+
+
+Horizontal Scaling
+Before
+
+Users
+  |
+Server
+
+↓
+
+After
+
+Users
+  |
+Load Balancer
+  |
+--------------
+|     |      |
+S1    S2     S3
+
+
+When to Use?
+
+
+Vertical Scaling
+Small applications
+Startups
+Development environments
+Low traffic
+Horizontal Scaling
+Large-scale applications
+Social media
+E-commerce
+Streaming platforms
+Cloud-native applications
+Interview Questions
+
+What is Vertical Scaling?
+Increasing CPU, RAM, or storage of a single server.
+
+What is Horizontal Scaling?
+Adding more servers and distributing traffic among them.
+
+Which is more scalable?
+Horizontal Scaling, because you can keep adding servers as demand grows.
+
+Why do companies like Google, Netflix, and Amazon use Horizontal Scaling?
+Because it provides high availability, fault tolerance, and supports millions of users.
+
+
+--->Microservices
+Definition
+Microservices is an architectural style where an application is divided into small,
+ independent services, and each service is responsible for a single business function.
+
+Goal: Build scalable, independently deployable, and maintainable applications.
+
+Why Microservices?
+Monolithic Architecture
+Application
+------------------------
+User
+Order
+Payment
+Notification
+Inventory
+------------------------
+
+Problems:
+
+Entire application must be deployed together.
+Hard to scale one feature.
+One bug can affect the whole application.
+Microservices Architecture
+
+                 API Gateway
+                      |
+-------------------------------------------------
+|        |          |         |                 |
+User   Order     Payment   Inventory   Notification
+Service Service   Service    Service      Service
+
+Each service is independent.
+
+Characteristics
+Single Responsibility
+Independent Deployment
+Own Database (recommended)
+Loosely Coupled
+Highly Scalable
+Fault Isolation
+
+
+Architecture
+Client
+   |
+API Gateway
+   |
+---------------------------------------------
+|         |         |          |             |
+User    Order   Payment   Inventory   Email
+Service  Service  Service    Service    Service
+
+
+Communication
+1. Synchronous
+Order Service
+      |
+HTTP / REST
+      |
+Payment Service
+
+The caller waits for a response.
+
+2. Asynchronous
+Order Service
+      |
+Message Queue
+      |
+Notification Service
+
+The caller doesn't wait; the message is processed later.
+
+Database
+
+Recommended approach:
+
+User Service ------ User DB
+
+Order Service ----- Order DB
+
+Payment Service --- Payment DB
+
+Each service owns its own database.
+
+Advantages
+Independent deployment
+Easy to scale individual services
+Better fault isolation
+Faster development
+Technology flexibility (each service can use a different language/database if needed)
+
+Disadvantages
+Complex architecture
+Difficult debugging
+Distributed transactions are harder
+Network latency
+Requires monitoring and service discovery
+
+
+| Monolith                  | Microservices                    |
+| ------------------------- | -------------------------------- |
+| Single application        | Multiple small services          |
+| Single deployment         | Independent deployments          |
+| Usually one database      | Database per service             |
+| Hard to scale selectively | Scale each service independently |
+| Tight coupling            | Loose coupling                   |
+
+
+--->
+Write-Through vs Write-Back Cache – Short Notes
+Write-Through Cache
+Definition
+
+In Write-Through, data is written to the cache and the database at the same time.
+
+Flow
+Client
+   |
+Write Request
+   |
+Cache
+   |
+Database
+
+How it Works
+Client sends a write request.
+Cache is updated.
+Database is updated immediately.
+Success response is returned.
+
+Advantages
+Data is always consistent.
+No data loss if the cache crashes.
+Database always has the latest data.
+
+Disadvantages
+Slower writes.
+Every write hits both cache and database.
+
+
+Write-Back (Write-Behind) Cache
+Definition
+
+In Write-Back, data is written only to the cache first. The cache updates the database later (asynchronously).
+
+Flow
+Client
+   |
+Write Request
+   |
+Cache
+   |
+Return Success
+   |
+(Background Process)
+   |
+Database
+How it Works
+Client sends a write request.
+Cache is updated.
+Response is returned immediately.
+Cache writes to the database later.
+
+Advantages
+Very fast writes.
+Reduces database load.
+Better performance for high write traffic.
+Disadvantages
+Risk of data loss if the cache fails before syncing.
+More complex implementation.        
+
+| Write-Through                  | Write-Back                             |
+| ------------------------------ | -------------------------------------- |
+| Cache + DB updated immediately | Cache updated first, DB later          |
+| Synchronous write              | Asynchronous write                     |
+| Slower                         | Faster                                 |
+| Strong consistency             | Eventual consistency                   |
+| Low risk of data loss          | Higher risk if cache fails before sync |
+
+
+Example
+Write-Through
+Update User Name
+
+↓
+
+Cache Updated ✅
+
+↓
+
+Database Updated ✅
+
+↓
+
+Response Sent
+
+Write-Back
+Update User Name
+
+↓
+
+Cache Updated ✅
+
+↓
+
+Response Sent ✅
+
+↓
+
+Later...
+
+↓
+
+Database Updated
+
+
+When to Use?
+Write-Through
+Banking systems
+Payment systems
+Inventory management
+Any application requiring immediate consistency
+
+Write-Back
+Social media likes
+Analytics
+Logging systems
+Gaming leaderboards
+High-throughput applications
+
+Interview Tip
+Write-Through = Safe but slower.
+Write-Back = Fast but riskier.
+
+
+--->
+Definition
+
+NoSQL (Not Only SQL) databases are non-relational databases designed to handle large-scale, distributed, and unstructured or semi-structured data.
+
+Goal: High scalability, flexibility, and high performance.
+
+Types of NoSQL Databases
+Document Database
+Key-Value Database
+Column Family Database
+Graph Database
+
+1. Document Database
+Definition
+
+Stores data as documents (usually JSON or BSON).
+Each document can have a different structure.
+
+Structure
+{
+  "_id": 1,
+  "name": "Naeem",
+  "age": 22,
+  "skills": ["Java", "React"]
+}
+
+Another document:
+
+{
+  "_id": 2,
+  "name": "Ali",
+  "city": "Delhi"
+}
+
+Notice the documents don't need the same fields.
+
+Characteristics
+JSON/BSON documents
+Flexible schema
+Nested objects supported
+Easy to scale
+
+Examples
+MongoDB
+CouchDB
+Firebase Firestore
+
+Use Cases
+User profiles
+CMS
+E-commerce products
+Blogs
+2. Key-Value Database
+
+Definition
+Stores data as Key → Value pairs.
+Think of it like a HashMap.
+
+Structure
+"user:101" → {"name":"Naeem"}
+
+"token:abc" → "JWT Token"
+
+"cart:123" → ["Phone","Laptop"]
+
+Characteristics
+Very fast lookups
+Simple structure
+Access data using the key
+
+Examples
+Redis
+Amazon DynamoDB
+Riak
+Use Cases
+Session storage
+Cache
+Shopping carts
+OTP storage
+
+3. Column Family Database
+Definition
+Stores data in column families instead of traditional rows.
+Columns belonging to the same family are stored together.
+
+Structure
+Student
+
+Row Key: 101
+
+Name
+---------
+First : Naeem
+Last  : Khan
+
+Education
+---------
+Degree : B.Tech
+CGPA   : 8.2
+
+Only the required columns are read, making it efficient for large datasets.
+
+Characteristics
+Distributed storage
+High write performance
+Handles huge datasets
+Optimized for analytical queries
+Examples
+Apache Cassandra
+Apache HBase
+Google Bigtable
+Use Cases
+IoT
+Time-series data
+Analytics
+Logging systems
+
+graph database
+Definition
+
+A Graph Database is a NoSQL database that stores data as Nodes (entities) and Edges (relationships).
+Goal: Efficiently store and query highly connected data.
+
+Structure
+        Friend
+   Alice ------ Bob
+     |            |
+ Works At      Lives In
+     |            |
+  Google      New York
+Node: Entity (Person, City, Company)
+Edge: Relationship (Friend, Works At, Lives In)
+Property: Information about a node or edge (name, age, city)
+Components
+1. Node
+Represents an object.
+
+Example:
+
+Person
+-------
+ID:101
+Name:Naeem
+Age:22
+2. Edge
+
+Represents the relationship between nodes.
+
+Naeem -------- Friend -------- Ali
+
+3. Properties
+
+Extra information stored with nodes or edges.
+
+Node:
+Name = Naeem
+Age = 22
+Example
+          Friend
+Naeem -------------- Ali
+  |
+Studies At
+  |
+AKTU
+  |
+Located In
+  |
+Lucknow
+
+Advantages
+Very fast relationship queries
+Flexible schema
+Efficient for connected data
+Easy to traverse relationships
+
+Disadvantages
+Not ideal for simple CRUD applications
+Harder to scale horizontally
+Not suitable for heavy analytical workloads
+
+Popular Graph Databases
+Neo4j
+Amazon Neptune
+TigerGraph
+ArangoDB
+
+Use Cases
+Social networks (Facebook, LinkedIn)
+Recommendation systems (Netflix, Amazon)
+Fraud detection
+Knowledge graphs
+Network topology
+Route and navigation systems
+
+| Document DB     | Key-Value DB     | Column Family DB | Graph DB          |
+| --------------- | ---------------- | ---------------- | ----------------- |
+| JSON Documents  | Key → Value      | Column Families  | Nodes & Edges     |
+| Flexible Schema | Very Fast Lookup | Big Data         | Relationship Data |
+| MongoDB         | Redis            | Cassandra        | Neo4j             |
+
+What is a Graph Database?
+A NoSQL database that stores data as nodes and edges to efficiently model and query relationships.
+
+What are Nodes?
+Entities such as Person, Product, Company, City.
+
+What are Edges?
+Relationships connecting nodes, such as Friend, Works At, or Purchased.
+
+When should you use a Graph Database?
+When the application has complex relationships, such as social networks, recommendation engines, or fraud detection.
+
+One-Line Definition
+A Graph Database is a NoSQL database that stores data as nodes and relationships (edges), making it highly efficient for querying and traversing connected data.
+
+
+
+
+
+
+
+

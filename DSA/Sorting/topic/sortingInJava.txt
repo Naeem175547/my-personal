@@ -1,0 +1,135 @@
+/*
+========================================
+JAVA SORTING : BASIC TO ADVANCED
+(Java Concepts, Not DSA Algorithms)
+========================================
+
+TOPICS:
+1. Arrays.sort()
+2. Descending Sorting
+3. String Sorting
+4. Collections.sort()
+5. Comparable
+6. Comparator
+7. Lambda Sorting
+8. Stream Sorting
+9. Multiple Field Sorting
+10. TreeSet
+11. TreeMap
+12. PriorityQueue
+13. parallelSort()
+
+1. Arrays.sort()
+
+
+ - Used for arrays(primitive and non primitive)
+ - Ascending order by default
+ */
+
+ int[] arr = {5, 2, 9, 1, 7};
+ Arrays.sort(arr);
+ System.out.println("Arrays.sort():");
+ // Output: Arrays.sort()
+ System.out.println(Arrays.toString(arr));
+ // Output: [1, 2, 5, 7, 9]
+
+
+ .for Descending order swap or use Algorithms
+ 
+ IMPORTANT METHODS->
+
+ Arrays.sort(arr)
+ Arrays.sort(arr, from, to)
+ Arrays.toString(arr)
+  Arrays.deepToString(arr)-for 2d array
+
+
+
+        
+2. Sorting in Descending Order
+For primitive arrays, Java does NOT directly support descending order.
+So first convert to Integer[].
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+
+        Integer[] arr = {5, 2, 9, 1, 7};
+
+        Arrays.sort(arr, Collections.reverseOrder());
+        System.out.println(Arrays.toString(arr));
+    }
+}
+
+
+3. Sorting Strings
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+
+        String[] names = {"Zara", "Ali", "John", "Bob"};
+
+        Arrays.sort(names);
+
+        System.out.println(Arrays.toString(names));
+    }
+}
+
+Output:
+[Ali, Bob, John, Zara]
+
+4. Sorting Collections (ArrayList)
+Use Collections.sort().
+import java.util.*;
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(50);
+        list.add(10);
+        list.add(30);
+
+        Collections.sort(list);
+        System.out.println(list);
+    }
+}
+
+5. Descending Order in ArrayList
+Collections.sort(list, Collections.reverseOrder());
+Example:
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        ArrayList<Integer> list =
+                new ArrayList<>(Arrays.asList(5,1,9,2));
+        Collections.sort(list, Collections.reverseOrder());
+        System.out.println(list);
+    }
+}
+========================================
+MOST IMPORTANT INTERVIEW POINT
+ ========================================
+
+        Comparable:
+        - Inside class
+        - One default sorting
+
+        Comparator:
+        - Outside class
+        - Multiple custom sorting
+        */
+
+
+
+        /*
+ ========================================
+MODERN JAVA SORTING
+ ========================================
+
+        list.sort()
+        Comparator.comparing()
+        Stream.sorted()
+        Lambdas
+        */
+        

@@ -1,0 +1,36 @@
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 2px solid white;
+  color: rgb(237, 233, 233);
+  border-bottom: 2px;
+}
+
+nav img {
+  height: 50px;
+  border-radius: 100%;
+}
+nav div {
+  display: flex;
+}
+
+nav h3 {
+  margin-left: 15px;
+  padding-top: 10px;
+  color: rgb(76, 73, 73);
+}
+
+nav p {
+  margin-left: 50px;
+  font-size: 1.2rem;
+  padding: 10px;
+  font-weight: bold;
+
+  color: rgb(74, 71, 71);
+}
+
+nav h3:hover,
+nav p:hover {
+  text-decoration: underline;
+}

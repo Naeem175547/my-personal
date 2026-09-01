@@ -1,0 +1,1444 @@
+Apollo Client
+1. What is Apollo Client?
+Apollo Client is a library used in React to communicate
+with a GraphQL server.
+It helps you:
+
+React
+  ↓
+Apollo Client
+  ↓
+GraphQL Server (NestJS)
+
+Without Apollo Client, you would have to manually send HTTP requests
+ and manage GraphQL responses.
+
+Apollo Client handles things like:
+
+Sending queries
+Sending mutations
+Loading state
+Error state
+Data state
+Caching
+
+
+2. Installation
+Inside your React project:
+npm install @apollo/client graphql
+You need:
+@apollo/client → Apollo Client
+graphql        → GraphQL library
+
+
+
+3. Configuration
+Create an Apollo Client:
+import { ApolloClient, InMemoryCache } from "@apollo/client";
+
+
+const client = new ApolloClient({
+  uri: "http://localhost:3000/graphql",
+  cache: new InMemoryCache(),
+});
+
+
+notes-->
+here error is because you're likely using a newer Apollo Client version. In Apollo Client 4, uri is configured through HttpLink, not directly on ApolloClient.
+
+Use this:
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+} from "@apollo/client";
+
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:3000/graphql",
+});
+
+
+export const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
+
+
+What does this mean?
+uri: "http://localhost:3000/graphql"
+
+This is your NestJS GraphQL endpoint.
+For example:
+
+React
+  ↓
+http://localhost:3000/graphql
+  ↓
+NestJS
+
+
+
+And:
+cache: new InMemoryCache()
+creates Apollo's client-side cache.
+
+
+
+4. Provider
+React components need access to the Apollo Client.
+So we wrap the application with ApolloProvider.
+
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./apollo-client";
+import App from "./App";
+
+
+function main() {
+  return (
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  );
+}
+
+Usually with React/Vite, you'll have something like:
+
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { ApolloProvider } from "@apollo/client";
+import App from "./App";
+import { client } from "./apollo-client";
+
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </StrictMode>
+);
+
+
+this is another Apollo Client 4 change. In Apollo Client 4, ApolloProvider is no longer exported from the main @apollo/client package. It comes from @apollo/client/react.
+Change:
+import { ApolloProvider } from "@apollo/client";
+to:
+import { ApolloProvider } from "@apollo/client/react";
+
+5. Why Provider?
+Because now any componen inside ApolloProvider can use Apollo hooks:
+ApolloProvider
+      │
+      ├── App
+      │    ├── Users
+      │    ├── Profile
+      │    └── Products
+      │
+      └── All can use Apollo Client
+
+For example, later:
+const { data, loading, error } = useQuery(GET_USERS);
+The component can use useQuery() because Apollo Client was provided at the top.
+In React, useQuery() is usually from TanStack Query or Apollo Client.
+
+
+
+---->GraphQL Queries — useQuery()
+Now we connect your React + Apollo Client to the NestJS GraphQL Query.
+1. What is useQuery()?
+
+useQuery() is a React hook from Apollo Client used to execute a GraphQL Query and get the result.
+
+React Component
+      ↓
+   useQuery()
+      ↓
+Apollo Client
+      ↓
+NestJS GraphQL
+      ↓
+Database
+
+2. NestJS Query
+Suppose your NestJS resolver has:
+
+@Query(() => [User])
+users() {
+  return this.userService.getUsers();
+}
+
+So GraphQL provides:
+
+type Query {
+  users: [User]
+}
+3. Write the Query in React
+
+Create:
+
+src/
+└── graphql/
+    └── queries.ts
+import { gql } from "@apollo/client";
+export const GET_USERS = gql`
+  query {
+    users {
+      id
+      username
+      displayName
+    }
+  }
+`;
+gql converts the GraphQL query into something Apollo Client can use.
+
+4. Use useQuery()
+Because you're using Apollo Client 4:
+
+import { useQuery } from "@apollo/client/react";
+import { GET_USERS } from "./graphql/queries";
+
+
+function Users() {
+  const { data, loading, error } = useQuery(GET_USERS);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+  return (
+    <div>
+      {data?.users.map((user: any) => (
+        <div key={user.id}>
+          <p>{user.username}</p>
+          <p>{user.displayName}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default Users;
+useQuery() returns
+const { data, loading, error } = useQuery(GET_USERS);
+| Value     | Meaning                    |
+| --------- | -------------------------- |
+| `data`    | Data returned by GraphQL   |
+| `loading` | Query is currently running |
+| `error`   | Something went wrong       |
+
+
+---->
+Query Variables
+Suppose NestJS has:
+
+@Query(() => User, { nullable: true })
+user(@Args("id", { type: () => ID }) id: number) {
+  return this.userService.getUserById(id);
+}
+
+GraphQL query:
+
+query GetUser($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    displayName
+  }
+}
+
+or
+you can omit the query name.
+
+Without a name
+query ($id: ID!) {
+  user(id: $id) {
+    id
+    username
+    displayName
+  }
+}
+
+Here:
+
+$id → GraphQL variable
+$id: ID! → variable type
+user(id: $id) → pass variable to query
+
+In React:
+
+const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      username
+      displayName
+    }
+  }
+`;
+
+Then:
+
+const { data, loading, error } = useQuery(GET_USER, {
+  variables: {
+    id: 10,
+  },
+});
+
+So the flow is:
+
+variables: { id: 10 }
+          ↓
+$id = 10
+          ↓
+user(id: $id)
+          ↓
+NestJS @Args("id")
+          ↓
+getUserById(10)
+
+Why variables?
+Instead of writing:
+user(id: 10)
+every time, you create a reusable query:
+user(id: $id)
+
+and React can provide different values:
+variables: { id: 10 }
+or:
+variables: { id: 20 }
+
+Remember
+useQuery()
+    ↓
+Execute GraphQL Query
+
+
+variables
+    ↓
+Send dynamic values to the Query
+
+$ is necessary when you use GraphQL variables.
+
+
+
+---->
+GraphQL Mutations
+A Mutation is used when you want to change data.
+
+Query     → Read
+Mutation  → Create / Update / Delete
+1. NestJS Mutation
+
+Suppose your NestJS resolver has:
+
+@Mutation(() => User)
+createUser(
+  @Args('username') username: string,
+  @Args('email') email: string,
+) {
+  return this.userService.createUser(username, email);
+}
+
+GraphQL provides a mutation like:
+
+type Mutation {
+  createUser(username: String!, email: String!): User
+}
+2. React — useMutation()
+
+Apollo provides the useMutation() hook.
+
+import { gql } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
+
+
+const CREATE_USER = gql`
+  mutation {
+    createUser(
+      username: "Naeem"
+      email: "naeem@example.com"
+    ) {
+      id
+      username
+      email
+    }
+  }
+`;
+
+Then:
+const [createUser] = useMutation(CREATE_USER);
+To execute it:
+
+createUser();
+
+Important difference from useQuery()
+useQuery(GET_USERS);
+
+The query runs automatically when the component renders.
+
+But:
+const [createUser] = useMutation(CREATE_USER);
+doesn't execute immediately.
+You call:
+createUser();
+
+when you want to perform the mutation, usually after a button/form submission.
+
+3. Mutation with Variables ⭐
+Hard-coding values isn't good:
+
+mutation {
+  createUser(
+    username: "Naeem"
+    email: "naeem@example.com"
+  ) {
+    id,
+    name
+  }
+}
+
+Instead, use variables:
+
+const CREATE_USER = gql`
+  mutation CreateUser($username: String!, $email: String!) { //CreateUser name is optional as useQuery operation name
+    createUser(
+      username: $username
+      email: $email
+    ) {
+      id
+      username
+      email
+    }
+  }
+`;
+
+Then:
+const [createUser] = useMutation(CREATE_USER);
+
+
+createUser({
+  variables: {
+    username: "Naeem",
+    email: "naeem@example.com",
+  },
+});
+
+Flow:
+
+React
+  ↓
+createUser()
+  ↓
+variables
+  ↓
+GraphQL Mutation
+  ↓
+NestJS @Mutation()
+  ↓
+Service
+  ↓
+MySQL/DB
+
+Why variables?
+Because the values usually come dynamically from a form:
+
+createUser({
+  variables: {
+    username: username,
+    email: email,
+  },
+});
+
+So:
+
+Query
+→ useQuery()
+
+
+Mutation
+→ useMutation()
+
+
+Dynamic values
+→ variables
+
+One important point: In real NestJS applications,
+ you'll commonly use an InputType for mutations with multiple fields:
+
+createUser(input: CreateUserInput!): User
+
+We'll get to that when you study Input Types.
+
+---->
+✅ useMutation() also returns data, loading, and error.
+Example:
+
+const [createUser, { data, loading, error }] =useMutation(CREATE_USER);
+
+first remember destructuring concepts:
+[a,b]=array ->then name can be anything but order is important so fun name can be anything
+{}=obj here key name is important
+
+
+What happens?
+When you call:
+
+await createUser({
+  variables: {
+    input: {
+      username: "Naeem",
+      email: "naeem@gmail.com",
+    },
+  },
+});
+
+The server might return:
+
+{
+  createUser {
+    id
+    username
+    email
+  }
+}
+
+Then Apollo puts that response into:
+
+data
+
+So you can do:
+
+if (loading) {
+  return <p>Creating user...</p>;
+}
+
+
+if (error) {
+  return <p>{error.message}</p>;
+}
+
+
+console.log(data?.createUser);
+
+Both hooks have these states
+useQuery()
+   ↓
+data
+loading
+error
+
+
+useMutation()
+   ↓
+data
+loading
+error
+
+But their main purpose is different:
+
+useQuery()
+→ fetch/read data
+
+
+useMutation()
+→ create/update/delete data
+→ and can return the result of that operation
+
+For example, after creating a user, the mutation can return the newly created user.
+
+-->GraphQL InputType
+
+An InputType is a custom structure used to send multiple input values together to a Query or, 
+more commonly, a Mutation.
+Instead of:
+createUser(username: String!, email: String!, age: Int!)
+you can create:
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  age: Int!
+}
+
+Then:
+createUser(input: CreateUserInput!): User
+
+NestJS
+import { InputType, Field, Int } from '@nestjs/graphql';
+
+@InputType()
+export class CreateUserInput {
+  @Field()
+  username: string;
+
+  @Field()
+  email: string;
+
+
+  @Field(() => Int)
+  age: number;
+}
+
+Use it in the resolver:
+
+@Mutation(() => User)
+createUser(@Args('input') input: CreateUserInput) {
+  return this.userService.createUser(input);
+}
+
+React sends
+mutation {
+  createUser(
+    input: {
+      username: "Naeem"
+      email: "naeem@gmail.com"
+      age: 21
+    }
+  ) {
+    id
+    username
+  }
+}
+
+With variables, which is the usual approach:
+
+mutation CreateUser($input: CreateUserInput!) {//we don't defind CreateUserInput inside react it is already in backend
+  createUser(input: $input) {
+    id
+    username
+  }
+}
+
+React:
+
+createUser({
+  variables: {
+    input: {
+      username: "Naeem",
+      email: "naeem@gmail.com",
+      age: 21,
+    },
+  },
+});
+
+Why use InputType?
+Without InputType
+createUser(username, email, age, address, phone, ...)
+
+
+With InputType
+createUser(input)
+              ↓
+        all fields together
+
+Remember:
+
+@InputType()
+      ↓
+Defines the structure of data coming INTO the API
+
+
+@ObjectType()
+      ↓
+Defines the structure of data going OUT of the API
+
+This is especially useful for Create and Update mutations.
+
+notes->
+I used CreateUserInput in the React GraphQL query 
+because that name already exists in the GraphQL schema created by NestJS.
+
+It is not being defined in React.
+
+NestJS defines it
+@InputType()
+export class CreateUserInput {
+  @Field()
+  username: string;
+  @Field()
+  email: string;
+}
+
+This creates the GraphQL type:
+
+input CreateUserInput {
+  username: String!
+  email: String!
+}
+
+React uses that existing GraphQL type
+React writes:
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    id
+    username
+  }
+}
+
+React is basically saying:
+
+"I'm sending an input whose GraphQL type is CreateUserInput."
+
+React's TypeScript type is separate
+
+You can also create a TypeScript type for your own type checking:
+
+type CreateUserInputData = {
+  username: string;
+  email: string;
+};
+
+Notice I intentionally called it CreateUserInputData to avoid confusion.
+
+const input: CreateUserInputData = {
+  username: "Naeem",
+  email: "naeem@gmail.com",
+};
+
+Then:
+
+createUser({
+  variables: {
+    input,
+  },
+});
+
+
+
+---->
+Caching
+
+Apollo Client has a cache on the React side.
+It stores data that was already fetched so Apollo can reuse it instead of requesting the same data from the server again.
+NestJS / MySQL
+      ↓
+   GraphQL
+      ↓
+ Apollo Client
+      ↓
+    Cache
+      ↓
+    React
+
+1. Apollo Cache
+
+You already created it here:
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
+
+InMemoryCache stores GraphQL results in memory.
+For example:
+
+query {
+  user(id: 1) {
+    id
+    username
+  }
+}
+
+Apollo receives:
+{
+  "id": "1",
+  "username": "Naeem"
+}
+
+and keeps that data in its cache.
+
+If another component asks for the same data,
+ Apollo may use the cached data instead of making another network request.
+
+ 2. Cache Updates
+
+Suppose you create a new user:
+Existing cache:
+
+users
+├── User 1
+└── User 2
+
+You run:
+createUser().
+and the server creates:
+
+User 3
+But your cache may still contain:
+because use fetch data before createUser
+
+users
+├── User 1
+└── User 2
+
+So you may need to update the cache.
+
+Apollo provides ways to do this.
+A simple approach is to refetch the users query after the mutation.
+
+3. Refetching
+
+Refetching means asking the server for the latest data again.
+Example:
+
+const { data, refetch } = useQuery(GET_USERS);
+
+Then:
+
+await createUser({
+  variables: {
+    input: {
+      username: "Naeem",
+      email: "naeem@gmail.com",
+    },
+  },
+});
+
+
+refetch();
+
+Flow:
+
+Create User
+    ↓
+Database changes
+    ↓
+refetch()
+    ↓
+GraphQL server
+    ↓
+Latest users
+    ↓
+Apollo cache updates
+    ↓
+React displays latest data
+
+|                | Cache                   | Refetch                      |
+| -------------- | ----------------------- | ---------------------------- |
+| Purpose        | Reuse stored data       | Get fresh data               |
+| Server request | May not happen          | Happens                      |
+| Speed          | Fast                    | Requires network             |
+| Example        | Previously fetched user | Refresh users after creation |
+
+
+Yes, that's the basic idea. ✅
+
+If Apollo already has the required data in its cache, 
+another component using useQuery() can get that data from the cache
+ instead of needing to fetch it again.
+
+Example
+Component A
+const { data } = useQuery(GET_USERS);
+
+Server returns:
+User 1
+User 2
+
+Apollo stores it:
+
+Apollo Cache
+    ↓
+User 1
+User 2
+
+Later, Component B does:
+
+const { data } = useQuery(GET_USERS);
+
+Apollo can use the cached result:
+
+Component B
+     ↓
+useQuery(GET_USERS)
+     ↓
+Apollo Cache
+     ↓
+User 1
+User 2
+
+So it may not need another request to NestJS.
+
+But one important point
+Whether Apollo uses only the cache or also contacts the server depends
+ on the query's fetch policy.
+
+The default behavior can involve both cache and network depending on the situation.
+ You can explicitly control it:
+
+useQuery(GET_USERS, {
+  fetchPolicy: "cache-first",
+});
+
+cache-first means:
+
+Cache has data?
+   ↓ YES → use cache
+   ↓ NO  → request server
+
+That's the simple caching behavior you should remember for now
+
+--->
+Polling
+
+Polling = client repeatedly asks the server for updated data at a fixed interval.
+
+In Apollo:
+
+const { data } = useQuery(GET_NOTIFICATIONS, {
+  pollInterval: 5000,
+});
+
+5000 = 5 seconds.
+
+So:
+
+Request → wait 5s → Request → wait 5s → Request → ...
+
+No WebSocket or Subscription is required.
+---->
+
+Authentication — JWT + Auth Headers + Apollo
+
+This is how you connect React + Apollo + NestJS authentication.
+
+React
+  ↓
+Apollo Client
+  ↓
+JWT in Authorization header
+  ↓
+NestJS Guard
+  ↓
+Resolver
+
+1. JWT
+JWT (JSON Web Token) is a token that the server gives to the user after successful login.
+
+Example:
+React
+ ↓
+login(email, password)
+ ↓
+NestJS
+ ↓
+login successful
+ ↓
+JWT token
+ ↓
+React stores token
+
+The token might look like:
+eyJhbGciOiJIUzI1NiIs...
+
+React then sends this token with future GraphQL requests.
+
+
+2. Auth Header
+
+The token is normally sent using the HTTP Authorization header:
+Authorization: Bearer <JWT_TOKEN>
+For example:
+Authorization: Bearer eyJhbGciOiJIUzI1NiIs...
+
+Bearer means:
+"The following value is the authentication token."
+
+
+
+3. Apollo Authentication
+
+Apollo needs to automatically attach the JWT to GraphQL requests.
+With Apollo Client 4, you can use SetContextLink.
+
+Install nothing extra if you're using the appropriate Apollo Client package exports.
+
+apollo-client.ts
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+} from "@apollo/client";
+
+
+import { SetContextLink } from "@apollo/client/link/context";
+
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:3000/graphql",
+});
+
+
+const authLink = new SetContextLink((prevContext) => {
+  const token = localStorage.getItem("token");
+  return {
+    headers: {
+      ...prevContext.headers,
+      authorization: token ? `Bearer ${token}` : "",
+    },
+  };
+});
+
+
+export const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
+Now every GraphQL request can automatically contain:
+Authorization: Bearer JWT_TOKEN
+
+4. Why do we use authLink?
+
+Without it:
+
+React
+ ↓
+GraphQL request
+ ↓
+NestJS
+
+The request doesn't automatically contain your JWT.
+
+With authLink:
+
+React
+ ↓
+Apollo Client
+ ↓
+authLink
+ ↓
+adds Authorization header
+ ↓
+HttpLink
+ ↓
+NestJS
+
+5. NestJS receives the token
+
+On the NestJS side, your authentication guard can read the token from the request.
+
+Conceptually:
+
+Authorization: Bearer JWT
+                ↓
+            NestJS Guard
+                ↓
+          verify JWT
+                ↓
+          authenticated?
+           /        \
+         YES        NO
+          ↓          ↓
+      Resolver     Reject
+
+For GraphQL, the authenticated user is commonly made available through the GraphQL context.
+
+Important distinction
+JWT
+→ The token
+
+
+Authorization header
+→ Where/how the token is sent
+
+
+Apollo authentication
+→ Automatically attaches the token to requests
+Complete picture
+              LOGIN
+React ─────────────────→ NestJS
+  ↑                         │
+  │                         ↓
+  │                      JWT token
+  │                         │
+  └─────────────────────────┘
+           store token
+
+
+Future request:
+
+
+React
+  ↓
+Apollo Client
+  ↓
+authLink
+  ↓
+Authorization: Bearer JWT
+  ↓
+NestJS
+  ↓
+Guard
+  ↓
+Resolver
+  ↓
+Protected data
+
+One important note: for a real production app, storing JWTs in localStorage has security tradeoffs. A common safer architecture
+ is using secure, HttpOnly cookies, depending on your authentication design.
+
+notes->
+After a successful login, you can store the JWT in localStorage.
+
+1. Login mutation
+Suppose NestJS returns:
+
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    token
+  }
+}
+
+React:
+
+const [login, { data }] = useMutation(LOGIN);
+After login:
+
+const handleLogin = async () => {
+  const result = await login({
+    variables: {
+      input: {
+        email: "test@gmail.com",
+        password: "123456",
+      },
+    },
+  });
+
+  const token = result.data?.login.token;
+  if (token) {
+    localStorage.setItem("token", token);
+  }
+};
+
+//result contain what mutation return and data is also contain same
+but:
+const [login, { data }] = useMutation(LOGIN);
+
+data is updated by React after the mutation finishes.
+So immediately after
+await login(...);
+
+data may still have the old value.
+That's why use:
+const result = await login(...);
+
+
+const token = result.data?.login.token;
+
+Here result contains the fresh response immediately.
+
+result.data → fresh mutation response
+data        → React-managed state
+
+2. Later Apollo reads it
+Your Apollo auth setup:
+const token = localStorage.getItem("token");
+
+Then:
+authorization: token ? `Bearer ${token}` : "",
+
+So the complete flow is:
+
+Login
+  ↓
+NestJS returns JWT
+  ↓
+result.data.login.token
+  ↓
+localStorage.setItem("token", token)
+  ↓
+Apollo reads token
+  ↓
+Authorization: Bearer token
+  ↓
+NestJS Guard
+To remove it on logout
+localStorage.removeItem("token");
+
+
+--->
+if using typescript but optional to remove warning
+
+import { gql } from "@apollo/client";
+import type { TypedDocumentNode } from "@apollo/client";//for specifing type of response and input
+
+
+type LoginResponse = {
+  login: {
+    accessToken: string;
+  };
+};
+
+type LoginVariables = {
+  username: string;
+  password: string;
+};
+
+export const Login_User: TypedDocumentNode<
+  LoginResponse,
+  LoginVariables
+> = gql`
+  mutation Login($username: String!, $password: String!) {
+    login(username: $username, password: $password) {
+      accessToken
+    }
+  }
+`;
+
+
+---->
+| Approach          | Header                           |
+| ----------------- | -------------------------------- |
+| `ApolloLink`      | Automatically with every request |
+| `context.headers` | **Only that specific request** ✅ |
+
+
+1. ApolloLink — Header with every request
+import {
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  ApolloLink,
+} from "@apollo/client";
+
+
+const httpLink = new HttpLink({
+  uri: "http://localhost:3000/graphql",
+});
+
+
+const authLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem("token");
+
+  operation.setContext({
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+  return forward(operation);
+});
+
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+});
+
+
+export default client;
+
+Now:
+
+useQuery(ME);
+automatically sends:
+Authorization: Bearer TOKEN
+with every GraphQL request.
+
+2. context.headers — Header for specific request
+No ApolloLink needed.
+
+import { useQuery } from "@apollo/client/react";
+import { ME } from "../graphql/query";
+
+
+export default function Profile() {
+  const token = localStorage.getItem("token");
+
+
+  const { data, loading, error } = useQuery(ME, {
+    context: {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error.message}</p>;
+  return (
+    <div>
+      <h2>{data?.me.name}</h2>
+      <p>{data?.me.username}</p>
+    </div>
+  );
+}
+
+Here the header is sent only with this ME request.
+
+Mutation example
+const [createPost] = useMutation(CREATE_POST);
+
+
+createPost({
+  variables: {
+    input: postData,
+  },
+  context: {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  },
+});
+
+
+In ApolloLink:
+
+const authLink = new ApolloLink((operation, forward) => {
+    // ...
+    return forward(operation);
+});
+operation
+operation represents the current GraphQL request.
+
+It contains information about the request, such as:
+
+operation
+├── query       → GraphQL query/mutation
+├── variables   → variables sent
+└── context     → headers, etc.
+
+You can modify its context:
+
+operation.setContext({
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+});
+
+So you're basically saying:
+"For this current request, add this header."
+
+forward
+forward sends the modified operation to the next Apollo Link.
+
+return forward(operation);
+
+Think of it as:
+
+GraphQL request
+      ↓
+   authLink
+      ↓
+  operation
+  (add token)
+      ↓
+   forward()
+      ↓
+ next link / HttpLink
+      ↓
+    Server
+
+If you don't call forward(operation), the request won't continue to the server.
+
+--->
+useQuery → use its error state; don't wrap the hook in try/catch
+if automatically get error in side error state
+
+
+---->
+1. refetch() — when you have the query's refetch function
+const { data, refetch } = useQuery(GET_MY_POSTS);
+
+async function deletePost(postId: number) {
+    const { data } = await deletePostMutation({
+        variables: {
+            userId: Number(localStorage.getItem("userId")),
+            id: postId,
+        },
+    });
+
+
+    if (data?.removePostUser) {
+        await refetch();
+        navigate("/profile");
+    }
+}
+so if mutation operation is not in same compoent then props drilling/context will be required
+2. refetchQueries — 
+async function deletePost(postId: number) {
+    const { data } = await deletePostMutation({
+        variables: {
+            userId: Number(localStorage.getItem("userId")),
+            id: postId,
+        },
+        refetchQueries: [
+            {
+                query: GET_MY_POSTS,
+            },
+        ],
+    });
+
+
+    if (data?.removePostUser) {
+        navigate("/profile");
+    }
+}
+
+refetchQueries works because Apollo runs GET_MY_POSTS again and then updates its cache with the new result.
+It does not matter which component originally called GET_MY_POSTS.
+
+refetchQueries: [
+    { query: GET_MY_POSTS }
+]
+
+Flow:
+
+Delete Post
+    ↓
+refetchQueries
+    ↓
+GET_MY_POSTS runs again
+    ↓
+Backend returns updated posts
+    ↓
+Apollo Cache updates
+    ↓
+Components using GET_MY_POSTS get updated data
+
+So if GET_MY_POSTS is used in your Profile component, and deletion happens in your Post component, it can still update the Profile data through Apollo's cache.
+
+Important: refetchQueries = fetch again + update cache.
+
+
+refetch()          → need access to refetch
+                    → props/context may be needed
+
+refetchQueries     → directly reruns GET_MY_POSTS
+                    → no prop drilling/context
+
+notes>
+const { data } = await deletePostMutation({
+    variables: {
+        userId: Number(localStorage.getItem("userId")),
+        id: postId,
+    },
+    refetchQueries: [
+        {
+            query: GET_POSTS,
+            variables: {
+                page: 1,
+                limit: 5,
+            },
+        },
+    ],
+});
+
+if (data?.removePostUser) {
+    navigate("/profile");
+}
+
+
+----->
+in Link
+
+to="create-post"
+➡️ Relative to the current route.
+
+to="/create-post"
+➡️ Absolute path from the website root.
+
+
+---->
+navigate(`/edit-post/${postId}`, {
+            state: {
+                from: window.location.pathname
+            }
+        });

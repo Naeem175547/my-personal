@@ -1,0 +1,2840 @@
+⚡ Process in Node.js Notes
+
+process is a global object in Node.js
+that provides information and control about
+ the currently running Node.js program.
+
+👉 No need to import it.
+
+⚡ Process in Node.js Notes
+📌 What is process in Node.js?
+
+process is a global object in Node.js that provides information and control about the currently running Node.js program.
+
+👉 No need to import it.
+
+console.log(process)
+process {
+  version: 'v22.x.x',
+  versions: { ... },
+  arch: 'x64',
+  platform: 'win32',
+  pid: 1234,
+  env: { ... },
+  argv: [
+    'C:\\Program Files\\nodejs\\node.exe',
+    'C:\\Users\\abc\\app.js'
+  ],
+  cwd: [Function: wrappedCwd],
+  exit: [Function: exit],
+  memoryUsage: [Function: memoryUsage]
+}
+🔹 Common Uses of process
+📌 1. process.argv
+
+Used to get command-line arguments.
+
+console.log(process.argv)
+Example
+// app.js
+console.log(process.argv[2])
+
+Run:
+node app.js Naeem
+
+Output:
+Naeem
+
+why [2]
+node app.js Naeem
+
+Node automatically stores values like this:
+
+[
+  'C:\\Program Files\\nodejs\\node.exe', // index 0
+  'C:\\Users\\abc\\app.js',              // index 1
+  'Naeem'                                // index 2
+]
+| Index | Value                   |
+| ----- | ----------------------- |
+| `0`   | Node.js executable path |
+| `1`   | File name (`app.js`)    |
+| `2`   | First user argument     |
+
+📌 2. process.cwd()
+
+Returns current working directory.
+
+console.log(process.cwd())
+📌 3. process.exit()
+
+Stops the Node.js program.
+
+console.log("Start")
+
+process.exit()
+
+console.log("End")
+
+Output:
+
+Start
+📌 4. process.env
+
+Used to access environment variables.
+
+console.log(process.env)
+Example
+console.log(process.env.PORT)
+
+Run:
+
+PORT=5000 node app.js
+📌 5. process.pid
+
+Returns Process ID.
+
+console.log(process.pid)
+📌 6. process.platform
+
+Shows operating system platform.
+
+console.log(process.platform)
+Output Examples
+win32
+linux
+darwin
+📌 7. process.version
+
+Shows Node.js version.
+
+console.log(process.version)
+📌 8. process.memoryUsage()
+
+Shows memory usage.
+
+console.log(process.memoryUsage())
+📌 9. process.uptime()
+
+Returns how long program has been running.
+
+console.log(process.uptime())
+🔹 Process Events
+📌 beforeExit
+
+Runs before Node.js exits.
+
+process.on('beforeExit', () => {
+    console.log("Before Exit")
+})
+📌 exit
+
+Runs when process exits.
+
+process.on('exit', () => {
+    console.log("Process Ended")
+})
+📌 uncaughtException
+
+Handles unexpected errors.
+
+process.on('uncaughtException', (err) => {
+    console.log("Error:", err.message)
+})
+
+undefinedFunction()
+🔹 Common Uses of process
+📌 1. process.argv
+
+Used to get command-line arguments.
+
+console.log(process.argv)
+Example
+// app.js
+console.log(process.argv[2])
+Run:
+
+node app.js Naeem
+
+Output:
+Naeem
+📌 2. process.cwd()
+Returns current working directory.
+
+console.log(process.cwd())
+
+📌 3. process.exit()
+Stops the Node.js program.
+
+console.log("Start")
+process.exit()
+console.log("End")
+
+Output:
+
+Start
+📌 4. process.env
+
+Used to access environment variables.
+
+console.log(process.env)
+Example
+console.log(process.env.PORT)
+
+Run:
+PORT=5000 node app.js
+
+📌 5. process.pid
+
+Returns Process ID.
+console.log(process.pid)
+
+📌 6. process.platform
+
+Shows operating system platform.
+
+console.log(process.platform)
+Output Examples
+win32
+linux
+darwin
+
+📌 7. process.version
+
+Shows Node.js version.
+
+console.log(process.version)
+
+📌 8. process.memoryUsage()
+
+Shows memory usage.
+console.log(process.memoryUsage())
+
+📌 9. process.uptime()
+Returns how long program has been running.
+
+console.log(process.uptime())
+
+🔹 Process Events
+📌 beforeExit
+
+Runs before Node.js exits.
+
+process.on('beforeExit', () => {
+    console.log("Before Exit")
+})
+
+📌 exit
+Runs when process exits.
+
+process.on('exit', () => {
+    console.log("Process Ended")
+})
+📌 uncaughtException
+
+Handles unexpected errors.
+
+process.on('uncaughtException', (err) => {
+    console.log("Error:", err.message)
+})
+
+undefinedFunction()
+
+🔹 Standard Streams
+| Stream           | Description   |
+| ---------------- | ------------- |
+| `process.stdin`  | Input stream  |
+| `process.stdout` | Output stream |
+| `process.stderr` | Error stream  |
+
+
+📌 Example
+process.stdout.write("Hello\n")
+process.stderr.write("Error\n")
+
+🔹 Taking Input using stdin
+process.stdin.on('data', (data) => {
+    console.log(`You typed: ${data}`)
+})
+🔹 Simple Example
+console.log("Node Started")
+
+console.log("Platform:", process.platform)
+
+console.log("Node Version:", process.version)
+
+console.log("Arguments:", process.argv)
+
+console.log("Process ID:", process.pid)
+🎯 Important Interview Points
+
+✅ process is global
+✅ Used to manage current Node.js application
+✅ Helps access environment variables
+✅ Used for command-line arguments
+✅ Can terminate app using process.exit()
+✅ Handles system-level events
+
+
+| Code                                      | Output                          |
+| ----------------------------------------- | ------------------------------- |
+| `process.cwd()`                           | `D:\Projects\GitClone`          |
+| `path.resolve()`                          | `D:\Projects\GitClone`          |
+| `path.resolve(".appaGit")`                | `D:\Projects\GitClone\.appaGit` |
+| `path.resolve(process.cwd(), ".appaGit")` | `D:\Projects\GitClone\.appaGit` |
+
+process.cwd()==process.resolve()-->both return curr working directory
+
+-->
+// ⚡ Figlet in Node.js
+
+// figlet -> Converts normal text into ASCII art text
+
+// ===============================
+// 📌 Install Figlet
+// ===============================
+
+npm install figlet
+
+// ===============================
+// 📌 Import Figlet
+// ===============================
+
+const figlet = require('figlet')
+
+// ===============================
+// 📌 Basic Syntax
+// ===============================
+
+figlet("Hello World", function(err, data) {
+
+    if(err){
+        console.log("Something went wrong...")
+        console.dir(err)
+        return
+    }
+
+    console.log(data)
+})
+
+// ===============================
+// 📌 Parameters
+// ===============================
+
+// err  -> error object
+// data -> generated ASCII text
+
+// ===============================
+// 📌 Example Output
+// ===============================
+
+ _   _      _ _        __        __         _     _
+| | | | ___| | | ___   \ \      / /__  _ __| | __| |
+| |_| |/ _ \ | |/ _ \   \ \ /\ / / _ \| '__| |/ _` |
+|  _  |  __/ | | (_) |   \ V  V / (_) | |  | | (_| |
+|_| |_|\___|_|_|\___/     \_/\_/ \___/|_|  |_|\__,_|
+
+// ===============================
+// 📌 Custom Font
+// ===============================
+
+figlet.text("Naeem", {
+    font: "Ghost"
+}, function(err, data) {
+
+    console.log(data)
+})
+
+// ===============================
+// 🎯 Important Points
+// ===============================
+
+// ✅ Used for stylish terminal text
+// ✅ Creates ASCII art text
+// ✅ Mostly used in CLI apps
+// ✅ Works asynchronously
+// ✅ Requires figlet package
+
+-->
+// ⚡ random-words in Node.js
+
+// random-words -> Generates random words
+
+// ===============================
+// 📌 Install Package
+// ===============================
+
+npm install random-words
+
+// ===============================
+// 📌 Import Package
+// ===============================
+
+const randomWords = require('random-words')
+
+// ===============================
+// 📌 Generate One Random Word
+// ===============================
+
+console.log(randomWords())
+
+// Example Output:
+// apple
+
+// ===============================
+// 📌 Generate Multiple Words
+// ===============================
+
+console.log(randomWords(5))
+
+// Example Output:
+// [ 'cat', 'book', 'tree', 'phone', 'river' ]
+
+// ===============================
+// 📌 Generate Words using Object
+// ===============================
+
+console.log(randomWords({
+    exactly: 3
+}))
+
+// Example Output:
+// [ 'sun', 'water', 'code' ]
+
+// ===============================
+// 📌 Join Words
+// ===============================
+
+console.log(randomWords({
+    exactly: 4,
+    join: '-'
+}))
+
+// Example Output:
+// dog-car-book-phone
+
+
+---> ⚡ Global Install Package in Node.js
+
+# ===============================
+# 📌 Install Package Globally
+# ===============================
+
+npm install -g package-name
+
+# Example
+npm install -g nodemon
+
+# ===============================
+# 📌 Why Global Install?
+# ===============================
+
+# ✅ Use package anywhere in system
+# ✅ No need to install in every project
+# ✅ Mostly used for CLI tools
+
+# ===============================
+# 📌 Check Global Packages
+# ===============================
+npm list -g --depth=0
+# ===============================
+# 📌 Uninstall Global Package
+# ===============================
+
+npm uninstall -g package-name
+
+# Example
+npm uninstall -g nodemon
+
+
+-->import (require) is not only used for importing  module (fun ,variable) but also for file
+.import data from "abc.json"
+it will include all data of json to data,we can do using fs also
+
+.import 'style.css
+include css file
+
+-->
+📌 GET Method
+Data is sent in the form of query parameters in URL.
+
+Example:
+
+<form action="/search" method="GET">
+    <input type="text" name="username">
+    <button>Submit</button>
+</form>
+
+Output URL:
+
+/search?username=Naeem
+
+Access in Express:
+req.query
+
+📌 POST Method
+
+Data is sent in the request body (or encoded form), not in URL.
+
+Example:
+
+<form action="/login" method="POST">
+    <input type="text" name="username">
+    <button>Submit</button>
+</form>
+
+URL:
+/login
+
+Data access in Express:
+req.body
+
+note->
+req.query and req.body are mainly from Express.js.
+
+In pure Node.js HTTP module, you do not directly get them.
+
+Example in Node.js:
+const http = require('http')
+http.createServer((req, res) => {
+
+    console.log(req.url)
+
+}).listen(3000)
+
+GET data:
+/search?name=Naeem
+You must manually parse it.
+POST data also must be manually collected using streams.
+
+
+-->REST
+
+## What is REST API?
+A REST API (Representational State Transfer) 
+allows communication between client and server using HTTP methods.
+
+Client → Request → Server → Response(JSON)
+
+REST ≠ Just Making API
+REST is a set of rules/architecture style used while creating APIs.
+An API becomes a REST API when it follows REST principles.
+
+Simple Understanding
+API
+
+
+
+Why Called REST?
+REST = Representational State Transfer
+It treats data as resources.
+Example resources:
+
+users
+products
+orders
+
+Each resource has its own URL.
+
+Main REST Principles
+Client-Server architecture
+Stateless requests
+Resource-based URLs
+Uses HTTP methods
+Data mostly in JSON
+In Short
+API = Communication interface
+
+REST API = API designed using REST rules
+
+So:
+Every REST API is an API
+But every API is NOT REST API
+--------------------------------------------------
+
+# Common HTTP Methods
+
+GET    → Fetch data
+POST   → Create data
+PUT    → Update complete data
+PATCH  → Update partial data
+DELETE → Delete data
+
+--------------------------------------------------
+
+# Status Codes
+
+200 → Success
+201 → Created
+400 → Bad Request
+401 → Unauthorized
+404 → Not Found
+500 → Server Error
+
+--------------------------------------------------
+
+# Install Express
+
+npm init -y
+npm install express
+
+--------------------------------------------------
+
+# Basic Server
+
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+app.listen(3000, () => {
+    console.log("Server running");
+});
+
+--------------------------------------------------
+
+# GET Request
+
+app.get("/users", (req, res) => {
+    res.json({
+        message: "All users"
+    });
+});
+
+--------------------------------------------------
+
+# POST Request
+
+app.post("/users", (req, res) => {
+
+    const data = req.body;
+
+    res.json({
+        message: "User created",
+        data
+    });
+});
+
+--------------------------------------------------
+
+# PUT Request
+
+app.put("/users/:id", (req, res) => {
+
+    const id = req.params.id;
+
+    res.json({
+        message: `User ${id} updated`
+    });
+});
+
+--------------------------------------------------
+
+# DELETE Request
+
+app.delete("/users/:id", (req, res) => {
+
+    const id = req.params.id;
+
+    res.json({
+        message: `User ${id} deleted`
+    });
+});
+
+--------------------------------------------------
+
+# req Object
+
+req.body
+req.params
+req.query
+
+--------------------------------------------------
+
+# res Object
+
+res.send()
+res.json()
+res.status()
+
+--------------------------------------------------
+
+# Middleware
+
+Middleware runs between request and response.
+
+app.use(express.json());
+
+Used for:
+- JSON parsing
+- Authentication
+- Logging
+- Error handling
+
+--------------------------------------------------
+
+# Route Parameters
+
+/users/:id
+
+Access:
+req.params.id
+
+--------------------------------------------------
+
+# Query Parameters
+
+/users?page=1
+
+Access:
+req.query.page
+
+--------------------------------------------------
+
+# JSON Response
+
+res.json({
+    success: true
+});
+
+--------------------------------------------------
+
+# REST API Folder Structure
+
+project/
+│
+├── routes/
+├── controllers/
+├── models/
+├── middleware/
+├── app.js
+
+--------------------------------------------------
+
+# CRUD Mapping
+
+Create → POST
+Read   → GET
+Update → PUT/PATCH
+Delete → DELETE
+
+--------------------------------------------------
+
+# Testing REST API
+
+- Postman
+- Thunder Client
+- Browser(GET)
+
+--------------------------------------------------
+
+# Simple REST API Example
+
+const express = require("express");
+
+const app = express();
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.send("REST API Working");
+});
+
+app.listen(3000, () => {
+    console.log("Server Started");
+});
+
+--------------------------------------------------
+
+# Key Points
+
+- REST API uses HTTP methods
+- Express is commonly used in Node.js
+- APIs mostly return JSON
+- Middleware processes requests
+- Routes handle endpoints
+
+
+
+-->
+UUID (Universally Unique Identifier) is used in Node.js to generate unique IDs.
+It is mostly used for users, orders, products, sessions, and database records.
+
+Install:
+npm install uuid
+
+Use:
+//import { v4 as uuidv4 } from 'uuid';
+import {v4:uuidv4} from 'uuid'
+
+const id = uuidv4();
+
+UUID v4 generates random unique IDs.
+Example:
+550e8400-e29b-41d4-a716-446655440000
+
+1. UUID is harder to guess than sequential/random ObjectId.
+2. Useful when sharing IDs publicly in APIs.
+3. Better for distributed systems/microservices.
+4. Can create IDs before saving data to MongoDB.
+5. Sometimes companies want custom public IDs separate from database _id.
+
+
+--->,method-override
+Method Override in Node.js is used to change the HTTP request method 
+(like PUT or DELETE) because HTML forms support only GET and POST.
+
+Package:
+npm install method-override
+
+Use:
+
+import methodOverride from 'method-override';
+app.use(methodOverride('_method'));
+
+Form Example:
+
+<form action="/user/1?_method=DELETE" method="POST">
+    <button>Delete</button>
+</form>
+
+Here POST request is overridden to DELETE.
+Here:
+- Browser sends POST request
+- method-override auto reads _method=DELETE
+- Express treats it as DELETE request
+
+?_method=PATCH for patch request
+?_method=PUT for put request
+
+-->
+# ExpressError Short Notes
+
+## Definition
+
+`ExpressError` is a custom error class used in Express.js to create errors with custom status codes and messages.
+
+---
+
+## Purpose
+
+Used for centralized error handling in Express applications.
+
+---
+
+## Syntax
+
+```js
+class ExpressError extends Error {
+    constructor(statusCode, message) {
+        super();
+        this.statusCode = statusCode;
+        this.message = message;
+    }
+}
+
+export default ExpressError;
+```
+
+---
+
+## Import
+
+```js
+import ExpressError from './utils/ExpressError.js';
+```
+
+---
+
+## Usage
+
+```js
+app.get('/admin', (req, res, next) => {
+    next(new ExpressError(403, "Access Denied"));
+});
+```
+
+---
+
+## Error Middleware
+
+```js
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "Something went wrong" } = err;
+
+    res.status(statusCode).send(message);
+});
+```
+
+---
+
+## Working Flow
+
+```txt
+Route → next(err) → Error Middleware
+```
+
+---
+
+## Advantages
+
+* Centralized error handling
+* Custom status codes
+* Cleaner code
+* Better debugging
+* Reusable
+
+---
+
+## Common Status Codes
+
+| Code | Meaning               |
+| ---- | --------------------- |
+| 400  | Bad Request           |
+| 401  | Unauthorized          |
+| 403  | Forbidden             |
+| 404  | Not Found             |
+| 500  | Internal Server Error |
+
+Why use it?
+
+Normal errors do not contain HTTP status codes.
+Example:
+throw new Error("Page not found");
+This only has a message.
+But with ExpressError:
+
+---->
+# app.all() vs app.use() 
+
+## app.all()
+### Definition
+
+`app.all()` handles all HTTP methods (`GET`, `POST`, `PUT`, `DELETE`, etc.) for a specific route.
+## Syntax
+app.all(path, callback)
+
+## Example
+
+app.all('/user', (req, res) => {
+    res.send("Handles all request methods");
+});
+
+
+## Features
+
+* Matches all HTTP methods
+* Requires a route path
+* Used for route handling
+
+---
+
+## Common Use
+
+404 route handling (at bottom)
+* means any route
+
+app.all(/.*/, (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+});
+
+
+# app.use()
+
+## Definition
+
+`app.use()` is used to add middleware in Express.
+
+
+
+## Syntax
+
+app.use([path], middleware)
+
+## Example
+
+app.use((req, res, next) => {
+    console.log("Middleware running");
+    next();
+});
+
+
+## Features
+
+* Used for middleware
+* Path is optional
+* Runs for every request if no path given
+---
+
+## Common Uses
+
+* Error handling
+* Logging
+* Authentication
+* 404 middleware
+
+---
+
+## 404 Example
+
+
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+});
+
+
+# Main Difference
+
+| app.all()                | app.use()                 |
+| ------------------------ | ------------------------- |
+| Route handler            | Middleware                |
+| Path required            | Path optional             |
+| Handles all HTTP methods | Runs middleware           |
+| Used for routes          | Used for middleware logic |
+
+-->
+# path-to-regexp S
+
+## Definition
+
+`path-to-regexp` is a library used internally by Express.js
+ to convert route paths into regular expressions.
+
+It helps Express match URLs with routes.
+
+# Purpose
+
+Used for:
+
+* Route matching
+* Dynamic routes
+* Wildcard routes
+* Parameters
+# Example
+
+app.get('/user/:id', (req, res) => {
+    res.send(req.params.id);
+});
+
+
+Here:
+/user/:id
+is converted into a regular expression by `path-to-regexp`.
+
+# Features
+
+## 1. Route Parameters
+
+'/user/:id'
+
+Matches:
+
+
+/user/101
+/user/abc
+
+## 2. Wildcards
+'/user/*'
+
+Matches all routes after `/user/`.
+
+## 3. Regular Expressions
+
+
+app.all(/.*/, callback)
+Matches every route.
+
+
+# Express Uses It Internally
+
+When you write:
+app.get('/about')
+
+Express converts it into regex using `path-to-regexp`.
+
+---
+
+# Express 4 vs Express 5
+
+## Express 4
+
+app.all('*')
+works.
+
+---
+## Express 5
+`*` causes error because newer `path-to-regexp` version changed wildcard handling.
+
+Use:
+
+app.all(/.*/, ...)
+
+instead.
+# Common Error
+Missing parameter name at index
+Occurs when route pattern is invalid for current `path-to-regexp` version.
+
+# Summary
+Express Route → path-to-regexp → Regular Expression → URL Matching
+
+
+---># Joi 
+
+## Definition
+
+`Joi` is a JavaScript validation library used to validate request data, forms, APIs, and objects.
+
+It is commonly used with Express.js for server-side validation.
+# Installation
+npm install joi
+# Import
+
+
+import Joi from 'joi';
+# Purpose
+Used to validate:
+
+* Request body
+* Forms
+* API data
+* User input
+# Example
+
+const schema = Joi.object({
+    username: Joi.string().required(),
+    age: Joi.number().min(18)
+});
+
+const result = schema.validate({
+    username: "Naeem",
+    age: 20
+});
+
+console.log(result);
+
+# Common Validation Methods
+
+| Method          | Purpose              |
+| --------------- | -------------------- |
+| `Joi.string()`  | String validation    |
+| `Joi.number()`  | Number validation    |
+| `Joi.boolean()` | Boolean validation   |
+| `required()`    | Mandatory field      |
+| `min()`         | Minimum value/length |
+| `max()`         | Maximum value/length |
+| `email()`       | Email validation     |
+
+
+# Express Example
+
+app.post('/user', (req, res) => {
+    const schema = Joi.object({
+        username: Joi.string().required(),
+        age: Joi.number().min(18)
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if(error){
+        return res.send(error.details);
+    }
+
+    res.send("Valid Data");
+});
+
+In Joi, validate() returns an object.
+
+When validation succeeds
+const schema = Joi.object({
+    name: Joi.string().required()
+});
+
+const result = schema.validate({ name: "Naeem" });
+
+console.log(result);
+
+Output:
+
+{
+  value: { name: 'Naeem' }
+}
+error → undefined
+value → validated data
+
+When validation fails
+const result = schema.validate({});
+console.log(result);
+
+Output:
+
+{
+  value: {},
+  error: [ValidationError: "name" is required]
+}
+error → ValidationError object
+value → received data
+
+# Advantages
+
+* Easy validation
+* Cleaner code
+* Prevents invalid data
+* Good for APIs
+* Reusable schemas
+
+-->
+import { useState } from "react";
+
+function LoginForm() {
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Name:", name);
+    console.log("Password:", password);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Enter Name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+
+      <br /><br />
+
+      <input
+        type="password"
+        placeholder="Enter Password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      <br /><br />
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+export default LoginForm;
+
+
+2.
+import { useState } from "react";
+
+function LoginForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,//e.target.name give name of input field
+    });
+  };
+
+  return (
+    <div>
+      <input
+        type="text"
+        name="name"
+        placeholder="Enter Name"
+        value={formData.name}
+        onChange={handleChange}
+      />
+
+      <br /><br />
+
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter Password"
+        value={formData.password}
+        onChange={handleChange}
+      />
+
+      <br /><br />
+
+      <h3>Name: {formData.name}</h3>
+      <h3>Password: {formData.password}</h3>
+    </div>
+  );
+}
+
+export default LoginForm;
+
+--->
+import fs from "fs" → callback API → use promisify() if you want Promises. ex= promisify(fs.readFile) or 
+import fs from "fs/promises" → Promise API → do not use promisify(). Use methods directly with await.(recommended)
+
+-->📌 
+╔════════════════════════════════════════════════════════════════════════════════════╗
+                         📘 YARGS (CLI) - COMPLETE NOTES
+                             From Basic → Advanced
+╚════════════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. WHAT IS YARGS?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Definition:
+Yargs is a Node.js library used to build Command Line Interface (CLI)
+applications. It parses command-line arguments and provides commands,
+options, validation, automatic help messages, and much more.
+
+Official Installation
+
+npm install yargs
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. WHAT IS CLI?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CLI = Command Line Interface
+Instead of clicking buttons, users type commands.
+Examples
+
+git init
+git add index.js
+npm install express
+node app.js
+
+Yargs helps us build commands like these.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. WHY USE YARGS?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Without Yargs
+
+• Manually read process.argv
+• Manual validation
+• Manual help
+• More code
+
+With Yargs
+
+✔ Easy argument parsing
+✔ Automatic help
+✔ Command support
+✔ Options support
+✔ Validation
+✔ Cleaner code
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. process.argv
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Node stores command-line arguments inside
+process.argv
+
+Example
+node app.js --name Naeem
+
+process.argv
+[
+ "/usr/bin/node",
+ "/project/app.js",
+ "--name",
+ "Naeem"
+]
+
+Explanation
+Index 0 → Node executable path
+Index 1 → Current JS file
+Remaining → User arguments
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. hideBin()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Definition
+hideBin() removes the first two values of process.argv
+
+Without hideBin
+
+[
+ "/usr/bin/node",
+ "/project/app.js",
+ "--name",
+ "Naeem"
+]
+
+With hideBin
+
+[
+ "--name",
+ "Naeem"
+]
+
+Syntax
+yargs(hideBin(process.argv))
+Why?
+Because Yargs only needs the user arguments.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. Basic Syntax
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const argv = yargs(hideBin(process.argv)).argv;
+
+//Parses the arguments and returns them as an object
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. argv
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Definition
+
+argv contains all parsed command-line arguments.
+
+Example
+
+node app.js --name Naeem --age 22
+console.log(argv)
+Output
+
+{
+ name:"Naeem",
+ age:22
+}
+
+Access
+argv.name
+argv.age
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Common Methods:
+• command()   → Create a command
+• option()    → Define options/flags
+• demandOption() → Make an option required
+• help()      → Show help menu
+• argv  
+
+8. command()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Purpose
+Creates a CLI command.
+Syntax
+
+.command(
+    commandName,
+    description,
+    builder,
+    handler
+)
+
+Parameters
+
+1. Command Name
+2. Description
+3. Builder
+4. Handler
+
+Example
+yargs(hideBin(process.argv))
+  .command(
+    "init",
+    "Initialize a new Git repository",
+    {},
+    () => {
+      console.log("Repository Initialized");
+    }
+  )
+  .help()
+  .argv;
+
+Run
+node app.js init
+
+Description:
+
+node app.js --help
+
+Output:
+Commands:
+  init   Initialize a new Git repository
+
+Options:
+  --help     Show help
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. Builder Function
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Builder Function
+
+Definition:
+The **Builder function** is the **3rd parameter** of `.command()`. It is used to configure a specific command before 
+it executes by defining positional arguments, options, aliases, default values, validation, and help information.
+
+**Flow:**
+
+User runs command
+        │
+        ▼
+Builder Function Executes
+        │
+        ▼
+Configures Arguments & Options
+        │
+        ▼
+Arguments are Parsed & Validated
+        │
+        ▼
+Handler Function Executes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Syntax
+
+.command(
+    "commandName",
+    "description",
+    (yargs) => {
+        // Configure the command
+        return yargs;
+    },
+    handler
+)
+
+
+
+📌 Builder Function (3rd Parameter of `.command()`)
+
+Definition:
+The **Builder** function configures a command before it executes. It tells Yargs what **arguments** and **options** the command accepts.
+
+Syntax
+
+.command(
+    "commandName",
+    "description",
+    (yargs) => {
+        // Configure command here
+        return yargs;
+    },
+    handler
+)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 What is `yargs` inside Builder?
+
+`yargs` is the **command-specific Yargs instance** used to configure that command.
+
+It is used to define:
+✔ Positional arguments
+✔ Options (flags)
+✔ Validation
+✔ Default values
+✔ Aliases
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Positional Argument
+
+Definition:
+A value written **after the command**.
+
+Example
+node app.js add index.js
+
+Builder
+
+yargs.positional("file", {
+    type: "string"
+})
+
+Result
+
+argv.file → "index.js"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Option (Flag)
+
+Definition:
+A named argument that starts with `--` or `-`.
+
+Example
+
+node app.js add --file index.js
+
+Builder
+
+yargs.option("file", {
+    type: "string"
+})
+
+Result
+
+argv.file → "index.js"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Flow
+
+User Command
+      │
+      ▼
+Builder Configures Command
+      │
+      ▼
+Yargs Parses Arguments
+      │
+      ▼
+Handler Executes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📌 Quick Difference
+
+Positional → add index.js
+Option     → add --file index.js
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 Interview Answer
+
+Builder = Configures a command.
+yargs = Command-specific Yargs object.
+positional() = Defines values after the command.
+option() = Defines named flags (`--option`).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Example : Positional Argument
+
+.command(
+    "add <file>",
+    "Add a file",
+    (yargs) => {
+        return yargs.positional("file", {
+            describe: "File to add",
+            type: "string"
+        });
+    },
+    handler
+)
+
+What the Builder is doing:
+✔ Defines a positional argument named `file`
+✔ Specifies its data type (`string`)
+✔ Adds a description for the help menu
+✔ Makes `argv.file` available in the handler
+
+Run
+
+node app.js add index.js
+
+Result
+
+argv.file → "index.js"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Example : Option
+
+.command(
+    "create",
+    "Create a file",
+    (yargs) => {
+        return yargs.option("name", {
+            alias: "n",
+            type: "string",
+            demandOption: true,
+            describe: "File name"
+        });
+    },
+    handler
+)
+
+What the Builder is doing:
+✔ Creates an option named `name`
+✔ Creates a shortcut `-n`
+✔ Sets the type to `string`
+✔ Makes the option required
+✔ Adds a description for the help menu
+
+Run
+
+node app.js create --name app.js
+
+or
+
+node app.js create -n app.js
+
+Result
+
+argv.name → "app.js"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Common Methods Used Inside Builder
+
+✔ positional()   → Define positional arguments
+✔ option()       → Create options/flags
+✔ alias()        → Add shortcut
+✔ default()      → Set default value
+✔ choices()      → Restrict allowed values
+✔ demandOption() → Make an option required
+✔ describe()     → Add help description
+✔ array()        → Accept multiple values
+✔ boolean()      → Define a boolean flag
+✔ number()       → Define a number option
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Builder vs Handler
+
+Builder
+✔ Configures the command
+✔ Defines arguments/options
+✔ Validates input
+✔ Runs before the handler
+
+Handler
+✔ Executes the command logic
+✔ Uses parsed values from `argv`
+
+ and then the handler executes with the parsed `argv` object.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. Handler Function
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Runs when command executes.
+
+Example
+
+(argv)=>{
+    console.log(argv.file);
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. Types
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+string
+
+number
+
+boolean
+
+array
+
+Example
+
+.option("age",{
+ type:"number"
+})
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. alias()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Creates shortcut.
+
+Example
+
+.option("name",{
+ alias:"n"
+})
+
+Run
+
+node app.js -n Naeem
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. describe()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Adds description for help menu.
+
+Example
+
+describe:"User Name"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16. default()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Sets default value.
+Example
+
+.option("port",{
+ default:3000
+})
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17. demandOption()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Makes option mandatory.
+Example
+
+.option("name",{
+ demandOption:true
+})
+
+Run
+
+node app.js
+Output
+
+Missing required argument: name
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18. demandCommand()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Requires at least one command.
+
+Example
+
+.demandCommand(
+1,
+"You need at least one command."
+)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19. choices()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Allows only selected values.
+
+Example
+
+.option("env",{
+ choices:["dev","prod"]
+})
+
+Valid
+
+--env dev
+Invalid
+--env local
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20. help()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Automatically generates help.
+
+Run
+node app.js --help
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+21. version()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Shows application version.
+
+.version("1.0.0")
+
+Run
+
+node app.js --version
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+22. example()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Adds examples in help.
+
+.example(
+"$0 add app.js",
+"Add app.js"
+)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+23. usage()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Displays usage instructions.
+
+.usage("Usage: node app.js <command>")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+24. epilog()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Displays footer text.
+
+.epilog("Made by Naeem")
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+25. strict()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rejects unknown commands/options.
+
+.strict()
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+26. middleware()
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Runs before handler.
+
+Example
+
+.middleware((argv)=>{
+ console.log("Checking...");
+})
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+27. Parsing Flow
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+User Types Command
+
+↓
+
+process.argv
+
+↓
+
+hideBin()
+
+↓
+
+Yargs Parser
+
+↓
+
+Command Found
+
+↓
+
+Builder
+
+↓
+
+Options
+
+↓
+
+Validation
+
+↓
+
+Handler
+
+↓
+
+Output
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+28. Real Example
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+yargs(hideBin(process.argv))
+
+.command(
+    "init",
+    "Initialize Repository",
+    {},
+    initRepo
+)
+
+.command(
+    "add <file>",
+    "Add File",
+    (yargs)=>{
+        yargs.positional("file",{
+            describe:"File Name",
+            type:"string"
+        });
+    },
+    addRepo
+)
+
+.demandCommand(1)
+.help()
+.argv;
+
+Run
+
+node index.js init
+
+node index.js add app.js
+
+node index.js --help
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+30. QUICK REVISION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+process.argv      → Raw command-line arguments
+
+hideBin()         → Removes Node & script path
+
+argv              → Parsed arguments
+
+command()         → Create command
+
+builder           → Configure command
+
+handler           → Execute command
+
+positional()      → Positional arguments
+
+option()          → Flags/options
+
+alias()           → Shortcut
+
+describe()        → Description
+
+default()         → Default value
+
+demandOption()    → Required option
+
+demandCommand()   → Required command
+
+choices()         → Allowed values
+
+help()            → Help menu
+
+version()         → Show version
+
+usage()           → Usage instructions
+
+example()         → Add examples
+
+epilog()          → Footer
+
+strict()          → Reject unknown inputs
+
+middleware()      → Execute before handler
+
+══════════════════════════════════════════════════════════════════════════════════════
+           🚀 YARGS = Build Professional CLI Applications in Node.js
+══════════════════════════════════════════════════════════════════════════════════════
+
+--->
+=========================================
+           AWS SDK (ONE-SHOT NOTES)
+=========================================
+
+Definition
+----------
+AWS SDK (Software Development Kit) is a library that allows applications to communicate with AWS services such as S3, EC2, Lambda, DynamoDB, SES, etc.
+
+-----------------------------------------
+Installation
+-----------------------------------------
+
+npm install aws-sdk
+
+-----------------------------------------
+Import
+-----------------------------------------
+
+import AWS from "aws-sdk";
+
+-----------------------------------------
+Configuration
+-----------------------------------------
+
+AWS.config.update({
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+});
+
+-----------------------------------------
+Create S3 Client
+-----------------------------------------
+
+const s3 = new AWS.S3();
+const S3_BUCKET=process.env.S3_BUCKET
+
+-----------------------------------------
+.env
+-----------------------------------------
+
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=XXXXXXXXXXXX
+AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXX
+S3_BUCKET=my-bucket
+
+-----------------------------------------
+Important Terms
+-----------------------------------------
+
+• AWS SDK → Library to access AWS services.
+• Bucket → Container that stores files.
+• Object → File stored inside a bucket.
+• Key → Unique file path/name.
+• Body → File content.
+• Region → AWS server location.
+• Access Key ID → Public credential.
+• Secret Access Key → Private credential.
+
+-----------------------------------------
+Common S3 Methods
+-----------------------------------------
+
+upload()          → Upload file
+putObject()       → Create/Replace object
+getObject()       → Download file
+listObjectsV2()   → List files
+deleteObject()    → Delete file
+copyObject()      → Copy file
+headObject()      → Get metadata
+
+-----------------------------------------
+Upload Example
+-----------------------------------------
+
+const params = {
+  Bucket: S3_BUCKET,
+  Key: "images/photo.jpg",
+  Body: fileContent,
+};
+
+await s3.upload(params).promise();
+
+-----------------------------------------
+Download Example
+-----------------------------------------
+
+const response=await s3.getObject({
+  Bucket: S3_BUCKET,
+  Key: "images/photo.jpg",
+}).promise();
+
+it return
+{
+  Body: <Buffer ...>,       // the actual file content
+  ContentType: "image/jpeg",
+  ContentLength: 12345,
+  LastModified: 2026-07-10T...,
+  ETag: '"abc123..."',
+  // ...other metadata
+}
+-----------------------------------------
+Delete Example
+-----------------------------------------
+
+await s3.deleteObject({
+  Bucket: S3_BUCKET,
+  Key: "images/photo.jpg",
+}).promise();
+
+-----------------------------------------
+List Objects
+-----------------------------------------
+
+await s3.listObjectsV2({
+  Bucket: S3_BUCKET,
+}).promise();
+
+
+The response looks like:
+javascript{
+  Contents: [
+    {
+      Key: "images/photo.jpg",
+      LastModified: 2026-07-10T09:22:00.000Z,
+      ETag: '"abc123..."',
+      Size: 45210,
+      StorageClass: "STANDARD"
+    },
+    {
+      Key: "docs/readme.txt",
+      LastModified: 2026-07-08T14:10:00.000Z,
+      Size: 512,
+      StorageClass: "STANDARD"
+    }
+    // ... up to 1000 objects by default
+  ],
+  KeyCount: 2,
+  IsTruncated: false, // true if there are more results than returned
+  Name: "my-github-project-bucket",
+  MaxKeys: 1000
+}
+
+A few useful things you can do with it:
+Just get the filenames:
+
+javascriptconst keys = data.Contents.map(obj => obj.Key);
+console.log(keys); // ["images/photo.jpg", "docs/readme.txt"]
+
+
+Filter to a specific folder/prefix (e.g. only files inside images/):
+
+javascriptconst data = await s3.listObjectsV2({
+  Bucket: S3_BUCKET,
+  Prefix: "images/",
+}).promise();
+
+-----------------------------------------
+Copy Object
+-----------------------------------------
+
+await s3.copyObject({
+  Bucket: S3_BUCKET,
+  CopySource: `${S3_BUCKET}/images/photo.jpg`,
+  Key: "backup/photo.jpg",
+}).promise();
+
+-----------------------------------------
+Why .promise() ?
+-----------------------------------------
+
+AWS SDK v2 methods return an AWS Request object.
+.promise() converts it into a JavaScript Promise,
+allowing the use of async/await.
+
+-----------------------------------------
+Error Handling
+-----------------------------------------
+
+try {
+    await s3.upload(params).promise();
+}
+catch(err){
+    console.log(err);
+}
+
+-----------------------------------------
+Common Errors
+-----------------------------------------
+
+CredentialsError          → Missing credentials
+InvalidAccessKeyId        → Wrong Access Key ID
+SignatureDoesNotMatch     → Wrong Secret Key/Region
+AccessDenied              → Permission denied
+NoSuchBucket              → Bucket not found
+NoSuchKey                 → File not found
+
+-----------------------------------------
+Flow
+-----------------------------------------
+
+Node.js App
+      │
+      ▼
+AWS SDK
+      │
+      ▼
+S3 Client
+      │
+      ▼
+Amazon S3 Bucket
+
+-----------------------------------------
+AWS SDK v2 vs v3
+-----------------------------------------
+
+v2
+• import AWS from "aws-sdk"
+• new AWS.S3()
+• upload().promise()
+
+v3
+• import { S3Client } from "@aws-sdk/client-s3"
+• new S3Client()
+• client.send(command)
+
+-----------------------------------------
+Interview Questions
+-----------------------------------------
+
+Q. What is AWS SDK?
+→ Library to interact with AWS services.
+
+Q. What is a Bucket?
+→ Container for storing objects.
+
+Q. What is an Object?
+→ File stored inside a bucket.
+
+Q. What is a Key?
+→ Unique path/name of an object.
+
+Q. Why use .promise()?
+→ Converts AWS Request into a Promise for async/await.
+
+Q. Difference between upload() and putObject()?
+→ upload() supports large/multipart uploads.
+→ putObject() uploads the object in a single request.
+
+=========================================
+             END OF NOTES
+=========================================
+
+=========================================
+        AWS SDK v3 (ONE-SHOT NOTES)
+=========================================
+
+Definition
+----------
+AWS SDK v3 (Software Development Kit) is the latest AWS library that allows
+applications to communicate with AWS services such as S3, EC2, Lambda,
+DynamoDB, SES, SNS, SQS, etc.
+
+Unlike v2, v3 is modular. You install only the packages you need.
+
+-----------------------------------------
+Installation
+-----------------------------------------
+
+For S3
+
+npm install @aws-sdk/client-s3
+
+For Multipart Uploads (Recommended)
+
+npm install @aws-sdk/lib-storage
+
+-----------------------------------------
+Import
+-----------------------------------------
+
+import {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteObjectCommand,
+    ListObjectsV2Command,
+    CopyObjectCommand,
+    HeadObjectCommand
+} from "@aws-sdk/client-s3";
+
+For multipart upload
+
+import { Upload } from "@aws-sdk/lib-storage";
+
+-----------------------------------------
+Configuration
+-----------------------------------------
+
+const client = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    },
+});
+
+const S3_BUCKET = process.env.S3_BUCKET;
+
+-----------------------------------------
+.env
+-----------------------------------------
+
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=XXXXXXXXXXXX
+AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXX
+S3_BUCKET=my-bucket
+
+-----------------------------------------
+Important Terms
+-----------------------------------------
+
+• AWS SDK → Library to access AWS services.
+• S3Client → Client used to communicate with Amazon S3.
+• Command → Represents an AWS operation.
+• send() → Executes a command.
+• Bucket → Container that stores files.
+• Object → File stored inside a bucket.
+• Key → Unique file name/path.
+• Body → File content.
+• Region → AWS server location.
+• Access Key ID → Public credential.
+• Secret Access Key → Private credential.
+
+-----------------------------------------
+Common S3 Commands
+-----------------------------------------
+
+PutObjectCommand        → Upload/Create file
+GetObjectCommand        → Download file
+DeleteObjectCommand     → Delete file
+ListObjectsV2Command    → List files
+CopyObjectCommand       → Copy file
+HeadObjectCommand       → Get metadata
+
+Multipart Upload
+
+Upload (from @aws-sdk/lib-storage)
+
+-----------------------------------------
+Upload Example
+-----------------------------------------
+
+await client.send(
+    new PutObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: "images/photo.jpg",
+        Body: fileContent,
+    })
+);
+
+-----------------------------------------
+Multipart Upload (Large Files)
+-----------------------------------------
+
+const upload = new Upload({
+    client,
+    params: {
+        Bucket: S3_BUCKET,
+        Key: "images/photo.jpg",
+        Body: fileContent,
+    },
+});
+
+await upload.done();
+
+Recommended for large files because it automatically
+uses multipart upload.
+
+-----------------------------------------
+Download Example
+-----------------------------------------
+
+const response = await client.send(
+    new GetObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: "images/photo.jpg",
+    })
+);
+
+Response
+
+{
+    Body,
+    ContentType,
+    ContentLength,
+    LastModified,
+    ETag,
+    Metadata
+}
+
+Body is returned as a Readable Stream.
+
+Convert stream to string
+
+const text = await response.Body.transformToString();
+
+Convert stream to bytes
+
+const bytes = await response.Body.transformToByteArray();
+
+-----------------------------------------
+Delete Example
+-----------------------------------------
+
+await client.send(
+    new DeleteObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: "images/photo.jpg",
+    })
+);
+
+-----------------------------------------
+List Objects
+-----------------------------------------
+
+const data = await client.send(
+    new ListObjectsV2Command({
+        Bucket: S3_BUCKET,
+    })
+);
+
+Response
+
+{
+    Contents: [
+        {
+            Key: "images/photo.jpg",
+            Size: 45210,
+            LastModified: ...,
+            StorageClass: "STANDARD"
+        }
+    ],
+    KeyCount: 1,
+    IsTruncated: false,
+    Name: "my-bucket",
+    MaxKeys: 1000
+}
+
+Get only filenames
+
+const keys = data.Contents.map(file => file.Key);
+
+Filter folder
+
+const data = await client.send(
+    new ListObjectsV2Command({
+        Bucket: S3_BUCKET,
+        Prefix: "images/",
+    })
+);
+
+-----------------------------------------
+Copy Object
+-----------------------------------------
+
+await client.send(
+    new CopyObjectCommand({
+        Bucket: S3_BUCKET,
+        CopySource: `${S3_BUCKET}/images/photo.jpg`,
+        Key: "backup/photo.jpg",
+    })
+);
+
+-----------------------------------------
+Head Object (Metadata)
+-----------------------------------------
+
+const metadata = await client.send(
+    new HeadObjectCommand({
+        Bucket: S3_BUCKET,
+        Key: "images/photo.jpg",
+    })
+);
+
+Returns
+
+ContentLength
+ContentType
+ETag
+LastModified
+Metadata
+
+-----------------------------------------
+Why send() ?
+-----------------------------------------
+
+In AWS SDK v3 every operation is represented as a Command.
+
+client.send(command)
+
+executes the command and returns a Promise.
+
+No .promise() is required.
+
+-----------------------------------------
+Error Handling
+-----------------------------------------
+
+try {
+
+    await client.send(
+        new PutObjectCommand(params)
+    );
+
+}
+catch(err){
+    console.log(err);
+}
+
+-----------------------------------------
+Common Errors
+-----------------------------------------
+
+CredentialsProviderError  → Missing credentials
+InvalidAccessKeyId        → Wrong Access Key ID
+SignatureDoesNotMatch     → Wrong Secret Key/Region
+AccessDenied              → IAM permission denied
+NoSuchBucket              → Bucket doesn't exist
+NoSuchKey                 → File doesn't exist
+
+-----------------------------------------
+Flow
+-----------------------------------------
+
+Node.js App
+      │
+      ▼
+AWS SDK v3
+      │
+      ▼
+S3Client
+      │
+      ▼
+Command
+      │
+      ▼
+client.send()
+      │
+      ▼
+Amazon S3 Bucket
+
+-----------------------------------------
+AWS SDK v2 vs v3
+-----------------------------------------
+
+v2
+
+import AWS from "aws-sdk"
+
+const s3 = new AWS.S3()
+
+await s3.upload(params).promise()
+
+-----------------------------------------
+
+v3
+
+import {
+    S3Client,
+    PutObjectCommand
+} from "@aws-sdk/client-s3"
+
+const client = new S3Client({...})
+
+await client.send(
+    new PutObjectCommand(params)
+)
+
+-----------------------------------------
+
+Major Differences
+
+v2
+• Monolithic package
+• Uses .promise()
+• Deprecated
+• Larger bundle size
+
+v3
+• Modular packages
+• Uses Commands
+• Uses client.send()
+• Better performance
+• Smaller bundle size
+• Recommended for all new projects
+
+-----------------------------------------
+Interview Questions
+-----------------------------------------
+
+Q. What is AWS SDK v3?
+
+→ Latest modular AWS library used to communicate with AWS services.
+
+-----------------------------------------
+
+Q. Why is AWS SDK v3 better?
+
+→ Smaller bundle size.
+→ Faster.
+→ Better TypeScript support.
+→ Modular packages.
+→ Active development.
+
+-----------------------------------------
+
+Q. What is S3Client?
+
+→ Client used to communicate with Amazon S3.
+
+-----------------------------------------
+
+Q. What is a Command?
+
+→ Every AWS operation (Upload, Download, Delete, etc.) is represented by a Command object.
+
+-----------------------------------------
+
+Q. Why use client.send()?
+
+→ Executes the command and returns a Promise.
+
+-----------------------------------------
+
+Q. Difference between PutObjectCommand and Upload?
+
+PutObjectCommand
+• Single request upload.
+• Best for small files.
+
+Upload
+• Multipart upload.
+• Automatically uploads large files in parts.
+• Recommended for production.
+
+-----------------------------------------
+
+Q. What replaced .promise() in v3?
+
+→ Nothing.
+
+client.send() already returns a Promise.
+
+-----------------------------------------
+
+Q. What is a Bucket?
+
+→ Container that stores objects.
+
+-----------------------------------------
+
+Q. What is an Object?
+
+→ A file stored inside a bucket.
+
+-----------------------------------------
+
+Q. What is a Key?
+
+→ Unique path/name of an object.
+
+=========================================
+            END OF NOTES
+=========================================
+
+--->
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
+});
+Meaning
+origin: "*" → Allows Socket.IO connections from any website/domain.
+methods: ["GET", "POST"] → Allows GET and POST requests during the Socket.IO handshake.
+
+-->
+
+Here are the correct ways to get URL information:
+
+
+
+https://example.com/profile?id=123
+ useful properties:
+window.location.protocol   // "https:"
+window.location.host       // "example.com"
+window.location.hostname   // "example.com"
+window.location.port       // "443" (if specified)
+window.location.pathname   // "/profile"
+window.location.search     // "?id=123"
+window.location.hash       // "#section1"
+window.location.origin     // "https://example.com"
+
+To navigate to another page:
+window.location.href = "/login";
+or
+window.location.assign("/login");
+or replace the current history entry:
+
+window.location.replace("/login");
+
+So, if your goal was to get the current URL, use:
+
+const currentUrl = window.location.href;
+console.log(currentUrl);
+
+
+-->
+await fs.copyFile("index.js", destination);
+
+is effectively the same as:
+
+await fs.copyFile(
+  "D:\\Projects\\myRepo\\index.js",
+  destination
+);
+
+Node does this resolution automatically.
+index.js bocome absolute path means path.resolve('index.js)
+
+
+--->http-status-codes
+http-status-codes is a Node.js package that provides named constants and helper
+ functions for HTTP status codes, making your code more readable than using numeric literals like 200, 404, or 500.
+
+Install
+npm install http-status-codes
+Basic Usage (ES Modules)
+import { StatusCodes } from "http-status-codes";
+
+res.status(StatusCodes.OK).json({
+  message: "Success"
+});
+
+| Status | Constant                            | Meaning                   |
+| ------ | ----------------------------------- | ------------------------- |
+| 200    | `StatusCodes.OK`                    | Success                   |
+| 201    | `StatusCodes.CREATED`               | Resource created          |
+| 204    | `StatusCodes.NO_CONTENT`            | Success, no response body |
+| 400    | `StatusCodes.BAD_REQUEST`           | Invalid request           |
+| 401    | `StatusCodes.UNAUTHORIZED`          | Authentication required   |
+| 403    | `StatusCodes.FORBIDDEN`             | Access denied             |
+| 404    | `StatusCodes.NOT_FOUND`             | Resource not found        |
+| 409    | `StatusCodes.CONFLICT`              | Conflict                  |
+| 422    | `StatusCodes.UNPROCESSABLE_ENTITY`  | Validation error          |
+| 500    | `StatusCodes.INTERNAL_SERVER_ERROR` | Server error              |
+
+
+---> eslint
+ESLint is a popular open-source tool for analyzing JavaScript and TypeScript code to find problems and enforce coding standards.
+
+What ESLint does
+Detects syntax errors and potential bugs.
+Enforces consistent coding style.
+Supports JavaScript, TypeScript (with plugins), React, Vue, Node.js, and more.
+Can automatically fix many issues.
+Example
+
+Code with issues:
+
+var name = "Alice"
+console.log(name)
+
+ESLint might report:
+
+Use const instead of var.
+Missing semicolon (if your rules require it).
+
+Auto-fixed version:
+
+const name = "Alice";
+console.log(name);
+
+---->
+The Prettier VS Code extension and the Prettier npm package serve different purposes.
+
+Install the npm package if:
+You are working on a project with a team.
+You want everyone to use the same Prettier version.
+You want to use a .prettierrc configuration file.
+
+You want to run formatting from the command line or in CI:
+
+npx prettier --write .
+You want formatting to work consistently regardless of the editor.
+
+Install it with:
+
+npm install --save-dev prettier
+You can skip the npm package if:
+You're working on a small personal project.
+You only use VS Code and are happy with the extension's default formatting.
+Best practice (recommended)
+
+Most professional projects install Prettier locally:
+
+npm install --save-dev prettier
+
+Then create a .prettierrc file, for example:
+
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5"
+}
+
+This ensures that anyone who works on the project gets the same formatting, regardless of their editor or global settings.

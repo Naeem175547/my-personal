@@ -1,0 +1,21 @@
+types of widgets:
+Label
+Button
+Entry
+Checkbutton
+Canvas
+Frame
+
+Geometry configuration of widgets
+pack()-it is used to place a widget on top
+pack()-attributes:
+anchor=nw,se,w,s (anchor="w")
+side=TOP,BOTTOM,LEFT,RIGHT
+fill=X,Y
+pack(side=,anchor)-optionl
+grid()-it is used to organize the widget in table-like structure
+place()-it is used to organize the widget at specific position
+
+
+where we use one of these then use same for whole program
+

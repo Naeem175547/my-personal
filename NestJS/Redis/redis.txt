@@ -1,0 +1,3552 @@
+Redis Syllabus for NestJS
+
+Since you already know NestJS, TypeORM, MySQL, authentication, transactions, migrations, and WebSockets, you don't need a huge Redis syllabus.
+
+1. Redis Fundamentals
+What is Redis?
+Redis vs MySQL
+In-memory database
+Key-value concept
+Redis use cases
+Redis architecture
+Redis persistence basics
+
+2. Redis Data Types
+String
+List
+Set
+Sorted Set
+Hash
+JSON basics
+TTL / expiration
+3. Basic Redis Commands
+SET
+GET
+DEL
+EXISTS
+EXPIRE
+TTL
+INCR
+DECR
+MSET
+MGET
+
+4. Redis with NestJS ⭐⭐⭐⭐⭐
+Install Redis
+Connect NestJS to Redis
+Redis client
+Configuration with .env
+Inject Redis client/service
+Create reusable Redis service
+GET / SET from NestJS
+
+5. Caching ⭐⭐⭐⭐⭐
+What is caching?
+Why caching?
+Cache-aside pattern
+Cache hit
+Cache miss
+Cache invalidation
+TTL-based caching
+Database + Redis caching
+
+Example:
+
+Request
+   ↓
+Redis
+   ↓
+Cache Hit → Return
+   ↓
+Cache Miss
+   ↓
+MySQL
+   ↓
+Store in Redis
+   ↓
+Return
+
+
+
+6. Redis Pub/Sub ⭐⭐⭐⭐
+Publisher
+Subscriber
+Channels
+PUBLISH
+SUBSCRIBE
+Redis Pub/Sub with NestJS
+Redis + WebSockets
+
+7. Redis for Authentication
+Session storage
+Token/refresh-token storage
+Blacklisting JWTs
+OTP storage
+Temporary data with TTL
+
+8. Redis + Queues ⭐⭐⭐⭐
+Why queues?
+Jobs
+Producers
+Workers
+BullMQ
+Redis + BullMQ/RabbitMQ
+Retry
+Delayed jobs
+Failed jobs
+
+Example:
+
+NestJS
+   ↓
+BullMQ
+   ↓
+Redis
+   ↓
+Worker
+   ↓
+Email / Image Processing / Notification
+
+9. Advanced Redis
+Transactions (MULTI, EXEC)
+Pipelines
+Atomic operations
+Distributed locks
+Redis Streams
+Rate limiting
+Distributed caching
+
+10. Production
+Redis security
+Environment variables
+Persistence
+Memory management
+Monitoring
+Redis Docker
+Redis in production
+Priority for You
+
+Focus heavily on:
+Redis Fundamentals → Data Types → NestJS Integration → Caching → Pub/Sub → BullMQ → Rate Limiting → Advanced Redis
+
+
+
+---->
+Redis is mainly used to make your application faster and reduce load on your database.
+Think of it like this:
+
+Without Redis:
+
+User → NestJS → MySQL/MongoDB → Response
+              ↑
+          Every request hits DB
+
+
+With Redis:
+User → NestJS → Redis → Response
+              ↓
+           if not found
+              ↓
+            MySQL
+
+Why use Redis?
+1. Caching ⚡
+Suppose you have:
+
+GET /posts
+Your database takes 100ms to fetch posts.
+If 1,000 users request the same posts:
+
+1000 requests → MySQL
+
+With Redis:
+
+First request → MySQL → save result in Redis
+Next 999 requests → Redis
+Redis is an in-memory data store, so reading cached data is extremely fast.
+
+2. Reduce database load
+Without Redis:
+
+1000 requests
+      ↓
+    MySQL
+      ↓
+1000 database queries
+
+With Redis:
+
+1000 requests
+      ↓
+    Redis
+      ↓
+maybe only 1 MySQL query
+
+This becomes especially useful when your application grows.
+
+3. Store temporary data
+Redis is good for data that doesn't need to permanently live in MySQL.
+
+For example:
+
+OTP
+Session
+Verification code
+Rate-limit counter
+Temporary cache
+
+Example:
+otp:user:123 → 482931
+TTL → 5 minutes
+
+After 5 minutes, Redis can automatically remove it.
+
+4. Rate limiting
+For example, you want:
+Maximum 100 requests/minute/user
+Redis can maintain a counter:
+
+user:123:requests → 87
+After the time window expires, the counter can reset.
+
+5. Real-time systems
+Redis can also help with:
+
+Notifications
+Queues
+Background jobs
+Pub/Sub
+WebSocket scaling
+
+For example:
+
+User A likes your post
+        ↓
+NestJS
+        ↓
+Redis
+        ↓
+Notification worker
+        ↓
+User B receives notification
+What can Redis help you avoid?
+This is probably the more important part of your question.
+
+Without Redis
+
+You may need to build/use:
+
+❌ Repeated database queries
+❌ Your own caching system
+❌ Temporary-data cleanup logic
+❌ Database-based rate-limit counters
+❌ Some queue infrastructure
+
+Redis can handle many of these efficiently.
+
+But Redis does NOT mean you can remove MySQL
+Don't think:
+Redis replaces MySQL ❌
+Think:
+
+MySQL = permanent/source-of-truth data
+
+Redis = fast/temporary/supporting data
+
+
+
+
+
+GraphQL
+   ↓
+NestJS
+   ↓
+Check Redis
+   ↓
+Found?
+ ┌───┴───┐
+Yes      No
+ ↓        ↓
+Return   MySQL
+         ↓
+       Redis
+         ↓
+       Return
+What Redis can let you ignore initially
+
+
+--->
+| Cache        | Where?           | Purpose                     |
+| ------------ | ---------------- | --------------------------- |
+| Apollo Cache | Frontend/browser | Avoid repeated API requests |
+| Redis        | Backend/server   | Avoid repeated DB queries   |
+| MySQL        | Database         | Permanent data              |
+
+
+---->
+Redis Fundamentals
+1. What is Redis?
+Redis is an in-memory data store used mainly for:
+
+Caching
+Temporary data
+Sessions
+Rate limiting
+Pub/Sub
+Queues
+Real-time applications
+OTP
+
+Redis stores data primarily in RAM, which makes it very fast.
+
+2. Redis vs MySQL
+MySQL
+↓
+Relational database
+↓
+Tables + Rows + Columns
+↓
+Permanent application data
+↓
+Uses disk for persistence
+
+
+Redis
+↓
+In-memory data store
+↓
+Key + Value
+↓
+Fast / temporary data
+↓
+Primarily uses RAM
+
+Example:
+MySQL:
+
+users
+--------------------------------
+id | name  | email
+1  | Naeem | naeem@gmail.com
+
+
+Redis:
+
+user:1 → "Naeem"
+Simple rule
+MySQL → Source of truth / permanent data
+Redis → Fast / temporary / frequently accessed data
+
+3. In-Memory Database
+"In-memory" means Redis keeps data primarily in RAM.
+RAM is much faster than disk.
+
+Traditional database:
+
+Application
+    ↓
+Disk
+    ↓
+Database
+
+Redis:
+
+Application
+    ↓
+RAM
+    ↓
+Redis
+
+That's why Redis can provide extremely fast reads and writes.
+However, RAM is volatile, so Redis also provides persistence mechanisms to save data to disk.
+
+4. Key-Value Concept
+Redis fundamentally works with keys and values.
+
+KEY                VALUE
+
+user:1       →     "Naeem"
+user:2       →     "Ali"
+token:123    →     "abcxyz"
+
+Example:
+SET username "Naeem"
+
+Get it:
+GET username
+
+Result:
+Naeem
+
+You can think of it like a JavaScript Map:
+const data = new Map();
+data.set("username", "Naeem");
+data.get("username");
+
+Redis is much more powerful than a simple key-value map because it supports data structures such as:
+
+String
+List
+Set
+Sorted Set
+Hash
+Stream
+
+5. Redis Use Cases
+Caching
+Application
+    ↓
+Check Redis
+    ↓
+Found → return data
+
+Not found
+    ↓
+MySQL/MongoDB
+    ↓
+Save result in Redis
+
+This reduces repeated database queries.
+
+Sessions
+session:user:123
+        ↓
+   session data
+
+Useful for storing temporary login/session information.
+
+OTP / Temporary data
+otp:user:123 → 482931
+TTL → 5 minutes
+
+Redis can automatically expire the key.
+
+Rate Limiting
+user:123:requests → 50
+
+You can limit how many requests a user makes within a time period.
+
+Pub/Sub
+Redis can send messages between different application instances.
+
+Publisher
+    ↓
+ Redis
+    ↓
+Subscriber
+
+Queues
+Redis can also be used as the storage layer for queue systems such as BullMQ/RabbitMQ.
+
+Producer
+   ↓
+Redis
+   ↓
+Worker
+
+
+6. Redis Architecture
+A simplified Redis architecture:
+
+                Client
+                  ↓
+            Redis Server
+                  ↓
+        ┌──────────────────┐
+        │      RAM         │
+        │                  │
+        │ Key → Value      │
+        │ Key → Value      │
+        │ Key → Value      │
+        └──────────────────┘
+                  ↓
+             Persistence
+                  ↓
+                Disk
+
+The client could be:
+
+Node.js
+NestJS
+Python
+Java
+Go
+
+For your NestJS application:
+
+React
+  ↓
+NestJS
+  ↓
+Redis
+  ↓
+MySQL
+
+Redis sits between your application and your permanent database when you're using it for caching.
+
+7. Redis Persistence Basics
+Redis is primarily an in-memory data store, but it can save data to disk.
+
+Why?
+
+Because RAM is volatile.
+If the Redis server crashes and data exists only in RAM, that data can be lost.
+Redis provides persistence mechanisms such as:
+
+RDB
+RDB = Redis Database Backup
+
+Redis periodically creates a snapshot of its data.
+
+RAM
+ ↓
+Snapshot
+ ↓
+Disk
+
+Good when you want periodic backups and relatively fast recovery.
+
+AOF
+AOF = Append Only File
+
+Redis records write operations.
+SET name Naeem
+SET age 23
+DEL age
+
+These operations can be written to an AOF file.
+After restarting, Redis can replay the operations to reconstruct the data.
+
+RDB vs AOF
+RDB
+↓
+Periodic snapshots
+↓
+Smaller files
+↓
+Faster recovery
+
+
+AOF
+↓
+Records write operations
+↓
+More durable
+↓
+Usually larger files
+
+Redis can also use both RDB and AOF depending on your durability requirements.
+
+Final Picture
+                    Redis
+                      │
+        ┌─────────────┼─────────────┐
+        ↓             ↓             ↓
+      Cache         Session       Rate Limit
+        │
+        ↓
+     RAM / Memory
+        │
+        ↓
+   Persistence
+   ┌────┴────┐
+   ↓         ↓
+  RDB       AOF
+   ↓         ↓
+ 
+Disk
+Remember these 7 points
+1. Redis = fast in-memory data store
+
+2. MySQL = relational database / permanent source of truth
+
+3. Redis mainly works with Key → Value
+
+4. Redis is used for:
+   Cache
+   Sessions
+   OTP
+   Rate limiting
+   Pub/Sub
+   Queues
+
+5. Redis stores data primarily in RAM
+
+6. Redis can persist data to disk
+
+7. Main persistence mechanisms:
+   RDB + AOF
+
+---------->
+You have several options to run redis:
+
+Docker → Redis runs inside a Docker container.
+WSL/Linux → Redis runs inside Linux on Windows.
+Windows Redis-compatible server → Redis runs directly on Windows.
+
+------->
+Redis Data Types
+Redis mainly stores data in different data structures
+
+| Type                 | Use                                  |
+| -------------------- | ------------------------------------ |
+| **String**           | Simple values, cache, counters       |
+| **List**             | Ordered collection, queues           |
+| **Set**              | Unique values                        |
+| **Sorted Set**       | Unique values + score/ranking        |
+| **Hash**             | Object-like data                     |
+| **JSON**             | Store JSON documents                 |
+| **TTL / Expiration** | Automatically delete data after time |
+
+REDIS DATA TYPES
+
+1. STRING
+String stores simple key-value data.
+
+Example:
+await redis.set("name", "Naeem");
+
+const name = await redis.get("name");
+
+Useful for:
+- Cache
+- Tokens
+- Counters
+- Simple values
+
+Counter: if redix.set("views",2)  is number
+await redis.incr("views");
+await redis.decr("views");
+
+
+2. LIST
+List stores an ordered collection of values.
+Duplicates are allowed.
+
+Example:
+await redis.rpush("tasks", "Task 1");
+await redis.rpush("tasks", "Task 2");
+
+const tasks = await redis.lrange("tasks", 0, -1);
+
+Common commands:
+LPUSH  → Add from left
+RPUSH  → Add from right
+LPOP   → Remove from left
+RPOP   → Remove from right
+LRANGE → Get values
+
+Useful for:
+- Queues
+- Notifications
+- Recent activities
+- Message processing
+
+
+3. SET
+Set stores UNIQUE values.
+Duplicate values are automatically ignored.
+
+Example:
+await redis.sadd("skills", "JavaScript");
+await redis.sadd("skills", "Redis");
+await redis.sadd("skills", "Redis");
+
+const skills = await redis.smembers("skills");
+
+Common commands:
+SADD      → Add value
+SMEMBERS  → Get all values
+SISMEMBER → Check if value exists
+SREM      → Remove value
+
+Useful for:
+- Tags
+- Unique users
+- Followers
+- Permissions
+
+
+4. SORTED SET
+Sorted Set stores UNIQUE values with a SCORE.
+Redis automatically sorts values according to their score.
+
+Example:
+await redis.zadd("leaderboard", 100, "Naeem");
+await redis.zadd("leaderboard", 200, "Ali");
+await redis.zadd("leaderboard", 150, "Ahmed");
+
+const leaderboard =
+    await redis.zrange("leaderboard", 0, -1, "WITHSCORES");
+
+Result:
+Naeem  → 100
+Ahmed  → 150
+Ali    → 200
+
+Common commands:
+ZADD   → Add value with score
+ZRANGE → Get sorted values
+ZREM   → Remove value
+ZSCORE → Get score
+
+Useful for:
+- Leaderboards
+- Rankings
+- Scores
+- Priority systems
+
+
+5. HASH
+Hash stores FIELD → VALUE pairs.
+It is similar to a JavaScript object.
+
+Example:
+await redis.hset("user:1", {
+    name: "Naeem",
+    age: "23",
+    role: "developer"
+});
+
+const user = await redis.hgetall("user:1");
+
+Result:
+{
+    name: "Naeem",
+    age: "23",
+    role: "developer"
+}
+
+Common commands:
+HSET    → Set fields
+HGET    → Get one field
+HGETALL → Get all fields
+HDEL    → Delete field
+
+Useful for:
+- Users
+- Profiles
+- Products
+- Object-like data
+
+
+6. JSON BASICS
+Normal Redis can store JSON as a STRING.
+
+Example:
+const user = {
+    name: "Naeem",
+    age: 23
+};
+
+await redis.set("user:1", JSON.stringify(user));
+
+Get JSON:
+const data = await redis.get("user:1");
+const userData = JSON.parse(data);
+console.log(userData.name);
+
+Output:
+Naeem
+
+Important:
+Basic Redis stores JSON as a String.
+RedisJSON provides advanced JSON operations.
+
+
+7. TTL / EXPIRATION
+TTL = Time To Live.
+It automatically deletes a key after a specific amount of time.
+
+Example:
+await redis.set("otp", "123456", "EX", 60);
+
+The key will expire after 60 seconds.
+
+Check remaining TTL:
+const ttl = await redis.ttl("otp");
+
+Set expiration separately:
+await redis.expire("otp", 60);
+
+Useful for:
+- OTP
+- Cache
+- Sessions
+- Password reset tokens
+- Rate limiting
+
+
+QUICK MEMORY:
+
+String       → Simple value
+List         → Ordered collection
+Set          → Unique values
+Sorted Set   → Unique value + score
+Hash         → Object / fields
+JSON         → JSON data
+TTL          → Automatic expiration
+
+--->
+3. BASIC REDIS COMMANDS
+
+1. SET
+   Stores a value in Redis.
+   await redis.set("name", "Naeem");
+
+   Redis:
+   name → Naeem
+
+
+2. GET
+   Gets a value from Redis.
+   const name = await redis.get("name");
+
+   Result:
+   Naeem
+
+
+3. DEL
+   Deletes a key.
+   await redis.del("name");
+
+   After DEL:
+   name → does not exist
+
+
+4. EXISTS
+   Checks whether a key exists.
+   const exists = await redis.exists("name");
+
+   Result:
+   1 → key exists
+   0 → key does not exist
+
+
+5. EXPIRE
+   Sets an expiration time for a key.
+
+   await redis.set("otp", "123456");
+   await redis.expire("otp", 60);
+
+   Meaning:
+   otp will automatically be deleted after 60 seconds.
+
+
+6. TTL
+   Shows how many seconds are remaining before a key expires.
+   const time = await redis.ttl("otp");
+
+   Example:
+   45
+
+   Meaning:
+   45 seconds remaining.
+
+   Special values:
+   -1 → key exists but has no expiration
+   -2 → key does not exist
+
+
+7. INCR
+   Increases a number by 1.
+   await redis.set("views", 10);
+   await redis.incr("views");
+
+   GET views:
+   11
+
+   Useful for:
+   - Views
+   - Likes
+   - Counters
+
+
+8. DECR
+   Decreases a number by 1.
+   await redis.set("stock", 10);
+   await redis.decr("stock");
+   GET stock:
+   9
+
+
+9. MSET
+   Sets multiple key-value pairs at once.
+   await redis.mset(
+       "name", "Naeem",
+       "age", "23",
+       "role", "developer"
+   );
+
+   This creates:
+
+   name → Naeem
+   age  → 23
+   role → developer
+
+
+10. MGET
+    Gets multiple values at once.
+
+    const values = await redis.mget(
+        "name",
+        "age",
+        "role"
+    );
+
+    Result:
+
+    [
+        "Naeem",
+        "23",
+        "developer"
+    ]
+
+
+QUICK MEMORY:
+The commands you listed are primarily basic key/value commands, 
+and when you're learning them initially, you use them with the Redis String type.
+
+SET     → Store value
+GET     → Get value
+DEL     → Delete key
+EXISTS  → Check key exists
+EXPIRE  → Set expiration
+TTL     → Check remaining time
+INCR    → +1
+DECR    → -1
+MSET    → Set multiple values
+MGET    → Get multiple values
+
+
+EXAMPLE FLOW:
+
+await redis.set("views", 100);
+await redis.incr("views");
+await redis.get("views");
+
+Result:
+101
+
+
+await redis.set("otp", "123456");
+await redis.expire("otp", 60);
+await redis.ttl("otp");
+
+Result:
+Remaining seconds
+
+
+await redis.mset(
+    "name", "Naeem",
+    "age", "23"
+);
+
+await redis.mget("name", "age");
+
+Result:
+["Naeem", "23"]   
+
+---->
+REST
+Client
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Database / Redis
+
+
+GraphQL
+Client
+  ↓
+Resolver
+  ↓
+Service
+  ↓
+Database / Redis
+
+4. REDIS WITH NESTJS ⭐⭐⭐⭐⭐
+
+Goal:
+Connect Redis with NestJS and create a reusable Redis service.
+Flow:
+
+NestJS Controller/Resolver
+       ↓
+RedisService
+       ↓
+ioredis
+       ↓
+Redis Server
+       ↓
+localhost:6379
+
+
+==================================================
+1. INSTALL REDIS CLIENT
+==================================================
+
+For NestJS, we can use ioredis.//same for node/express js
+Install:
+npm install ioredis
+If you are using @nestjs/config for .env:
+npm install @nestjs/config
+==================================================
+2. CREATE .env
+==================================================
+Create a .env file in the root of your NestJS project.
+REDIS_URL=redis://localhost:6379
+If Redis is running in Docker and port 6379 is exposed
+to your Windows host, localhost:6379 will work.
+Example Docker port mapping:
+6379:6379
+
+
+==================================================
+3. CONFIGURE ConfigModule
+==================================================
+
+src/app.module.ts
+
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { RedisModule } from './redis/redis.module';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    RedisModule,
+  ],
+})
+export class AppModule {}
+
+
+Why isGlobal: true?
+It allows ConfigService to be used throughout the
+application without importing ConfigModule into every
+module.
+==================================================
+4. CREATE REDIS MODULE
+==================================================
+Create:
+src/redis/redis.module.ts
+
+Code:
+import { Global, Module } from '@nestjs/common';
+import { RedisService } from './redis.service';
+
+@Global()
+@Module({
+  providers: [RedisService],
+  exports: [RedisService],
+})
+export class RedisModule {}
+
+
+Why @Global()?
+
+It makes RedisService available throughout the application
+without importing RedisModule into every feature module.
+
+Why exports?
+Because other modules need to use RedisService.
+==================================================
+5. CREATE REDIS SERVICE
+==================================================
+Create:
+src/redis/redis.service.ts
+Code:
+import {
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import Redis from 'ioredis';
+@Injectable()
+export class RedisService
+  implements OnModuleInit, OnModuleDestroy
+{
+  private redis: Redis;
+  constructor(
+    private readonly configService: ConfigService,
+  ) {
+    const redisUrl =
+      this.configService.get<string>('REDIS_URL') ||
+      'redis://localhost:6379';
+    this.redis = new Redis(redisUrl);
+  }
+
+  async onModuleInit() {
+    try {
+      const result = await this.redis.ping(); 
+      console.log(`Redis connected: ${result}`);
+    } catch (error) {
+      console.error('Redis connection failed:', error);
+    }
+  }
+   //If Redis is running:return
+//PONG
+//If Redis isn't running, ping() throws a connection error.
+
+
+
+
+  async onModuleDestroy() {
+    await this.redis.quit();
+    console.log('Redis connection closed');
+  }
+  //quit() closes the Redis connection cleanly.
+ 
+
+  async set(key: string, value: string) {
+    return this.redis.set(key, value);
+  }
+
+  async get(key: string) {
+    return this.redis.get(key);
+  }
+
+  async del(key: string) {
+    return this.redis.del(key);
+  }
+
+  async exists(key: string) {
+    return this.redis.exists(key);
+  }
+
+  async expire(key: string, seconds: number) {
+    return this.redis.expire(key, seconds);
+  }
+
+  async ttl(key: string) {
+    return this.redis.ttl(key);
+  }
+}
+
+
+==================================================
+6. UNDERSTAND THE REDIS CLIENT
+==================================================
+This line creates the Redis client:
+private redis: Redis;
+Then:
+this.redis = new Redis(redisUrl);
+
+
+If:
+REDIS_URL=redis://localhost:6379
+then ioredis connects to:
+
+Redis Server
+localhost
+port 6379
+The Redis client is responsible for communicating
+between NestJS and Redis.
+==================================================
+7. WHY CREATE RedisService?
+==================================================
+Instead of doing this everywhere:
+
+const redis = new Redis(
+  'redis://localhost:6379'
+);
+We create ONE reusable service:
+RedisService
+
+Then any controller/Resolver/service can do:
+
+this.redisService.set(...)
+
+this.redisService.get(...)
+
+
+Architecture:
+
+Controller/resolver
+    ↓
+RedisService
+    ↓
+ioredis
+    ↓
+Redis
+
+
+This keeps Redis connection logic in one place.
+
+
+==================================================
+8. CREATE TEST CONTROLLER
+==================================================
+
+Create:
+
+src/redis/redis.controller.ts
+
+Code:
+
+import { Controller, Get, Param } from '@nestjs/common';
+import { RedisService } from './redis.service';
+
+@Controller('redis')
+export class RedisController {
+  constructor(
+    private readonly redisService: RedisService,
+  ) {}
+  @Get('set')
+  async setValue() {
+    await this.redisService.set(
+      'name',
+      'Naeem',
+    );
+
+    return {
+      message: 'Value stored in Redis',
+    };
+  }
+
+  @Get('get')
+  async getValue() {
+    const value =
+      await this.redisService.get('name');
+    return {
+      value,
+    };
+  }
+}
+
+
+==================================================
+9. ADD CONTROLLER/Resolver TO RedisModule
+==================================================
+
+Update:
+src/redis/redis.module.ts
+
+Code:
+
+import { Global, Module } from '@nestjs/common';
+import { RedisService } from './redis.service';
+import { RedisController } from './redis.controller';
+
+@Global()
+@Module({
+  controllers: [RedisController],
+  providers: [RedisService],
+  exports: [RedisService],
+})
+export class RedisModule {}
+
+
+==================================================
+10. TEST SET
+==================================================
+
+Start NestJS:
+npm run start:dev
+
+
+Call:
+GET http://localhost:3000/redis/set
+
+
+Response:
+
+{
+  "message": "Value stored in Redis"
+}
+
+
+Redis now contains:
+name → Naeem
+
+
+==================================================
+11. TEST GET
+==================================================
+
+Call:
+GET http://localhost:3000/redis/get
+
+Response:
+
+{
+  "value": "Naeem"
+}
+
+
+Flow:
+
+Browser/Postman
+      ↓
+GET /redis/get
+      ↓
+RedisController
+      ↓
+RedisService
+      ↓
+ioredis
+      ↓
+Redis
+      ↓
+"Naeem"
+
+
+==================================================
+12. BETTER VERSION USING PARAMETER
+==================================================
+
+Instead of hardcoding "name", create reusable
+GET and SET endpoints.
+
+redis.controller.ts
+
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+} from '@nestjs/common';
+
+import { RedisService } from './redis.service';
+
+@Controller('redis')
+export class RedisController {
+
+  constructor(
+    private readonly redisService: RedisService,
+  ) {}
+
+  @Get('set')
+  async setValue(
+    @Query('key') key: string,
+    @Query('value') value: string,
+  ) {
+    await this.redisService.set(key, value);
+    return {
+      message: 'Value stored',
+      key,
+      value,
+    };
+  }
+
+  @Get('get/:key')
+  async getValue(
+    @Param('key') key: string,
+  ) {
+    const value =
+      await this.redisService.get(key);
+
+    return {
+      key,
+      value,
+    };
+  }
+}
+
+
+==================================================
+13. TEST REUSABLE SET
+==================================================
+Request:
+GET
+http://localhost:3000/redis/set?key=name&value=Naeem
+Response:
+
+{
+  "message": "Value stored",
+  "key": "name",
+  "value": "Naeem"
+}
+
+==================================================
+14. TEST REUSABLE GET
+==================================================
+Request:
+GET
+http://localhost:3000/redis/get/name
+Response:
+
+{
+  "key": "name",
+  "value": "Naeem"
+}
+==================================================
+15. ADD TTL
+==================================================
+You can also create a method for temporary data.
+redis.service.ts
+
+async setWithExpiry(
+  key: string,
+  value: string,
+  seconds: number,
+) {
+  return this.redis.set(
+    key,
+    value,
+    'EX',
+    seconds,
+  );
+}
+
+
+Usage:
+await this.redisService.setWithExpiry(
+  'otp',
+  '123456',
+  60,
+);
+
+
+Meaning:
+otp → 123456
+After 60 seconds:
+otp → automatically deleted
+
+
+==================================================
+16. FINAL PROJECT STRUCTURE
+==================================================
+
+src/
+│
+├── app.module.ts
+│
+└── redis/
+    │
+    ├── redis.module.ts
+    ├── redis.service.ts
+    └── redis.controller.ts
+    or radis.resolver
+
+
+.env
+REDIS_URL=redis://localhost:6379
+
+
+==================================================
+17. COMPLETE FLOW
+==================================================
+
+1. Redis Server starts
+       ↓
+2. NestJS starts
+       ↓
+3. ConfigModule reads .env
+       ↓
+4. RedisService gets REDIS_URL
+       ↓
+5. ioredis creates Redis connection
+       ↓
+6. RedisService calls ping()
+       ↓
+7. Redis connection succeeds
+       ↓
+8. Controller uses RedisService
+       ↓
+9. RedisService executes SET / GET
+       ↓
+10. Redis stores/returns data
+
+
+IMPORTANT:
+You need Redis actually running.
+If using Docker:
+docker compose up -d
+
+Then Redis should expose
+localhost:6379
+
+Your .env:
+REDIS_URL=redis://localhost:6379
+
+if not using docker then
+Option 1: WSL + Redis — recommended
+Redis runs inside Linux through WSL.
+Your architecture becomes:
+NestJS
+  ↓
+ioredis
+  ↓
+redis://localhost:6379
+  ↓
+Redis running in WSL
+
+
+Option 2: Windows Redis-compatible server
+You can install a Redis-compatible server that runs directly on Windows. 
+Then your NestJS application can still connect to:
+
+redis://localhost:6379
+
+What changes if you remove Docker?
+Only how Redis is started changes.
+
+With Docker:
+docker compose up -d
+
+Without Docker/using WSL:
+Start Redis inside WSL
+
+Your NestJS code:
+NestJS
+ ↓
+RedisService
+ ↓
+ioredis
+ ↓
+localhost:6379
+
+doesn't care whether Redis came from Docker, WSL, or another server.
+Important: You still need a Redis server somewhere. Removing Docker doesn't remove that requirement.
+, I'd recommend WSL + Redis if you want to learn the standard Linux-based Redis setup.
+
+--->
+5. CACHING ⭐⭐⭐⭐⭐
+
+WHAT IS CACHING?
+----------------
+Caching means temporarily storing frequently used data in a
+fast storage system so that we don't have to fetch the same
+data from the database every time.
+
+Redis is commonly used as a cache because it stores data in
+memory (RAM), making it much faster than querying a database
+for every request.
+
+
+WHY CACHING?
+------------
+
+Without cache:
+
+Client
+  ↓
+NestJS
+  ↓
+MySQL
+  ↓
+Return data
+
+Every request goes to MySQL.
+
+With cache:
+
+Client
+  ↓
+NestJS
+  ↓
+Redis
+  ↓
+Return data
+
+Most requests can be served directly from Redis.
+
+Benefits:
+
+- Faster response
+- Less database load
+- Better performance
+- Better scalability
+- Useful for frequently requested data
+
+CACHE-ASIDE PATTERN
+-------------------
+Cache-aside is the most common caching pattern.
+The application checks Redis first.
+
+If data exists:
+    Return it.
+
+If data does not exist:
+    Get it from database.
+    Store it in Redis.
+    Return it.
+
+
+CACHE HIT
+----------
+Cache Hit means:
+"The requested data was found in Redis."
+
+
+Flow:
+Request
+   ↓
+Redis
+   ↓
+Data found
+   ↓
+CACHE HIT
+   ↓
+Return data
+
+
+CACHE MISS
+----------
+
+Cache Miss means:
+
+"The requested data was NOT found in Redis."
+
+Example:
+Request:
+GET /users/1
+Redis:
+user:1 → not found
+
+This is a CACHE MISS.
+Then the application gets the data from MySQL.
+
+Flow:
+
+Request
+   ↓
+Redis
+   ↓
+Not found
+   ↓
+CACHE MISS
+   ↓
+MySQL
+   ↓
+Get data
+   ↓
+Store data in Redis
+   ↓
+Return data
+
+CACHE-ASIDE COMPLETE FLOW
+-------------------------
+
+Request
+   ↓
+Check Redis
+   ↓
+Is data available?
+   │
+   ├── YES
+   │    ↓
+   │  CACHE HIT
+   │    ↓
+   │  Return data
+   │
+   └── NO
+        ↓
+      CACHE MISS
+        ↓
+      MySQL
+        ↓
+      Get data
+        ↓
+      Store in Redis
+        ↓
+      Return data
+
+The second request does not need to query MySQL.
+
+
+TTL-BASED CACHING
+-----------------
+
+TTL = Time To Live.
+We can tell Redis how long cached data should remain.
+Example:
+
+await redis.set(
+  "user:1",
+  JSON.stringify(user),
+  "EX",
+  60
+);
+
+The cached data will automatically expire after
+60 seconds.
+
+Flow:
+
+MySQL
+  ↓
+Store in Redis
+  ↓
+TTL = 60 seconds
+  ↓
+60 seconds pass
+  ↓
+Redis deletes key
+  ↓
+Next request
+  ↓
+CACHE MISS
+  ↓
+MySQL
+  ↓
+Store fresh data again
+
+
+WHY USE TTL?
+Because cached data can become old.
+
+Example:
+Database:
+user name = Naeem
+
+Redis:
+user name = Naeem
+
+Later database changes:
+user name = Mohammad
+
+But Redis may still contain:
+user name = Naeem
+
+TTL helps automatically remove old cached data.
+
+
+CACHE INVALIDATION
+------------------
+Cache invalidation means removing or updating cached data
+when the original database data changes.
+
+Example:
+
+Database:
+user:1
+name = Naeem
+
+Redis:
+user:1
+name = Naeem
+
+
+User updates name:
+Naeem → Mohammad
+
+Database is updated:
+user:1
+name = Mohammad
+
+
+But Redis still has:
+user:1
+name = Naeem
+
+So we invalidate the cache:
+await redis.del("user:1");
+
+
+Now:
+
+Redis:
+user:1 → does not exist
+
+
+Next request:
+
+Request
+   ↓
+Redis
+   ↓
+CACHE MISS
+   ↓
+MySQL
+   ↓
+Get updated data
+   ↓
+Store in Redis
+   ↓
+Return
+
+
+DATABASE + REDIS CACHING
+------------------------
+Database is the SOURCE OF TRUTH.
+Redis is the CACHE.
+Example:
+
+MySQL
+  ↓
+Permanent data
+
+Redis
+  ↓
+Temporary / frequently accessed data
+
+
+Redis should generally NOT be treated as the main
+permanent database when using it as a cache.
+
+ UPDATE
+------------
+
+Client
+  ↓
+NestJS
+  ↓
+Update MySQL
+  ↓
+Delete/Update Redis cache
+  ↓
+Return response
+
+
+EXAMPLE:
+
+Update user:
+
+await userRepository.update(
+  { id: userId },
+  { name: "Mohammad" }
+);
+
+await redis.del(`user:${userId}`);
+
+
+Next GET request:
+GET /users/1
+       ↓
+Redis
+       ↓
+CACHE MISS
+       ↓
+MySQL
+       ↓
+Get latest user
+       ↓
+Store in Redis
+       ↓
+Return latest user
+
+
+IMPORTANT TERMS
+---------------
+
+Caching
+→ Temporarily storing frequently used data.
+
+Cache Hit
+→ Data found in Redis.
+
+Cache Miss
+→ Data not found in Redis.
+
+Cache-Aside
+→ Check cache → if miss, database → store in cache.
+
+Cache Invalidation
+→ Remove/update cached data when database data changes.
+
+TTL
+→ Automatically expire cached data after a certain time.
+
+Redis
+→ Fast cache.
+
+MySQL
+→ Permanent/source-of-truth database.
+
+
+example:
+
+// redis.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import Redis from 'ioredis';
+
+@Injectable()
+export class RedisService {
+  private redis: Redis;
+
+  constructor(private configService: ConfigService) {
+    this.redis = new Redis(
+      this.configService.get<string>('REDIS_URL') ||
+        'redis://localhost:6379',
+    );
+  }
+
+  async get(key: string) {
+    return this.redis.get(key);
+  }
+
+  async set(key: string, value: string, ttl: number) {
+    return this.redis.set(key, value, 'EX', ttl);
+  }
+
+  async del(key: string) {
+    return this.redis.del(key);
+  }
+}
+
+
+// user.service.ts
+
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from './user.entity';
+import { RedisService } from '../redis/redis.service';
+
+@Injectable()
+export class UserService {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+    private readonly redisService: RedisService,
+  ) {}
+
+  async getUser(id: number) {
+    const key = `user:${id}`;
+    // Check Redis
+    const cachedUser = await this.redisService.get(key);
+    // Cache Hit
+    if (cachedUser) {
+      return JSON.parse(cachedUser);
+    }
+
+    // Cache Miss → Database
+    const user = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Store in Redis for 60 seconds
+    await this.redisService.set(
+      key,
+      JSON.stringify(user),
+      60,
+    );
+    return user;
+  }
+
+
+
+async updateUser(id: number, data: Partial<User>) {
+  // 1. Update MySQL
+  const result = await this.userRepository.update(
+    id,
+    data,
+  );
+
+  if (result.affected === 0) {
+    throw new NotFoundException('User not found');
+  }
+
+  // 2. Delete old Redis cache
+  await this.redisService.del(`user:${id}`);
+
+  // 3. Get updated user from MySQL
+  const user = await this.userRepository.findOne({
+    where: { id },
+  });
+
+  // 4. Store updated user in Redis
+  await this.redisService.set(
+    `user:${id}`,
+    JSON.stringify(user),
+    60,
+  );
+  return user;
+}
+
+   }
+
+
+
+----->
+6. REDIS PUB/SUB ⭐⭐⭐⭐
+PUB/SUB = PUBLISH / SUBSCRIBE
+
+Redis Pub/Sub is used for sending messages between
+different parts of an application in real time.
+
+Basic flow:
+
+Publisher
+    ↓
+Redis Channel
+    ↓
+Subscriber
+
+
+1. PUBLISHER
+----------------
+Publisher sends a message to a Redis channel.
+
+Example:
+
+await redis.publish(
+  "notifications",
+  "New notification"
+);
+
+Publisher does NOT send directly to a subscriber.
+It sends the message to a CHANNEL.(notification is channel)
+
+2. SUBSCRIBER
+----------------
+Subscriber listens to a Redis channel.
+Example:
+await redis.subscribe("notifications");
+When a message is published:
+
+Publisher
+    ↓
+"notifications"
+    ↓
+Subscriber receives message
+
+
+3. CHANNEL
+----------------
+
+A channel is like a communication topic.
+Example channels:
+
+notifications
+messages
+orders
+payments
+chat
+
+
+Publisher:
+await redis.publish(
+  "notifications",
+  "New post created"
+);
+
+Subscriber:
+
+await redis.subscribe(
+  "notifications"
+);
+Both use the same channel name.
+
+4. PUBLISH
+----------------
+PUBLISH sends a message to a channel
+Redis command:
+PUBLISH notifications "Hello"
+
+
+ioredis:
+await redis.publish(
+  "notifications",
+  "Hello"
+);
+
+Redis sends the message to all subscribers
+currently subscribed to that channel.
+
+
+5. SUBSCRIBE
+----------------
+SUBSCRIBE listens to a channel.
+Redis command:
+SUBSCRIBE notifications
+
+
+ioredis:
+await redis.subscribe(
+  "notifications"
+);
+Then listen for messages:
+
+redis.on(
+  "message",
+  (channel, message) => {
+
+    console.log(channel);
+    console.log(message);
+
+  }
+);
+
+ful example:
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Redis } from 'ioredis';
+
+@Injectable()
+export class RedisSubscriber implements OnModuleInit {
+    private redis: Redis;
+
+    constructor(private configService: ConfigService) {
+        this.redis = new Redis(
+            configService.get<string>(
+                'REDIS_URL',
+                'redis://localhost:6379',
+            ),
+        );
+
+        this.redis.on('error', (error) => {
+            console.error('Redis Subscriber Error:', error);
+        });
+    }
+
+    async onModuleInit() {
+        await this.redis.subscribe('user.created');
+        console.log('Subscribed to user.created');
+
+        this.redis.on('message', (channel, message) => {
+            console.log('Channel:', channel);
+            console.log('Message:', message);
+        });
+    }
+}
+
+we put it in onModuleInit because it will auto subscribe when otherwise the method or fun we created will have call
+
+Example output:
+
+notifications
+Hello
+
+
+6. IMPORTANT PUB/SUB CONCEPT
+----------------------------
+Pub/Sub messages are NOT stored.
+
+Example:
+Subscriber is connected:
+
+Subscriber
+    ↓
+notifications
+
+Publisher:
+    ↓
+PUBLISH notifications "Hello"
+
+Subscriber receives:
+    ↓
+Hello
+
+
+But if there is NO subscriber:
+
+Publisher
+    ↓
+PUBLISH notifications "Hello"
+
+Nobody receives it.
+The message is gone.
+
+
+if the subscriber is already subscribed to that Redis channel, 
+then publishing from a different route/resolver will automatically deliver the message to that subscriber.
+
+For example:
+
+POST /user
+     ↓
+Redis PUBLISH
+     ↓
+   "user.created"
+     ↓
+Redis
+     ↓
+SUBSCRIBE "user.created"
+     ↓
+Notification Service
+
+So Redis Pub/Sub is useful for:
+
+- Real-time notifications
+- Chat
+- Live updates
+- WebSocket communication
+- Events between servers
+
+
+7. REDIS PUB/SUB WITH NESTJS
+----------------------------
+For Pub/Sub, it is better to create two Redis
+connections.
+
+Why?
+
+A Redis connection that uses SUBSCRIBE becomes
+a subscriber connection.
+
+Therefore:
+
+Connection 1 → Publisher
+Connection 2 → Subscriber
+
+Example:
+redis.publisher.ts
+import Redis from 'ioredis';
+
+export const redisPublisher =
+  new Redis('redis://localhost:6379')
+
+redis.subscriber.ts
+import Redis from 'ioredis';
+
+export const redisSubscriber =
+  new Redis('redis://localhost:6379');
+
+
+8. PUBLISH FROM NESTJS
+----------------------
+
+Example RedisService:
+
+@Injectable()
+export class RedisService {
+
+  private publisher: Redis;
+
+  constructor() {
+    this.publisher =
+      new Redis('redis://localhost:6379');
+  }
+
+  async publish(
+    channel: string,
+    message: string,
+  ) {
+
+    return this.publisher.publish(
+      channel,
+      message,
+    );
+  }
+}
+
+
+9. SUBSCRIBE FROM NESTJS
+------------------------
+
+Subscriber:
+
+@Injectable()
+export class RedisSubscriber
+  implements OnModuleInit {
+
+  private subscriber: Redis;
+
+  constructor() {
+    this.subscriber =
+      new Redis('redis://localhost:6379');
+  }
+
+  async onModuleInit() {
+
+    await this.subscriber.subscribe(
+      'notifications',
+    );
+
+    this.subscriber.on(
+      'message',
+      (channel, message) => {
+
+        console.log(
+          'Channel:',
+          channel,
+        );
+
+        console.log(
+          'Message:',
+          message,
+        );
+
+      },
+    );
+  }
+}
+
+
+10. COMPLETE NESTJS FLOW
+------------------------
+
+Publisher:
+
+await redisService.publish(
+  'notifications',
+  'New post created',
+);
+
+
+        ↓
+
+Redis
+
+Channel:
+notifications
+
+        ↓
+
+Subscriber
+
+        ↓
+
+Receives:
+
+New post created
+
+
+11. REDIS + WEBSOCKETS
+---------------------
+
+This is a very useful real-world combination.
+
+Redis Pub/Sub can communicate between
+multiple NestJS server instances.
+
+Example:
+
+User A
+  ↓
+WebSocket Server 1
+  ↓
+Redis PUBLISH
+  ↓
+notifications channel
+  ↓
+Redis
+  ↓
+WebSocket Server 2
+  ↓
+User B
+
+
+Why?
+
+Imagine you have two backend servers:
+
+Server 1
+Server 2
+
+
+User A is connected to Server 1.
+
+User B is connected to Server 2.
+
+
+Server 1 cannot directly communicate with
+the WebSocket connection on Server 2.
+
+Redis solves this:
+
+Server 1
+   ↓
+PUBLISH
+   ↓
+Redis
+   ↓
+SUBSCRIBE
+   ↓
+Server 2
+   ↓
+WebSocket
+   ↓
+User B
+
+
+12. REAL-TIME NOTIFICATION EXAMPLE
+-----------------------------------
+User A creates a post.
+NestJS Server:
+
+await redis.publish(
+  'notifications',
+  JSON.stringify({
+    userId: 2,
+    message: 'New post created',
+  }),
+);
+
+
+Redis:
+
+notifications
+     ↓
+{
+  userId: 2,
+  message: "New post created"
+}
+
+
+Subscriber receives it:
+
+redis.on(
+  'message',
+  (channel, message) => {
+    const data = JSON.parse(message);
+    console.log(data);
+
+  },
+);
+
+
+Then WebSocket sends it to the client:
+
+WebSocket
+    ↓
+User 2
+    ↓
+Notification appears
+
+
+13. PUB/SUB VS CACHE
+--------------------
+
+CACHE:
+
+Application
+    ↓
+Redis
+    ↓
+GET / SET data
+
+
+PUB/SUB:
+
+Publisher
+    ↓
+Redis Channel
+    ↓
+Subscriber
+
+
+Cache stores data.
+Pub/Sub sends messages.
+
+
+14. PUB/SUB VS DATABASE
+-----------------------
+
+Database:
+Data is stored permanently.
+
+Redis Pub/Sub:
+Messages are temporary.
+If nobody is subscribed when the message is
+published, the message is lost.
+
+
+15. IMPORTANT COMMANDS
+----------------------
+
+PUBLISH
+→ Send message to a channel.
+
+SUBSCRIBE
+→ Listen to a channel.
+
+UNSUBSCRIBE
+→ Stop listening.
+
+CHANNEL
+→ Communication topic.
+
+
+16. QUICK MEMORY
+----------------
+
+Publisher
+→ Sends message.
+
+Subscriber
+→ Receives message.
+
+Channel
+→ Communication topic.
+
+PUBLISH
+→ Send message.
+
+SUBSCRIBE
+→ Listen for messages.
+
+Redis Pub/Sub
+→ Real-time message delivery.
+
+Redis + WebSocket
+→ Redis distributes events between backend
+  servers, while WebSocket delivers them to
+  connected clients.
+
+
+IMPORTANT:
+
+PUB/SUB ≠ CACHE
+
+CACHE:
+Redis stores data.
+
+PUB/SUB:
+Redis distributes messages.
+
+PUB/SUB messages are not persisted.
+
+---->
+7. Redis for Authentication
+Redis for Authentication
+Redis Authentication
+│
+├── 1. Session Storage
+├── 2. Access/Refresh Token Storage
+├── 3. JWT Blacklisting
+├── 4. OTP Storage
+└── 5. Temporary Data + TTL
+
+1. Session Storage
+Idea
+Instead of storing session data in NestJS memory:
+
+User
+ ↓
+NestJS
+ ↓
+Redis
+
+Redis stores:
+
+session:abc123
+        ↓
+{
+   userId: 10,
+   role: "USER"
+}
+Store session
+async createSession(
+  sessionId: string,//anthing like session:abc123
+  userId: number,
+  role: string,
+) {
+  const session = {
+    userId,
+    role,
+  };
+
+  await this.redis.set(
+    `session:${sessionId}`,
+    JSON.stringify(session),
+    'EX',
+    60 * 60,
+  );
+}
+Get session
+async getSession(sessionId: string) {
+  const data = await this.redis.get(
+    `session:${sessionId}`,
+  );
+
+  if (!data) {
+    return null;
+  }
+  return JSON.parse(data);
+}
+
+Delete session / logout
+async deleteSession(sessionId: string) {
+  await this.redis.del(
+    `session:${sessionId}`,
+  );
+}
+
+how things happens:
+1. LOGIN
+User sends email/password
+↓
+Server verifies credentials
+
+2. CREATE SESSION
+Generate unique sessionId
+↓
+sessionId = randomUUID()
+
+3. STORE(set) SESSION IN REDIS
+Redis:
+session:abc123 → { userId: 10, role: "USER" }
+↓
+Set TTL for automatic expiration
+
+4. SEND COOKIE
+Server sends:
+Set-Cookie: sessionId=abc123; HttpOnly
+
+5. FUTURE REQUEST
+Browser automatically sends:
+Cookie: sessionId=abc123
+
+6. SESSION GUARD
+NestJS reads sessionId from cookie
+↓
+Redis GET session:abc123
+
+
+
+7. AUTHENTICATE
+Session found?
+YES → request.user = session data → allow request
+NO  → reject request (401)
+
+
+
+
+
+8. LOGOUT
+Redis DEL session:abc123
+↓
+Clear session cookie
+↓
+User is logged out
+
+
+
+//gurads
+ @Injectable()
+export class SessionGuard implements CanActivate {
+  async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    const sessionId = request.cookies.sessionId;
+    if (!sessionId) {
+      return false;
+    }
+    const session = await redis.get(
+      `session:${sessionId}`,
+    );
+
+    if (!session) {
+      return false;
+    }
+    request.user = JSON.parse(session);
+    return true;
+  }
+}
+
+
+
+Flow
+LOGIN
+ ↓
+Server verifies email/password
+ ↓
+Create random Session ID
+ ↓
+Store Session ID + user data in Redis
+ ↓
+Send Session ID in HTTP-only Cookie
+ ↓
+Browser stores Cookie
+ ↓
+Future Request
+ ↓
+Browser automatically sends Cookie
+ ↓
+NestJS reads Session ID from Cookie
+ ↓
+Redis GET session:SessionID
+ ↓
+Session found?
+ ├── YES → User authenticated
+ └── NO  → Not authenticated
+
+
+
+
+
+
+2. Token / Refresh Token Storage
+Usually:
+
+Access Token
+    ↓
+short lifetime
+
+Refresh Token
+    ↓
+long lifetime
+    ↓
+Redis
+
+Example:
+
+refresh:user:10
+        ↓
+refresh-token-value
+Store refresh token
+async saveRefreshToken(
+  userId: number,
+  refreshToken: string,
+) {
+  await this.redis.set(
+    `refresh:${userId}`,
+    refreshToken,
+    'EX',
+    60 * 60 * 24 * 7,
+  );
+}
+
+7 days TTL.
+
+Get refresh token
+async getRefreshToken(userId: number) {
+  return await this.redis.get(
+    `refresh:${userId}`,
+  );
+}
+Delete refresh token
+async deleteRefreshToken(userId: number) {
+  await this.redis.del(
+    `refresh:${userId}`,
+  );
+}
+
+Why Redis?
+Suppose user logs out:
+
+DELETE refresh:10
+Now the refresh token cannot be used to generate another access token.
+
+JWT + Refresh Token
+────────────────────────
+Access JWT
+   ↓
+API requests
+
+Refresh Token
+   ↓
+Redis
+   ↓
+Generate new Access JWT
+
+
+3. Blacklisting JWTs
+
+Normally JWT is stateless:
+
+JWT
+ ↓
+verify signature
+ ↓
+valid
+
+But problem:
+
+User logs out
+ ↓
+JWT is still valid
+ ↓
+JWT expires after 15 minutes
+
+You can blacklist the JWT in Redis.
+Store blacklist
+
+Use the JWT ID (jti) rather than storing the whole token when possible.
+
+async blacklistToken(
+  jti: string,
+  expiresIn: number,
+) {
+  await this.redis.set(
+    `blacklist:${jti}`,
+    '1',
+    'EX',
+    expiresIn,
+  );
+}
+Check blacklist
+async isBlacklisted(jti: string) {
+  const result = await this.redis.get(
+    `blacklist:${jti}`,
+  );
+
+  return result === '1';
+}
+
+JWT request flow
+Request
+ ↓
+JWT
+ ↓
+Verify JWT
+ ↓
+Extract jti
+ ↓
+Redis GET blacklist:jti
+ ↓
+Found?
+ ├── YES → Reject
+ └── NO  → Continue
+
+Important
+
+The blacklist TTL should normally match the remaining lifetime of the JWT.
+
+Example:
+JWT expires in 300 seconds
+
+Redis:
+blacklist:abc123 → "1"
+TTL = 300
+
+After 300 seconds, Redis automatically removes it.
+
+4. OTP Storage
+OTP is perfect for Redis because OTPs are temporary.
+
+Example:
+
+otp:user@example.com
+        ↓
+482931
+        ↓
+TTL = 5 minutes
+
+Store OTP//when your put it 
+async saveOtp(
+  email: string,
+  otp: string,
+) {
+  await this.redis.set(
+    `otp:${email}`,
+    otp,
+    'EX',
+    60 * 5,
+  );
+}
+
+Get OTP
+async getOtp(email: string) {
+  return await this.redis.get(
+    `otp:${email}`,
+  );
+}
+
+Verify OTP
+async verifyOtp(
+  email: string,
+  inputOtp: string,
+) {
+  const storedOtp = await this.redis.get(
+    `otp:${email}`,
+  );
+
+  if (!storedOtp) {
+    return false;
+  }
+
+  if (storedOtp !== inputOtp) {
+    return false;
+  }
+
+  await this.redis.del(`otp:${email}`);
+
+  return true;
+}
+
+Flow
+Generate OTP
+     ↓
+Redis SET
+     ↓
+TTL 5 minutes
+     ↓
+Send OTP to user
+     ↓
+User enters OTP
+     ↓
+Redis GET
+     ↓
+Compare
+     ↓
+DELETE OTP
+
+5. Temporary Data + TTL
+Redis is excellent for data that should automatically disappear.
+
+Examples:
+
+OTP
+Password reset token
+Email verification token
+Rate-limit counters
+Temporary login state
+Temporary cache
+Basic Redis TTL
+await this.redis.set(
+  'reset-token:abc123',
+  'user:10',
+  'EX',
+  600,
+);
+
+This means:
+
+Key:
+reset-token:abc123
+
+Value:
+user:10
+
+TTL:
+600 seconds
+
+After 10 minutes:
+
+reset-token:abc123
+        ↓
+        deleted automatically
+Check TTL
+const ttl = await this.redis.ttl(
+  'reset-token:abc123',
+);
+
+console.log(ttl);
+
+Possible result:
+
+543
+
+Meaning:
+
+543 seconds remaining
+Complete Redis Auth Service
+
+Y
+Remember the main pattern
+Redis Authentication
+│
+├── Session
+│   └── session:user
+│
+├── Refresh Token
+│   └── refresh:user
+│
+├── JWT Blacklist
+│   └── blacklist:jti
+│
+├── OTP
+│   └── otp:email
+│
+└── Temporary Data
+    └── temp:key
+
+And the most important Redis feature for all of these is TTL:
+
+await redis.set(
+  key,
+  value,
+  'EX',
+  seconds,
+);
+
+-------->
+============================================================
+8. REDIS + QUEUES ⭐⭐⭐⭐
+============================================================
+IMPORTANT:
+There are TWO different queue technologies:
+
+1. BullMQ + Redis
+2. RabbitMQ
+They solve similar problems, but they are NOT the same thing.
+
+For NestJS + Microservices, RabbitMQ is very important.
+
+For background jobs with Node.js, BullMQ + Redis is also useful.
+
+============================================================
+1. WHY DO WE NEED QUEUES?
+============================================================
+Suppose a user creates an account.
+
+Without a queue:
+
+User
+ ↓
+API
+ ↓
+Create User
+ ↓
+Send Email
+ ↓
+Generate Notification
+ ↓
+Response
+
+example:
+async register(data) {
+  const user = await this.userService.create(data);
+  await this.emailService.sendWelcomeEmail(user);
+  await this.notificationService.create(user);
+  return user;
+}
+
+The user has to wait for everything.
+
+With a queue:
+
+User
+ ↓
+API
+ ↓
+Create User
+ ↓
+Queue
+ ↓
+Response immediately
+
+
+Then in background:
+
+Queue
+ ↓
+Worker / Consumer
+ ↓
+Send Email
+
+
+Benefits:
+
+- Faster API response
+- Background processing
+- Decoupling
+- Better scalability
+- Retry failed work
+- Handle traffic spikes
+- Communication between microservices
+
+============================================================
+2. JOB
+============================================================
+A Job is a unit of work that needs to be processed.
+
+Examples:
+
+- Send email
+- Send notification
+- Resize image
+- Generate PDF
+- Process payment
+- Generate report
+- Process uploaded file
+
+
+Example Job:
+{
+    "type": "send-email",
+    "email": "user@gmail.com",
+    "subject": "Welcome"
+}
+
+============================================================
+3. PRODUCER
+============================================================
+Producer creates and sends a job/message.
+
+Example:
+
+User Service
+     ↓
+Producer
+     ↓
+Queue
+
+The producer does NOT necessarily process the job.
+It only says:
+
+"Here is some work that needs to be done."
+
+============================================================
+4. WORKER / CONSUMER
+============================================================
+Worker receives and processes the job.
+
+
+Queue
+ ↓
+Worker
+ ↓
+Process Job
+
+
+Example:
+
+Queue
+ ↓
+Email Worker
+ ↓
+Send Email
+
+
+============================================================
+5. QUEUE
+============================================================
+A Queue temporarily stores messages/jobs.
+
+
+Producer
+   ↓
+ Queue
+   ↓
+Consumer
+
+
+Example:
+email_queue
+
+
+Messages:
+Message 1
+Message 2
+Message 3
+Message 4
+
+Consumer processes them.
+============================================================
+6. BULLMQ + REDIS
+============================================================
+BullMQ is a Node.js queue library.
+Redis is used by BullMQ to store/manage the queue data.
+
+Architecture:
+
+NestJS
+   ↓
+BullMQ
+   ↓
+Redis
+   ↓
+Worker
+   ↓
+Email / Image Processing / Notification
+
+
+Example:
+
+API
+ ↓
+queue.add()
+ ↓
+Redis
+ ↓
+Worker
+ ↓
+process job
+
+
+============================================================
+7. BULLMQ PRODUCER
+============================================================
+
+Example:
+
+await emailQueue.add(
+    'send-email',
+    {
+        email: 'user@gmail.com',
+        subject: 'Welcome'
+    }
+);
+
+
+Here:
+
+emailQueue
+    ↓
+Producer
+
+'send-email'
+    ↓
+Job name
+
+{
+    email: ...
+}
+    ↓
+Job data
+
+
+============================================================
+8. BULLMQ WORKER
+============================================================
+Worker receives the job.
+
+
+Worker
+ ↓
+Job
+ ↓
+Process
+
+
+Example concept:
+async process(job) {
+    console.log(job.name);
+    console.log(job.data);
+    // send email
+
+}
+
+
+============================================================
+9. BULLMQ RETRY
+============================================================
+
+If a job fails, it can be retried.
+
+
+Job
+ ↓
+Worker
+ ↓
+FAIL
+ ↓
+Retry
+ ↓
+Worker
+ ↓
+SUCCESS
+
+
+Example:
+attempts: 3
+
+
+Means:
+
+Try 1
+ ↓
+FAIL
+
+Try 2
+ ↓
+FAIL
+
+Try 3
+ ↓
+SUCCESS
+
+
+============================================================
+10. BULLMQ DELAYED JOB
+============================================================
+A job can be executed later.
+
+
+Example:
+
+await queue.add(
+    'send-reminder',
+    data,
+    {
+        delay: 60000
+    }
+);
+
+
+60000 milliseconds = 1 minute
+
+Flow:
+
+Add Job
+ ↓
+Wait 1 minute
+ ↓
+Worker processes Job
+
+
+Useful for:
+
+- Reminders
+- Scheduled notifications
+- Retry delays
+- Expiring operations
+
+
+============================================================
+11. FAILED JOB
+============================================================
+If a job repeatedly fails:
+
+
+Job
+ ↓
+Worker
+ ↓
+FAIL
+ ↓
+Retry
+ ↓
+FAIL
+ ↓
+Retry
+ ↓
+FAIL
+ ↓
+Failed
+
+
+Failed jobs can be inspected and retried later.
+
+
+============================================================
+If you want Redis directly
+For things like:
+
+set/get
+OTP storage
+sessions
+token blacklist
+pub/sub
+Redis commands
+
+You mainly need:
+
+npm i redis
+
+Then:
+
+import { createClient } from 'redis';
+
+const client = createClient({
+  url: 'redis://localhost:6379',
+});
+
+await client.connect();
+await client.set('name', 'Naeem');
+
+const value = await client.get('name');
+
+If you want NestJS Cache
+If your purpose is NestJS CacheModule:
+npm i @nestjs/cache-manager cache-manager
+And a Redis store/adapter is additionally needed to make the cache
+ actually use Redis.
+
+Your command:
+npm i redis @nestjs/cache-manager cache-manager cache-manager-redis-store
+
+is mixing two approaches:
+                Redis
+                  │
+        ┌─────────┴─────────┐
+        ↓                   ↓
+   Direct Redis          Nest Cache
+      redis           @nestjs/cache-manager
+                           +
+                      cache-manager
+                           +
+                     Redis store
+note->
+You can do caching directly with Redis without NestJS CacheModule.  
+
+app.module
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
+@Module({
+  imports: [
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => ({
+        store: await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        }),
+        ttl: 60,
+
+      }),
+
+    }),
+
+  ],
+
+  controllers: [AppController],
+
+  providers: [AppService],
+
+})
+
+
+1. CacheModule
+CacheModule.registerAsync
+This configures NestJS's cache system.
+
+Instead of manually doing:
+redis.set(...)
+redis.get(...)
+
+NestJS's CacheModule gives you a cache abstraction.
+
+2. isGlobal: true
+isGlobal: true,
+Means the cache configuration is available throughout your application.
+So you don't need to import CacheModule again in every module.
+
+3. useFactory
+useFactory: async () => ({
+This function returns your cache configuration.
+The important part is what it returns:
+
+{
+  store: ...,
+  ttl: 60
+}
+4. redisStore
+store: await redisStore({
+
+This is the important Redis part.
+It tells Cache Manager:
+"Use Redis as the place where cache data will be stored."
+Without this, Cache Manager may use its default in-memory cache instead.
+
+5. Redis connection
+socket: {
+  host: 'localhost',
+  port: 6379,
+},
+
+This tells the Redis store where Redis is running:
+
+host = localhost
+port = 6379
+
+So your application connects to:
+
+Redis
+  ↑
+localhost:6379
+
+6379 is Redis's default port.
+
+6. ttl: 60
+ttl: 60,
+
+TTL = Time To Live
+
+It means cached data will automatically expire after 60 milliseconds.
+
+Example:
+
+Cache:
+user:10 → { name: "Naeem" }
+
+        ↓ 60 seconds
+
+user:10 → deleted/expired
+
+So overall:
+
+NestJS CacheModule
+       ↓
+Cache Manager
+       ↓
+redisStore
+       ↓
+Redis
+localhost:6379
+       ↓
+Cache data
+       ↓
+expires after 60 seconds
+In one line
+store: await redisStore(...)
+
+means "use Redis for storing the cache", while:
+
+ttl: 60
+means "keep each cached value for 60 seconds."
+
+
+now:
+app.service.tx
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Inject, Injectable } from '@nestjs/common';
+import { Cache } from 'cache-manager';
+import { products } from './fake.db';//just array of object(data)
+
+@Injectable()
+export class AppService {
+  constructor(@Inject(CACHE_MANAGER) private  readonly cacheManager:Cache){    
+  }
+  async getProduct(id:number){
+    const cacheKey=`product:${id}`
+    const cacheProduct=await this.cacheManager.get(cacheKey)
+    if(cacheProduct){
+      console.log('Cache Hit')
+      return cacheProduct
+    }
+    console.log('Cache miss')
+    const product=products.find((item)=>item.id==id)
+    await this.cacheManager.set(
+      cacheKey,
+      product
+    )
+    return product
+
+  }
+
+  async updateProduct(
+    id:number,
+    price:number
+  ){
+    const product=products.find((item)=>item.id==id)
+    if(!product){
+      return {
+        message:'Product not found!'
+      }
+    }
+    products.price=price;
+    await this.cacheManager.set(`product:${id}`,product)
+    console.log('Cache updated')
+    return{
+      message:'Product updated successfully!',
+      product 
+    };
+  }
+   
+}
+
+CACHE_MANAGER → NestJS token used to access the configured cache.
+Cache → TypeScript type for the cache manager.
+
+
+controller:
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+} from '@nestjs/common';
+import { AppService } from './app.service';
+
+@Controller('products')
+export class AppController {
+  constructor(private readonly appService: AppService) {}
+
+  @Get(':id')
+  getProduct(@Param('id', ParseIntPipe) id: number) {
+    return this.appService.getProduct(id);
+  }
+
+  @Patch(':id')
+  updateProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @Body('price', ParseIntPipe) price: number,
+  ) {
+    return this.appService.updateProduct(id, price);
+  }
+}

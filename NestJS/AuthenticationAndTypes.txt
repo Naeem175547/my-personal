@@ -1,0 +1,831 @@
+------->
+Authentication
+Authentication = “Who are you?”
+Authorization = “What are you allowed to do?”
+
+Example:
+Login → Authentication
+Admin can delete users → Authorization
+
+1. Basic Authentication
+Basic Auth sends:
+username + password
+Usually encoded as:
+Base64(username:password)
+
+Example:
+Authorization: Basic dXNlcjpwYXNz
+
+⚠️ Base64 is NOT encryption.
+So Basic Auth should be used with HTTPS.
+
+Flow
+Client
+  ↓ username + password
+Server
+  ↓ verify
+Authenticated
+Important
+Basic Auth
+→ username/password on every request
+→ simple
+→ HTTPS required
+→ not ideal for modern applications
+
+2. Digest Authentication
+Digest Auth improves Basic Auth by avoiding sending the actual password directly.
+
+Conceptually:
+
+Client
+  ↓ username + hash/challenge response
+Server
+  ↓ verifies response
+Authenticated
+
+Server sends a challenge such as a nonce.
+
+Client calculates a response using the credentials + challenge.
+
+Server → nonce
+Client → hash(username + password + nonce + ...)
+Server → verifies hash
+
+| Basic                                  | Digest                       |
+| -------------------------------------- | ---------------------------- |
+| Sends Base64 credentials               | Sends challenge-response     |
+| Password can be recovered from request | Password isn't sent directly |
+| HTTPS essential                        | Still use HTTPS              |
+| Simpler                                | More complex                 |
+| Common today                           | Much less common             |
+
+3. Session-Based Authentication
+
+Very common in traditional web applications.
+
+Flow
+Login
+ ↓
+username + password
+ ↓
+Server verifies
+ ↓
+Creates session
+ ↓
+Session stored on server
+ ↓
+Session ID sent to browser
+
+Browser stores:
+
+session_id
+Usually inside a cookie.
+
+Then:
+
+Cookie: session_id=abc123
+
+Server looks up:
+
+abc123 → User 101
+Architecture
+Browser
+   ↓ session cookie
+Server
+   ↓
+Session Store
+   ↓
+User information
+
+Session can be stored in:
+
+Memory
+Redis
+Database
+Important
+
+Session ID ≠ user data
+The browser generally has only the identifier.
+
+4. API Key Authentication
+
+An API key is a secret identifier used to access an API.
+
+Example:
+X-API-Key: abc123xyz
+
+or sometimes:
+
+Authorization: Bearer abc123xyz
+
+The server checks:
+
+API key → Which application/user?
+Common use
+Your Application
+       ↓ API Key
+Third-party API
+       ↓
+Response
+
+Examples:
+
+Google Maps API
+Payment APIs
+Weather APIs
+Internal services
+API Key vs Password
+Password
+→ identifies/authenticates a human user
+
+API Key
+→ commonly identifies an application/client/service
+
+5. JWT Authentication
+JWT = JSON Web Token
+JWT is a token containing claims about a user.
+
+Structure:
+HEADER.PAYLOAD.SIGNATURE
+
+Example:
+
+xxxxx.yyyyy.zzzzz
+Header
+{
+  "alg": "HS256",
+  "typ": "JWT"
+}
+Payload
+{
+  "sub": "123",
+  "role": "USER",
+  "exp": 1780000000
+}
+
+Signature
+Used to verify that the token wasn't modified.
+
+HMAC/RSA/ECDSA...
+Flow
+Login
+ ↓
+Server verifies password
+ ↓
+Server creates JWT
+ ↓
+Client stores JWT
+ ↓
+Client sends JWT on requests
+ ↓
+Server verifies JWT
+ ↓
+Request allowed
+
+Usually:
+
+Authorization: Bearer <JWT>
+
+6. Bearer Token
+Bearer describes how the token is presented.
+Authorization: Bearer <token>
+
+Meaning:
+Whoever bears/possesses this token can use it.
+
+Important:
+Bearer ≠ JWT
+
+A bearer token can be:
+
+JWT
+opaque token
+access token
+
+So:
+JWT = token format
+Bearer = authentication scheme
+
+7. Access Token vs Refresh Token
+
+This is very important.
+Access Token
+
+Used to access APIs.
+
+Client
+ ↓
+Access Token
+ ↓
+API
+
+Usually:
+short-lived
+
+Example:
+
+Access token → 15 minutes
+
+Refresh Token
+Used to obtain a new access token.
+
+Access Token expires
+        ↓
+Refresh Token
+        ↓
+Authorization Server
+        ↓
+New Access Token
+
+Usually:
+long-lived
+
+Example:
+Access Token  → 15 min
+Refresh Token → days/weeks
+
+Why two tokens?
+Suppose someone steals the access token.
+
+If it expires quickly:
+15 minutes → limited damage
+
+Instead of:
+30 days → huge risk
+
+Simple picture
+             Login
+               ↓
+       ┌───────┴────────┐
+       ↓                ↓
+ Access Token      Refresh Token
+ short-lived       long-lived
+       ↓                ↓
+     APIs          Get new access
+
+8. SSO
+SSO = Single Sign-On
+Login once, access multiple applications.
+
+Example:
+
+             Identity Provider
+                    ↓
+          ┌─────────┼─────────┐
+          ↓         ↓         ↓
+       Gmail      Drive     YouTube
+
+You don't separately log into every application.
+
+Example
+Company SSO
+    ↓
+Login once
+    ↓
+Slack
+GitHub Enterprise
+Jira
+Company Portal
+
+SSO is a login experience/architecture, not a token format.
+
+9. OAuth 2.0
+OAuth 2.0 = Authorization framework
+
+Its main purpose is:
+Allow an application to access a resource without giving the application your password.
+
+Example:
+
+Your App
+   ↓
+"Access my Google data"
+   ↓
+Google
+   ↓
+User gives permission
+   ↓
+Access Token
+   ↓
+Your App
+   ↓
+Google API
+
+Important distinction
+OAuth is primarily about:
+Authorization
+
+not proving the user's identity.
+
+OAuth 2.0 basic actors
+Resource Owner
+       ↓
+     Client
+       ↓
+Authorization Server
+       ↓
+Access Token
+       ↓
+Resource Server
+
+Example
+User
+ ↓
+Your App
+ ↓
+Google Authorization Server
+ ↓
+Access Token
+ ↓
+Google API
+
+10. OIDC
+OIDC = OpenID Connect
+OIDC is an authentication layer built on OAuth 2.0.
+
+OAuth:
+"What can this application access?"
+
+OIDC:
+"Who is this user?"
+
+OIDC introduces the ID Token, normally a JWT.
+
+Example:
+
+User
+ ↓
+Google Login
+ ↓
+Google
+ ↓
+ID Token
+ ↓
+Your Application
+ ↓
+User authenticated
+
+ID Token can contain:
+
+{
+  "sub": "12345",
+  "name": "Naeem",
+  "email": "user@example.com"
+}
+
+OAuth vs OIDC — VERY IMPORTANT
+| OAuth 2.0              | OIDC                           |
+| ---------------------- | ------------------------------ |
+| Authorization          | Authentication + authorization |
+| Access resources       | Identify user                  |
+| Access Token           | ID Token + Access Token        |
+| "What can app access?" | "Who is the user?"             |
+| API access             | Login/identity                 |
+
+
+Remember:
+OAuth 2.0 → Authorization
+OIDC → Authentication
+
+All 7 Concepts Together
+AUTHENTICATION
+│
+├── Basic Auth
+│     └── username + password
+│
+├── Digest Auth
+│     └── challenge + response
+│
+├── Session Auth
+│     └── session ID + server-side session
+│
+├── API Key
+│     └── API/application identification
+│
+├── JWT
+│     └── token format
+│
+├── SSO
+│     └── login once → multiple applications
+│
+└── OIDC
+      └── identity layer on OAuth 2.0
+
+And:
+
+OAuth 2.0
+   ↓
+Authorization
+   ↓
+Access Token
+
+OIDC
+   ↓
+Authentication
+   ↓
+ID Token
+
+🔥 Most Important Differences to Remember
+Basic
+→ username/password every request
+
+Digest
+→ challenge-response authentication
+
+Session
+→ session ID stored client-side
+→ session data stored server-side
+
+API Key
+→ identifies/authorizes an application or client
+
+JWT
+→ self-contained signed token
+
+Bearer
+→ "whoever has this token can use it"
+
+Access Token
+→ access APIs
+→ short-lived
+
+Refresh Token
+→ get new access token
+→ long-lived
+
+SSO
+→ login once → multiple apps
+
+OAuth 2.0
+→ authorization
+
+OIDC
+→ authentication/identity on top of OAuth 2.0
+One-line memory trick
+Basic    = Password
+Digest   = Challenge
+Session  = Server Session
+API Key  = Application Key
+JWT      = Token Format
+Bearer   = Token Usage Scheme
+Access   = Access API
+Refresh  = Renew Access
+SSO      = Login Once
+OAuth    = Authorization
+OIDC     = Identity
+
+---->
+Step 1 — Create Google OAuth credentials
+Go to Google Cloud Console:
+
+Google Cloud Console
+Create a new project, for example:
+
+Blog Website
+Then select that project.
+
+Step 2 — Configure OAuth
+In Google Cloud Console, find:
+Google Auth Platform
+Then configure the OAuth consent screen.
+
+For a development project, you can use:
+User type: External
+
+Add your application name and developer email.
+
+For now, you don't need many scopes. We mainly need:
+openid
+email
+profile
+
+Step 3 — Create OAuth Client ID
+Go to the OAuth client section and create:
+
+Application type:
+Web application
+
+Give it a name:
+Blog Website Web Client
+
+For your React development server, add:
+http://localhost:5173
+
+Depending on the Google authentication method we use,
+ you may also need to configure the appropriate authorized JavaScript origins/redirect URI.
+
+Google will give you something like:
+
+Client ID:
+1234567890-xxxxx.apps.googleusercontent.com
+
+Keep this Client ID.
+Do not put the Google client secret in your React frontend.
+
+Step 4 — Install Google login package in React
+
+Inside your frontend:
+npm install @react-oauth/google
+
+Then wrap your application with GoogleOAuthProvider.
+For example in main.tsx:
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import App from "./App";
+
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
+    <React.StrictMode>
+        <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+            <App />
+        </GoogleOAuthProvider>
+    </React.StrictMode>
+);
+
+Replace:
+
+YOUR_GOOGLE_CLIENT_ID
+with the Client ID from Google Cloud.
+
+Step 5 — Create Google Login button
+Install done, now create a button:
+import { GoogleLogin } from "@react-oauth/google";
+
+export default function Login() {
+
+
+    return (
+        <div>
+            <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                    console.log(credentialResponse);
+                }}
+                onError={() => {
+                    console.log("Google Login Failed");
+                }}
+            />
+        </div>
+    );
+}
+
+When Google login succeeds, you'll receive something like:
+
+credentialResponse
+with a credential.
+Conceptually:
+
+Google
+   ↓
+credential
+   ↓
+React
+
+Do not trust this credential directly on the frontend.
+Send it to your NestJS backend.
+
+
+Step 6 — Create GraphQL mutation
+Your frontend can have:
+
+import { gql } from "@apollo/client";
+
+
+export const GOOGLE_LOGIN = gql`
+    mutation GoogleLogin($credential: String!) {
+        googleLogin(credential: $credential) {
+            accessToken
+        }
+    }
+`;
+
+Now the flow becomes:
+
+GoogleLogin button
+       ↓
+credential
+       ↓
+googleLogin mutation
+       ↓
+NestJS
+
+
+Step 7 — Backend Google verification
+
+Install Google's authentication library in your NestJS backend:
+npm install google-auth-library
+Then your AuthService can verify the credential.
+
+The important part is:
+import { OAuth2Client } from "google-auth-library";
+
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+Then:
+
+const ticket = await client.verifyIdToken({
+    idToken: credential,
+    audience: process.env.GOOGLE_CLIENT_ID,
+});
+
+
+const payload = ticket.getPayload();
+
+Now Google has been verified by your backend.
+
+You can get information such as:
+
+payload.email
+payload.name
+payload.picture
+payload.sub
+
+The sub is Google's unique identifier for that Google account.
+
+Step 8 — Find the user
+Now use your existing UserService.
+
+For example:
+const user = await this.userService.getUserByEmail(payload.email);
+
+There are two possibilities.
+
+Existing user
+Google
+ ↓
+email
+ ↓
+User exists
+ ↓
+Login
+ ↓
+Generate JWT
+
+New user
+Google
+ ↓
+email
+ ↓
+User doesn't exist
+ ↓
+Create User
+ ↓
+Generate JWT
+
+Step 9 — Generate your existing JWT
+You already have this logic:
+
+const payload = {
+    id: user.id,
+    name: user.name,
+    username: user.username,
+    role: user.role,
+};
+
+
+const accessToken =
+    await this.jwtService.signAsync(payload);
+
+
+return {
+    accessToken,
+};
+
+You can reuse it for Google authentication.
+
+This is important
+Google authentication
+        ↓
+Your application authentication
+        ↓
+Your JWT
+
+Google doesn't need to replace your JWT system.
+
+Step 10 — GraphQL resolver
+
+Your resolver would have something like:
+
+@Mutation(() => LoginResponse)
+googleLogin(
+    @Args("credential") credential: string,
+) {
+    return this.authService.googleLogin(credential);
+}
+
+So:
+
+React
+ ↓
+googleLogin(credential)
+ ↓
+AuthResolver
+ ↓
+AuthService
+ ↓
+Google verification
+ ↓
+UserService
+ ↓
+JWT
+
+Step 11 — Store your JWT in React
+After the mutation succeeds:
+const [googleLogin] = useMutation(GOOGLE_LOGIN);
+
+
+const handleGoogleLogin = async (credential: string) => {
+
+
+    const { data } = await googleLogin({
+        variables: {
+            credential,
+        },
+    });
+
+
+    localStorage.setItem(
+        "token",
+        data.googleLogin.accessToken
+    );
+};
+
+Then your existing Apollo authentication can continue to work:
+
+localStorage
+     ↓
+token
+     ↓
+Apollo Authorization header
+     ↓
+NestJS Guard
+     ↓
+request.user
+
+So your existing:
+
+const token = localStorage.getItem("token");
+
+doesn't need to change.
+
+Final architecture
+
+You'll now have two login methods:
+
+                    LOGIN
+                      │
+            ┌─────────┴─────────┐
+            ↓                   ↓
+     Username/Password       Google
+            │                   │
+            ↓                   ↓
+      AuthService          Verify Google
+            │                   │
+            └─────────┬─────────┘
+                      ↓
+                  UserService
+                      ↓
+                    User
+                      ↓
+                 Your JWT
+                      ↓
+                 localStorage
+                      ↓
+              Apollo Auth Header
+                      ↓
+                 NestJS Guard
+
+This is a good architecture for your current project because Google handles Google identity, 
+while your application continues using your existing JWT authentication and guards.
+
+One thing before we write the NestJS code
+Your User table currently has fields like:
+
+id
+name
+username
+email
+password
+role
+
+For Google users, I recommend adding a field such as:
+
+googleId
+and allowing the password to be nullable for Google-created accounts.
+
+That lets you distinguish:
+
+Normal account
+→ username + password
+
+
+Google account
+→ googleId + email
+
+Next step should be the database/User entity change, then we'll write the complete googleLogin() service and resolver.
+
+
+
+---->

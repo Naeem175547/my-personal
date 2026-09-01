@@ -1,0 +1,958 @@
+--->AWS(s3)
+
+ 1. What is Amazon S3?
+S3 = Simple Storage Service.
+
+It is AWS's service for storing files/objects.
+You can store:
+
+Images
+PDFs
+Videos
+ZIP files
+Documents
+Backups
+Profile pictures
+Post images
+
+Think of S3 as cloud storage for your application.
+
+
+
+2. Why not store images inside NestJS?
+
+Suppose your project is:
+
+NestJS
+├── src/
+├── uploads/
+│   ├── profile1.jpg
+│   └── post1.jpg
+└── package.json
+
+This works locally.
+
+But in production, it creates problems.
+For example, if you have multiple servers:
+
+             Load Balancer
+              /         \
+           Server 1     Server 2
+             |             |
+          uploads/      uploads/
+
+If an image is uploaded to Server 1, Server 2 may not have it.
+
+S3 solves this:
+
+             Load Balancer
+              /         \
+           Server 1     Server 2
+              \           /
+               \         /
+                    S3
+                    |
+               images/files
+
+All servers use the same storage.
+
+3. What is an S3 Bucket?
+A bucket is the main container where your objects are stored.
+Think:
+
+S3
+└── Bucket
+    ├── image.jpg
+    ├── resume.pdf
+    └── video.mp4
+
+For example, you might create:
+my-blog-production
+
+Then put your files inside it.
+4. What is an Object?
+An object is the actual file stored in S3.
+For example:
+
+profile.jpg
+is an object.
+Another:
+
+resume.pdf
+is another object.
+
+So:
+
+Bucket
+   ↓
+Objects
+   ├── profile.jpg
+   ├── resume.pdf
+   └── post-cover.png
+
+5. What is an S3 Key?
+This is very important.
+S3 doesn't really have traditional folders.
+
+Instead, S3 stores an object key.
+
+For example:
+
+users/15/profile.jpg
+
+The complete key is:
+
+users/15/profile.jpg
+
+You can make it look like folders:
+
+users/
+   15/
+      profile.jpg
+
+But internally, S3 treats this as one object key:
+users/15/profile.jpg
+
+6. Bucket + Key = Unique Object
+Suppose your bucket is:
+
+my-blog-production
+
+and your key is:
+
+users/15/profile.jpg
+
+Then the object is uniquely identified by:
+
+Bucket:
+my-blog-production
+
+
+Key:
+users/15/profile.jpg
+
+Conceptually:
+
+S3
+└── my-blog-production
+    └── users/15/profile.jpg
+
+7. What is an AWS Region?
+When creating an S3 bucket, you select a region.
+
+For example:
+ap-south-1
+
+is the AWS Mumbai region.
+
+Your application might run in India, so using a nearby region can be useful for latency.
+
+Conceptually:
+
+Your users
+    ↓
+India
+    ↓
+AWS Mumbai
+    ↓
+S3
+
+8. Public vs Private S3
+This is one of the most important concepts.
+Public bucket/object
+
+Anyone who has the URL can potentially access the file.
+
+User
+  ↓
+S3 URL
+  ↓
+Image
+Private bucket/object
+
+The object cannot simply be accessed by anyone.
+
+Your backend can generate a temporary presigned URL.
+
+User
+  ↓
+NestJS
+  ↓
+Presigned URL
+  ↓
+S3
+  ↓
+Image
+
+For a production application, keep your bucket private by default.
+
+9. Example for Your Blog
+Suppose user 15 uploads a profile picture.
+Your S3 bucket:
+blog-production
+
+Object key:
+
+users/15/profile/abc123.jpg
+Your MySQL database could store:
+
+user_id = 15
+profile_image_key = users/15/profile/abc123.jpg
+You don't need to put the actual image inside MySQL.
+
+Similarly, a post could have:
+
+post_id = 100
+image_key = posts/100/cover/xyz789.jpg
+
+So your architecture becomes:
+
+React
+   ↓
+NestJS
+   ↓
+S3
+   │
+   └── Image
+
+
+NestJS
+   ↓
+MySQL
+   │
+   └── S3 object key
+
+10. Important S3 Terms
+
+Remember these five:
+| Term       | Meaning                        |
+| ---------- | ------------------------------ |
+| **S3**     | AWS object storage service     |
+| **Bucket** | Container for objects          |
+| **Object** | Actual stored file             |
+| **Key**    | Unique path/name of the object |
+| **Region** | AWS geographical location      |
+
+
+
+Example:
+
+S3
+ ↓
+Bucket: blog-production
+ ↓
+Key: users/15/profile/photo.jpg
+ ↓
+Object: photo.jpg
+
+Your first mental model
+
+Remember this:
+
+                 AWS S3
+                   │
+             ┌─────┴─────┐
+             │  Bucket   │
+             │           │
+             │           │
+             │ Objects   │
+             │           │
+             │ image.jpg │
+             │ resume.pdf│
+             │ video.mp4 │
+
+2. Create the Bucket
+Your initial settings should look roughly like:
+
+Bucket name:
+blog-production-naeem-2026
+
+
+Region:
+ap-south-1
+
+
+Object Ownership:
+Bucket owner enforced
+
+
+Block Public Access:
+ON
+
+
+Versioning:
+Enabled
+
+
+Encryption:
+SSE-S3
+
+
+. One Important Concept
+
+You might wonder:
+If the bucket is private, how will my React application display an image?
+
+That's exactly what we'll solve later.
+
+There are two common approaches:
+Approach A — NestJS returns a presigned URL
+
+React
+ ↓
+GraphQL
+ ↓
+NestJS
+ ↓
+Generate presigned URL
+ ↓
+React
+ ↓
+S3
+
+Approach B — NestJS proxies the file
+React
+ ↓
+NestJS
+ ↓
+S3
+ ↓
+NestJS
+ ↓
+React
+
+
+
+3##.
+What is IAM?
+IAM = Identity and Access Management
+IAM controls who can access AWS resources and what they can do.
+
+NestJS
+   ↓
+IAM
+   ↓
+S3
+1. IAM User
+
+For local development, you can create an IAM user.
+
+IAM User
+   ↓
+AWS credentials
+   ↓
+NestJS
+   ↓
+S3
+
+2. IAM Policy
+
+A policy defines permissions.
+
+For our blog, NestJS needs:
+
+s3:PutObject     → upload
+s3:GetObject     → read/download
+s3:DeleteObject  → delete
+
+Example policy:
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::YOUR-BUCKET-NAME/*"
+    }
+  ]
+}
+Meaning
+Effect
+ ↓
+Allow
+
+
+Action
+ ↓
+Get / Put / Delete
+
+
+Resource
+ ↓
+Only objects inside YOUR bucket
+
+3. Least Privilege
+Don't give your NestJS application:
+AdministratorAccess ❌
+
+Give only what it needs:
+
+GetObject
+PutObject
+DeleteObject
+
+This is called least privilege.
+
+4. Local vs Production
+For local development:
+
+NestJS
+ ↓
+IAM User credentials
+ ↓
+S3
+
+For production on AWS:
+
+NestJS
+ ↓
+IAM Role
+ ↓
+S3
+
+Production should preferably use an IAM role instead of storing long-lived access keys.
+
+5. Environment Variables
+
+For local development:
+
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=xxxxx
+AWS_SECRET_ACCESS_KEY=xxxxx
+AWS_S3_BUCKET=my-blog-bucket
+
+Never commit these to GitHub.
+.env
+
+Remember
+IAM = permission
+S3 = storage
+NestJS = application
+NestJS → IAM → S3
+
+
+AWS S3 + NestJS — Lesson 4: AWS SDK
+Now we connect NestJS to S3.
+
+1. Install AWS SDK
+npm install @aws-sdk/client-s3
+
+This package lets NestJS communicate with S3.
+
+2. Create S3 Service
+Recommended structure:
+src/
+└── s3/
+    ├── s3.module.ts
+    └── s3.service.ts
+
+3. Create S3 Client
+import { Injectable } from '@nestjs/common';
+import { S3Client } from '@aws-sdk/client-s3';
+
+
+@Injectable()
+export class S3Service {
+  private readonly s3 = new S3Client({
+    region: process.env.AWS_REGION,
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+    },
+  });
+}
+
+The important part is:
+
+NestJS
+   ↓
+S3Client
+   ↓
+AWS S3
+
+4. Environment Variables
+AWS_REGION=ap-south-1
+AWS_ACCESS_KEY_ID=your_access_key
+AWS_SECRET_ACCESS_KEY=your_secret_key
+AWS_S3_BUCKET=your_bucket_name
+
+Don't put credentials directly in your TypeScript code.
+
+5. What is S3Client?
+
+S3Client is the AWS SDK client that communicates with S3.
+
+Think:
+
+S3Client
+   ↓
+"Hey AWS, I want to upload this file"
+   ↓
+S3
+
+The client itself doesn't upload anything yet.
+
+For that, we use Commands.
+
+Examples:
+
+PutObjectCommand    → Upload
+GetObjectCommand    → Download
+DeleteObjectCommand → Delete
+
+S3 operations you should learn
+1. Upload file — PutObjectCommand
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+
+
+await this.s3.send(
+  new PutObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: 'posts/image.jpg',
+    Body: fileBuffer,
+    ContentType: 'image/jpeg',
+  }),
+);
+
+body:data->any data that we want to put in s3
+
+2. Download file — GetObjectCommand
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+
+
+const result = await this.s3.send(
+  new GetObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: 'posts/image.jpg',
+  }),
+);
+
+result.Body contains the file stream.
+
+3. Delete file — DeleteObjectCommand
+import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+
+await this.s3.send(
+  new DeleteObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: 'posts/image.jpg',
+  }),
+);
+
+Useful when a user deletes a post or replaces an image.
+
+4. Check if file exists — HeadObjectCommand
+import { HeadObjectCommand } from '@aws-sdk/client-s3';
+
+const result = await this.s3.send(
+  new HeadObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Key: 'posts/image.jpg',
+  }),
+);
+
+This gets metadata without downloading the actual file.
+
+5. List files — ListObjectsV2Command
+import { ListObjectsV2Command } from '@aws-sdk/client-s3';
+
+
+const result = await this.s3.send(
+  new ListObjectsV2Command({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    Prefix: 'posts/',//if not give return whole bucket
+  }),
+);
+
+
+console.log(result.Contents);
+
+For example:
+
+posts/
+ ├── image1.jpg
+ ├── image2.jpg
+ └── image3.png
+
+6. Copy file — CopyObjectCommand
+import { CopyObjectCommand } from '@aws-sdk/client-s3';
+
+
+await this.s3.send(
+  new CopyObjectCommand({
+    Bucket: process.env.AWS_S3_BUCKET_NAME,
+    CopySource: `${process.env.AWS_S3_BUCKET_NAME}/posts/image.jpg`,
+    Key: 'backup/image.jpg',
+  }),
+);
+7. Move file
+
+S3 doesn't have a direct MoveObjectCommand.
+
+Move = Copy + Delete
+
+await this.s3.send(
+  new CopyObjectCommand({
+    Bucket: bucket,
+    CopySource: `${bucket}/posts/image.jpg`,
+    Key: 'archive/image.jpg',
+  }),
+);
+
+
+await this.s3.send(
+  new DeleteObjectCommand({
+    Bucket: bucket,
+    Key: 'posts/image.jpg',
+  }),
+);
+
+
+
+Presigned URL operations
+These are very important for production.
+Install:
+
+npm install @aws-sdk/s3-request-presigner
+
+
+8. Generate download URL
+import { GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+
+const command = new GetObjectCommand({
+  Bucket: bucket,
+  Key: 'posts/image.jpg',
+});
+
+
+const url = await getSignedUrl(
+  this.s3,
+  command,
+  {
+    expiresIn: 3600,
+  },
+);
+
+
+return url;
+
+The user can access the file using the temporary URL.
+
+9. Generate upload URL
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+
+
+const command = new PutObjectCommand({
+  Bucket: bucket,
+  Key: 'posts/image.jpg',
+  ContentType: 'image/jpeg',
+});
+
+
+const url = await getSignedUrl(
+  this.s3,
+  command,
+  {
+    expiresIn: 300,
+  },
+);
+
+
+return url;
+
+Then:
+
+React
+  ↓
+Ask NestJS for presigned URL
+  ↓
+NestJS
+  ↓
+S3 presigned URL
+  ↓
+   ↓
+React uploads directly to S3
+
+// 2. Upload directly to S3
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type,
+    },
+    body: file,
+  });
+
+  if (!response.ok) {
+    throw new Error("S3 upload failed");
+  }
+
+  console.log("Uploaded successfully");
+
+
+| Operation          | AWS command            | Importance |
+| ------------------ | ---------------------- | ---------- |
+| Upload             | `PutObjectCommand`     | ⭐⭐⭐⭐⭐      |
+| Download           | `GetObjectCommand`     | ⭐⭐⭐⭐       |
+| Delete             | `DeleteObjectCommand`  | ⭐⭐⭐⭐⭐      |
+| Check exists       | `HeadObjectCommand`    | ⭐⭐⭐        |
+| List               | `ListObjectsV2Command` | ⭐⭐⭐        |
+| Copy               | `CopyObjectCommand`    | ⭐⭐         |
+| Presigned upload   | `getSignedUrl()`       | ⭐⭐⭐⭐⭐      |
+| Presigned download | `getSignedUrl()`       | ⭐⭐⭐⭐⭐      |
+
+
+
+###
+Multer + S3: Receive the file through Multer, then pass the file data to your S3 service.
+await this.s3Service.uploadFile(file.buffer, key, file.mimetype);
+Multer is mainly used with REST APIs for handling multipart/form-data file uploads.
+
+
+###
+For GraphQL + S3 in your NestJS app, the basic idea is:
+
+React
+ ↓
+GraphQL mutation
+ ↓
+NestJS Resolver
+ ↓
+S3Service.uploadFile()
+ ↓
+AWS S3
+1. GraphQL resolver
+
+If your GraphQL setup supports Upload:
+
+@Mutation(() => String)
+async uploadFile(
+  @Args('file', { type: () => GraphQLUpload })
+  file: FileUpload,
+) {
+  const { createReadStream, filename, mimetype } = await file;
+  const stream = createReadStream();
+  await this.s3Service.uploadFile(
+    stream,
+    `uploads/${filename}`,
+    mimetype,
+  );
+  return filename;
+}
+
+2. S3 service
+Your service accepts the stream:
+async uploadFile(
+  stream: Readable,
+  key: string,
+  contentType: string,
+) {
+  return this.s3.send(
+    new PutObjectCommand({
+      Bucket: this.bucket,
+      Key: key,
+      Body: stream,
+      ContentType: contentType,
+    }),
+  );
+}
+
+So the important part is:
+
+await this.s3Service.uploadFile(
+  stream,
+  key,
+  mimetype,
+);
+
+
+####
+Large-file uploads
+
+For large files, don't load the entire file into a Buffer.
+
+Instead use a stream:
+
+File
+ ↓
+Read Stream
+ ↓
+S3
+
+For example:
+2
+const stream = createReadStream(filePath);
+
+await this.s3.send(
+  new PutObjectCommand({
+    Bucket: bucket,
+    Key: key,
+    Body: stream,
+  }),
+);
+
+
+####
+For very large files, use S3 Multipart Upload.
+
+Multipart Upload
+
+Multipart upload divides one large file into parts:
+
+10 GB file
+     ↓
+ ┌────┬────┬────┬────┐
+ │Part│Part│Part│Part│
+ └────┴────┴────┴────┘
+     ↓
+     S3
+     ↓
+Complete object
+
+Main operations:
+
+CreateMultipartUpload
+        ↓
+UploadPart
+        ↓
+UploadPart
+        ↓
+UploadPart
+        ↓
+CompleteMultipartUpload
+
+If something fails:
+AbortMultipartUpload
+
+This is useful for a GitHub-like application where repositories may contain large files
+
+---->
+| File type                     | What you usually want | Retrieval                              |
+| ----------------------------- | --------------------- | -------------------------------------- |
+| `.txt`                        | Text                  | `transformToString()`                  |
+| `.json`                       | JSON object           | `transformToString()` → `JSON.parse()` |
+| `.js`, `.ts`, `.html`, `.css` | Source code/text      | `transformToString()`                  |
+| `.jpg`, `.png`, `.webp`       | Image                 | Presigned URL or bytes                 |
+| `.pdf`                        | PDF                   | Presigned URL or bytes                 |
+| `.mp4`                        | Video                 | Presigned URL/stream                   |
+| `.zip`                        | Binary file           | Presigned URL/bytes                    |
+| Any file                      | Download              | Presigned URL                          |
+
+1. Text files
+const result = await this.s3.send(
+  new GetObjectCommand({
+    Bucket: bucket,
+    Key: 'files/readme.txt',
+  }),
+);
+
+
+const text = await result.Body?.transformToString();
+
+
+return text;
+You get data:
+
+Hello World
+This is my file.
+
+2. JSON
+const result = await this.s3.send(
+  new GetObjectCommand({
+    Bucket: bucket,
+    Key: 'files/data.json',
+  }),
+);
+
+
+const text = await result.Body?.transformToString();
+const data = JSON.parse(text!);
+
+
+return data;
+
+You get:
+
+{
+  "name": "Naeem",
+  "age": 25
+}
+
+3. JS / TS / HTML / CSS
+
+Same as text:
+const text = await result.Body?.transformToString();
+return text;
+
+You get the source code as a string.
+
+
+
+return url;
+
+Browser:
+
+window.location.href = url;
+The important distinction
+If you need the content/data
+
+Use:
+
+GetObjectCommand
+
+Then:
+
+result.Body
+
+For text:
+
+await result.Body?.transformToString();
+.txt
+.json
+.js
+.ts
+.html
+.css
+.md
+     ↓
+GetObject
+     ↓
+Body
+     ↓
+String
+If you need the file itself for the browser
+
+Generate:
+
+getSignedUrl()
+.jpg
+.png
+.pdf
+.mp4
+.zip
+     ↓
+
+
+For source-code files:
+
+README.md  → data/string
+app.ts     → data/string
+style.css  → data/string
+data.json  → parsed JSON
+
+For assets:
+
+image.jpg  → URL
+logo.png   → URL
+video.mp4  → URL
+file.pdf   → URL
+
+So you don't always get a URL. You choose whether your 
+backend returns the object's data or a presigned URL, depending on the file and what your frontend needs.

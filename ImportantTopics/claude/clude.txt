@@ -1,0 +1,1603 @@
+If your goal is to work on a real production product primarily through Claude,
+ don't learn Claude as just a chatbot. Learn Claude Code + agentic development + production engineering + your existing stack.
+Since you already work with React, TypeScript, NestJS, GraphQL, MySQL, TypeORM, Redis, S3, JWT and Git, you don't need to restart
+ programming from zero. Your roadmap should teach you how to make Claude operate like a strong engineering partner while 
+ you remain
+the architect/reviewer.
+
+🚀 Your Claude Expert Roadmap
+Think of the progression like this:
+
+Claude basics
+      ↓
+Claude Code
+      ↓
+Prompting for software engineering
+      ↓
+Context management
+      ↓
+CLAUDE.md + project rules
+      ↓
+Agents / subagents
+      ↓
+Skills + reusable workflows
+      ↓
+Git + Claude workflow
+      ↓
+Debugging with Claude
+      ↓
+Testing + code review
+      ↓
+Production architecture
+      ↓
+CI/CD + deployment
+      ↓
+Security
+      ↓
+Large codebase management
+      ↓
+Autonomous development
+      ↓
+Claude-powered Engineering System
+
+Phase 1 — Claude Fundamentals
+First understand how Claude thinks about a software task.
+
+Learn:
+
+What Claude can/cannot see
+Context window
+Tokens
+Context accumulation
+Instructions vs context
+System instructions
+Project instructions
+Prompt structure
+Giving Claude constraints
+Asking Claude to inspect before modifying
+Asking Claude to explain before coding
+Asking Claude to verify its changes
+Most important principle
+
+Don't say:
+Build authentication.
+
+Instead give Claude:
+i are working in an existing NestJS + GraphQL application.
+
+First inspect:
+- auth module
+- user entity
+- existing guards
+- JWT configuration
+- GraphQL context
+
+Do not modify anything yet.
+
+Explain:
+1. current authentication flow
+2. problems you find
+3. proposed implementation
+4. files that would need modification
+
+Wait for my approval before implementing.
+This is the difference between using Claude and engineering with Claude.
+
+
+
+
+
+
+Phase 2 — Become Expert in Claude Code
+This should be your #1 priority.
+Learn Claude Code deeply:
+
+Commands/concepts
+claude
+/resume
+/clear
+/compact
+/cost
+/help
+
+And especially understand:
+
+CLAUDE.md
+permissions
+tools
+agents
+skills
+hooks
+MCP
+subagents
+context management
+
+You should eventually be comfortable starting Claude in a repository and saying:
+
+Analyze this repository.
+Do not change anything.
+
+Give me:
+- architecture
+- modules
+- database architecture
+- authentication flow
+- API architecture
+- external services
+- testing strategy
+- deployment architecture
+- technical debt
+- security risks
+
+Then Claude should be able to understand your entire project.
+
+Phase 3 — Master CLAUDE.md
+This is extremely important for production work.
+
+Think of:
+CLAUDE.md
+
+as your project's engineering constitution.
+
+For example:
+
+# Project Rules
+
+## Stack
+
+Frontend:
+- React
+- TypeScript
+- Apollo Client
+
+Backend:
+- NestJS
+- GraphQL
+- TypeORM
+
+Database:
+- MySQL
+
+Infrastructure:
+- Redis
+- S3
+
+## Rules
+
+- Never use `any`
+- Never modify database schema without approval
+- Never expose secrets
+- Follow existing architecture
+- Use DTO validation
+- Write tests for business logic
+- Do not introduce dependencies without approval
+- Do not change API contracts without approval
+
+## Before coding
+1. Inspect existing implementation.
+2. Identify affected modules.
+3. Explain proposed solution.
+4. Implement.
+5. Run tests.
+6. Review changes.
+7. Explain what changed.
+
+Then every Claude session starts with the same engineering rules.
+
+Phase 4 — Context Engineering
+This is where you start becoming really good with Claude.
+
+You need to understand:
+
+Context
+   ↓
+Relevant files
+   ↓
+Instructions
+   ↓
+Task
+   ↓
+Constraints
+   ↓
+Expected output
+
+Don't dump your entire project into Claude unnecessarily.
+
+Instead:
+Inspect the authentication implementation.
+
+Focus only on:
+
+src/auth
+src/users
+src/common/guards
+GraphQL context
+JWT configuration
+
+Then ask Claude to build a mental model.
+
+Learn these concepts
+Context window
+Context pollution
+Context compression
+/compact
+/clear
+Repository exploration
+Relevant-file selection
+Long-running sessions
+Breaking large tasks into phases
+
+Phase 5 — Claude + Git
+For production development, Git + Claude becomes extremely powerful.
+
+Learn a workflow like:
+
+main
+ │
+ ├── feature/auth
+ │
+ ├── feature/payment
+ │
+ └── feature/notification
+
+Claude should help you:
+
+inspect branch
+↓
+understand issue
+↓
+implement
+↓
+run tests
+↓
+review diff
+↓
+fix problems
+↓
+commit
+
+Example:
+
+Inspect my current git diff.
+
+Do not modify anything.
+
+Find:
+- bugs
+- unnecessary changes
+- security issues
+- breaking changes
+- bad naming
+- missing tests
+
+Then give me a review.
+This is much better than asking Claude to blindly commit code.
+
+Phase 6 — Agentic Development
+Now learn how to make Claude operate as an agent.
+
+Instead of:
+Write this function.
+
+you move toward:
+Investigate the authentication bug.
+
+You may:
+- inspect files
+- search the repository
+- run tests
+- inspect logs
+
+Do not modify production configuration.
+
+Find the root cause first.
+
+Claude:
+
+search
+ ↓
+inspect
+ ↓
+reason
+ ↓
+test
+ ↓
+modify
+ ↓
+verify
+
+You need to understand:
+
+Agent loop
+Observe
+   ↓
+Plan
+   ↓
+Act
+   ↓
+Observe result
+   ↓
+Evaluate
+   ↓
+Correct
+   ↓
+Verify
+
+This is the foundation of agentic coding.
+
+Phase 7 — Subagents
+This is another major skill.
+
+Imagine your product has:
+
+Backend
+Frontend
+Database
+Testing
+Security
+DevOps
+
+You can use specialized agents conceptually:
+
+Backend Agent
+Frontend Agent
+Database Agent
+Testing Agent
+Security Agent
+Review Agent
+
+For example:
+
+Implement the new payment module.
+Use separate investigation/review roles for:
+
+1. architecture
+2. backend implementation
+3. database design
+4. testing
+5. security review
+
+Before finalizing, perform a complete code review.
+Your goal isn't simply to make Claude write more code.
+
+Your goal is:
+Build a development process where different reasoning roles check each other.
+
+Phase 8 — Skills
+Learn reusable Claude workflows.
+
+For example:
+
+skills/
+
+backend-feature
+database-migration
+graphql-feature
+security-review
+code-review
+testing
+api-documentation
+deployment
+
+Then instead of explaining your entire process repeatedly:
+Implement a GraphQL feature.
+Claude can follow your predefined engineering workflow.
+
+A mature setup might look like:
+
+.claude/
+│
+├── agents/
+├── skills/
+├── hooks/
+└── settings/
+    
+CLAUDE.md
+You should eventually become comfortable designing this structure yourself.
+
+Phase 9 — MCP
+Now learn MCP (Model Context Protocol).
+This is important if you want Claude to work with real production systems.
+
+Conceptually:
+
+Claude
+  │
+  ├── GitHub
+  ├── Database
+  ├── Documentation
+  ├── Jira
+  ├── Slack
+  ├── Sentry
+  ├── Cloud services
+  └── Internal tools
+
+Claude isn't just generating code anymore.
+It can interact with external tools/data through appropriate integrations.
+
+Learn:
+
+MCP server
+MCP tools
+MCP resources
+MCP authentication
+permissions
+security
+custom MCP servers
+
+Eventually, you should be able to build your own MCP server for an internal company system.
+
+Phase 10 — Production Engineering
+This is where your existing backend knowledge becomes extremely valuable.
+
+Don't become someone who knows:
+"How to make Claude generate any language code."
+
+Become someone who knows:
+"How to make Claude safely develop a production system."
+
+Master:
+
+Backend
+NestJS
+GraphQL
+REST
+TypeORM
+MySQL
+Redis
+Queues
+RabbitMQ
+WebSockets
+Authentication
+Authorization
+Caching
+Rate limiting
+Logging
+Error handling
+Infrastructure
+Docker
+Docker Compose
+CI/CD
+Linux
+AWS
+S3
+CloudFront
+Load Balancer
+Reverse Proxy
+Environment variables
+Secrets
+Monitoring
+Production
+Testing
+Unit tests
+Integration tests
+E2E tests
+Observability
+Logging
+Metrics
+Tracing
+Security
+Backups
+Database migrations
+Rollback
+Incident response
+
+Claude can help you with all of these, but you must understand the engineering decisions.
+
+Phase 11 — Testing With Claude
+This should become part of your normal workflow.
+
+Never:
+Claude wrote code → done
+
+Instead:
+
+Claude wrote code
+       ↓
+Run tests
+       ↓
+Static analysis
+       ↓
+Review diff
+       ↓
+Security review
+       ↓
+Integration tests
+       ↓
+E2E tests
+       ↓
+Deploy
+
+Ask Claude:
+
+Analyze this feature and create a test strategy.
+
+Cover:
+- happy path
+- edge cases
+- invalid input
+- authorization
+- concurrency
+- database failures
+- Redis failures
+- external API failures
+
+
+Phase 12 — Security With Claude
+For production, this is mandatory.
+Learn:
+
+OWASP
+JWT security
+Cookie security
+CSRF
+XSS
+SQL injection
+GraphQL security
+Rate limiting
+RBAC
+ABAC
+Secrets management
+Input validation
+File upload security
+S3 security
+Redis security
+API authorization
+
+Then use Claude as a security reviewer.
+
+Example:
+Perform a security audit of this authentication system.
+
+Look for:
+- broken authorization
+- JWT vulnerabilities
+- cookie issues
+- privilege escalation
+- injection
+- sensitive information leakage
+- insecure GraphQL resolvers
+- missing validation
+- rate limiting problems
+
+Do not modify code.
+Give severity:
+CRITICAL
+HIGH
+MEDIUM
+LOW
+
+
+Phase 13 — Large Codebases
+This is where you'll separate yourself from beginner Claude users.
+
+Learn how Claude handles:
+
+10 files
+↓
+100 files
+↓
+1,000+ files
+
+You need to understand:
+
+repository exploration
+architecture mapping
+dependency tracing
+feature boundaries
+module boundaries
+context control
+incremental implementation
+avoiding unnecessary refactors
+
+For a large feature:
+
+Requirement
+   ↓
+Architecture investigation
+   ↓
+Technical design
+   ↓
+Database design
+   ↓
+API design
+   ↓
+Implementation plan
+   ↓
+Backend
+   ↓
+Frontend
+   ↓
+Tests
+   ↓
+Security review
+   ↓
+Performance review
+   ↓
+PR review
+
+Don't ask Claude to do all of that in one giant prompt.
+
+Phase 14 — Claude for Your Actual Product
+Now build a production-grade project.
+
+I'd recommend something significantly more complex than a CRUD blog.
+
+For example:
+SaaS Product
+
+Architecture:
+
+React
+   │
+   ↓
+Apollo Client
+   │
+   ↓
+NestJS
+   │
+   ↓
+GraphQL
+   │
+   ├──────────────┐
+   ↓              ↓
+MySQL           Redis
+   │              │
+   ↓              ↓
+TypeORM        Cache/Queue
+                  │
+                  ↓
+              RabbitMQ
+                  │
+                  ↓
+               Workers
+                  │
+                  ↓
+                 S3
+
+Then add:
+
+JWT authentication
+RBAC
+Organizations
+Teams
+Subscriptions
+Payments
+Notifications
+Email
+File uploads
+Search
+Caching
+Queues
+Background jobs
+Audit logs
+Admin dashboard
+WebSockets
+GraphQL subscriptions
+Monitoring
+CI/CD
+Docker
+AWS
+
+And build the entire thing with Claude as your primary engineering assistant.
+Your Daily Claude Workflow
+
+Once you're good, your normal workflow should look like this:
+
+1. Requirement
+Here is the business requirement...
+
+2. Investigation
+Inspect the existing architecture.
+Don't modify anything.
+
+3. Design
+Give me 2 possible architectures.
+Explain tradeoffs.
+
+4. Decision
+We'll use option 2.
+
+5. Implementation
+Implement this incrementally.
+
+6. Testing
+Run relevant tests and add missing tests.
+
+7. Review
+Review your implementation as a senior engineer.
+
+8. Security
+Perform a security review.
+
+9. Git
+Review the final diff.
+
+10. Deployment
+Prepare this feature for production deployment.
+That is an expert Claude workflow.
+
+90-Day Roadmap
+Month 1 — Claude Mastery
+Week 1
+Claude fundamentals
+Prompt engineering
+Context
+Instructions
+Tokens
+Week 2
+Claude Code
+CLI
+sessions
+commands
+permissions
+file operations
+repository exploration
+Week 3
+CLAUDE.md
+project instructions
+coding standards
+context management
+large tasks
+Week 4
+Git + Claude
+debugging
+testing
+code review
+refactoring
+Month 2 — Agent Engineering
+Week 5
+Agents
+agent loops
+planning
+tool use
+autonomous tasks
+Week 6
+Subagents
+specialized agents
+parallel work
+review agents
+Week 7
+Skills
+hooks
+automation
+reusable workflows
+Week 8
+MCP
+MCP architecture
+tools
+resources
+custom MCP server
+Month 3 — Production Claude
+Week 9
+Claude + NestJS
+Claude + GraphQL
+Claude + TypeORM
+Claude + MySQL
+Claude + Redis
+Week 10
+Claude + Docker
+Claude + CI/CD
+Claude + AWS
+Claude + S3
+deployment
+Week 11
+Security
+testing
+performance
+observability
+production debugging
+Week 12
+
+Build one serious production-style product:
+
+Requirement
+    ↓
+Architecture
+    ↓
+Database
+    ↓
+Backend
+    ↓
+Frontend
+    ↓
+Testing
+    ↓
+Security
+    ↓
+CI/CD
+    ↓
+Deployment
+    ↓
+Monitoring
+
+Use Claude throughout the entire process.
+The Most Important Skill
+Don't try to become:
+"A person who knows lots of Claude commands."
+
+Become:
+"A software engineer who knows how to direct, verify, constrain, and orchestrate Claude."
+
+There is a huge difference.
+Your target skill level should eventually be:
+
+                 YOU
+                  │
+          Architecture
+          Requirements
+          Decisions
+          Verification
+                  │
+                  ↓
+              CLAUDE
+                  │
+       ┌──────────┼──────────┐
+       ↓          ↓          ↓
+    Coding      Testing    Debugging
+       ↓          ↓          ↓
+    Git        Security   Refactoring
+       └──────────┼──────────┘
+                  ↓
+             Production
+
+You are the engineer. Claude is the engineering force multiplier.
+And because you're already learning NestJS + GraphQL + MySQL + Redis + RabbitMQ + S3 + React+nestjs,nodejs,express js
+ I'd recommend that we don't spend weeks learning generic Claude prompting.
+ We should learn Claude directly through your production stack,
+ starting with Claude Code → CLAUDE.md → context engineering → agents → subagents → skills → MCP → production workflow.
+
+
+ ---------------------->
+ ============================================================
+ CLAUDE FUNDAMENTALS
+============================================================
+GOAL:
+Understand how Claude processes a software-development task
+before learning advanced Claude Code features.
+
+The goal is NOT to learn random prompts.
+
+The goal is to learn how to give Claude:
+    Context
+    Instructions
+    Constraints
+    Goals
+    Verification steps
+------------------------------------------------------------
+1. WHAT CLAUDE CAN / CANNOT SEE
+------------------------------------------------------------
+Claude can only work with information that is available to it
+through its current conversation, project context, files,
+tools, or integrations.
+
+For software development, Claude may be able to inspect:
+
+- Project files
+- Source code
+- Configuration files
+- Git repository
+- Terminal output
+- Error messages
+- Tests
+- Documentation
+- Tool results
+
+Claude does NOT automatically know everything about your
+application or business.
+
+Example:
+BAD:
+
+    "Fix authentication."
+
+Claude does not know:
+- What authentication system you use
+- Where authentication is implemented
+- What the bug is
+- What the expected behavior is
+
+BETTER:
+    "Inspect the authentication implementation.
+
+    First inspect:
+    - auth module
+    - JWT guard
+    - GraphQL context
+    - user service
+    - login resolver
+
+    Do not modify anything yet.
+    Explain the current authentication flow."
+
+IMPORTANT:
+Never assume Claude understands your entire project.
+
+First allow Claude to inspect the relevant context.
+------------------------------------------------------------
+2. CONTEXT WINDOW
+------------------------------------------------------------
+A context window is the amount of information Claude can
+consider during a conversation/task/session.
+
+Think of it as Claude's current working memory.
+
+Example:
+
+    User message
+          +
+    Project instructions
+          +
+    Files Claude reads
+          +
+    Tool results
+          +
+    Previous conversation
+          =
+       CONTEXT
+
+If the context becomes very large, Claude may have less
+effective access to earlier details.
+
+Therefore:
+    More context != always better context
+
+The goal is:
+    RELEVANT CONTEXT
+
+not:
+    ALL POSSIBLE CONTEXT
+
+so if topic change create new session
+------------------------------------------------------------
+3. TOKENS
+------------------------------------------------------------
+Tokens are the units used to process text.
+
+For example:
+    "authentication"
+
+may be represented internally as one or more tokens.
+Code also consumes tokens.
+A large project can therefore create a very large context.
+
+You should understand:
+
+    More files
+        ↓
+    More text
+        ↓
+    More tokens
+        ↓
+    Larger context
+
+Therefore, don't unnecessarily give Claude thousands of
+irrelevant files.
+
+Instead:
+
+    Task
+      ↓
+    Identify relevant files
+      ↓
+    Read relevant files
+      ↓
+    Work on task
+------------------------------------------------------------
+4. CONTEXT ACCUMULATION
+------------------------------------------------------------
+During a long Claude session, information can accumulate.
+
+Example:
+
+    User request
+        ↓
+    Claude reads auth
+        ↓
+    Claude reads user module
+        ↓
+    Claude modifies login
+        ↓
+    Claude runs tests
+        ↓
+    Claude fixes error
+        ↓
+    Claude modifies another file
+
+The conversation now contains a lot of information.
+
+This can be useful because Claude remembers the work being
+done in the current context.
+
+But it can also become noisy.
+
+Therefore learn when to:
+    Continue the current conversation
+
+and when to:
+    Start a fresh context
+
+Important principle:
+
+    Long conversation
+        ≠
+    Automatically better conversation
+------------------------------------------------------------
+5. INSTRUCTIONS VS CONTEXT
+------------------------------------------------------------
+These are different things.
+CONTEXT:
+Information Claude needs to understand the problem.
+
+Example:
+    "The application uses NestJS, GraphQL, MySQL and Redis."
+
+INSTRUCTION:
+What you want Claude to do.
+
+Example:
+    "Inspect the authentication flow."
+
+CONSTRAINT:
+What Claude must NOT or MUST do.
+
+Example:
+    "Do not modify the database schema."
+
+GOAL:
+What the final result should achieve.
+
+Example:
+    "Fix the authentication bug without changing
+     the existing GraphQL API."
+
+A good software task contains all four:
+
+    CONTEXT
+       +
+    INSTRUCTION
+       +
+    CONSTRAINTS
+       +
+    GOAL
+
+------------------------------------------------------------
+6. SYSTEM INSTRUCTIONS
+------------------------------------------------------------
+System instructions are high-level instructions that control
+how Claude should behave.
+
+As a user, you normally don't control the underlying system
+instructions.
+
+You should understand the concept:
+
+    System instructions
+          ↓
+    Developer/project instructions
+          ↓
+    User instructions
+          ↓
+    Context/files/tools
+
+The important lesson is:
+Claude follows a hierarchy of instructions.
+
+Therefore, don't assume that writing:
+    "Ignore all previous instructions."
+
+will necessarily override higher-priority instructions.
+
+For your development work, focus mainly on:
+
+    Project instructions
+    User instructions
+    Task constraints
+------------------------------------------------------------
+7. PROJECT INSTRUCTIONS
+------------------------------------------------------------
+Project instructions define how Claude should work inside
+your project.
+
+A common example is:
+    CLAUDE.md
+
+Think of this as:
+    PROJECT ENGINEERING RULEBOOK
+
+Example:
+    Project:
+    NestJS + GraphQL + TypeORM + MySQL
+
+    Rules:
+    - Use TypeScript strict mode
+    - Do not use any
+    - Follow existing architecture
+    - Do not introduce unnecessary dependencies
+    - Validate GraphQL inputs
+    - Never expose secrets
+    - Do not modify database schema without approval
+    - Write tests for business logic
+    - Run tests after implementation
+    - Review git diff before finishing
+
+Now Claude doesn't need you to repeat these rules
+every time.
+------------------------------------------------------------
+8. PROMPT STRUCTURE
+------------------------------------------------------------
+
+A strong software-development prompt can follow this
+structure:
+
+    CONTEXT
+       ↓
+    TASK
+       ↓
+    CONSTRAINTS
+       ↓
+    PROCESS
+       ↓
+    EXPECTED RESULT
+       ↓
+    VERIFICATION
+
+
+Example:
+
+    CONTEXT:
+    This is a NestJS + GraphQL application.
+    Authentication uses JWT and Redis.
+
+
+    TASK:
+    Investigate why authenticated GraphQL requests are
+    sometimes returning Unauthorized.
+
+
+    CONSTRAINTS:
+    - Do not change the JWT strategy yet.
+    - Do not modify the database.
+    - Do not install new packages.
+
+
+    PROCESS:
+
+    1. Inspect the authentication module.
+    2. Inspect JWT guard.
+    3. Inspect GraphQL context.
+    4. Trace how the request reaches the resolver.
+    5. Identify the root cause.
+
+
+    EXPECTED RESULT:
+
+    Explain:
+    - current authentication flow
+    - root cause
+    - recommended fix
+    - files that need modification
+
+
+    VERIFICATION:
+    Do not modify code until the root cause is confirmed.
+------------------------------------------------------------
+9. GIVE CLAUDE CONSTRAINTS
+------------------------------------------------------------
+Constraints are extremely important in production.
+
+Without constraints:
+    Claude may solve the problem
+    but change things you didn't want changed.
+
+Example:
+    "Fix the login bug."
+
+Better:
+    "Fix the login bug.
+
+    Constraints:
+    - Do not change the API response.
+    - Do not change the database schema.
+    - Do not change JWT expiration.
+    - Do not add dependencies.
+    - Follow the existing architecture."
+
+
+Another example:
+    "Refactor this service.
+
+    Constraints:
+    - Preserve public method signatures.
+    - Preserve database behavior.
+    - Preserve GraphQL API.
+    - Do not change unrelated files."
+
+
+IMPORTANT:
+The more dangerous the task,
+the more explicit your constraints should be.
+------------------------------------------------------------
+10. ASK CLAUDE TO INSPECT BEFORE MODIFYING
+------------------------------------------------------------
+This is one of the most important habits.
+
+DO NOT immediately say:
+    "Implement this feature."
+
+Instead:
+    "First inspect the existing implementation.
+
+    Do not modify anything.
+
+    Explain:
+    1. Current architecture
+    2. Relevant files
+    3. Existing behavior
+    4. Problems
+    5. Proposed implementation
+
+    Wait before making changes."
+
+
+Why?
+
+Because Claude may otherwise make assumptions.
+
+Production workflow:
+
+    INSPECT
+       ↓
+    UNDERSTAND
+       ↓
+    PLAN
+       ↓
+    APPROVE
+       ↓
+    IMPLEMENT
+------------------------------------------------------------
+11. ASK CLAUDE TO EXPLAIN BEFORE CODING
+------------------------------------------------------------
+For important features, separate:
+    THINKING / DESIGN
+
+from:
+    IMPLEMENTATION
+
+Example:
+    "I need to add refresh-token authentication.
+
+    First do not write code.
+
+    Analyze:
+    - current authentication architecture
+    - token storage
+    - Redis usage
+    - GraphQL context
+    - cookie handling
+    - security considerations
+
+    Then propose an implementation plan.
+    Wait for my approval."
+
+This gives you a chance to catch bad architecture BEFORE
+Claude writes many files.
+------------------------------------------------------------
+12. ASK CLAUDE TO VERIFY ITS CHANGES
+------------------------------------------------------------
+Never assume:
+
+    Code generated
+        =
+    Code correct
+
+After implementation:
+
+    Run tests
+    Check TypeScript
+    Check lint
+    Inspect git diff
+    Check edge cases
+    Review security
+    Verify expected behavior
+
+Example:
+
+    "Now verify your implementation.
+
+    1. Run the relevant tests.
+    2. Check TypeScript errors.
+    3. Check lint errors.
+    4. Inspect the git diff.
+    5. Look for unintended changes.
+    6. Check edge cases.
+    7. Explain anything that failed.
+
+    Do not claim success unless you actually verified it."
+
+This is one of the biggest differences between:
+    BEGINNER CLAUDE USER
+
+and:
+    PROFESSIONAL CLAUDE USER
+------------------------------------------------------------
+13. THE MOST IMPORTANT CLAUDE DEVELOPMENT LOOP
+------------------------------------------------------------
+
+Memorize this:
+
+    ┌──────────────────────┐
+    │      REQUIREMENT     │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │       CONTEXT        │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │       INSPECT        │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │        PLAN          │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │     IMPLEMENT        │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │        TEST          │
+    └──────────┬───────────┘2
+               ↓
+    ┌──────────────────────┐
+    │       REVIEW         │
+    └──────────┬───────────┘
+               ↓
+    ┌──────────────────────┐
+    │       VERIFY         │
+    └──────────────────────┘
+------------------------------------------------------------
+14. BAD VS GOOD CLAUDE USAGE
+------------------------------------------------------------
+
+BAD:
+    "Build authentication."
+
+Problem:
+
+    Too vague.
+    No context.
+    No constraints.
+    No architecture.
+    No verification.
+
+
+BETTER:
+    "Build JWT authentication."
+
+Still not enough.
+
+
+GOOD:
+    "This is an existing NestJS + GraphQL application.
+    First inspect the existing authentication architecture.
+    Do not modify anything.
+
+    Determine:
+    - how users are authenticated
+    - how JWT is generated
+    - how JWT is validated
+    - how GraphQL context receives the request
+    - how guards access the user
+    - whether Redis is involved
+
+    Then explain the current architecture and propose
+    the safest implementation."
+
+
+PRODUCTION-LEVEL:
+    "This is an existing production-oriented NestJS +
+    GraphQL application.
+
+    Goal:
+    Add refresh-token authentication.
+
+    First:
+    - inspect the repository
+    - inspect authentication
+    - inspect GraphQL context
+    - inspect cookie handling
+    - inspect Redis integration
+    - inspect existing tests
+
+    Do not modify code yet.
+
+    Analyze:
+    1. Current authentication flow
+    2. Existing security model
+    3. Required changes
+    4. Database impact
+    5. Redis impact
+    6. Cookie strategy
+    7. Failure cases
+    8. Testing strategy
+
+    Constraints:
+    - preserve existing GraphQL API
+    - do not expose tokens to frontend JavaScript
+    - do not modify unrelated modules
+    - do not add dependencies without approval
+
+    Output:
+    - architecture explanation
+    - implementation plan
+    - affected files
+    - risks
+    - test plan
+
+    Do not implement until the plan is reviewed."
+------------------------------------------------------------
+15. YOUR FIRST CLAUDE MENTAL MODEL
+------------------------------------------------------------
+Whenever you give Claude a task, think:
+
+    WHAT DOES CLAUDE KNOW?
+            ↓
+    WHAT DOES CLAUDE NEED TO KNOW?
+            ↓
+    WHAT DO I WANT CLAUDE TO DO?
+            ↓
+    WHAT MUST CLAUDE NOT DO?
+            ↓
+    HOW SHOULD CLAUDE DO IT?
+            ↓
+    HOW WILL WE VERIFY IT?
+
+
+This is called:
+    CONTEXT → INSTRUCTION → CONSTRAINT → EXECUTION → VERIFICATION
+------------------------------------------------------------
+16. PHASE 1 PRACTICE EXERCISES
+------------------------------------------------------------
+Exercise 1:
+    Give Claude an existing project.
+
+    Ask:
+    "Analyze this repository.
+    Do not modify anything.
+
+    Explain:
+    - architecture
+    - modules
+    - database
+    - authentication
+    - external services
+    - testing
+
+    Identify the most important parts of the system."
+Goal:
+    Learn repository context.
+------------------------------------------------------------
+Exercise 2:
+    Give Claude a bug.
+
+    DO NOT ask it to fix it immediately.
+    Ask:
+    "Investigate this bug.
+
+    Do not modify code.
+    Find the root cause and explain it."
+
+Goal:
+    Learn inspection before implementation.
+------------------------------------------------------------
+Exercise 3:
+    Ask Claude for an architecture proposal.
+    Example:
+    "I need to implement Redis-based caching.
+
+    Analyze the current application and give me
+    2 architecture options.
+
+    Explain tradeoffs.
+    Do not implement anything."
+Goal:
+    Learn design before coding.
+------------------------------------------------------------
+Exercise 4:
+    Let Claude implement a small feature.
+
+    Then ask:
+    "Review your own implementation.
+
+    Check:
+    - correctness
+    - edge cases
+    - security
+    - tests
+    - unnecessary changes
+    - TypeScript errors
+
+    Verify everything before claiming completion."
+
+
+Goal:
+    Learn verification.
+
+
+------------------------------------------------------------
+17. PHASE 1 COMPLETION CHECKLIST
+------------------------------------------------------------
+
+- [ ] Understand what Claude can see
+- [ ] Understand what Claude cannot automatically know
+- [ ] Understand context
+- [ ] Understand context window
+- [ ] Understand tokens
+- [ ] Understand context accumulation
+- [ ] Understand relevant vs irrelevant context
+- [ ] Understand instructions
+- [ ] Understand constraints
+- [ ] Understand goals
+- [ ] Understand system instructions conceptually
+- [ ] Understand project instructions
+- [ ] Understand CLAUDE.md conceptually
+- [ ] Learn structured prompts
+- [ ] Learn inspect-before-modify
+- [ ] Learn explain-before-code
+- [ ] Learn plan-before-implementation
+- [ ] Learn verification after implementation
+- [ ] Practice repository analysis
+- [ ] Practice bug investigation
+- [ ] Practice architecture planning
+- [ ] Practice code verification
+============================================================
+PHASE 1 GOLDEN RULE
+============================================================
+NEVER think:
+    "Claude writes code for me."
+
+Think:
+
+    "I provide Claude with the right context,
+     requirements and constraints.
+     Claude investigates, plans, implements and tests.
+     I review the architecture and verify the result."
+The professional workflow is:
+
+    YOU
+     ↓
+    REQUIREMENT
+     ↓
+    CLAUDE
+     ↓
+    INSPECT
+     ↓
+    PLAN
+     ↓
+    YOU REVIEW
+     ↓
+    CLAUDE IMPLEMENTS
+     ↓
+    TEST
+     ↓
+    REVIEW
+     ↓
+    VERIFY
+     ↓
+    PRODUCTION
+
+
+PHASE 1 TARGET:
+By the end of this phase, you should be able to take any
+software task and clearly tell Claude:
+
+    1. What the project is
+    2. What Claude needs to inspect
+    3. What you want
+    4. What Claude must not change
+    5. How Claude should approach it
+    6. How the result should be verified
+
+----->

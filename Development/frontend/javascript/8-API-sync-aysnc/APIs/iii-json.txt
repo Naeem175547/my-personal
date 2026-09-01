@@ -1,0 +1,640 @@
+======================================================
+JSON (JavaScript Object Notation) — Basic to Advanced
+======================================================
+
+1. WHAT IS JSON?
+------------------------------------------------------
+JSON is a lightweight format used to store and exchange data.
+it string(text) format
+| Thing             | Type        |
+| ----------------- | ----------- |
+| JavaScript Object | object      |
+| JSON Data         | string/text |
+| `.json` file      | text file   |
+
+
+Main Uses:
+- APIs
+- Frontend ↔ Backend communication
+- Databases
+- Config files
+
+Example:
+{
+  "name": "Imran",
+  "age": 21
+}
+
+======================================================
+
+2. JSON SYNTAX
+------------------------------------------------------
+JSON stores data in:
+- Objects {}
+- Arrays []
+- Key-Value pairs
+
+Example:
+{
+  "name": "Imran",
+  "age": 21,
+  "isStudent": true
+}
+
+======================================================
+
+3. RULES OF JSON
+------------------------------------------------------
+
+1. Keys must be in double quotes
+
+Correct:
+{
+  "name": "Imran"
+}
+
+Wrong:
+{
+  name: "Imran"
+}
+
+----------------------------------
+
+2. String values use double quotes
+
+Correct:
+{
+  "city": "Delhi"
+}
+
+Wrong:
+{
+  "city": 'Delhi'
+}
+
+----------------------------------
+
+3. No functions allowed
+
+Wrong:
+{
+  "greet": function(){}
+}
+
+----------------------------------
+
+4. No comments allowed
+
+Wrong:
+{
+  // comment
+  "name": "Imran"
+}
+
+----------------------------------
+
+5. No trailing commas
+
+Wrong:
+{
+  "name": "Imran",
+}
+
+======================================================
+
+4. JSON DATA TYPES
+------------------------------------------------------
+
+1. String
+"Hello"
+
+2. Number
+10
+99.5
+
+3. Boolean
+true
+false
+
+4. Null
+null
+
+5. Object
+{}
+
+6. Array
+[]
+
+Example:
+{
+  "name": "Imran",
+  "age": 21,
+  "isStudent": true,
+  "marks": [90,80,70],
+  "address": {
+    "city": "Delhi"
+  },
+  "phone": null
+}
+
+======================================================
+
+5. JSON OBJECT
+------------------------------------------------------
+Object stores key-value pairs.
+
+Example:
+{
+  "name": "Ali",
+  "age": 20
+}
+
+======================================================
+
+6. JSON ARRAY
+------------------------------------------------------
+Array stores multiple values.
+
+Example:
+[
+  "HTML",
+  "CSS",
+  "JavaScript"
+]
+
+Array of objects:
+[
+  {
+    "name": "Ali"
+  },
+  {
+    "name": "Imran"
+  }
+]
+
+======================================================
+
+7. NESTED JSON
+------------------------------------------------------
+JSON inside another JSON.
+
+Example:
+{
+  "student": {
+    "name": "Imran",
+    "marks": {
+      "math": 90,
+      "science": 80
+    }
+  }
+}
+
+======================================================
+
+8. JSON VS JAVASCRIPT OBJECT
+------------------------------------------------------
+
+JSON:
+- Keys in double quotes
+- No functions
+- Data format
+- Used for data transfer
+
+JavaScript Object:
+- Quotes optional
+- Functions allowed
+- Used in code
+
+Example:
+let obj = {
+    name: "Imran",
+    greet() {
+        console.log("Hello");
+    }
+}
+
+======================================================
+
+9. CONVERT OBJECT TO JSON
+------------------------------------------------------
+JSON.stringify()
+
+Converts JavaScript object → JSON string
+
+Example:
+let student = {
+    name: "Imran",
+    age: 21
+};
+
+let jsonData = JSON.stringify(student);
+
+console.log(jsonData);
+
+Output:
+{"name":"Imran","age":21}
+
+======================================================
+
+10. CONVERT JSON TO OBJECT
+------------------------------------------------------
+JSON.parse()
+
+Converts JSON string → JavaScript object
+
+Example:
+let data = '{"name":"Imran","age":21}';
+
+let obj = JSON.parse(data);
+
+console.log(obj.name);
+
+Output:
+Imran
+
+======================================================
+
+11. WHY APIs RETURN JSON
+------------------------------------------------------
+Because JSON is:
+- Lightweight
+- Fast
+- Easy to read
+- Supported everywhere
+
+API Example:
+{
+  "userId": 1,
+  "title": "Learn JSON"
+}
+
+======================================================
+
+12. FETCH API + JSON
+------------------------------------------------------
+Example:
+
+fetch("https://jsonplaceholder.typicode.com/users")
+.then((res) => {
+    return res.json();
+})
+.then((data) => {
+    console.log(data);
+});
+
+======================================================
+
+13. JSON.STRINGIFY() ADVANCED
+------------------------------------------------------
+
+Convert Array:
+let arr = [1,2,3];
+
+console.log(JSON.stringify(arr));
+
+Output:
+[1,2,3]  //string
+
+----------------------------------
+
+Pretty Print JSON:
+JSON.stringify(value, replacer, space)
+| Parameter | Meaning                 |
+| --------- | ----------------------- |
+| value     | object/array to convert |
+| replacer  | filter/change values    |
+| space     | indentation spaces      |
+
+space->It does two things automatically:
+1️⃣ Adds new lines
+So each key/value appears on a new line
+2️⃣ Adds indentation (2 spaces per level)
+So nested structure is visually organized
+example 1:
+
+let obj = {
+    name: "Imran",
+    age: 21
+};
+
+console.log(JSON.stringify(obj, null, 2));
+
+Output:
+{
+  "name": "Imran",
+  "age": 21
+}
+//null means -no filtering\
+example2:
+Case A: Array replacer (allow list)
+
+let obj = { name: "Imran", age: 21, city: "Delhi" };
+
+console.log(JSON.stringify(obj, ["name", "age"], 2));
+Output:
+{
+  "name": "Imran",
+  "age": 21
+}
+
+👉 city removed
+======================================================
+
+14. JSON.PARSE() ADVANCED
+------------------------------------------------------
+Example:
+
+let data = '{"price":100}';
+
+let obj = JSON.parse(data);
+
+console.log(obj.price + 50);
+
+Output:
+150
+
+======================================================
+
+15. LOCAL STORAGE + JSON
+------------------------------------------------------
+
+Store Object:
+let user = {
+    name: "Imran",
+    age: 21
+};
+
+localStorage.setItem("user", JSON.stringify(user));
+
+----------------------------------
+
+Get Object:
+let data = JSON.parse(localStorage.getItem("user"));
+
+console.log(data.name);
+
+======================================================
+
+16. DEEP COPY USING JSON
+------------------------------------------------------
+Example:
+
+let obj1 = {
+    name: "Imran",
+    marks: {
+        math: 90
+    }
+};
+
+let obj2 = JSON.parse(JSON.stringify(obj1));
+
+obj2.marks.math = 50;
+
+console.log(obj1.marks.math);
+
+Output:
+90
+
+======================================================
+
+17. JSON REPLACER FUNCTION
+------------------------------------------------------
+Example:
+
+let user = {
+    name: "Imran",
+    password: "12345"
+};
+
+let data = JSON.stringify(user, (key, value) => {
+    if(key === "password") {
+        return undefined;
+    }
+    return value;
+});
+console.log(data);
+
+Output:
+{"name":"Imran"}
+
+======================================================
+
+18. JSON REVIVER FUNCTION
+------------------------------------------------------
+Example:
+
+let data = '{"age":"21"}';
+
+let obj = JSON.parse(data, (key, value) => {
+    if(key === "age") {
+        return Number(value);
+    }
+    return value;
+});
+
+console.log(typeof obj.age);
+
+Output:
+number
+
+======================================================
+
+19. COMMON JSON ERRORS
+------------------------------------------------------
+
+1. Missing Quotes
+
+Wrong:
+{
+  name: "Imran"
+}
+
+----------------------------------
+
+2. Trailing Comma
+
+Wrong:
+{
+  "age": 21,
+}
+
+----------------------------------
+
+3. Single Quotes
+
+Wrong:
+{
+  'name': 'Imran'
+}
+
+======================================================
+
+20. REAL API JSON EXAMPLE
+------------------------------------------------------
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Imran"
+    },
+    {
+      "id": 2,
+      "name": "Ali"
+    }
+  ]
+}
+
+======================================================
+
+21. ACCESS JSON DATA
+------------------------------------------------------
+Example:
+
+let data = {
+    users: [
+        {
+            name: "Imran"
+        }
+    ]
+};
+
+console.log(data.users[0].name);
+
+Output:
+Imran
+
+======================================================
+
+22. JSON FILE
+------------------------------------------------------
+Extension:
+data.json
+
+Example:
+{
+  "name": "Imran",
+  "course": "JavaScript"
+}
+
+======================================================
+
+23. ADVANCED NESTED API EXAMPLE
+------------------------------------------------------
+{
+  "status": "success",
+  "data": {
+    "users": [
+      {
+        "id": 1,
+        "profile": {
+          "name": "Imran",
+          "skills": ["HTML", "CSS", "JS"]
+        }
+      }
+    ]
+  }
+}
+
+Access:
+console.log(data.data.users[0].profile.skills[2]);
+
+Output:
+JS
+
+======================================================
+
+24. JSON SCHEMA (ADVANCED)
+------------------------------------------------------
+Used for validating JSON structure.
+
+Example:
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    }
+  }
+}
+
+======================================================
+
+25. IMPORTANT INTERVIEW QUESTIONS
+------------------------------------------------------
+
+Q1. Difference between JSON and Object?
+
+- JSON is data format
+- Object is JavaScript structure
+
+----------------------------------
+
+Q2. Why use JSON?
+
+- Fast communication
+- API response
+- Lightweight
+
+----------------------------------
+
+Q3. What does JSON.stringify() do?
+
+Converts object → JSON string
+
+----------------------------------
+
+Q4. What does JSON.parse() do?
+
+Converts JSON string → JavaScript object
+
+======================================================
+
+26. COMPLETE FLOW
+------------------------------------------------------
+Example:
+
+let student = {
+    name: "Imran",
+    age: 21
+};
+
+// Object → JSON
+let jsonData = JSON.stringify(student);
+
+console.log(jsonData);
+
+// JSON → Object
+let obj = JSON.parse(jsonData);
+
+console.log(obj.name);
+
+Output:
+{"name":"Imran","age":21}
+
+Imran
+
+======================================================
+
+27. MOST IMPORTANT TOPICS
+------------------------------------------------------
+1. JSON Syntax
+2. JSON Data Types
+3. JSON Objects
+4. JSON Arrays
+5. Nested JSON
+6. JSON.parse()
+7. JSON.stringify()
+8. Fetch API + JSON
+9. LocalStorage + JSON
+10. API Responses
+11. Deep Copy
+12. Replacer & Reviver
+13. JSON Errors
+14. JSON Schema
+
+======================================================
+END
+======================================================

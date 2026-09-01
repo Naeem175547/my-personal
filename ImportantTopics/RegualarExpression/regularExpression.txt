@@ -1,0 +1,236 @@
+# 📘 Universal Regex Cheat Sheet
+
+## 🔤 1. Basic Characters
+
+| Pattern | Meaning |
+|---|---|
+| a | Match character `a` anywhere in the text |
+|cat| Match exact word/text `cat` anywhere |
+| . | Match any single character except newline |
+
+
+Note:
+Exact character/word means regex searches anywhere in the text unless anchors (^ $) are used.
+
+--------------------------------------------------
+
+## 🔡 2. Character Sets
+
+| Pattern | Meaning |
+|---|---|
+| [abc] | Match either a, b, or c |
+| [a-z] | Match any lowercase letter |
+| [A-Z] | Match any uppercase letter |
+| [0-9] | Match any digit |
+| [a-zA-Z] | Match any alphabet letter |
+| [^abc] | Match anything except a, b, or c |
+
+--------------------------------------------------
+
+## 🔢 3. Quantifiers (Repetition)
+
+| Pattern | Meaning |
+|---|---|
+| a* | Match a zero or more times |
+| a+ | Match a one or more times |
+| a? | Match a zero or one time |
+| a{3} | Match exactly 3 a |
+| a{2,5} | Match between 2 and 5 a |
+| a{2,} | Match 2 or more a |
+
+--------------------------------------------------
+
+## ⚡ 4. Special Shortcuts
+
+| Pattern | Meaning |
+|---|---|
+| \d | Match any digit |
+| \D | Match any non-digit |
+| \w | Match word character (a-z, A-Z, 0-9, _) |
+| \W | Match non-word character |
+| \s | Match whitespace (space, tab, newline) |
+| \S | Match non-whitespace |
+
+--------------------------------------------------
+
+## 📍 5. Anchors (Position)
+
+| Pattern | Meaning |
+|---|---|
+| ^cat |  start from cat |
+| dog$ |  end at dog |
+| ^$ | Empty line/string |
+| ^imran$ | exact match
+
+--------------------------------------------------
+
+## 🔗 6. Combining Patterns
+
+| Pattern | Meaning |
+|---|---|
+| ^\d{10}$ | Exactly 10 digits only |
+| ^[a-z]+$ | Only lowercase letters |
+| ^[a-zA-Z]+$ | Only alphabet letters |
+
+--------------------------------------------------
+
+## 🔀 7. OR Operator
+
+| Pattern | Meaning |
+|---|---|
+| cat\|dog | Match either cat or dog |
+
+--------------------------------------------------
+
+## 🧩 8. Grouping
+
+| Pattern | Meaning |
+|---|---|
+| (ab) | Create group containing ab |
+| (ab)+ | Repeat group ab |
+| (a\|b) | Match either a or b |
+
+--------------------------------------------------
+
+## 🧠 9. Greedy vs Lazy
+
+| Pattern | Meaning |
+|---|---|
+| .* | Greedy match (maximum possible) |
+| .*? | Lazy match (minimum possible) |
+
+--------------------------------------------------
+
+## 🔍 10. Lookaheads
+
+| Pattern | Meaning |
+|---|---|
+| a(?=b) | Match a only if followed by b |
+| a(?!b) | Match a only if NOT followed by b |
+
+--------------------------------------------------
+
+## 🔄 11. Lookbehinds
+
+| Pattern | Meaning |
+|---|---|
+| (?<=a)b | Match b only if after a |
+| (?<!a)b | Match b only if NOT after a |
+
+--------------------------------------------------
+
+## 🎯 12. Real-World Patterns
+
+| Use Case | Pattern |
+|---|---|
+| 10-digit phone | ^\d{10}$ |
+| only letters | ^[a-zA-Z]+$ |
+| username | ^[a-zA-Z0-9_]{3,15}$ |
+| simple email | ^\w+@\w+\.\w+$ |
+| email validation | ^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$ |
+
+--------------------------------------------------
+
+## 🚩 13. Regex Flags
+
+| Flag | Meaning |
+|---|---|
+| g | Global match (find all matches) |
+| i | Ignore uppercase/lowercase |
+| m | Multiline mode |
+| s | Dot . matches newline too |
+| u | Unicode support |
+
+--------------------------------------------------
+
+## 🛠 Common Regex Methods
+
+| Method | Meaning |
+|---|---|
+| match() | Return matched text |
+| test() | Return true/false if pattern exists |
+| replace() | Replace matched text |
+| search() | Return index of first match |
+| split() | Split text using regex |
+
+--------------------------------------------------
+
+## 🧠 Important Notes
+
+| Symbol | Meaning |
+|---|---|
+| [] | Character set |
+| () | Group |
+| {} | Quantity |
+| ^ | Start |
+| $ | End |
+| \ | Escape special character |
+| | | OR operator |
+
+--------------------------------------------------
+
+## 🔥 Most Important Thing
+
+Regex checks patterns, not meaning.
+Example:
+^\d{10}$
+Means:
+- start
+- exactly 10 digits
+- end
+
+So only 10 digits are allowed.
+
+// 📘 Regex Syntax in Different Languages
+
+| Language   | Regex Syntax Example | Digit Example |
+|------------|----------------------|----------------|
+| JavaScript | /a/                  | /\d+/          |
+| PHP        | "/a/"                | "/\d+/"        |
+| Perl       | /a/                  | /\d+/          |
+| Ruby       | /a/                  | /\d+/          |
+| Java       | Pattern.compile("a") | Pattern.compile("\\d+") |
+| Python     | re.compile(r"a")     | re.compile(r"\d+") |
+| C#         | new Regex("a")       | new Regex(@"\d+") |
+| Go         | regexp.MustCompile("a") | regexp.MustCompile(`\d+`) |
+
+--------------------------------------------------
+
+// ✅ Languages Using / / (Regex Delimiters)
+
+| Language | Example |
+|----------|----------|
+| JavaScript | /a/ |
+| PHP | "/a/" |
+| Perl | /a/ |
+| Ruby | /a/ |
+
+// Here / / is called a regex delimiter.
+
+--------------------------------------------------
+
+// ❌ Languages NOT Using / /
+
+| Language | Example |
+|----------|----------|
+| Java | Pattern.compile("a") |
+| Python | re.compile(r"a") |
+| C# | new Regex("a") |
+| Go | regexp.MustCompile("a") |
+
+// These languages use strings instead of delimiters.
+
+--------------------------------------------------
+
+// 🧠 Important
+
+// Regex pattern is mostly same in every language.
+
+// Example:
+\d+
+
+// Meaning:
+\d   -> digit
++    -> one or more
+
+// Only writing style changes depending on language.

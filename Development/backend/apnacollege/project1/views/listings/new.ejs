@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container">
+    
+    <div class="row justify-content-center " novalidate>
+        <div class="col-8">
+            <h2>Create a New Listing</h2>
+            <form action="/listings" method="POST" class="form needs-validation" novalidate>
+        
+        <input type="text" placeholder="Title" required name="listing[title]" id="title" class="form-control">
+        <div class="valid-feedback">title looks good</div>
+        <div class="invalid-feedback">title looks bad</div>
+        <br>
+        
+        <textarea type="text" placeholder="Description" name="listing[description]" id="description" class="form-control"></textarea>
+        <div class="invalid-feedback">description is required</div>
+        
+        <br>
+        
+        <input type="number" placeholder="Price" name="listing[price]" id="price" class="form-control" required>
+        <br>
+      
+        <input type="text" placeholder="Image URL" name="listing[image]" id="image" class="form-control" const packageName = require('packageName');>
+        <br>
+     
+        <input type="text" placeholder="Location" name="listing[location]" id="location" class="form-control" required>
+        <br>
+       
+        <input type="text" placeholder="Country" name="listing[country]" id="country" class="form-control" required>
+        <br>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+        </div>
+    
+    </div>
+</div>
+
+    

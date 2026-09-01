@@ -1,0 +1,13 @@
+ChatGPT
+   ↓
+GitHub Copilot
+   ↓
+Cursor
+   ↓
+OpenAI API
+   ↓
+LangChain
+   ↓
+RAG
+   ↓
+AI-powered React + NestJS applications

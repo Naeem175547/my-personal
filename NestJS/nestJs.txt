@@ -1,0 +1,9303 @@
+REACT + GRAPHQL + NESTJS + MYSQL
+FULL-STACK LEARNING ROADMAP
+================================
+
+
+PHASE 1 — MYSQL BASICS
+======================
+
+1. MySQL Basics
+   - Database
+   - Table
+   - Row
+   - Column
+   - Data types
+   - CREATE DATABASE
+   - CREATE TABLE
+   - INSERT
+   - SELECT
+   - UPDATE
+   - DELETE
+
+2. Primary Key
+   - id
+   - UNIQUE
+   - AUTO_INCREMENT
+
+3. Foreign Key
+   - Connecting tables
+   - Referential relationship
+
+4. Relationships
+   - One-to-One
+   - One-to-Many
+   - Many-to-Many
+
+5. JOIN
+   - INNER JOIN
+   - LEFT JOIN
+   - RIGHT JOIN
+
+6. Transactions
+   - COMMIT
+   - ROLLBACK
+   - Atomic operations
+
+
+PHASE 2 — NESTJS + MYSQL + TYPEORM
+===================================
+
+7. TypeORM
+   - What is ORM?
+   - TypeORM setup
+   - MySQL connection
+
+8. Entity
+   - @Entity()
+   - @Column()
+   - @PrimaryGeneratedColumn()
+
+9. Repository
+   - find()
+   - findOne()
+   - save()
+   - insert()
+   - update()
+   - delete()
+
+10. DTO + Validation
+    - DTO
+    - class-validator
+    - ValidationPipe
+    - Create DTO
+    - Update DTO
+    - PartialType()
+
+11. Relationships
+    - @OneToOne()
+    - @OneToMany()
+    - @ManyToOne()
+    - @ManyToMany()
+    - @JoinColumn()
+    - @JoinTable()
+
+12. QueryBuilder
+    - createQueryBuilder()
+    - WHERE
+    - AND WHERE
+    - OR WHERE
+    - JOIN
+    - GROUP BY
+    - ORDER BY
+    - Pagination
+    - getMany()
+    - getRawMany()
+    - getManyAndCount()
+
+13. Transactions
+    - DataSource transaction
+    - EntityManager
+    - Commit
+    - Rollback
+
+
+PHASE 3 — GRAPHQL FUNDAMENTALS
+==============================
+
+14. What is GraphQL?
+
+15. GraphQL vs REST
+
+  16. Schema
+      - Schema definition
+      - Object types
+      - Fields
+
+17. Types
+    - String
+    - Int
+    - Float
+    - Boolean
+    - ID
+    - Object Types
+    - Lists
+    - Non-null (!)
+    -and more
+
+18. Query
+    - Reading/fetching data
+
+19. Mutation
+    - Creating data
+    - Updating data
+    - Deleting data
+
+20. Resolver
+    - Resolves GraphQL requests
+
+21. Arguments
+    - Passing values to queries/mutations
+
+22. Input Types
+    - Input objects
+    - Multiple input fields
+
+23. Context
+    - Request information
+    - User information
+    - Authentication data
+
+
+PHASE 4 — NESTJS + GRAPHQL
+===========================
+
+  24. @nestjs/graphql
+
+  25. GraphQL Setup in NestJS
+
+  26. Code-First Approach
+
+27. Object Types
+    - @ObjectType()
+    - @Field()
+
+28. Resolvers
+    - @Resolver()
+    - @Query()
+    - @Mutation()
+
+29. Arguments
+    - @Args()
+
+30. Input Types
+    - @InputType()
+    - @Field()
+
+31. Services
+    - Resolver → Service
+
+32. Repository
+    - Service → Repository
+
+33. GraphQL + TypeORM
+    - Resolver
+    - Service
+    - Repository
+    - Entity
+
+34. Guards
+    - CanActivate
+    - Auth Guard
+    - Protected operations
+    -protected mutation
+
+35. Authentication
+    - Register
+    - Login
+    - Password hashing
+    - JWT
+    - Access token
+
+36. GraphQL Context + Authentication
+    - Get request
+    - Get authenticated user
+    - Pass user to resolver
+
+
+PHASE 5 — REACT + GRAPHQL
+==========================
+
+37. Apollo Client
+    - What is Apollo Client?
+    - Installation
+    - Configuration
+    - Provider
+
+38. GraphQL Queries
+    - useQuery()
+    - Query variables
+
+39. GraphQL Mutations
+    - useMutation()
+    - Mutation variables
+
+40. Loading State
+    - loading
+
+41. Error State
+    - error
+
+42. Data State
+    - data
+
+43. Caching
+    - Apollo cache
+    - Cache updates
+    - Refetching
+
+44. Authentication
+    - JWT
+    - Auth headers
+    - Apollo authentication
+
+
+PHASE 6 — BLOG / CMS PROJECT
+=============================
+
+45. Project Setup
+
+    Frontend:
+    - React
+    - Apollo Client
+
+    Backend:
+    - NestJS
+    - GraphQL
+    - TypeORM
+
+    Database:
+    - MySQL
+
+
+46. Authentication
+
+    - Register
+    - Login
+    - JWT
+    - Password hashing
+    - Auth Guard
+
+
+47. Users
+
+    - Create user
+    - Get users
+    - Get user
+    - Update user
+    - Delete user
+
+
+48. Posts
+
+    - Create post
+    - Get posts
+    - Get single post
+    - Update post
+    - Delete post
+
+
+49. Categories
+
+    - Create category
+    - Get categories
+    - Update category
+    - Delete category
+
+
+50. Comments
+
+    - Create comment
+    - Get comments
+    - Delete comment
+
+
+51. Relationships
+
+    User
+      |
+      └───< Posts
+
+    Post
+      |
+      ├───< Comments
+      |
+      └───<> Categories
+
+
+52. GraphQL API
+
+    Queries:
+    - users
+    - user
+    - posts
+    - post
+    - categories
+    - comments
+
+    Mutations:
+    - register
+    - login
+    - createPost
+    - updatePost
+    - deletePost
+    - createCategory
+    - updateCategory
+    - deleteCategory
+    - createComment
+    - deleteComment
+
+
+53. React Pages
+
+    - Home
+    - Login
+    - Register
+    - Posts
+    - Post Details
+    - Create Post
+    - Edit Post
+    - Profile
+    - Admin Dashboard
+
+
+54. Final Features
+
+    - Authentication
+    - Authorization
+    - CRUD
+    - Relationships
+    - Search
+    - Filtering
+    - Sorting
+    - Pagination
+    - Comments
+    - Categories
+    - Admin panel
+    - Error handling
+    - Loading states
+    - Apollo caching
+
+
+FINAL ARCHITECTURE
+==================
+
+React
+  ↓
+Apollo Client
+  ↓
+GraphQL
+  ↓
+NestJS Resolver
+  ↓
+NestJS Service
+  ↓
+TypeORM Repository
+  ↓
+MySQL
+
+
+IMPORTANT NESTJS FLOW
+=====================
+
+Request
+  ↓
+GraphQL
+  ↓
+Resolver
+  ↓
+DTO / Input
+  ↓
+Validation
+  ↓
+Guard (if protected)
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL
+
+
+LEARNING ORDER
+==============
+
+MySQL
+  ↓
+TypeORM
+  ↓
+Entities
+  ↓
+Repositories
+  ↓
+DTO + Validation
+  ↓
+Relationships
+  ↓
+QueryBuilder
+  ↓
+Transactions
+  ↓
+GraphQL Fundamentals
+  ↓
+NestJS + GraphQL
+  ↓
+Authentication
+  ↓
+Apollo Client
+  ↓
+React + GraphQL
+  ↓
+Blog/CMS Project
+
+
+1. What is NestJS?
+NestJS = Backend framework for Node.js, mainly built with TypeScript.
+
+Node.js
+   ↓
+NestJS
+   ↓
+Express / Fastify
+
+It gives you a structured architecture:
+
+Controller
+    ↓
+Service
+    ↓
+Repository / Database
+
+2. Why NestJS?
+
+Express:
+
+app.get("/users", (req, res) => {
+   // everything can end up here
+});
+
+NestJS:
+
+Controller → handles request
+Service    → business logic
+Module     → organizes feature
+DTO        → validates input
+Guard      → authentication/authorization
+Pipe       → validation/transformation
+Interceptor → request/response processing
+Filter     → exception handling
+
+This makes large applications easier to maintain.
+
+3. Installation
+npm i -g @nestjs/cli
+
+Create project:
+nest new my-app
+
+Run:
+npm run start:dev
+
+4. Basic Structure
+src/
+│
+├── app.controller.ts
+├── app.service.ts
+├── app.module.ts
+└── main.ts
+
+Larger application:
+
+src/
+│
+├── users/
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   ├── users.module.ts
+│   ├── dto/
+│   └── entities/
+│
+├── auth/
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   └── auth.module.ts
+│
+├── app.module.ts
+└── main.ts
+
+5. main.ts
+
+Application starts here.
+
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  await app.listen(3000);
+}
+
+bootstrap();
+
+
+6. Module ⭐⭐⭐
+
+Module organizes related functionality.
+
+import { Module } from '@nestjs/common';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+
+@Module({
+  controllers: [UsersController],
+  providers: [UsersService],
+})
+export class UsersModule {}
+
+Think:
+
+UsersModule
+   ├── UsersController
+   └── UsersService
+
+
+7. Controller ⭐⭐⭐
+
+Controller handles HTTP requests.
+
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('users')
+export class UsersController {
+
+  @Get()
+  getUsers() {
+    return ['Naeem', 'Ali'];
+  }
+}
+
+Request:
+
+GET /users
+
+8. Service ⭐⭐⭐
+Business logic goes into services.
+
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class UsersService {
+  getUsers() {
+    return ['Naeem', 'Ali'];
+  }
+}
+
+Controller uses service:
+
+@Controller('users')
+export class UsersController {
+  constructor(private usersService: UsersService) {}
+
+  @Get()
+  getUsers() {
+    return this.usersService.getUsers();
+  }
+}
+
+Architecture:
+
+Request
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Database
+
+9. Dependency Injection ⭐⭐⭐⭐⭐
+
+This is one of the most important NestJS concepts.
+
+constructor(
+  private usersService: UsersService
+) {}
+
+NestJS automatically creates and injects UsersService.
+Instead of:
+const service = new UsersService();
+
+NestJS manages it for you.
+
+NestJS Container
+      ↓
+Creates Service
+      ↓
+Injects Service
+      ↓
+Controller
+
+10. HTTP Methods
+@Get()
+getUsers() {}
+
+@Post()
+createUser() {}
+
+@Put()
+updateUser() {}
+
+@Patch()
+updateUserPartially() {}
+
+@Delete()
+deleteUser() {}
+
+11. Route Parameters
+@Get(':id')
+getUser(@Param('id') id: string) {
+  return id;
+}
+
+Request:
+
+GET /users/123
+
+id = 123
+
+12. Query Parameters
+
+URL:
+
+/users?page=1&limit=10
+
+Code:
+
+@Get()
+getUsers(
+  @Query('page') page: string,
+  @Query('limit') limit: string,
+) {
+  return { page, limit };
+}
+13. Request Body
+@Post()
+createUser(@Body() body: any) {
+  return body;
+}
+
+Request:
+
+{
+  "name": "Naeem",
+  "email": "test@gmail.com"
+}
+14. DTO ⭐⭐⭐⭐⭐
+
+DTO = Data Transfer Object
+
+Instead of accepting random data:
+
+@Body() body: any
+
+Create:
+
+export class CreateUserDto {
+  name: string;
+  email: string;
+  age: number;
+}
+
+Then:
+
+@Post()
+createUser(@Body() dto: CreateUserDto) {
+  return dto;
+}
+
+DTO defines the expected structure.
+
+15. Validation ⭐⭐⭐⭐⭐
+
+Install:
+npm install class-validator class-transformer
+
+DTO:
+
+import { IsEmail, IsNotEmpty, IsInt } from 'class-validator';
+
+export class CreateUserDto {
+
+  @IsNotEmpty()
+  name: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsInt()
+  age: number;
+}
+
+Enable validation:
+
+app.useGlobalPipes(
+  new ValidationPipe({
+    whitelist: true,
+  }),
+);
+
+Now invalid input can automatically be rejected.
+class validator and transformer can be used for dot/inputType
+
+16. Pipes
+
+Pipes are used for:
+
+Validation
+Transformation
+
+Example:
+
+@Get(':id')
+getUser(
+  @Param('id', ParseIntPipe) id: number
+) {
+  return id;
+}
+
+If:
+
+/users/123
+
+id becomes:
+
+123 → number
+
+
+17. Guards ⭐⭐⭐⭐⭐
+
+Guards decide whether a request is allowed.
+Common use:
+
+Authentication
+Authorization
+Roles
+Permissions
+
+Concept:
+
+Request
+   ↓
+Guard
+   ↓
+Allowed?
+  / \
+Yes  No
+ ↓    ↓
+Controller  401/403
+
+Example:
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+
+  canActivate(context: ExecutionContext): boolean {
+    return true;
+  }
+}
+
+18. JWT Authentication
+
+Typical NestJS auth architecture:
+
+POST /auth/login
+       ↓
+AuthController
+       ↓
+AuthService
+       ↓
+Check User
+       ↓
+Generate JWT
+       ↓
+Client
+
+Then:
+
+GET /users/profile
+       ↓
+JWT Guard
+       ↓
+Verify Token
+       ↓
+Controller
+
+Important packages:
+
+npm install @nestjs/jwt passport passport-jwt
+19. Interceptors
+
+Interceptors can execute code:
+
+Before request
+      ↓
+Controller
+      ↓
+After request
+
+Used for:
+
+Logging
+Response transformation
+Caching
+Performance measurement
+
+Example:
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+
+  intercept(context: ExecutionContext, next: CallHandler) {
+
+    console.log('Before');
+
+    return next.handle();
+  }
+}
+20. Middleware
+
+Middleware runs before the controller.
+
+Request
+   ↓
+Middleware
+   ↓
+Guard
+   ↓
+Interceptor
+   ↓
+Pipe
+   ↓
+Controller
+   ↓
+Service
+
+Typical uses:
+
+Logging
+Headers
+Request modification
+Authentication preprocessing
+21. Exception Filters
+
+NestJS has built-in HTTP exceptions:
+
+throw new NotFoundException('User not found');
+
+Other common exceptions:
+
+BadRequestException
+UnauthorizedException
+ForbiddenException
+NotFoundException
+ConflictException
+InternalServerErrorException
+
+
+             HTTP REQUEST
+                  ↓
+             Middleware
+                  ↓
+              Guard
+                  ↓
+            Interceptor
+                  ↓
+               Pipe
+                  ↓
+             Controller
+                  ↓
+               Service
+                  ↓
+            Repository
+                  ↓
+              Database
+                  ↓
+             Repository
+                  ↓
+               Service
+                  ↓
+             Controller
+                  ↓
+            Interceptor
+                  ↓
+              RESPONSE
+
+Recommended Folder Structure
+
+For a serious project:
+
+src/
+│
+├── auth/
+│   ├── dto/
+│   ├── guards/
+│   ├── strategies/
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   └── auth.module.ts
+│
+├── users/
+│   ├── dto/
+│   ├── schemas/
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   └── users.module.ts
+│
+├── common/
+│   ├── guards/
+│   ├── interceptors/
+│   ├── pipes/
+│   └── filters/
+│
+├── database/
+│
+├── app.module.ts
+└── main.ts
+
+30. What You Should Learn
+For your existing MERN + TypeScript background, learn NestJS in this order:
+
+1. TypeScript
+      ↓
+2. Modules
+      ↓
+3. Controllers
+      ↓
+4. Services
+      ↓
+5. Dependency Injection
+      ↓
+6. DTOs
+      ↓
+7. Validation Pipes
+      ↓
+8. MongoDB / Mongoose
+      ↓
+9. JWT Authentication
+      ↓
+10. Guards
+      ↓
+11. Middleware
+      ↓
+12. Interceptors
+      ↓
+13. Exception Filters
+      ↓
+14. File Upload
+      ↓
+15. Swagger
+      ↓
+16. Testing
+      ↓
+17. Redis / Caching
+      ↓
+18. Queues
+      ↓
+19. WebSockets
+      ↓
+20. Docker + Deployment
+
+
+
+---->notes->
+dist: A folder containing the compiled JavaScript files generated from TypeScript source code for running the NestJS application.
+Nest CLI: A command-line tool for NestJS used to create, generate, build, and manage NestJS projects.
+nest new project-name      # Create a new project
+nest generate controller   # Create controller
+nest generate service      # Create service
+nest generate module       # Create module
+nest generate resource     # Create CRUD resource
+nest g pipe                # this will create pipe
+nest g guard          # this will create pipe
+nest g filter              #create exceptionFilter
+nest g middleware          #create middleware
+nest build                 # Build project
+nest start                 # Start project
+nest start --watch         # Start with auto-reload
+nest --version             # Check Nest CLI version
+
+
+note->after every command we can write or give path to directory,or it will ask after command
+
+nest g module-shorthand for generate
+
+Use Nest CLI commands for most NestJS projects. 👍
+If the CLI is generating extra .spec.ts test files and you don't want them, you can disable them:
+
+nest g controller users --no-spec
+nest g service users --no-spec
+
+.spec.ts file: A test file in NestJS used to write unit tests for controllers, services, and other components.
+
+Example:
+
+users.service.ts       → Actual service
+users.service.spec.ts  → Tests for that service
+
+It is usually used with Jest, NestJS's default testing framework.
+nest-cli.json: A configuration file for Nest CLI that defines project settings such as the source directory.
+
+
+Decorator: A special TypeScript feature that adds metadata or behavior to a class, method, property, or parameter. 
+In NestJS, decorators tell the framework how that part of the application should work.
+
+
+
+---->
+NestJS Controller
+
+Definition
+A Controller in NestJS is responsible for handling incoming HTTP requests and sending responses.
+
+Client
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Database
+
+
+Basic Example
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('users')
+export class UsersController {
+
+  @Get()
+  getUsers() {
+    return ['Naeem', 'Ali'];
+  }
+}
+
+Important Parts
+
+1. @Controller('users')
+Defines the base route.
+
+@Controller('users')
+All routes inside start with:
+
+/users
+
+2. @Get()
+
+Handles a GET request.
+
+@Get()
+getUsers() {}
+
+Request:
+
+GET /users
+
+3. @Post()
+
+Handles POST requests.
+
+@Post()
+createUser() {}
+
+Request:
+
+POST /users
+Parameters
+
+Route parameter:
+
+@Get(':id')
+getUser(@Param('id') id: string) {
+  return id;
+}
+GET /users/10
+
+Query parameter:
+
+@Get()
+getUsers(@Query('page') page: string) {
+  return page;
+}
+GET /users?page=2
+
+Request body:
+
+@Post()
+createUser(@Body() data: any) {
+  return data;
+}
+In NestJS, these two are different:
+
+@Body() x
+Gets the entire request body.
+
+@Post()
+create(@Body() x) {
+  console.log(x);
+}
+
+Request:
+
+{
+  "name": "Naeem",
+  "age": 23
+}
+
+x becomes:
+
+{
+  name: "Naeem",
+  age: 23
+}
+@Body('name') x
+
+Gets only the name property from the body.
+
+@Post()
+create(@Body('name') x) {
+  console.log(x);
+}
+
+Request:
+
+{
+  "name": "Naeem",
+  "age": 23
+}
+
+x becomes:
+"Naeem"
+
+Easy rule
+@Body()        → complete body
+@Body('name')  → only body.name
+@Body('age')   → only body.age
+
+So @Body('name') means "give me the name field from the request body."
+
+
+Common Controller Decorators
+@Controller()
+@Get()
+@Post()
+@Put()
+@Patch()
+@Delete()
+
+@Param()
+@Query()
+@Body()
+@Headers()
+
+Key Point
+
+Controller = Request handling layer
+It should mainly handle:
+
+Request → Controller → Service → Response
+
+Business logic should generally be kept in the Service, not the Controller.
+
+--->NestJS Service
+Definition: A Service contains the application's business logic 
+and performs operations such as processing data, communicating with the database, and implementing application rules.
+
+Basic Example
+
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class ProductService {
+  private products = [
+    { id: 1, name: 'Product 1', price: 100 },
+    { id: 2, name: 'Product 2', price: 200 },
+    { id: 3, name: 'Product 3', price: 300 },
+  ];
+  getAllProducts() {
+    return this.products;
+  }
+  getProductById(id: number) {
+    return this.products.find((product) => product.id == id);
+  }
+}
+
+@Injectable()
+
+@Injectable() marks the class as a provider that NestJS can create and inject using Dependency Injection.
+
+Controller + Service
+Request
+   ↓
+Controller
+   ↓
+Service
+   ↓
+Database
+
+Controller:
+
+constructor(private usersService: UsersService) {} this inject services
+
+This tells NestJS:
+“I need an instance of UsersService here.”
+NestJS automatically creates and provides that instance.
+constructor(  private readonly usersService: UsersService) {}
+now instance is readonly
+
+
+
+Then:
+this.usersService.getUsers();
+
+Key Point
+Controller → handles request
+
+Service → handles business logic
+
+If a controller needs 2 or more services, inject all of them through the constructor.
+@Controller('users')
+export class UsersController {
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+    private readonly emailService: EmailService,
+  ) {}
+
+}
+
+
+---->
+
+NestJS Module
+
+Definition: A Module is a class that organizes related controllers, services, providers, and other dependencies
+ into one feature or functional unit.
+
+Example:
+
+@Module({
+  controllers: [UsersController],
+  providers: [UsersService],
+})
+export class UsersModule {}
+
+
+Think of it as:
+
+UsersModule
+   ├── UsersController
+   └── UsersService
+
+Important decorators
+@Module({
+  imports: [],
+  controllers: [],
+  providers: [],
+  exports: [],
+})
+imports → imports other modules
+controllers → registers controllers
+providers → registers services/providers
+exports → makes providers available to other modules
+
+Simple definition:
+👉 Module = A container that groups related parts of a NestJS application.
+
+note->
+if we directory render usersmodule instead of app.module in nestFactory?
+No. Normally, NestFactory.create() should receive the root module, which is usually AppModule.
+
+const app = await NestFactory.create(AppModule);
+
+Why not UsersModule?
+UsersModule is usually a feature module:
+
+AppModule
+ ├── UsersModule
+ ├── AuthModule
+ └── ProductsModule
+
+So the flow is:
+
+main.ts
+   ↓
+AppModule
+   ↓
+UsersModule
+   ↓
+UsersController
+UsersService
+
+If you do:
+
+NestFactory.create(UsersModule);
+NestJS can technically start with UsersModule, but you would only get the modules/dependencies connected to that module.
+ Your other application modules won't automatically be part of the application.
+
+Rule:
+👉 NestFactory.create() → Root Module (AppModule).
+
+--->
+Dependency Injection (DI)
+
+Definition: Dependency Injection is a design pattern where NestJS automatically provides
+ the required dependencies (services/objects) to a class instead of the class creating them manually.
+
+Example:
+
+constructor(
+  private readonly usersService: UsersService
+) {}
+
+Here, NestJS automatically creates and injects UsersService.
+
+UsersController
+      ↓
+  needs UsersService
+      ↓
+ NestJS DI Container
+      ↓
+ provides UsersService
+
+In short:
+👉 DI = NestJS automatically gives a class the objects/services it needs.
+YOU create → Service class
+NestJS creates → Service object/instance
+
+
+--->CRUD operations (student)
+
+--->
+DTO (Data Transfer Object)
+
+Definition: A DTO is a class that defines the structure 
+and expected data of information transferred between the client and server.
+
+Example:
+
+export class CreateUserDto {
+  name: string;
+  email: string;
+  age: number;
+}
+
+Used in a controller:
+
+@Post()
+createUser(@Body() dto: CreateUserDto) {
+  return dto;
+}
+
+Why DTO?
+Defines expected input structure
+Improves type safety
+Can be used with validation
+Keeps request data organized
+
+In short:
+👉 DTO = Defines what data an API expects to receive or return.
+
+
+--->
+Interface
+
+Definition:
+ An interface in TypeScript defines the structure/type of an object by specifying
+ what properties and their types it should have.
+
+Example:
+
+interface User {
+  name: string;
+  age: number;
+}
+const user: User = {
+  name: "Naeem",
+  age: 23
+};
+
+In TypeScript, both interface and type are used to define the shape/type of data. They overlap a lot, but there are some important differences.
+
+1. Basic example
+interface
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+type
+type User = {
+  id: number;
+  username: string;
+  email: string;
+};
+
+For this simple case, they behave almost the same.
+2diffrence
+| Feature               |   `interface`   | `type` |
+| --------------------- | :-------------: | :----: |
+| Object shape          |        ✅        |    ✅   |
+| Can be extended       |        ✅        |    ✅   |
+| `extends` keyword     |        ✅        |    ❌   |
+| Intersection `&`      | ⚠️ Not directly |    ✅   |
+| Union `\|`            |        ❌        |    ✅   |
+| Primitive types       |        ❌        |    ✅   |
+| Tuples                |        ❌        |    ✅   |
+| Declaration merging   |        ✅        |    ❌   |
+| Functions             |     Limited     |    ✅   |
+| Classes can implement |        ✅        |    ✅   |
+
+3. Extending
+
+With interface, use extends:
+
+interface User {
+  name: string;
+}
+
+interface Admin extends User {
+  admin: boolean;
+}
+
+Now Admin has:
+
+name
+admin
+
+With type, use intersection &:
+
+type User = {
+  name: string;
+};
+
+type Admin = User & {
+  admin: boolean;
+};
+
+Same idea.
+
+4. Union types — advantage of type
+
+A type can represent a union:
+
+type Status = 'pending' | 'success' | 'failed';
+
+Now:
+
+let status: Status;
+
+status = 'success'; // ✅
+status = 'hello';   // ❌
+
+You cannot do this directly with an interface.
+
+5. Primitive types
+
+type can define primitive aliases:
+
+type UserId = number;
+type Username = string;
+type IsActive = boolean;
+
+An interface is mainly for describing object-like structures.
+
+6. Tuples
+
+type can easily define tuples:
+
+type UserData = [number, string, string];
+
+Example:
+
+const user: UserData = [1, 'Naeem', 'naeem@gmail.com'];
+7. Declaration merging — advantage of interface
+
+This is an important difference.
+
+You can declare the same interface twice:
+
+interface User {
+  name: string;
+}
+
+interface User {
+  age: number;
+}
+
+TypeScript merges them.
+
+So User becomes:
+
+interface User {
+  name: string;
+  age: number;
+}
+
+With type, you cannot redeclare the same type:
+
+type User = {
+  name: string;
+};
+
+type User = {
+  age: number;
+};
+
+❌ Duplicate identifier error.
+
+8. In NestJS, you'll see both
+
+For example, your CreateUserParams could be a type:
+
+export type CreateUserParams = {
+  username: string;
+  password: string;
+  createdAt: Date;
+};
+
+Or an interface:
+
+export interface CreateUserParams {
+  username: string;
+  password: string;
+  createdAt: Date;
+}
+
+Both work for this use case.
+
+9. Which should you use?
+
+A simple rule:
+
+Use interface for object contracts
+interface User {
+  id: number;
+  username: string;
+  email: string;
+}
+
+Especially when you expect the shape to be extended.
+
+Use type for unions, intersections, tuples, and more complex type combinations
+type Status = 'pending' | 'success' | 'failed';
+type Admin = User & {
+  permissions: string[];
+};
+⭐ Easy way to remember
+interface → object structure / contract
+
+type      → flexible type combinations
+
+Neither is universally "better". In modern TypeScript, both are commonly used, and the choice often depends on the situation and project conventions.
+
+
+Interface vs DTO
+Interface → mainly used for TypeScript type checking
+DTO → used to define API data structure, and can also support runtime validation with decorators.
+
+In short:
+👉 Interface = Defines the shape of an object at TypeScript compile time.
+
+If you add a property that is not defined in an interface or DTO, the behavior depends on which one you're using.
+
+1. Interface
+interface User {
+  name: string;
+  age: number;
+}
+
+const user: User = {
+  name: "Naeem",
+  age: 23,
+  email: "test@gmail.com" // ❌ Error
+};
+
+TypeScript gives an error because email isn't part of User.
+
+2. NestJS DTO
+class CreateUserDto {
+  name: string;
+  age: number;
+}
+
+Request:
+
+{
+  "name": "Naeem",
+  "age": 23,
+  "email": "test@gmail.com"
+}
+
+By default, the extra email may still come through.
+
+If you enable:
+
+new ValidationPipe({
+  whitelist: true
+})
+
+NestJS removes properties that aren't defined in the DTO.
+
+Request
+ ↓
+{name, age, email}
+ ↓
+ValidationPipe
+ ↓
+{name, age}
+
+So:
+
+Interface → extra properties can cause TypeScript errors in object literals.
+DTO + whitelist: true → extra request properties are removed.
+
+Apply whitelist: true in the global ValidationPipe, usually inside main.ts.
+
+import { ValidationPipe } from '@nestjs/common';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+    }),
+  );
+
+  await app.listen(3000);
+}
+
+bootstrap();
+
+What it does
+If your DTO is:
+
+export class CreateUserDto {
+  name: string;
+  age: number;
+}
+
+Request:
+
+{
+  "name": "Naeem",
+  "age": 23,
+  "email": "test@gmail.com"
+}
+
+With whitelist: true:
+
+{
+  "name": "Naeem",
+  "age": 23
+}
+
+👉 Extra properties are removed.
+
+#forbidNonWhitelisted: true
+Instead of removing extra properties, it throws an error.
+
+new ValidationPipe({
+  whitelist: true,
+  forbidNonWhitelisted: true,
+})
+
+So:
+
+Extra property
+      ↓
+whitelist: true
+      ↓
+Remove it
+
+
+Extra property
+      ↓
+forbidNonWhitelisted: true
+      ↓
+❌ Throw error
+
+Together
+app.useGlobalPipes(
+  new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }),
+);
+
+👉 whitelist = remove extra fields
+👉 forbidNonWhitelisted = reject extra fields
+
+
+Important: whitelist works with class-validator decorators,
+ so normally your DTO properties should have validation decorators such as @IsString(), @IsInt(), etc.
+
+ --->
+ class-validator
+Definition: A TypeScript/NestJS library used to validate object data using decorators.
+
+Example:
+
+@IsString()
+name: string;
+
+@IsEmail()
+email: string;
+
+It checks whether incoming data is valid.
+
+note->So when we say class-validator validates data, it can check both the type and rules/constraints.
+
+@IsString()
+name: string;
+
+Checks: "Naeem" → ✅ string
+
+@IsEmail()
+email: string;
+
+Checks: "abc@gmail.com" → ✅ valid email format
+
+Remember:
+👉 Data = value
+👉 Data type = kind of value
+👉 Validation = checking whether the data follows the required rules
+
+
+class-transformer
+Definition: A library used to transform plain JavaScript/JSON objects into class instances and convert/transform data types.
+
+Example:
+
+@Type(() => Number)
+age: number;
+
+It can transform:
+
+"23" → 23
+Easy difference
+
+class-validator
+      ↓
+"Is this data valid?"
+
+class-transformer
+      ↓
+"Convert/transform this data into the required form."
+
+In NestJS, they are commonly used together with:
+ValidationPipe
+
+--->
+NestJS Pipes
+
+Definition: A Pipe is a class that processes data before it reaches the controller method.
+ It is mainly used for validation and transformation.
+
+Flow
+Request
+   ↓
+Pipe
+   ↓
+Controller
+
+Example: ParseIntPipe
+
+URL:
+
+/users/123
+@Get(':id')
+getUser(@Param('id', ParseIntPipe) id: number) {
+  return id;
+}
+
+The pipe converts:
+
+"123" → 123
+
+If the value cannot be converted to an integer, it returns an error.
+
+Two main jobs
+
+1. Validation
+Is the incoming data valid?
+
+2. Transformation
+Convert the incoming data into the required form.
+
+Common Built-in Pipes
+ValidationPipe
+ParseIntPipe
+ParseFloatPipe
+ParseBoolPipe
+ParseArrayPipe
+ParseUUIDPipe
+DefaultValuePipe
+ParseEnumPipe
+
+Easy difference
+class-validator
+   ↓
+Checks/validates data
+
+Pipe
+   ↓
+Processes data before controller
+   ├── Validate
+   └── Transform
+
+
+
+Custom Pipe in NestJS
+Definition: A Custom Pipe is a pipe that you create yourself to perform custom validation or transformation of incoming data.
+
+Basic Example
+import {
+  ArgumentMetadata,
+  Injectable,
+  PipeTransform,
+} from '@nestjs/common';
+
+@Injectable()
+export class MyPipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    return value;
+  }
+}
+
+
+Use it
+@Get(':id')
+getUser(
+  @Param('id', MyPipe) id: string
+) {
+  return id;
+}
+
+Example: Custom validation
+transform(value: any) {
+  if (value < 18) {
+    throw new BadRequestException('Age must be 18+');
+  }
+
+  return value;
+}
+
+Remember
+Built-in Pipe
+→ NestJS provides it
+
+Custom Pipe
+→ You create it for your own requirement
+
+Main method: transform() — it receives the input value and returns the processed value or throws an error.
+
+use "nest g pipe" for creating pipe template 
+
+Example:
+@Injectable()
+export class UppercasePipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    if (typeof value === 'string') {
+      return value.toUpperCase();
+    }
+    return value;
+  }
+}
+now in controller
+
+@Controller('myname')
+export class MynameController {
+  @Post('custom')
+  transformName(@Body('name', UppercasePipe) name: string) {
+    return { message: `${name}` };
+  }
+}
+
+
+--->
+NestJS Guards
+
+Definition: A Guard is a class that decides whether a request is allowed to continue to the controller or should be rejected.
+
+Flow
+Request
+   ↓
+Guard
+   ↓
+Allowed? ── No → ❌ Reject
+   ↓ Yes
+Controller
+
+Common Uses
+Authentication → Is the user logged in?
+Authorization → Does the user have permission?
+Roles → Is the user an admin/user?
+
+Basic Guard
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(context: ExecutionContext): boolean {
+    return true;
+  }
+}
+
+true → request continues
+false → request is rejected.
+
+Apply Guard
+@UseGuards(AuthGuard)
+@Get('profile')
+getProfile() {
+  return 'Profile';
+}
+
+Easy Difference
+Pipe
+ ↓
+Processes/validates data
+
+Guard
+ ↓
+Decides whether request is allowed
+
+In short:
+👉 Guard = Security gate that decides whether a request can access a route.
+
+
+Ex:
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class AuthGuard implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers['authorization'];
+    return authHeader === 'Bearer my-secret-token';
+  }
+}
+
+This is a custom authentication guard. Let's understand it line by line:
+
+@Injectable()
+export class AuthGuard implements CanActivate 
+
+@Injectable() → allows NestJS to manage this class.
+implements CanActivate → tells TypeScript that this guard must have a canActivate() method.
+canActivate()
+
+canActivate(
+  context: ExecutionContext,
+): boolean | Promise<boolean> | Observable<boolean> {}
+
+This method decides:
+
+true  → Allow request ✅
+false → Reject request ❌
+
+It can return:
+
+boolean
+Promise<boolean>
+Observable<boolean>
+
+
+Get the request
+const request = context.switchToHttp().getRequest();
+
+ExecutionContext contains information about the current request.
+
+ExecutionContext
+       ↓
+switchToHttp()
+       ↓
+getRequest()
+       ↓
+HTTP request object
+
+Now you can access:
+
+request.headers
+request.body
+request.params
+request.query
+
+Get Authorization Header
+const authHeader = request.headers['authorization'];
+
+For example, if the client sends:
+
+Authorization: Bearer my-secret-token
+
+then:
+
+authHeader
+// "Bearer my-secret-token"
+Check the token
+return authHeader === 'Bearer my-secret-token';
+
+If they match:
+
+true → Controller executes ✅
+
+Otherwise:
+
+false → Access denied ❌
+Complete flow
+Client
+  ↓
+Authorization: Bearer my-secret-token
+  ↓
+AuthGuard
+  ↓
+Read authorization header
+  ↓
+Compare token
+  ↓
+   ┌─────────────┐
+   │             │
+  true         false
+   ↓             ↓
+Controller     Reject
+
+Important: This is useful for learning how guards work, but a real application should not hard-code a secret token like this.
+ Real authentication usually uses JWT/session authentication.
+
+
+ ---->role based login
+ ---->
+ Definition:
+  An Exception Filter handles exceptions/errors thrown during request processing and
+  controls what response is sent back to the client.
+
+Flow
+Request
+   ↓
+Controller
+   ↓
+Error occurs
+   ↓
+Exception Filter
+   ↓
+Formatted Error Response
+
+Basic Example
+
+@Catch()
+export class HttpExceptionFilter implements ExceptionFilter {
+  catch(exception: HttpException, host: ArgumentsHost) {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse();
+    const status = exception.getStatus();
+    response.status(status).json({
+      statusCode: status,
+      message: exception.message,
+    });
+  }
+}
+
+
+@Catch()
+Tells NestJS that this class is an exception filter.
+
+You can also catch a specific exception:
+
+@Catch(NotFoundException)
+
+Apply Filter
+
+For a controller:
+@UseFilters(HttpExceptionFilter)
+@Controller('users')
+export class UsersController {}
+
+For the whole application:
+app.useGlobalFilters(new HttpExceptionFilter());
+
+Easy Difference
+Guard
+ ↓
+Can request continue?
+
+Pipe
+ ↓
+Is/process the input?
+
+Exception Filter
+ ↓
+An error happened → How should we respond?
+
+In short:
+👉 Exception Filter = Handles and formats errors/exceptions into HTTP responses.
+
+ex:
+This is a custom exception filter that catches HttpException and sends a custom error response.
+import {
+  Controller,
+  ParseIntPipe,
+  Param,
+  Get,
+  UseFilters,
+} from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/filters/http-exception/http-exception.filter';
+
+@Controller('exception')
+@UseFilters(HttpExceptionFilter)
+export class ExceptionController {
+  @Get('hello/:id')
+  getHello(@Param('id', ParseIntPipe) id: number) {
+    return { Message: `Your Id is ${id}` };
+  }
+}
+
+
+
+1. Imports
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
+ArgumentsHost → gives access to the current request/response context.
+Catch → decorator used to specify which exceptions to catch.
+ExceptionFilter → interface for creating an exception filter.
+HttpException → NestJS HTTP exception class.
+import { Request, Response } from 'express';
+
+These provide TypeScript types for Express request and response.
+
+2. @Catch(HttpException)
+@Catch(HttpException)
+
+Means:
+This filter will handle exceptions of type HttpException.
+
+For example:
+throw new NotFoundException('User not found');
+
+3. implements ExceptionFilter
+export class HttpExceptionFilter implements ExceptionFilter
+
+Tells TypeScript that this class follows NestJS's exception-filter structure.
+
+It must have:
+catch()
+
+4. catch()
+catch(exception: HttpException, host: ArgumentsHost)
+
+This method runs when a matching exception occurs.
+
+exception → the actual error
+host → information about the current execution/request
+5. Get HTTP context
+const ctx = host.switchToHttp();
+
+Changes the execution context to HTTP so you can access the request and response.
+
+6. Get Response
+const response = ctx.getResponse<Response>();
+
+Gets the Express response object.
+
+You can use it to send:
+response.status(...).json(...)
+
+7. Get Request
+const request = ctx.getRequest<Request>();
+
+Gets the current HTTP request.
+
+You can access:
+
+request.url
+request.body
+request.params
+request.query
+
+8. Get status code
+const status = exception.getStatus();
+
+For example:
+
+
+BadRequestException → 400
+UnauthorizedException → 401
+NotFoundException → 404
+
+9. Custom response
+response.status(status).json({
+  statusCode: status,
+  timestamp: new Date().toISOString(),
+  path: request.url,
+  message: exception.message,
+});
+
+The client receives something like:
+
+{
+  "statusCode": 404,
+  "timestamp": "2026-08-12T10:00:00.000Z",
+  "path": "/users/10",
+  "message": "User not found"
+}
+
+Overall flow
+Request
+   ↓
+Controller
+   ↓
+Exception occurs
+   ↓
+@Catch(HttpException)
+   ↓
+HttpExceptionFilter
+   ↓
+catch()
+   ↓
+Custom JSON response
+
+In short: Your filter catches HttpException, 
+gets the status + request URL + error message, and returns them in a consistent custom JSON response.
+
+---->
+Definition:
+ A Middleware is a function/class that executes before the request reaches the controller.
+ It can inspect or modify the request/response or perform tasks such as logging and authentication preprocessing.
+
+Flow
+Client Request
+      ↓
+  Middleware
+      ↓
+    Guard
+      ↓
+    Pipe
+      ↓
+ Controller
+      ↓
+  Response
+
+Basic Example
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class LoggerMiddleware implements NestMiddleware {
+  use(req: Request, res: Response, next: NextFunction) {
+    console.log(`${req.method}-[${req.url}]`);
+    next();
+  }
+}
+
+
+
+
+
+
+next();
+
+Tells NestJS:
+
+Continue to the next middleware/controller.
+If you don't call next(), the request can get stuck.
+
+Apply Middleware
+
+Usually inside a module:
+
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('users');
+      //.forRoutes('*') for all
+  }
+}
+
+This applies it to:
+
+/users
+
+Common Uses
+Logging
+Request modification
+Adding custom headers
+Request preprocessing
+Authentication preprocessing
+
+In short:
+👉 Middleware = code that runs between the incoming request and the controller.
+we write code inside this as we write in node express
+
+
+notes-->
+In NestJS, these four can be confusing because they all sit around your request. The easiest way is to remember their main question.
+
+Request
+   ↓
+Middleware
+   ↓
+Guards
+   ↓
+Interceptors
+   ↓
+Pipes
+   ↓
+Resolver / Controller
+   ↓
+Service
+1. Middleware — "Do something with the request"
+
+Use middleware when you want to process every incoming request or perform general request-level work.
+
+Example:
+
+@Injectable()
+export class LoggerMiddleware {
+  use(req, res, next) {
+    console.log(req.method, req.url);
+    next();
+  }
+}
+
+Use it for:
+
+Logging
+Request processing
+Adding information to req
+General request-level tasks
+
+Think:
+Middleware = request processing
+
+2. Guard — "Is this request allowed?"
+
+Use Guards for authentication and authorization.
+
+Example:
+
+@UseGuards(AuthGuard)
+@Query(() => User)
+profile() {
+  return this.userService.getProfile();
+}
+
+The Guard checks:
+
+JWT valid?
+   ↓
+Yes → continue
+No  → reject
+
+Authorization:
+
+@UseGuards(AuthGuard, RolesGuard)
+@Roles('ADMIN')
+deleteUser() {
+  // ...
+}
+
+Think:
+Guard = permission
+
+3. Pipe — "Is the input valid and in the correct type?"
+
+Use Pipes for validation and transformation.
+
+Example:
+
+@Mutation(() => User)
+createUser(
+  @Args('input', new ValidationPipe())
+  input: CreateUserInput,
+) {
+  return this.userService.createUser(input);
+}
+
+Suppose input requires:
+
+@IsEmail()
+email: string;
+
+User sends:
+
+"hello"
+
+Pipe can reject it because it's not a valid email.
+
+Pipes can also transform values:
+
+"10"
+ ↓
+10
+
+Think:
+
+Pipe = validate/transform input
+
+4. Interceptor — "Do something before/after the handler"
+
+Interceptors wrap around your Resolver/Controller.
+
+Example:
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+
+
+  intercept(context, next) {
+    console.log('Before');
+    return next.handle();
+  }
+}
+
+Conceptually:
+
+Request
+   ↓
+Interceptor
+   ↓
+Resolver
+   ↓
+Service
+   ↓
+Interceptor
+   ↓
+Response
+
+Use Interceptors for:
+
+Logging execution time
+Transforming responses
+Caching
+Adding common response behavior
+Measuring performance
+
+Think:
+
+Interceptor = wrap around execution
+
+---->
+
+---->
+In NestJS, lifecycle methods are special methods or Hook
+ that NestJS calls automatically at specific stages of your application's/module's life.
+ Application starts → initialize → run → application shuts down
+
+ | Lifecycle Hook              | When it runs                               | Common use                               |
+| --------------------------- | ------------------------------------------ | ---------------------------------------- |
+| `OnModuleInit`              | After a module's dependencies are resolved | Initialization logic                     |
+| `OnApplicationBootstrap`    | After all modules are initialized          | Start tasks after the whole app is ready |
+| `OnModuleDestroy`           | When a module is being destroyed           | Cleanup module resources                 |
+| `BeforeApplicationShutdown` | Before the application shuts down          | Prepare for shutdown                     |
+| `OnApplicationShutdown`     | When the application is shutting down      | Final cleanup                            |
+
+2. OnModuleInit
+Runs when the module has been initialized.
+
+import {
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class UserService implements OnModuleInit {
+  onModuleInit() {
+    console.log('UserService initialized');
+  }
+}
+
+When NestJS starts:
+
+NestJS starts
+    ↓
+UserService created
+    ↓
+onModuleInit()
+    ↓
+Application continues
+
+Async is also possible
+
+async onModuleInit() {
+  await this.loadSomething();
+}
+
+
+3. OnApplicationBootstrap
+This runs after all modules have been initialized.
+
+import {
+  Injectable,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class UserService
+  implements OnApplicationBootstrap {
+  onApplicationBootstrap() {
+    console.log('Application is ready');
+  }
+}
+
+The difference:
+
+OnModuleInit
+     ↓
+Individual module initialization
+
+
+OnApplicationBootstrap
+     ↓
+Whole application initialization completed
+
+Use this when your code needs other modules/services to already be initialized.
+
+4. OnModuleDestroy
+Runs when a module is being destroyed.
+
+import {
+  Injectable,
+  OnModuleDestroy,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class UserService implements OnModuleDestroy {
+
+
+  onModuleDestroy() {
+    console.log('UserService destroyed');
+  }
+}
+
+Useful for cleaning up things such as:
+
+Database connections
+WebSocket connections
+Timers
+Event listeners
+Other resources
+
+5. BeforeApplicationShutdown
+Runs before the application completely shuts down.
+
+import {
+  Injectable,
+  BeforeApplicationShutdown,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class AppService
+  implements BeforeApplicationShutdown {
+
+  beforeApplicationShutdown(signal?: string) {
+    console.log('Shutdown signal:', signal);
+  }
+}
+
+For example:
+
+Application running
+       ↓
+Shutdown signal
+       ↓
+beforeApplicationShutdown()
+       ↓
+Cleanup
+       ↓
+Application shuts down
+6. OnApplicationShutdown
+Runs when the application is shutting down.
+
+import {
+  Injectable,
+  OnApplicationShutdown,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class AppService
+  implements OnApplicationShutdown {
+
+
+  onApplicationShutdown(signal?: string) {
+    console.log('Application shutting down');
+  }
+}
+7. Complete Example
+
+You can implement multiple lifecycle hooks in one service:
+
+import {
+  Injectable,
+  OnModuleInit,
+  OnApplicationBootstrap,
+  OnModuleDestroy,
+  BeforeApplicationShutdown,
+  OnApplicationShutdown,
+} from '@nestjs/common';
+
+
+@Injectable()
+export class AppService
+  implements
+    OnModuleInit,
+    OnApplicationBootstrap,
+    OnModuleDestroy,
+    BeforeApplicationShutdown,
+    OnApplicationShutdown {
+
+
+  onModuleInit() {
+    console.log('1. Module initialized');
+  }
+
+
+  onApplicationBootstrap() {
+    console.log('2. Application bootstrapped');
+  }
+
+
+  onModuleDestroy() {
+    console.log('3. Module destroyed');
+  }
+
+
+  beforeApplicationShutdown(signal?: string) {
+    console.log('4. Before shutdown:', signal);
+  }
+
+
+  onApplicationShutdown(signal?: string) {
+    console.log('5. Application shutdown:', signal);
+  }
+}
+Easy way to remember
+
+The signal value is provided by NestJS/Node.js, not by you.
+Where does it come from?
+When your application receives an operating-system shutdown signal, Node.js receives something like:
+SIGINT
+SIGTERM
+
+app.enableShutdownHooks(),
+we need it if we want NestJS to receive OS shutdown signals and trigger shutdown lifecycle hooks.
+
+
+
+Startup
+onModuleInit()
+      ↓
+onApplicationBootstrap()
+      ↓
+Application running
+
+Shutdown
+onModuleDestroy()
+      ↓
+beforeApplicationShutdown()
+      ↓
+onApplicationShutdown()
+      ↓
+Application stopped
+
+Important: Lifecycle hooks are mainly for application/module initialization and cleanup. They are different
+ from request lifecycle features such as middleware → guards → interceptors → pipes → controller → response.
+
+
+----->
+NestJS Interceptor
+
+An Interceptor is a class that can run before and/or after a controller method.
+
+Think of it like a wrapper around your controller:
+
+Request
+   ↓
+Interceptor (before)
+   ↓
+Controller
+   ↓
+Interceptor (after)
+   ↓
+Response
+
+It is commonly used for:
+
+Logging
+Measuring execution time
+Transforming responses
+Adding extra data
+Handling/cache-related logic
+Working with RxJS streams
+
+
+1. Basic Interceptor
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
+
+
+import { Observable } from 'rxjs';
+
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    console.log('Before controller');
+    return next.handle();
+  }
+}
+
+The important part is:
+
+return next.handle();
+
+It means:
+
+Continue to the controller.
+
+2. Before and After Controller
+
+To execute something after the controller, use RxJS tap().
+
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
+
+
+import { Observable, tap } from 'rxjs';
+
+
+@Injectable()
+export class LoggingInterceptor implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    console.log('Before controller');
+    return next.handle().pipe(
+      tap(() => {
+        console.log('After controller');
+      }),
+    );
+  }
+}
+
+Flow:
+
+Request
+   ↓
+Before controller
+   ↓
+Controller executes
+   ↓
+After controller
+   ↓
+Response
+
+
+3. Applying Interceptor to Controller
+
+Use @UseInterceptors().
+
+import { Controller, Get, UseInterceptors } from '@nestjs/common';
+
+
+@Controller('users')
+@UseInterceptors(LoggingInterceptor)
+export class UserController {
+
+
+  @Get()
+  getUsers() {
+    return [
+      { id: 1, name: 'Naeem' },
+      { id: 2, name: 'Ali' },
+    ];
+  }
+}
+
+Now every route in this controller uses the interceptor.
+
+4. Apply to One Method
+
+Instead of the whole controller:
+
+@Controller('users')
+export class UserController {
+
+
+  @Get()
+  @UseInterceptors(LoggingInterceptor)
+  getUsers() {
+    return [];
+  }
+
+
+  @Get(':id')
+  getUser() {
+    return {};
+  }
+}
+
+Only:
+
+GET /users
+
+uses the interceptor.
+
+GET /users/:id does not.
+
+5. Global Interceptor
+You can apply an interceptor to the entire application.
+
+const app = await NestFactory.create(AppModule);
+
+app.useGlobalInterceptors(
+  new LoggingInterceptor(),
+);
+
+Now:
+
+All Controllers
+      ↓
+LoggingInterceptor
+      ↓
+Controller
+
+6. Very Important: ExecutionContext
+
+You will see this in almost every interceptor:
+
+intercept(
+  context: ExecutionContext,
+  next: CallHandler,
+)
+
+ExecutionContext gives you information about the current request/execution.
+
+For HTTP:
+const request = context.switchToHttp().getRequest();
+console.log(request.method);
+console.log(request.url);
+
+Example:
+
+intercept(context: ExecutionContext, next: CallHandler) {
+  const request = context.switchToHttp().getRequest();
+  console.log(request.method);
+  console.log(request.url);
+  return next.handle();
+}
+
+For GraphQL, you normally use the GraphQL execution context instead of treating it like a normal HTTP request.
+
+7. Response Transformation
+One of the most useful interceptor features is modifying the controller's response.
+Suppose controller returns:
+
+@Get()
+getUsers() {
+  return [
+    { id: 1, name: 'Naeem' },
+    { id: 2, name: 'Ali' },
+  ];
+}
+
+Interceptor:
+
+@Injectable()
+export class TransformInterceptor
+  implements NestInterceptor {
+
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ) {
+
+
+    return next.handle().pipe(
+      map(data => ({
+        success: true,
+        data,
+      })),
+    );
+  }
+}
+
+You'll need:
+
+import { map } from 'rxjs';
+
+The response becomes:
+
+{
+  success: true,
+  data: [
+    { id: 1, name: 'Naeem' },
+    { id: 2, name: 'Ali' }
+  ]
+}
+
+So:
+
+Controller
+    ↓
+[ users ]
+    ↓
+Interceptor
+    ↓
+{
+  success: true,
+  data: users
+}
+
+8. Measuring Execution Time
+
+A common real-world use:
+
+@Injectable()
+export class LoggingInterceptor
+  implements NestInterceptor {
+  intercept(context: ExecutionContext, next: CallHandler) {
+    const start = Date.now();
+    return next.handle().pipe(
+      tap(() => {
+        const time = Date.now() - start;
+        console.log(`Request took ${time}ms`);
+      }),
+    );
+  }
+}
+
+Example output:
+
+Request took 42ms
+
+This is useful for finding slow APIs.
+
+notes->
+What is .pipe()?
+
+next.handle() returns an Observable.
+returns the controller's result as an Observable.
+Think of it as a stream of the controller's result.
+
+.pipe() allows you to put RxJS operators on that stream:
+
+next.handle().pipe(
+  operator1,
+  operator2,
+  operator3,
+)
+
+Example:
+
+return next.handle().pipe(
+  map(...),
+  tap(...),
+);
+
+map() is an RxJS operator.
+
+import { map } from 'rxjs';
+
+It takes the value emitted by the Observable and transforms it into another value.
+
+Example:
+
+next.handle().pipe(
+  map(data => {
+    return {
+      success: true,
+      data,
+    };
+  }),
+);
+
+Suppose the controller returns:
+[
+  { id: 1, name: 'Naeem' },
+  { id: 2, name: 'Ali' }
+]
+
+map() receives that value:
+data = [
+  { id: 1, name: 'Naeem' },
+  { id: 2, name: 'Ali' }
+]
+
+Then it returns:
+{
+  success: true,
+  data: [
+    { id: 1, name: 'Naeem' },
+    { id: 2, name: 'Ali' }
+  ]
+}
+
+
+tap() in RxJS
+tap() is used to do something with a value without changing that value.
+Example:
+
+return next.handle().pipe(
+  tap(data => {
+    console.log(data);
+  }),
+);
+
+
+notes->Observable = a way to handle a value that may come now or later.
+
+
+Observable as a TypeScript type, the simplest example is:
+const data: Observable<string>
+This means:
+data is an Observable that will emit a string.
+
+Examples: 
+
+Observable<string>    // emits string
+Observable<number>    // emits number
+Observable<User>      // emits User
+Observable<User[]>    // emits array of Users
+
+Observable<string> means:
+A value of type string can be produced/emitted over time(समय के साथ / समय-समय पर).
+
+
+Five Exaple of interceptor:
+1. Request Transformation
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class RequestTransformInterceptor
+  implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const request = context.switchToHttp().getRequest();
+    request.body.name = request.body.name?.trim();
+    return next.handle();
+  }
+}
+
+3. Response Transformation
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable()
+export class ResponseTransformInterceptor
+  implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    return next.handle().pipe(
+      map((data) => {
+        return {
+          success: true,
+          data,
+        };
+      }),
+    );
+  }
+}
+
+
+4. Logging
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class LoggingInterceptor
+  implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const request = context.switchToHttp().getRequest();
+
+    console.log('Method:', request.method);
+    console.log('URL:', request.url);
+
+    return next.handle().pipe(
+      tap(() => {
+        console.log('Request completed');
+      }),
+    );
+  }
+}
+//just knowing whether the request completed or not
+
+5. Timing
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class TimingInterceptor
+  implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const startTime = Date.now();
+
+    return next.handle().pipe(
+      tap(() => {
+        const endTime = Date.now();
+
+        console.log(
+          `Execution Time: ${endTime - startTime}ms`,
+        );
+      }),
+    );
+  }
+}
+
+
+6. Response Mapping
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable()
+export class ResponseMappingInterceptor
+  implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    return next.handle().pipe(
+      map((data) => ({
+        status: 'success',
+        message: 'Data fetched successfully',
+        result: data,
+      })),
+    );
+  }
+}
+
+
+
+
+Advanced Use Cases of NestJS Interceptors
+Once you understand logging, timing, and response mapping,
+ interceptors become useful for cross-cutting concerns that apply to many controllers/resolvers.
+
+1. Caching with Interceptor
+Cache expensive responses so you don't query the database every time.
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class CacheInterceptor implements NestInterceptor {
+  private cache = new Map<string, any>();
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    const request = context.switchToHttp().getRequest();
+
+    const key = request.url;
+
+    // Check cache
+    if (this.cache.has(key)) {
+      console.log('Returning from cache');
+      return of(this.cache.get(key));
+    }
+
+    // Execute controller
+    return next.handle().pipe(
+      tap((data) => {
+        console.log('Saving response to cache');
+        this.cache.set(key, data);
+      }),
+
+    );
+  }
+}
+
+Flow:
+
+Request
+   ↓
+Interceptor
+   ↓
+Cache exists?
+   ├── YES → Return cache
+   │
+   └── NO
+        ↓
+     Controller
+        ↓
+     Database
+        ↓
+     Save response
+        ↓
+     Client
+
+In production, you'd normally use Redis instead of an in-memory Map.
+
+2. Automatic Response Wrapper
+Instead of writing this in every controller:
+
+return {
+  success: true,
+  message: 'Users fetched',
+  data: users,
+};
+
+Use an interceptor:
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable()
+export class ResponseInterceptor
+  implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    return next.handle().pipe(
+      map((data) => ({
+        success: true,
+        timestamp: new Date().toISOString(),
+        data,
+      })),
+
+    );
+  }
+}
+
+Controller stays clean:
+@Get('users')
+getUsers() {
+  return this.userService.findAll();
+}
+
+or resolver
+@Mutation('users')
+getUsers() {
+  return this.userService.findAll();
+}
+
+
+Response:
+{
+  "success": true,
+  "timestamp": "2026-08-27T12:00:00.000Z",
+  "data": [
+    {
+      "id": 1,
+      "name": "Naeem"
+    }
+  ]
+}
+
+3. Request ID / Correlation ID
+Very useful in production.
+Every request gets a unique ID.
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  NestInterceptor,
+} from '@nestjs/common';
+
+import { randomUUID } from 'crypto';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class RequestIdInterceptor
+  implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const request =
+      context.switchToHttp().getRequest();
+
+    const response =
+      context.switchToHttp().getResponse();
+
+    const requestId =
+      randomUUID();
+
+    request.requestId = requestId;
+
+    response.setHeader(
+      'X-Request-ID',
+      requestId,
+    );
+
+    console.log(
+      `Request ${requestId} started`,
+    );
+
+    return next.handle();
+  }
+}
+
+Now your logs can show:
+
+Request 7c8f... started
+Request 7c8f... UserService called
+Request 7c8f... Database query
+Request 7c8f... completed
+
+This is extremely useful when debugging distributed applications.
+
+4. Exception Logging
+An interceptor can observe errors using RxJS catchError().
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+@Injectable()
+export class ErrorLoggingInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    return next.handle().pipe(
+
+      catchError((error) => {
+        console.error(
+          'Error:',
+          error.message,
+        );
+        console.error(
+          'Stack:',
+          error.stack,
+        );
+        return throwError(() => error);
+      }),
+
+    );
+  }
+}
+
+Important:
+return throwError(() => error);
+
+means:
+Log the error, but don't swallow it. Let Nest's exception handling continue.
+
+5. Measuring Database/Service Performance
+Suppose your handler performs an expensive operation.
+
+return next.handle().pipe(
+
+  tap(() => {
+    console.log(
+      `Total execution: ${Date.now() - start}ms`,
+    );
+  }),
+
+);
+
+You can extend this to monitor slow requests:
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
+@Injectable()
+export class SlowRequestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const start = Date.now();
+
+    return next.handle().pipe(
+
+      tap(() => {
+        const duration =
+          Date.now() - start;
+        if (duration > 1000) {
+          console.warn(
+            `Slow request: ${duration}ms`,
+          );
+        }
+
+      }),
+
+    );
+  }
+}
+
+This is useful for finding performance problems.
+
+6. Different Interceptor for GraphQL
+
+Since you're using NestJS + GraphQL, you can access GraphQL context.
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+
+import {
+  GqlExecutionContext,
+} from '@nestjs/graphql';
+
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class GraphQLInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    const gqlContext =
+      GqlExecutionContext.create(context);
+
+    const info =
+      gqlContext.getInfo();
+
+    console.log(
+      'Resolver:',
+      info.fieldName,
+    );
+    return next.handle();
+  }
+}
+
+For example, if the client executes:
+
+query {
+  users {
+    id
+    name
+  }
+}
+
+You can get:
+Resolver: users
+
+This is particularly useful for GraphQL logging and monitoring.
+
+7. Role-Based Response Filtering
+You can modify the response based on the authenticated user.
+
+Suppose:
+
+request.user = {
+  id: 1,
+  role: 'USER'
+};
+
+Interceptor:
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+@Injectable()
+export class UserResponseInterceptor
+  implements NestInterceptor {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+    const request =
+      context.switchToHttp().getRequest();
+    const user = request.user;
+
+    return next.handle().pipe(
+      map((data) => {
+        if (user?.role === 'USER') {
+          delete data.password;
+        }
+
+        return data;
+      }),
+
+    );
+  }
+}
+
+However, don't rely on this as your main authorization/security mechanism.
+ Use guards and proper DTO/serialization strategies for security-sensitive data.
+
+8. Timeout Interceptor
+You can prevent a request from hanging indefinitely.
+
+import {
+  CallHandler,
+  ExecutionContext,
+  Injectable,
+  RequestTimeoutException,
+} from '@nestjs/common';
+
+import { Observable, throwError } from 'rxjs';
+import {
+  catchError,
+  timeout,
+} from 'rxjs/operators';
+
+@Injectable()
+export class TimeoutInterceptor
+  implements NestInterceptor {
+
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<any> {
+
+    return next.handle().pipe(
+      timeout(5000),
+      catchError((error) => {
+        if (error.name === 'TimeoutError') {
+          return throwError(
+            () =>
+              new RequestTimeoutException(
+                'Request took too long',
+              ),
+          );
+
+        }
+        return throwError(() => error);
+      }),
+
+    );
+  }
+}
+
+Flow:
+
+Request
+   ↓
+Interceptor
+   ↓
+Controller/Resolver
+   ↓
+Service
+   ↓
+5 seconds?
+   ├── Finished → Response
+   │
+   └── Not finished → TimeoutException
+
+
+9. Combining Multiple Responsibilities
+In a real application, you might have separate interceptors:
+
+                    Request
+                       ↓
+              RequestIdInterceptor
+                       ↓
+               LoggingInterceptor
+                       ↓
+               CacheInterceptor
+                       ↓
+             Controller/Resolver
+                       ↓
+                Service
+                       ↓
+                 Database
+                       ↓
+             ResponseInterceptor
+                       ↓
+                    Client
+
+Don't create one giant interceptor containing logging + caching + authentication + response transformation + everything else.
+Prefer:
+
+LoggingInterceptor
+CacheInterceptor
+ResponseInterceptor
+RequestIdInterceptor
+TimeoutInterceptor
+
+Each interceptor should have one clear responsibility.
+
+10. The Most Important Advanced Pattern
+The most important concept to understand is this:
+
+return next.handle().pipe(
+  map(...),
+  tap(...),
+  catchError(...),
+);
+
+Think of it as a pipeline:
+
+                 next.handle()
+                      ↓
+                  Controller
+                      ↓
+                    data
+                      ↓
+                    map()
+                      ↓
+                transformed
+                      ↓
+                    tap()
+                      ↓
+                catchError()
+                      ↓
+                   response
+What each operator does
+map()
+→ Change the data
+
+tap()
+→ Do something without changing the data
+
+catchError()
+→ Observe/handle errors
+
+timeout()
+→ Limit execution time
+
+of()
+→ Return a value without executing handler
+
+
+
+
+important:
+If you are using GraphQL Resolver instead of a REST Controller, an interceptor works in the same basic way.
+
+GraphQL Request
+      ↓
+Interceptor (before)
+      ↓
+Resolver
+      ↓
+Interceptor (after)
+      ↓
+GraphQL Response
+
+REST → interceptor wraps the controller handler
+GraphQL → interceptor wraps the resolver handler
+
+
+
+---->
+NESTJS — ENVIRONMENT VARIABLES
+==============================
+
+Environment variables are used to store configuration values
+outside the source code.
+
+Examples:
+- Database username
+- Database password
+- Database host
+- Port
+- JWT secret
+- API keys
+
+
+1. INSTALL CONFIG PACKAGE
+=========================
+npm install @nestjs/config
+
+2. CREATE .env FILE
+===================
+
+Create .env in the root of the project:
+
+.env
+
+PORT=3000
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=12345
+DB_DATABASE=blog
+
+JWT_SECRET=mysecret
+
+
+3. ADD .env TO .gitignore
+=========================
+
+.env
+
+
+4. CONFIGURE ConfigModule
+==========================
+
+app.module.ts
+
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
+@Module({
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
+})
+export class AppModule {}
+
+
+isGlobal: true
+---------------
+It means ConfigService can be used throughout the application
+without importing ConfigModule in every module.
+
+
+5. ACCESS ENVIRONMENT VARIABLES
+===============================
+
+Using ConfigService:
+
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
+@Injectable()
+export class AppService {
+  constructor(
+    private configService: ConfigService
+  ) {}
+  getPort() {
+    return this.configService.get<string>('PORT');
+  }
+}
+
+
+6. get()
+========
+
+configService.get<string>('PORT');
+
+             ↓
+        variable name
+
+             ↓
+           .env
+
+PORT=3000
+
+             ↓
+         returns
+
+"3000"
+
+
+7. USING process.env
+====================
+
+You can also directly access environment variables:
+
+console.log(process.env.PORT);
+
+console.log(process.env.DB_HOST);
+
+console.log(process.env.JWT_SECRET);
+
+
+But in NestJS, ConfigService is generally preferred.
+
+
+8. TYPE OF VALUE
+================
+
+.env values are initially strings.
+
+PORT=3000
+
+process.env.PORT
+        ↓
+      "3000"
+
+It is a STRING, not a number.
+
+
+Using ConfigService:
+
+configService.get<number>('DB_PORT');
+
+
+9. TYPEORM + MYSQL EXAMPLE
+===========================
+
+import { ConfigService } from '@nestjs/config';
+const configService = new ConfigService();
+
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: configService.get<string>('DB_HOST'),
+  port: configService.get<number>('DB_PORT'),
+  username: configService.get<string>('DB_USERNAME'),
+  password: configService.get<string>('DB_PASSWORD'),
+  database: configService.get<string>('DB_DATABASE'),
+  entities: [User],
+  synchronize: true,
+});
+
+
+10. COMPLETE FLOW
+=================
+
+.env
+  ↓
+ConfigModule.forRoot()
+  ↓
+ConfigService
+  ↓
+Your Service / Controller / TypeORM
+  ↓
+Application
+
+
+11. WHY USE ENVIRONMENT VARIABLES?
+==================================
+
+Without .env:
+
+password: '12345'
+
+Problem:
+- Password is visible in source code
+- Difficult to change
+- Dangerous when pushing code to GitHub
+
+
+With .env:
+DB_PASSWORD=12345
+
+Code:
+configService.get<string>('DB_PASSWORD')
+
+
+So configuration is separated from application code.
+
+
+IMPORTANT
+=========
+
+.env
+→ Stores configuration values
+
+ConfigModule
+→ Loads .env
+
+ConfigService
+→ Reads values from .env
+
+process.env
+→ Node.js's direct way to access environment variables
+
+
+
+
+
+----->
+DEPENDENCY INJECTION (DI) IN NESTJS
+===================================
+
+1. WHAT IS A DEPENDENCY?
+========================
+
+A dependency is something a class needs to do its work.
+
+Example:
+
+class UserService {
+  constructor(private database: DatabaseService) {}
+}
+
+Here:
+
+UserService
+    ↓
+needs
+    ↓
+DatabaseService
+
+DatabaseService is a DEPENDENCY of UserService.
+
+
+2. WHAT IS DEPENDENCY INJECTION?
+================================
+
+Dependency Injection means:
+
+Instead of creating the required object yourself,
+NestJS creates it and gives it to your class.
+
+Without DI:
+
+class UserService {
+
+  private database = new DatabaseService();
+
+}
+
+
+With DI:
+
+class UserService {
+
+  constructor(
+    private database: DatabaseService
+  ) {}
+
+}
+
+NestJS creates DatabaseService
+and injects it into UserService.
+
+
+3. WHY DO WE NEED DI?
+=====================
+
+Without DI:
+
+class UserService {
+
+  private database = new DatabaseService();
+
+}
+
+Problems:
+
+- Class creates its own dependency
+- Harder to test
+- Tightly coupled
+- Difficult to replace dependency
+
+
+With DI:
+
+class UserService {
+
+  constructor(
+    private database: DatabaseService
+  ) {}
+
+}
+
+Benefits:
+
+- Loose coupling
+- Easy testing
+- Easy replacement
+- NestJS manages dependencies
+
+
+4. SIMPLE REAL-LIFE EXAMPLE
+===========================
+
+Imagine:
+
+Car needs Engine.
+
+Car
+ ↓
+needs
+ ↓
+Engine
+
+Instead of Car creating Engine itself:
+
+class Car {
+  engine = new Engine();
+}
+
+We let someone provide Engine:
+
+class Car {
+  constructor(private engine: Engine) {}
+}
+
+NestJS acts as the system that provides Engine.
+
+
+5. NESTJS EXAMPLE
+=================
+
+database.service.ts
+
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
+export class DatabaseService {
+
+  findUsers() {
+    return ['Ali', 'Ahmed'];
+  }
+
+}
+
+
+user.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { DatabaseService } from './database.service';
+
+@Injectable()
+export class UserService {
+
+  constructor(
+    private databaseService: DatabaseService
+  ) {}
+
+  getUsers() {
+    return this.databaseService.findUsers();
+  }
+
+}
+
+
+Here:
+
+UserService
+    ↓
+depends on
+    ↓
+DatabaseService
+
+NestJS injects DatabaseService into UserService.
+
+
+6. WHAT DOES @Injectable() DO?
+==============================
+
+@Injectable()
+export class DatabaseService {}
+
+@Injectable() tells NestJS:
+
+"This class can be managed and injected
+by the NestJS Dependency Injection system."
+
+
+IMPORTANT:
+
+@Injectable()
+does NOT mean:
+
+"Create an object immediately."
+
+It makes the class available for
+NestJS's dependency injection system.
+
+
+7. PROVIDER
+===========
+
+A provider is something NestJS can create
+and inject.
+
+Most commonly:
+
+@Injectable()
+export class UserService {}
+
+Services are providers.
+
+Other things can also be providers:
+
+- Services
+- Factories
+- Values
+- Classes
+- Custom providers
+
+
+8. REGISTERING A PROVIDER
+=========================
+
+app.module.ts
+
+@Module({
+  providers: [
+    UserService,
+    DatabaseService
+  ]
+})
+export class AppModule {}
+
+
+This tells NestJS:
+
+UserService → provider
+DatabaseService → provider
+
+
+9. HOW NESTJS INJECTS IT
+========================
+
+@Module({
+  providers: [
+    UserService,
+    DatabaseService
+  ]
+})
+
+             ↓
+
+NestJS sees:
+
+UserService needs DatabaseService
+
+             ↓
+
+Finds DatabaseService
+in providers
+
+             ↓
+
+Creates DatabaseService
+
+             ↓
+
+Passes it to UserService
+
+             ↓
+
+UserService receives it
+
+
+10. CONTROLLER + SERVICE
+========================
+
+user.controller.ts
+
+@Controller('users')
+export class UserController {
+
+  constructor(
+    private userService: UserService
+  ) {}
+
+  @Get()
+  getUsers() {
+    return this.userService.getUsers();
+  }
+
+}
+
+
+Flow:
+
+HTTP Request
+     ↓
+UserController
+     ↓
+UserService
+     ↓
+DatabaseService
+     ↓
+Database
+
+
+11. MODULE EXAMPLE
+==================
+
+@Module({
+  controllers: [UserController],
+
+  providers: [
+    UserService,
+    DatabaseService
+  ]
+})
+export class UserModule {}
+
+
+NestJS now knows:
+
+UserController
+      ↓
+UserService
+      ↓
+DatabaseService
+
+
+12. CONSTRUCTOR INJECTION
+=========================
+
+The most common DI method in NestJS is
+constructor injection.
+
+constructor(
+  private userService: UserService
+) {}
+
+
+NestJS sees the type:
+
+UserService
+
+and injects the corresponding provider.
+
+
+13. PRIVATE + CONSTRUCTOR
+=========================
+
+Instead of:
+
+private userService: UserService;
+
+constructor(userService: UserService) {
+  this.userService = userService;
+}
+
+
+We write:
+
+constructor(
+  private userService: UserService
+) {}
+
+
+This is TypeScript shorthand.
+
+It automatically:
+
+- Creates a property
+- Assigns the parameter
+- Makes it private
+
+
+14. MULTIPLE DEPENDENCIES
+=========================
+
+class UserService {
+
+  constructor(
+    private databaseService: DatabaseService,
+    private emailService: EmailService,
+    private loggerService: LoggerService
+  ) {}
+
+}
+
+
+Dependency tree:
+
+UserService
+   ├── DatabaseService
+   ├── EmailService
+   └── LoggerService
+
+
+NestJS injects all three.
+
+
+15. DEPENDENCY CHAIN
+====================
+
+Example:
+
+UserController
+      ↓
+UserService
+      ↓
+DatabaseService
+      ↓
+ConnectionService
+
+
+NestJS resolves the entire chain.
+
+You don't manually write:
+
+new UserService()
+
+new DatabaseService()
+
+new ConnectionService()
+
+
+NestJS handles it.
+
+
+16. PROVIDER SCOPE
+==================
+
+By default, NestJS providers are SINGLETONS.
+That means NestJS normally creates one instance
+and reuses it.
+
+Example:
+
+UserService
+     ↓
+same instance
+     ↓
+throughout the module/application context
+
+
+17. CUSTOM PROVIDER
+===================
+
+You don't always have to provide a class directly.
+
+Example:
+
+{
+  provide: 'DATABASE',
+  useValue: database
+}
+
+
+Now:
+
+@Inject('DATABASE')
+private database: any
+
+
+Here:
+
+'DATABASE'
+    ↓
+TOKEN
+
+database
+    ↓
+VALUE
+
+
+18. CUSTOM PROVIDER WITH useClass
+=================================
+
+{
+  provide: 'DATABASE',
+  useClass: MySQLDatabase
+}
+
+
+Meaning:
+When someone requests:
+'DATABASE'
+
+NestJS should create:
+MySQLDatabase
+
+
+Means:
+Whenever NestJS sees @Inject('DATABASE'), it should create and provide an instance of MySQLDatabase.
+
+Example
+@Injectable()
+export class MySQLDatabase {
+  connect() {
+    return 'Connected to MySQL';
+  }
+}
+
+Register it:
+
+@Module({
+  providers: [
+    {
+      provide: 'DATABASE',
+      useClass: MySQLDatabase,
+    },
+  ],
+})
+export class AppModule {}
+
+Use it:
+@Injectable()
+export class UserService {
+  constructor(
+    @Inject('DATABASE')
+    private database: MySQLDatabase,
+  ) {}
+
+
+}
+Simple flow
+@Inject('DATABASE')
+        ↓
+   NestJS searches
+
+   'DATABASE'
+        ↓
+   useClass: MySQLDatabase
+        ↓
+ creates MySQLDatabase
+        ↓
+   injects it
+
+Key point: provide = token/name, useClass = class NestJS should instantiate
+
+
+19. useValue
+============
+useClass → NestJS creates an instance
+useValue → NestJS uses the value you provide
+
+
+{
+  provide: 'CONFIG',
+  useValue: {
+    port: 3000,
+    environment: 'development'
+  }
+}
+
+//use:
+constructor(
+  @Inject('CONFIG') private config: any,
+) {}
+
+
+//now config=useValue
+
+20. useClass
+============
+Used when you want NestJS to use a specific class.
+
+{
+  provide: 'DATABASE',
+  useClass: MySQLDatabase
+}
+
+
+21. useFactory
+==============
+
+Used when the dependency needs to be created
+using a function.
+
+{
+  provide: 'DATABASE',
+  useFactory: () => {
+    return createDatabase();
+  }
+}
+
+useFactory is used when NestJS should call a function to create the dependency.
+
+{
+  provide: 'DATABASE',
+  useFactory: () => {
+    return createDatabase();
+  }
+}
+
+Meaning:
+
+'DATABASE'
+    ↓
+call useFactory()
+    ↓
+createDatabase()
+    ↓
+returned object
+    ↓
+inject into service
+
+Then:
+constructor(
+  @Inject('DATABASE') private database: any
+) {}
+
+database receives the value returned by createDatabase()
+
+Main difference
+useValue   → already have the value
+useClass   → NestJS creates a class instance
+useFactory → function creates the value
+
+Important: useFactory becomes especially useful when you need environment variables or other dependencies to create the value.
+
+
+22. useExisting
+===============
+
+Used when you want to use an already registered
+provider instead of creating another instance.
+
+useExisting means: use the same instance of an already registered provider.
+
+{
+  provide: 'LOGGER',
+  useExisting: LoggerService
+}
+
+Suppose:
+
+providers: [
+  LoggerService,
+  {
+    provide: 'LOGGER',
+    useExisting: LoggerService,
+  },
+]
+
+Now both refer to the same instance:
+@Inject('LOGGER')
+logger
+
+and
+constructor(private loggerService: LoggerService) {}
+
+
+23. @Inject()
+===========
+
+For normal class injection:
+
+constructor(
+  private userService: UserService
+) {}
+
+
+For custom token:
+
+constructor(
+  @Inject('DATABASE')
+  private database: any
+) {}
+
+
+@Inject() tells NestJS exactly which
+dependency/token to inject.
+
+
+24. TOKEN
+=========
+
+A token is the identifier NestJS uses
+to find a dependency.
+
+Example:
+
+{
+  provide: 'DATABASE',
+  useClass: MySQLDatabase
+}
+
+'DATABASE'
+    ↓
+  TOKEN
+
+MySQLDatabase
+    ↓
+ IMPLEMENTATION
+
+
+25. INTERFACE + DI
+=================
+
+TypeScript interfaces disappear at runtime.
+Example:
+
+interface Database {
+  findUsers(): any[];
+}
+
+
+You cannot normally do:
+
+constructor(
+  private database: Database
+) {}
+
+
+because NestJS cannot use the interface
+as a runtime injection token.
+
+
+Instead:
+
+{
+  provide: 'DATABASE',
+  useClass: MySQLDatabase
+}
+
+
+Then:
+
+constructor(
+  @Inject('DATABASE')
+  private database: Database
+) {}
+
+
+26. DI WITH INTERFACE
+=====================
+
+interface Database {
+  findUsers(): any[];
+}
+
+
+class MySQLDatabase implements Database {
+
+  findUsers() {
+    return [];
+  }
+
+}
+
+
+Provider:
+{
+  provide: 'DATABASE',
+  useClass: MySQLDatabase
+}
+
+
+Injection:
+
+constructor(
+  @Inject('DATABASE')
+  private database: Database
+) {}
+
+
+Now:
+
+UserService
+     ↓
+'DATABASE'
+     ↓
+MySQLDatabase
+
+
+27. MODULE EXPORTS
+==================
+
+A provider registered inside one module
+is normally available only in that module.
+
+Example:
+
+@Module({
+  providers: [UserService],
+  exports: [UserService]
+})
+export class UserModule {}
+
+
+exports means:
+"Other modules are allowed to use UserService."
+
+
+28. IMPORTING MODULE
+====================
+
+Another module can import UserModule:
+@Module({
+  imports: [UserModule]
+})
+export class AppModule {}
+
+
+Now exported UserService can be injected
+where available.
+
+
+29. @Global()
+============
+
+A module can be made global:
+
+@Global()
+@Module({
+  providers: [DatabaseService],
+  exports: [DatabaseService]
+})
+export class DatabaseModule {}
+
+
+Then other modules don't need to import
+DatabaseModule individually.
+
+
+30. DI ERROR
+============
+
+If you see:
+Nest can't resolve dependencies of UserService
+It usually means NestJS cannot find
+one of UserService's dependencies.
+
+Example:
+UserService needs:
+DatabaseService
+but DatabaseService was not registered.
+Fix:
+
+@Module({
+  providers: [
+    UserService,
+    DatabaseService
+  ]
+})
+
+
+31. COMPLETE EXAMPLE
+====================
+
+database.service.ts
+
+@Injectable()
+export class DatabaseService {
+
+  findUsers() {
+    return ['Ali', 'Ahmed'];
+  }
+
+}
+
+
+user.service.ts
+
+@Injectable()
+export class UserService {
+
+  constructor(
+    private databaseService: DatabaseService
+  ) {}
+
+  getUsers() {
+    return this.databaseService.findUsers();
+  }
+
+}
+
+
+user.controller.ts
+
+@Controller('users')
+export class UserController {
+
+  constructor(
+    private userService: UserService
+  ) {}
+
+  @Get()
+  getUsers() {
+    return this.userService.getUsers();
+  }
+
+}
+
+
+user.module.ts
+
+@Module({
+  controllers: [UserController],
+
+  providers: [
+    UserService,
+    DatabaseService
+  ]
+})
+export class UserModule {}
+
+
+FLOW:
+
+Request
+   ↓
+Controller
+   ↓
+UserService
+   ↓
+DatabaseService
+   ↓
+Data
+
+
+32. THE MOST IMPORTANT CONCEPT
+==============================
+
+DI =
+
+"You tell NestJS WHAT your class needs,
+and NestJS creates/provides it for you."
+
+
+Without DI:
+UserService
+   ↓
+new DatabaseService()
+
+
+With DI:
+
+UserService
+   ↓
+"Give me DatabaseService"
+
+NestJS
+   ↓
+creates DatabaseService
+   ↓
+injects it
+
+
+33. FOUR TERMS TO REMEMBER
+==========================
+
+DEPENDENCY
+→ Something a class needs.
+
+PROVIDER
+→ Something NestJS can create/provide.
+
+INJECTION
+→ Giving the dependency to the class.
+
+DEPENDENCY INJECTION
+→ NestJS automatically provides the
+  dependencies a class needs.
+
+
+34. FINAL MEMORY TRICK
+=====================
+
+@Injectable()
+     ↓
+"This class can be a provider"
+
+providers: []
+     ↓
+"Register this provider with NestJS"
+
+constructor(...)
+     ↓
+"My class needs this dependency"
+
+@Inject(...)
+     ↓
+"Inject this specific token"
+
+exports: []
+     ↓
+"Make this provider available to
+other modules"
+
+imports: []
+     ↓
+"Use providers exported by another module"
+
+---->
+| Situation                            | Use             |
+| ------------------------------------ | --------------- |
+| Receiving data from GraphQL frontend | `@InputType()`  |
+| Service method parameters            | DTO/type        |
+| Database structure                   | Entity          |
+| GraphQL response                     | `@ObjectType()` |
+
+
+--->The module that owns a service exports it; the module that wants to use it imports the owning module.
+
+| Exception                      | Use                             |
+| ------------------------------ | ------------------------------- |
+| `BadRequestException`          | Invalid input                   |
+| `UnauthorizedException`        | Login/JWT authentication failed |
+| `ForbiddenException`           | User doesn't have permission    |
+| `NotFoundException`            | Resource doesn't exist          |
+| `ConflictException`            | Duplicate username/email        |
+| `InternalServerErrorException` | Unexpected server error         |
+
+
+
+---->
+========================================================
+NESTJS + GRAPHQL ERROR HANDLING
+========================================================
+
+1. NORMAL NESTJS EXCEPTIONS
+===========================
+
+You can throw built-in exceptions from Resolver/Service:
+
+throw new NotFoundException('User not found');
+
+throw new UnauthorizedException('Invalid credentials');
+
+throw new BadRequestException('Invalid input');
+
+throw new ForbiddenException('Access denied');
+
+throw new ConflictException('Username already exists');
+
+
+Common exceptions:
+
+NotFoundException
+    → Resource does not exist
+    → 404
+
+BadRequestException
+    → Invalid request/input
+    → 400
+
+UnauthorizedException
+    → User is not authenticated
+    → 401
+
+ForbiddenException
+    → User does not have permission
+    → 403
+
+ConflictException
+    → Duplicate/conflicting data
+    → 409
+
+
+========================================================
+2. EXCEPTION FILTER
+========================================================
+
+Exception Filter is used to catch exceptions and customize
+how they are handled.
+
+Basic structure:
+
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
+
+@Catch(HttpException)
+export class FiltersFilter implements ExceptionFilter {
+
+  catch(exception: HttpException, host: ArgumentsHost) {
+
+    const res = host.switchToHttp().getResponse();
+
+    const status = exception.getStatus();
+
+    res.status(status).json({
+      statusCode: status,
+      message: exception.getResponse(),
+      timestamp: new Date().toISOString(),
+    });
+
+  }
+}
+
+res is used for rest response not graphql response
+
+
+========================================================
+3. @Catch()
+========================================================
+
+@Catch(HttpException)
+
+→ Catches only HttpException and its subclasses.
+
+Examples:
+
+NotFoundException
+BadRequestException
+UnauthorizedException
+ForbiddenException
+ConflictException
+
+
+@Catch()
+
+→ Catches all exceptions.
+
+Example:
+
+@Catch()
+export class FiltersFilter implements ExceptionFilter {
+
+  catch(exception: unknown, host: ArgumentsHost) {
+
+  }
+
+}
+
+
+========================================================
+4. WHY exception: unknown?
+========================================================
+
+If we write:
+
+catch(exception: unknown, host: ArgumentsHost)
+
+TypeScript does NOT know what type exception is.
+
+Therefore this is not directly allowed:
+
+exception.getStatus();
+
+
+Because unknown may be anything.
+
+If we specifically catch HttpException:
+
+@Catch(HttpException)
+
+catch(exception: HttpException, host: ArgumentsHost)
+
+Now this is allowed:
+
+exception.getStatus();
+
+
+========================================================
+5. ArgumentsHost
+========================================================
+
+  ExceptionFilter receives:
+
+  catch(exception, host)
+
+
+  ArgumentsHost gives information about the context
+  where the exception happened.
+
+  It can represent:
+
+  HTTP
+  GraphQL
+  WebSocket
+  RPC
+
+
+For normal HTTP:
+
+const response = host
+  .switchToHttp()
+  .getResponse();
+
+
+This gives the HTTP response object.
+
+
+========================================================
+6. IMPORTANT: HTTP vs GRAPHQL
+========================================================
+
+HTTP / REST:
+
+Exception
+   ↓
+ExceptionFilter
+   ↓
+res.status().json()
+
+
+GraphQL:
+
+Exception
+   ↓
+GraphQL error handling
+   ↓
+GraphQL response
+   ↓
+{
+  "errors": [...]
+}
+
+
+Therefore:
+
+host.switchToHttp().getResponse()
+
+is mainly for HTTP/REST.
+
+It is NOT the normal way to format GraphQL errors.
+
+
+========================================================
+7. GqlExecutionContext
+========================================================
+
+GqlExecutionContext is used when you need
+GraphQL-specific execution information.
+
+Example:
+
+const context = GqlExecutionContext.create(context);
+
+It is commonly used with:
+
+Guards
+Interceptors
+Resolvers
+Other places receiving ExecutionContext
+
+
+IMPORTANT:
+
+GqlExecutionContext.create()
+
+expects:
+
+ExecutionContext
+
+
+But ExceptionFilter receives:
+
+ArgumentsHost
+
+
+Therefore this can cause:
+
+Argument of type 'ArgumentsHost' is not assignable
+to parameter of type 'ExecutionContext'.
+
+
+========================================================
+8. GRAPHQL ERROR HANDLING
+========================================================
+
+For GraphQL, a simple way to customize errors is:
+
+GraphQLModule.forRoot({
+
+  formatError: (error) => {
+
+    return {
+      message: error.message,
+      code: error.extensions?.code,
+      timestamp: new Date().toISOString(),
+    };
+
+  },
+
+});
+
+
+Usually this configuration goes in:
+
+AppModule
+
+
+Example:
+
+@Module({
+  imports: [
+
+    GraphQLModule.forRoot({
+      autoSchemaFile: true,
+
+      formatError: (error) => {
+
+        return {
+          message: error.message,
+          code: error.extensions?.code,
+          timestamp: new Date().toISOString(),
+        };
+
+      },
+
+    }),
+
+  ],
+})
+export class AppModule {}
+
+
+========================================================
+9. GRAPHQL ERROR FLOW
+========================================================
+
+Resolver/Service:
+
+throw new NotFoundException('User not found');
+
+
+        ↓
+
+NestJS/GraphQL handles exception
+
+
+        ↓
+
+formatError()
+
+
+        ↓
+
+GraphQL response:
+
+{
+  "errors": [
+    {
+      "message": "User not found",
+      "code": "NOT_FOUND",
+      "timestamp": "..."
+    }
+  ]
+}
+
+
+========================================================
+10. HTTP EXCEPTION FILTER VS GRAPHQL formatError
+========================================================
+
+REST / HTTP:
+
+ExceptionFilter
+
+Example:
+
+@Catch(HttpException)
+class FiltersFilter {
+
+  catch(exception, host) {
+
+    const res = host
+      .switchToHttp()
+      .getResponse();
+
+    res.status(...).json(...);
+
+  }
+
+}
+
+
+GraphQL:
+
+formatError
+
+Example:
+
+GraphQLModule.forRoot({
+
+  formatError: (error) => {
+
+    return {
+      message: error.message,
+      code: error.extensions?.code,
+      timestamp: new Date().toISOString(),
+    };
+
+  },
+
+});
+
+
+========================================================
+11. IMPORTANT DIFFERENCE
+========================================================
+
+REST:
+
+res.status(404).json({
+  statusCode: 404,
+  message: 'User not found'
+});
+
+
+GraphQL:
+
+You normally DON'T do:
+
+res.status(404).json(...)
+
+
+Instead:
+
+throw new NotFoundException('User not found');
+
+
+Then GraphQL creates:
+
+{
+  "errors": [
+    {
+      "message": "User not found"
+    }
+  ]
+}
+
+
+========================================================
+12. JWT ERROR
+========================================================
+
+Error:
+
+secretOrPrivateKey must have a value
+
+
+This is NOT an error that should be solved
+with an exception filter.
+
+It means JwtService has no secret.
+
+Example:
+
+JwtModule.register({
+  secret: process.env.Secret_Key,
+});
+
+
+.env:
+
+Secret_Key=imrankhan
+
+
+Make sure ConfigModule loads .env:
+
+ConfigModule.forRoot({
+  isGlobal: true,
+});
+
+
+========================================================
+13. QUICK REVISION
+========================================================
+
+@Catch(HttpException)
+    ↓
+Catches NestJS HTTP exceptions
+
+
+@Catch()
+    ↓
+Catches all exceptions
+
+
+ArgumentsHost
+    ↓
+Generic execution information
+
+
+switchToHttp()
+    ↓
+Used for HTTP/REST
+
+
+GqlExecutionContext
+    ↓
+GraphQL-specific execution context
+    ↓
+Usually used with ExecutionContext
+
+
+GraphQL errors
+    ↓
+Use GraphQL's error handling / formatError
+
+
+HTTP errors
+    ↓
+ExceptionFilter + response.status().json()
+
+
+========================================================
+14. MAIN RULE TO REMEMBER
+========================================================
+
+REST API:
+
+Controller
+   ↓
+Service
+   ↓
+throw Exception
+   ↓
+ExceptionFilter
+   ↓
+HTTP Response
+
+
+GRAPHQL API:
+
+Resolver
+   ↓
+Service
+   ↓
+throw Exception
+   ↓
+GraphQL Error Handling
+   ↓
+formatError()
+   ↓
+GraphQL Response
+
+
+========================================================
+
+
+---->
+========================================================
+NESTJS EXCEPTION FILTER + GRAPHQL
+========================================================
+
+
+1. EXCEPTION FILTER
+===================
+
+ExceptionFilter receives:
+
+catch(exception, host)
+
+Example:
+
+@Catch()
+export class FiltersFilter implements ExceptionFilter {
+
+  catch(exception: unknown, host: ArgumentsHost) {
+
+  }
+
+}
+
+
+========================================================
+2. ArgumentsHost
+========================================================
+
+ArgumentsHost is a generic context provided to
+ExceptionFilter.
+
+It can represent different types of applications:
+
+HTTP
+GraphQL
+WebSocket
+RPC
+
+
+Think:
+
+Exception
+   ↓
+ExceptionFilter
+   ↓
+ArgumentsHost
+   ↓
+Which context is this?
+   ↓
+HTTP / GraphQL / WebSocket / RPC
+
+
+========================================================
+3. CHECK THE CONTEXT TYPE
+========================================================
+
+Use:
+
+const type = host.getType();
+
+
+Example:
+
+if (host.getType() === 'graphql') {
+  // GraphQL handling
+}
+
+
+For HTTP:
+
+if (host.getType() === 'http') {
+  // HTTP handling
+}
+
+
+========================================================
+4. HTTP / REST EXCEPTION FILTER
+========================================================
+
+For REST/HTTP, use:
+
+const res = host
+  .switchToHttp()
+  .getResponse();
+
+
+Then:
+
+res.status(status).json({
+  statusCode: status,
+  message: message,
+});
+
+
+Complete example:
+
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+} from '@nestjs/common';
+
+@Catch(HttpException)
+export class FiltersFilter implements ExceptionFilter {
+
+  catch(exception: HttpException, host: ArgumentsHost) {
+
+    const res = host
+      .switchToHttp()
+      .getResponse();
+
+    const status = exception.getStatus();
+
+    res.status(status).json({
+      statusCode: status,
+      message: exception.getResponse(),
+    });
+
+  }
+
+}
+
+
+IMPORTANT:
+
+res = HTTP response object
+
+res.status().json()
+    ↓
+Used for REST/HTTP response
+
+
+========================================================
+5. GRAPHQL IS DIFFERENT
+========================================================
+
+GraphQL also runs over HTTP, BUT we normally don't
+manually create the GraphQL response using:
+
+res.status().json()
+
+
+Don't think:
+
+GraphQL
+   ↓
+switchToHttp()
+   ↓
+res.json()
+
+
+Instead:
+
+GraphQL
+   ↓
+Resolver
+   ↓
+Service
+   ↓
+throw Exception
+   ↓
+GraphQL error handling
+   ↓
+GraphQL response
+
+
+========================================================
+6. GraphQL ERROR
+========================================================
+
+In Resolver/Service:
+
+throw new NotFoundException('User not found');
+
+GraphQL will produce an error response such as:
+
+{
+  "errors": [
+    {
+      "message": "User not found"
+    }
+  ]
+}
+
+
+========================================================
+7. CUSTOMIZING GRAPHQL ERRORS
+========================================================
+
+For customizing GraphQL errors, use:
+
+formatError
+
+
+Configure it in AppModule:
+
+GraphQLModule.forRoot({
+  formatError: (error) => {
+    return {
+      message: error.message,
+      code: error.extensions?.code,
+      timestamp: new Date().toISOString(),
+    };
+  },
+});
+
+
+GraphQL flow:
+
+Exception
+   ↓
+GraphQL error
+   ↓
+formatError()
+   ↓
+Custom GraphQL error response
+
+
+Example response:
+
+{
+  "errors": [
+    {
+      "message": "User not found",
+      "code": "NOT_FOUND",
+      "timestamp": "2026-08-17T..."
+    }
+  ]
+}
+
+
+========================================================
+8. GqlExecutionContext
+========================================================
+
+GqlExecutionContext is used to access
+GraphQL-specific execution information.
+
+Example:
+
+const gqlContext =
+  GqlExecutionContext.create(context);
+
+
+It expects:
+
+ExecutionContext
+
+
+It is commonly used in:
+
+Guards
+Interceptors
+Resolvers
+Other places where ExecutionContext is available
+
+IMPORTANT:
+ExceptionFilter receives:
+
+ArgumentsHost
+
+
+So this:
+
+GqlExecutionContext.create(host)
+
+
+can cause a TypeScript error because:
+
+ArgumentsHost
+    ≠
+ExecutionContext
+
+
+========================================================
+9. IMPORTANT DIFFERENCE
+========================================================
+
+ArgumentsHost:
+
+Generic context
+
+    ↓
+
+HTTP
+GraphQL
+WebSocket
+RPC
+
+
+GqlExecutionContext:
+
+GraphQL-specific execution context
+
+
+HTTP:
+
+host.switchToHttp().getResponse()
+
+
+GraphQL:
+Don't manually use:
+res.status().json()
+Use GraphQL's error handling.
+========================================================
+10. REST VS GRAPHQL
+========================================================
+
+REST:
+
+Controller
+   ↓
+Service
+   ↓
+Exception
+   ↓
+ExceptionFilter
+   ↓
+res.status().json()
+   ↓
+HTTP Response
+
+
+GRAPHQL:
+
+Resolver
+   ↓
+Service
+   ↓
+Exception
+   ↓
+GraphQL Error Handling
+   ↓
+formatError()
+   ↓
+GraphQL Response
+
+
+========================================================
+11. MAIN RULE
+========================================================
+
+REST / HTTP:
+
+ExceptionFilter
++
+ArgumentsHost
++
+switchToHttp()
++
+response.status().json()
+
+
+GRAPHQL:
+
+Exception
++
+GraphQL error handling
++
+formatError()
+
+
+ArgumentsHost itself does NOT create the GraphQL
+response.
+
+It gives the ExceptionFilter information about
+the context where the exception occurred.
+
+
+========================================================
+QUICK REVISION
+========================================================
+
+ArgumentsHost
+    ↓
+Generic execution context
+
+host.getType()
+    ↓
+Check HTTP / GraphQL / WebSocket / RPC
+
+host.switchToHttp()
+    ↓
+Switch to HTTP context
+
+getResponse()
+    ↓
+Get HTTP response
+
+res.status().json()
+    ↓
+REST response
+
+GqlExecutionContext
+    ↓
+GraphQL-specific context
+
+formatError()
+    ↓
+Customize GraphQL errors
+
+
+MOST IMPORTANT:
+
+REST:
+ExceptionFilter → res.status().json()
+
+GRAPHQL:
+Exception → GraphQL error handling → formatError()
+========================================================
+
+---->
+Roles in NestJS = Authorization (what a user is allowed to do).
+
+Authentication:
+JwtGuard → checks whether the JWT is valid and identifies the user.
+
+Authorization:
+RolesGuard → checks whether the authenticated user has the required role.
+
+Example:
+
+enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+Roles decorator:
+
+export const Roles = (...roles: Role[]) =>
+  SetMetadata('roles', roles);
+
+Admin-only resolver:
+
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+@Mutation(() => Boolean)
+updatePostAdmin(...) {
+  return this.postService.updateAdmin(...);
+}
+
+Flow:
+
+Request
+  ↓
+JwtGuard → Is the user authenticated?
+  ↓
+req.user
+  ↓
+RolesGuard → Does user have required role?
+  ↓
+ADMIN → Allow
+USER  → Reject
+
+Remember:
+JwtGuard = Who are you?
+RolesGuard = What are you allowed to do?
+
+For user-specific operations, also check ownership:
+post.userId === user.id
+---->
+NESTJS LOGGER — SHORT NOTES
+===========================
+
+1. Logging
+-----------
+Logging = recording what is happening in the application.
+console.log('User created');
+
+
+2. NestJS Logger
+----------------
+import { Logger } from '@nestjs/common';
+inside method
+
+async createUser() {
+  const logger = new Logger('UserService');
+  logger.log('Creating user');
+  // your code
+  logger.log('User created');
+
+}
+
+inside class
+private readonly logger =
+  new Logger(UserService.name);
+
+
+3. Logger Methods
+-----------------
+this.logger.log('User created');
+→ Normal information
+
+this.logger.warn('User not found');
+→ Warning
+
+this.logger.error('Database failed');
+→ Error
+
+this.logger.debug('User ID: 10');
+→ Debugging
+
+this.logger.verbose('Checking permissions');
+→ Detailed information
+
+
+4. Example
+----------
+@Injectable()
+export class UserService {
+
+  private readonly logger =
+    new Logger(UserService.name);
+
+  async createUser() {
+
+    this.logger.log('Creating user');
+
+    // logic
+
+    this.logger.log('User created');
+  }
+}
+
+
+5. Logger vs Exception
+----------------------
+Logger
+→ Records/logs information
+
+Exception
+→ Handles/stops an error
+
+Example:
+
+this.logger.error('Database failed');
+
+throw new InternalServerErrorException();
+
+
+6. Logger vs console.log
+------------------------
+console.log()
+→ Basic console output
+
+NestJS Logger
+→ Structured NestJS logging
+→ Context + log levels
+
+
+7. Logger + Interceptor
+-----------------------
+Interceptor can use Logger to automatically log:
+
+Request started
+      ↓
+Resolver
+      ↓
+Service
+      ↓
+Request finished
+
+
+
+MAIN POINT:
+Logger = records application events.
+
+--->
+
+1. MIDDLEWARE
+=============
+Usually configured in Module:
+@Module({
+  ...
+})
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(LoggerMiddleware)
+      .forRoutes('*');
+  }
+}
+Can also be applied to specific routes:
+
+consumer
+  .apply(LoggerMiddleware)
+  .forRoutes('users');
+
+
+MAIN:
+Middleware → Module (configure method)
+
+
+==================================
+
+2. PIPE
+=======
+
+Global Pipe → main.ts
+
+app.useGlobalPipes(
+  new ValidationPipe(),
+);
+
+
+Specific route/field → Controller/Resolver
+
+@UsePipes(new ValidationPipe())
+
+
+MAIN:
+Global Pipe → main.ts
+Specific Pipe → Controller/Resolver/Method
+
+
+==================================
+
+3. GUARD
+========
+
+Global Guard → main.ts
+
+app.useGlobalGuards(
+  new AuthGuard(),
+);
+
+
+Specific Resolver/Controller:
+
+@UseGuards(AuthGuard)
+
+
+MAIN:
+Global Guard → main.ts
+Specific Guard → Resolver/Controller/Method
+
+
+==================================
+
+4. INTERCEPTOR
+==============
+
+Global Interceptor → main.ts
+
+app.useGlobalInterceptors(
+  new BasicInterceptor(),
+);
+
+
+Specific Resolver/Controller:
+
+@UseInterceptors(BasicInterceptor)
+
+
+MAIN:
+Global Interceptor → main.ts
+Specific Interceptor → Resolver/Controller/Method
+
+---->
+handling relationship
+const post = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        user: {
+          posts: {
+            user: true
+          }
+        }
+      },
+    });
+// 1. Load direct relation
+relations: {
+  user: true
+}
+
+// Structure:
+// Post
+//  └── user
+
+
+// 2. Load nested relation
+relations: {
+  user: {
+    posts: true
+  }
+}
+
+// Structure:
+// Post
+//  └── user
+//       └── posts
+
+
+// 3. More nested relations
+relations: {
+  user: {
+    posts: {
+      comments: true
+    }
+  }
+}
+
+// Structure:
+// Post
+//  └── user
+//       └── posts
+//            └── comments
+
+
+// 4. Multiple relations at same level
+relations: {
+  user: true,
+  comments: true
+}
+
+// Structure:
+// Post
+//  ├── user
+//  └── comments
+
+
+// 5. Multiple nested relations
+relations: {
+  user: {
+    posts: true,
+    profile: true
+  }
+}
+
+// Structure:
+// Post
+//  └── user
+//       ├── posts
+//       └── profile
+
+
+// GENERAL RULE
+relations: {
+  relation1: {
+    relation2: {
+      relation3: true
+    }
+  }
+}
+
+// Structure:
+// Entity
+//  └── relation1
+//       └── relation2
+//            └── relation3
+
+// true = load that relation
+
+full example:
+const post = await this.postRepository.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        user: {
+          posts: {
+            user: true
+          }
+        }
+      },
+    });
+
+
+--->
+Decorator in NestJS is a special function used with @ to add metadata or behavior to classes, methods, or properties.
+
+Examples:
+
+NestJS Core
+@Controller()
+@Get()
+@Post()
+@Put()
+@Patch()
+@Delete()
+
+@Param()
+@Query()
+@Body()
+@Headers()
+@Req()
+@Res()
+
+
+@Injectable()
+@Module()
+@UseGuards()
+@UseInterceptors()
+@UsePipes()
+@UseFilters()
+@UseMiddleware()
+
+GraphQL
+@Resolver()
+@Query()
+@Mutation()
+@Args()
+@Context()
+
+
+@ObjectType()
+@InputType()
+@Field()
+@Int()
+
+
+@ArgsType()
+@ResolveField()
+@Parent()
+
+
+TypeORM
+@Entity()
+@Column()
+@PrimaryGeneratedColumn()
+@PrimaryGenerated
+@CreateDateColumn
+@UpdateDateColumn
+
+
+@ManyToOne()
+@OneToMany()
+@OneToOne()
+@ManyToMany()
+
+
+@JoinColumn()
+@JoinTable()
+
+
+Validation / DTO
+@IsString()
+@IsInt()
+@IsEmail()
+@IsNotEmpty()
+@IsOptional()
+@Min()
+@Max()
+@Length()
+
+
+custom decorator:
+Example for your JWT project:
+
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const CurrentUser = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    const request = context.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+
+Use it like:
+
+@Get('profile')
+getProfile(@CurrentUser() user) {
+  return user;
+}
+
+So:
+
+@CurrentUser()
+      ↓
+Gets request.user
+
+For GraphQL, the implementation is slightly different because you use GqlExecutionContext.
+
+----->
+ROLES IN NESTJS — SIMPLE WORKING SETUP
+
+1. Role enum
+
+// common/enums/role.enum.ts
+
+export enum Role {
+  USER = 'USER',
+  ADMIN = 'ADMIN',
+}
+
+
+2. Roles decorator
+
+// common/decorators/roles.decorator.ts
+
+import { SetMetadata } from '@nestjs/common';
+import { Role } from '../enums/role.enum';
+
+export const Roles = (...roles: Role[]) =>
+  SetMetadata('roles', roles);
+
+ Now you can write:
+@Roles(Role.ADMIN)
+
+
+your decorator runs:
+SetMetadata('roles', [Role.ADMIN])
+So NestJS stores information like:
+Key:   roles
+Value: [ADMIN]
+
+Think of it as attaching a label to the resolver:
+updatePostAdmin
+       ↓
+required role = ADMIN
+
+
+3. RolesGuard
+// common/guards/roles.guard.ts
+
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+} from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { GqlExecutionContext } from '@nestjs/graphql';
+import { Role } from '../enums/role.enum';
+
+@Injectable()
+export class RolesGuard implements CanActivate {
+  constructor(private reflector: Reflector) {}
+  canActivate(context: ExecutionContext): boolean {
+    const requiredRoles =
+      this.reflector.getAllAndOverride<Role[]>(
+        'roles',
+        [
+          context.getHandler(),
+          context.getClass(),
+        ],
+      );
+
+    if (!requiredRoles) return true;
+    const gqlContext = GqlExecutionContext.create(context);
+    const user = gqlContext.getContext().req.user;
+    if (!user) return false;
+    return requiredRoles.includes(user.role);
+  }
+}
+
+
+Reflector
+Reflector reads the metadata created by your @Roles() decorator.
+means:
+"Get the value stored under the roles key, and treat that value as a Role[] array."
+
+When you write:
+@Roles(Role.ADMIN)
+
+your decorator stores:
+roles → ADMIN
+
+Reflector reads that information.
+
+
+context.getHandler()
+Gets the current method.
+
+For:
+
+@Get('users')
+@Roles(Role.ADMIN)
+getUsers() {}
+
+it points to:
+getUsers()
+
+
+context.getClass()
+Gets the controller/resolver class.
+
+For REST:
+
+@Controller('users')
+export class UserController {}
+
+it points to:
+UserController
+
+For GraphQL:
+@Resolver(() => User)
+export class UserResolver {}
+
+it points to:
+UserResolver
+
+#req.user is available because your JwtGuard puts the JWT payload/user into request.user after verifying the JWT.
+4. Admin-only Resolver
+
+import { UseGuards } from '@nestjs/common';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { JwtGuard } from '../common/guards/auth.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '../common/enums/role.enum';
+
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+@Mutation(() => Boolean)
+updatePostAdmin(
+  @Args('id', { type: () => Int }) id: number,
+  @Args('updatePostInput') updatePostInput: UpdatePostInput,
+) {
+  return this.postService.updateAdmin(id, updatePostInput);
+}
+
+
+notes->
+
+[
+  context.getHandler(),
+  context.getClass(),
+]
+
+means:
+
+Check @Roles() on the specific method
+              ↓
+        getHandler()
+              ↓
+If not found, check @Roles() on the class
+              ↓
+         getClass()
+
+5. Flow
+
+Request
+  ↓
+JwtGuard → verifies JWT and puts user in req.user
+  ↓
+RolesGuard → checks user.role
+  ↓
+ADMIN → allowed
+USER  → rejected
+
+
+IMPORTANT:
+
+JwtGuard   = Is the user logged in?
+RolesGuard = Does the user have permission?
+
+@UseGuards(JwtGuard, RolesGuard)
+@Roles(Role.ADMIN)
+
+means:
+"User must be authenticated AND must be ADMIN."
+
+
+----->Multer
+Multer is used for file uploads in NestJS—images, PDFs, profile pictures, etc.
+1. First understand what Multer does
+
+Normal request:
+
+Client
+  ↓
+JSON
+  ↓
+NestJS
+
+
+File upload:
+
+Client
+  ↓
+multipart/form-data
+  ↓
+Multer
+  ↓
+NestJS
+
+Multer handles the incoming file and makes it available to your controller.
+
+2. Learn these concepts 
+
+Step 1 — multipart/form-data
+
+Understand why file uploads don't normally use JSON.
+
+JSON
+→ text/data
+
+
+multipart/form-data
+→ text + files
+
+Multer processes that multipart request.
+
+React
+  ↓
+multipart/form-data
+  ↓
+Multer
+  ↓
+NestJS Controller
+
+
+Step 2 — FileInterceptor
+This is the most important NestJS concept.
+intsall: npm install -D @types/multer
+
+import {
+    Controller,
+    Post,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+
+@Controller('upload')
+export class UploadController {
+    @Post()
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(
+        @UploadedFile() file: Express.Multer.File,
+    ) {
+        console.log(file);
+        return {
+            message: 'File uploaded successfully',
+            file,
+        };
+    }
+}
+
+FileInterceptor('file')
+@UseInterceptors(FileInterceptor('file'))
+
+This tells Nest:
+"Look for a file whose form-data field name is file."
+
+The name must match the frontend/Postman field.
+
+@UploadedFile()
+@UploadedFile() file
+
+This gets the file processed by Multer.
+Express.Multer.File
+This is the TypeScript type for the uploaded file.
+
+
+
+The flow is:
+
+POST /upload
+     ↓
+FileInterceptor
+     ↓
+Multer
+     ↓
+@UploadedFile()
+     ↓
+file
+
+
+
+
+Step 3 — Understand the file object
+
+When you upload a file:
+console.log(file);
+you'll see information such as:
+
+fieldname    → form field name
+originalname → original file name
+encoding     → file encoding
+mimetype     → file type (image/jpeg, image/png...)
+size         → file size
+buffer       → actual file data
+destination  → upload folder
+filename     → stored file name
+path         → stored file location
+
+The important ones initially are:
+
+originalname → original file name
+mimetype     → image/jpeg, image/png...
+size         → file size
+filename     → stored file name
+path         → stored location
+
+
+example:
+{
+    fieldname: 'file',
+    originalname: 'photo.jpg',
+    encoding: '7bit',
+    mimetype: 'image/jpeg',
+    size: 123456,
+    buffer: ...
+}
+
+
+3. Learn single-file upload first
+Don't start with multiple files.
+Start with:
+@Post("upload")
+@UseInterceptors(FileInterceptor("file"))
+upload(
+    @UploadedFile() file: Express.Multer.File,
+) {
+    return file;
+}
+
+Then test using Postman.
+
+POST /upload
+
+Body → form-data
+
+
+Key       Type       Value
+--------------------------------
+file      File       photo.jpg
+
+
+
+4. Then learn disk storage
+By default, you can receive the file in memory.
+
+Then learn how to save it:
+
+@UseInterceptors(
+    FileInterceptor("file", {
+        dest: "./uploads",
+    }),
+)
+
+Now:
+photo.jpg
+    ↓
+Multer
+    ↓
+uploads/
+    ↓
+photo.jpg
+
+5. Then learn custom filename
+After that, learn:
+@UseInterceptors(
+    FileInterceptor("file", {
+      storage: diskStorage({
+    destination: "./uploads",
+    filename: (...)
+})
+       
+    }),
+)
+
+or same as express
+ storage: diskStorage({
+            destination: (req, file, cb) => {
+                const uploadPath = path.join(process.cwd(), 'uploads');
+                if (!fs.existsSync(uploadPath)) {
+                    fs.mkdirSync(uploadPath, { recursive: true });                }
+                cb(null, uploadPath);
+
+            },
+            filename: (req, file, cb) => {
+                const date = Date.now()
+
+                cb(null, `${date}${path.extname(file.originalname)}`)
+
+            }
+ })
+
+notes->
+memoryStorage() → file is kept in memory, so  file.buffer contain data (use this when using aws s3)
+diskStorage() → file is saved on disk, so use file.path (then readFile(file.path) to get the buffer).
+
+This is useful because you usually don't want two users uploading files with the same name.
+For example:
+
+profile.jpg
+profile.jpg
+
+could become:
+
+172415123-profile.jpg
+172415456-profile.jpg
+
+
+6. Then learn file validation
+
+This is important.
+
+Learn:
+
+file type
+file size
+
+For example:
+
+Only images
+Maximum 2 MB
+
+NestJS provides:
+
+ParseFilePipe
+MaxFileSizeValidator
+FileTypeValidator
+
+import {
+    Controller,
+    Post,
+    UploadedFile,
+    UseInterceptors,
+    ParseFilePipe,
+    MaxFileSizeValidator,
+    FileTypeValidator,
+} from '@nestjs/common';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+
+@Controller('upload-file')
+export class UploadFileController {
+
+    @Post('upload')
+    @UseInterceptors(
+        FileInterceptor('file'),
+    )
+    upload(
+        @UploadedFile(
+            new ParseFilePipe({
+                validators: [
+                    new MaxFileSizeValidator({
+                        maxSize: 2 * 1024 * 1024,
+                    }),
+
+                    new FileTypeValidator({
+                        fileType: /^image\/(jpeg|png|jpg)$/,
+                    }),
+                ],
+            }),
+        )
+        file: Express.Multer.File,
+    ) {
+        return file;
+    }
+}
+
+
+7. Then multiple files
+
+After single upload works, learn:
+
+FilesInterceptor()
+
+For example:
+
+POST /upload    
+
+
+file1 → image1.jpg
+file2 → image2.jpg
+file3 → image3.jpg
+
+Then learn:
+
+@UploadedFiles()
+
+
+
+@Post('upload')
+    @UseInterceptors(
+        FilesInterceptor('files', 5, {
+            storage: diskStorage({
+                destination: './uploads',//this directy recreate or use that folder
+
+                filename: (req, file, cb) => {
+                    const name = Date.now();
+                    const ext = path.extname(file.originalname);
+
+                    cb(null, `${name}${ext}`);
+                },
+
+            }),
+
+        }),
+    )
+    upload(
+        @UploadedFiles() files: Express.Multer.File[],
+    ) {
+        return files;
+    }
+'files' → field name(same for all image)
+5       → maximum number of files
+
+
+If the files have different field names, don't use FilesInterceptor().
+Use FileFieldsInterceptor().
+
+For example, suppose you want:
+
+profileImage → profile.jpg
+coverImage   → cover.jpg
+document     → resume.pdf
+
+Use:
+
+@UseInterceptors(
+    FileFieldsInterceptor([
+        { name: 'profileImage', maxCount: 1 },
+        { name: 'coverImage', maxCount: 1 },
+        { name: 'document', maxCount: 1 },
+    ]),
+)
+
+Then receive them with:
+
+@UploadedFiles()
+files: {
+    profileImage?: Express.Multer.File[],
+    coverImage?: Express.Multer.File[],
+    document?: Express.Multer.File[],
+}
+
+You can access:
+
+files.profileImage
+files.coverImage
+files.document
+
+Difference
+FileInterceptor()
+→ one field
+→ one file
+
+
+FilesInterceptor()
+→ same field
+→ multiple files
+
+
+FileFieldsInterceptor()
+→ different fields
+→ files for each field
+
+
+
+Learn Multer in this order:
+
+1. multipart/form-data
+        ↓
+2. FileInterceptor
+        ↓
+3. @UploadedFile()
+        ↓
+4. File object
+        ↓
+5. dest / disk storage/memory starage
+        ↓
+6. custom filename
+        ↓
+7. file validation
+        ↓
+8. multiple files
+        ↓
+9. image upload
+        ↓
+10. Connect upload with MySQL
+
+
+REST
+→ multipart/form-data
+→ Multer
+→ @UploadedFile()
+
+GraphQL
+→ Upload scalar
+→ GraphQL multipart request
+→ resolver receives file
+
+for graphQL
+. Install the required packages
+In your NestJS backend:
+npm install graphql-upload
+
+Depending on your NestJS/GraphQL version, the exact integration can differ, 
+so first check which GraphQL driver you're using (ApolloDriver is common).
+
+2. Understand the GraphQL Upload scalar
+Your schema needs an Upload type:
+
+scalar Upload
+
+Then your mutation can look conceptually like:
+
+mutation UploadFile($file: Upload!) {
+    uploadFile(file: $file)
+}
+
+The important part is:
+Upload!
+
+It means:
+This GraphQL argument expects a file.
+
+3. Resolver
+Conceptually, your resolver receives the uploaded file:
+
+@Mutation(() => Boolean)
+async uploadFile(
+    @Args('file', { type: () => GraphQLUpload })
+    file: Promise<FileUpload>,
+) {
+    const { createReadStream, filename, mimetype } =
+        await file;
+
+
+    console.log(filename);
+    console.log(mimetype);
+    return true;
+}
+
+The uploaded object provides things such as:
+
+filename       → original filename
+mimetype       → file type
+createReadStream → stream containing the file
+
+4. Why is this different from Multer?
+With REST you learned:
+
+@UseInterceptors(FileInterceptor('file'))
+Multer handles the multipart request for you.
+
+With GraphQL, the upload is represented by the GraphQL Upload scalar,
+ and the resolver receives a file upload object.
+
+Think:
+
+REST
+
+
+Client
+ ↓
+multipart/form-data
+ ↓
+Multer
+ ↓
+@UploadedFile()
+
+versus
+GraphQL
+
+
+Client
+ ↓
+multipart request
+ ↓
+Upload scalar
+ ↓
+Resolver
+ ↓
+file
+
+5. One important point for your project
+
+Since your project currently uses:
+
+React
+   ↓
+Apollo Client
+   ↓
+NestJS GraphQL
+   ↓
+MySQL
+
+GraphQL file uploads also require the Apollo Client side to send multipart requests.
+ A normal HttpLink is generally not enough by itself.
+
+So don't jump straight into the React side yet.
+
+Learn GraphQL upload in this order
+1. Upload scalar
+      ↓
+2. GraphQL mutation with Upload
+      ↓
+3. Resolver receives file
+      ↓
+4. createReadStream()
+      ↓
+5. Save file to uploads/
+      ↓
+6. Return filename/path
+      ↓
+7. Apollo Client upload
+      ↓
+8. Store filename in MySQL
+
+Once this works, you can build things like:
+
+User profile
+   ↓
+profileImage: Upload
+   ↓
+uploads/profile/...
+   ↓
+save filename in User table
+
+One caveat: graphql-upload integration has changed across GraphQL/NestJS/Apollo versions, so before writing the exact NestJS configuration,
+ it's worth checking your installed @nestjs/graphql, Apollo driver, and graphql versions.
+
+----->
+
+------------------------------------------------------------------------------
+ WebSockets
+ ---------------------------------------------------------------------------
+ Recommended order for you
+NestJS Fundamentals
+       ↓
+REST + GraphQL
+       ↓
+Authentication / Authorization
+       ↓
+        ⭐ You are here
+       ↓
+WebSockets
+       ↓
+GraphQL Subscriptions
+       ↓
+Redis / PubSub
+       ↓
+Deployment
+
+
+Why learn WebSockets now?
+It will make the subscription concept you just learned much easier.
+Start with plain NestJS WebSockets first:
+
+Client
+  ↕
+WebSocket
+  ↕
+NestJS Gateway
+
+Learn:
+
+@WebSocketGateway()
+@SubscribeMessage()
+@MessageBody()
+@ConnectedSocket()
+Gateway
+Events
+Broadcasting
+Rooms
+Authentication with JWT
+Then GraphQL Subscriptions
+Build one small project
+
+I recommend a real-time chat:
+
+User A ───────┐
+              │
+              ↓
+        NestJS Gateway
+              ↑
+              │
+User B ───────┘
+
+Learn:
+
+sendMessage
+receiveMessage
+broadcast
+rooms
+joinRoom
+leaveRoom
+
+Then you'll understand why:
+
+Query        → history
+Mutation     → send/change
+Subscription → real-time updates
+Don't abandon your current project
+
+Keep your current blog using:
+
+HTTP/GraphQL
+   +
+JWT
+   +
+Guards
+   +
+Roles
+   +
+refetchQueries
+
+Build WebSocket learning separately, perhaps a small chat module.
+My recommendation: yes, start WebSockets next—but learn NestJS Gateway/WebSocket
+ basics before jumping directly into GraphQL subscriptions.
+
+
+
+-->
+1. What is a WebSocket?
+Normally with HTTP/graphql:
+
+Client ───── request ─────> Server
+Client <──── response ───── Server
+
+The client has to make a request.
+With WebSocket:
+Client <════════ WebSocket connection ════════> Server
+
+The connection stays open.
+So the server can send data to the client whenever something happens, without waiting for a new HTTP request.
+
+This is useful for:
+💬 Chat
+🔔 Notifications
+🟢 Online/offline status
+📊 Live dashboards
+🎮 Multiplayer games
+📍 Live location
+⚡ Real-time updates
+
+2. NestJS WebSocket Architecture
+In NestJS, the main component is a Gateway.
+
+Client
+   ↕
+WebSocket
+   ↕
+Gateway
+   ↕
+Service
+   ↕
+Database
+
+The Gateway is similar to a Controller, but instead of handling HTTP routesor graphQL resovler, it handles WebSocket events.
+
+HTTP:
+@Controller('users')
+export class UserController {}
+
+WebSocket:
+@WebSocketGateway()
+export class ChatGateway {}
+
+3. Install WebSocket packages
+For NestJS, we'll use Socket.IO.
+
+Run:
+npm install @nestjs/websockets @nestjs/platform-socket.io socket.io
+
+
+4. Create a Gateway
+You can generate one using Nest CLI:
+
+nest g gateway chat
+
+This will create something similar to:
+
+chat/
+├── chat.gateway.ts
+└── chat.gateway.spec.ts
+
+Your gateway starts like this:
+
+import {
+  WebSocketGateway,
+} from '@nestjs/websockets';
+
+
+@WebSocketGateway()
+export class ChatGateway {}
+
+That's it.
+Now NestJS knows:
+"This class is a WebSocket Gateway."
+
+5. Start the server
+Run:
+npm run start:dev
+Your NestJS application now has a WebSocket Gateway.
+
+6. Understanding @SubscribeMessage()
+Now we want to receive an event from the client.
+
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+} from '@nestjs/websockets';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  @SubscribeMessage('message')
+  handleMessage() {
+    console.log('Message received');
+  }
+
+
+}
+
+Here:
+@SubscribeMessage('message')
+
+means:
+Listen for a WebSocket event called message.
+
+So the client sends:
+message
+
+and NestJS executes:
+handleMessage()
+
+7. Receiving data with @MessageBody()
+Suppose the client sends:
+
+{
+  "name": "Naeem",
+  "message": "Hello"
+}
+
+We can receive it:
+
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+  @SubscribeMessage('message')
+  handleMessage(
+    @MessageBody() data: any,
+  ) {
+    console.log(data);
+  }
+
+
+}
+
+Now:
+data
+contains:
+
+{
+  "name": "Naeem",
+  "message": "Hello"
+}
+
+8. Returning a response
+A Gateway handler can return data.
+
+@SubscribeMessage('message')
+handleMessage(
+  @MessageBody() data: any,
+) {
+  return {
+    message: 'Message received',
+    data,
+  };
+}
+
+Conceptually:
+
+Client
+   │
+   │ message
+   │ { message: "Hello" }
+   ↓
+Gateway
+   │
+   │ handleMessage()
+   ↓
+Server
+   │
+   │ response
+   ↓
+Client
+
+
+9. Important difference
+Remember this:
+
+HTTP Controller
+@Get()
+getUsers() {}
+
+The client makes an HTTP request.
+
+WebSocket Gateway
+@SubscribeMessage('message')
+handleMessage() {}
+
+The client sends a WebSocket event.
+
+So:
+
+HTTP
+GET /users
+      ↓
+Controller
+
+graphQL
+  |
+resovler
+
+
+WebSocket
+message event
+      ↓
+Gateway
+
+10. Your first exercise
+
+Create this Gateway:
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  @SubscribeMessage('hello')
+  handleHello(
+    @MessageBody() name: string,
+  ) {
+    console.log(name);
+    return {
+      message: `Hello ${name}`,
+    };
+  }
+
+
+}
+
+The client will eventually send:
+
+event: hello
+data: "Naeem"
+
+and the server returns:
+{
+  "message": "Hello Naeem"
+}
+
+
+Step 2 — @ConnectedSocket()
+
+@ConnectedSocket() gives you the actual connected client/socket that sent the event.
+
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+
+
+import { Socket } from 'socket.io';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  @SubscribeMessage('message')
+  handleMessage(
+    @MessageBody() message: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('Message:', message);
+    console.log('Client ID:', client.id);
+  }
+
+}
+
+Understand the two parameters
+@MessageBody() message: string
+Gives you the data sent by the client.
+
+@ConnectedSocket() client: Socket
+Gives you the client connection.
+
+So:
+
+Client A
+   │
+   │ message: "Hello"
+   ↓
+NestJS Gateway
+   │
+   ├── message → "Hello"
+   │
+   └── client.id → "abc123"
+
+Why do we need client?
+Because later we'll use it for things like:
+
+client.emit(...)
+Send something back to this client.
+
+And:
+client.join('room1')
+
+Put this client into a room.
+
+And eventually:
+
+client.handshake.auth.token
+
+to get a JWT during WebSocket authentication.
+
+Your current Gateway
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+
+
+import { Socket } from 'socket.io';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  @SubscribeMessage('message')
+  handleMessage(
+    @MessageBody() message: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('Message:', message);
+    console.log('Client ID:', client.id);
+
+
+    return {
+      message: `Received: ${message}`,
+    };
+  }
+}
+
+
+Step 3 — client.emit()
+Now we make NestJS send a message back to the client.
+
+client.emit()
+client.emit('response', {
+  message: 'Hello from server',
+});
+
+This means:
+Send the response event to this specific client.
+
+Complete Gateway
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+import { Socket } from 'socket.io';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+  @SubscribeMessage('message')
+  handleMessage(
+    @MessageBody() message: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    console.log('Received:', message);
+    client.emit('response', {
+      message: `Server received: ${message}`,
+    });
+  }
+}
+
+Flow
+Client
+   │
+   │ message
+   │ "Hello"
+   ↓
+NestJS Gateway
+   │
+   │ client.emit()
+   ↓
+Client
+   │
+   │ response
+   │ "Server received: Hello"
+
+Important distinction
+client.emit()
+➡️ sends to one specific client.
+
+Later we'll learn:
+server.emit()
+➡️ sends to all connected clients.
+
+And then:
+client.broadcast.emit()
+➡️ sends to everyone except the sender.
+
+These three are very important for chat applications.
+
+step-4.broadcasting — sending a message to multiple clients.
+
+1. What is broadcasting?
+Suppose we have three clients:
+
+User A
+User B
+User C
+
+User A sends:
+"Hello everyone!"
+
+We want:
+
+              ┌──→ User A
+User A ──→ Gateway ──→ User B
+              └──→ User C
+
+The Gateway sends the message to multiple connected clients.
+
+2. server.emit() — send to everyone
+In NestJS, we can use @WebSocketServer() to get the Socket.IO server.
+
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
+
+
+import { Server } from 'socket.io';
+
+@WebSocketGateway()
+export class ChatGateway {
+  @WebSocketServer()
+  server: Server;
+
+  @SubscribeMessage('message')
+  handleMessage(
+    @MessageBody() message: string,
+  ) {
+    this.server.emit('message', {
+      message,
+    });
+  }
+}
+
+
+What happens?
+User A sends:
+message → "Hello"
+
+Then:
+this.server.emit('message', {
+  message: 'Hello',
+});
+
+sends it to:
+
+User A ✅
+User B ✅
+User C ✅
+
+So:
+
+                  ┌──→ User A
+                  │
+User A → Gateway ├──→ User B
+                  │
+                  └──→ User C
+
+3. server.emit() vs client.emit()
+This distinction is very important.
+
+client.emit()
+client.emit('message', data);
+
+Sends to one specific client.
+Gateway
+   │
+   └────→ User A
+
+server.emit()
+this.server.emit('message', data);
+
+Sends to all connected clients.
+             ┌──→ User A
+             │
+Gateway ─────┼──→ User B
+             │
+             └──→ User C
+
+
+
+4. What about the sender?
+With:
+this.server.emit('message', data);
+the sender also receives the message.
+
+So if User A sends:
+Hello
+
+all three get it:
+User A → "Hello" ✅
+User B → "Hello" ✅
+User C → "Hello" ✅
+
+5. Broadcast to everyone EXCEPT sender
+For that, use:
+
+client.broadcast.emit('message', {
+  message,
+});
+
+Complete example:
+
+@SubscribeMessage('message')
+handleMessage(
+  @MessageBody() message: string,
+  @ConnectedSocket() client: Socket,
+) {
+  client.broadcast.emit('message', {
+    message,
+  });
+}
+
+Now:
+User A sends "Hello"
+
+
+User A ❌
+User B ✅
+User C ✅
+
+5.Rooms
+A room is a group of connected clients.
+
+Room: "room1"
+User A ─┐
+User B ─┼──→ room1
+User C ─┘
+
+1. Join a room
+@SubscribeMessage('joinRoom')
+handleJoinRoom(
+  @MessageBody() room: string,
+  @ConnectedSocket() client: Socket,
+) {
+  client.join(room);
+}
+
+If the client sends:
+joinRoom → "room1"
+
+that client joins room1.
+
+2. Send message to room
+this.server.to(room).emit('message', {
+  message: 'Hello room',
+});
+
+This sends to everyone inside that room.
+
+room1
+├── User A ✅
+├── User B ✅
+└── User C ✅
+
+room2
+└── User D ❌
+
+3. Leave a room
+client.leave(room);
+
+Remember
+client.join(room)              // join
+client.leave(room)             // leave
+this.server.to(room).emit()    // send to room
+
+#
+Let's make a small NestJS chat room with joinRoom and leaveRoom.
+
+chat.gateway.ts
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+
+
+import { Socket } from 'socket.io';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  // Join room
+  @SubscribeMessage('joinRoom')
+  joinRoom(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.join(room);
+    return {
+      message: `Joined ${room}`,
+    };
+  }
+
+
+  // Leave room
+  @SubscribeMessage('leaveRoom')
+  leaveRoom(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.leave(room);
+    return {
+      message: `Left ${room}`,
+    };
+  }
+
+
+  // Send message to room
+  @SubscribeMessage('sendMessage')
+  sendMessage(
+    @MessageBody() data: { room: string; message: string },
+  ) {
+    // message will be sent to everyone in the room
+  }
+}
+
+Flow
+User A:
+
+joinRoom → "room1"
+
+User A
+   ↓
+client.join("room1")
+   ↓
+room1
+
+User B also joins:
+
+room1
+├── User A
+└── User B
+
+Now User A sends:
+
+{
+  "room": "room1",
+  "message": "Hello"
+}
+
+We send it to that room:
+
+this.server.to(data.room).emit('receiveMessage', {
+  message: data.message,
+});
+
+So we need @WebSocketServer():
+
+import {
+  WebSocketGateway,
+  WebSocketServer,
+  SubscribeMessage,
+  MessageBody,
+  ConnectedSocket,
+} from '@nestjs/websockets';
+
+
+import { Server, Socket } from 'socket.io';
+
+
+@WebSocketGateway()
+export class ChatGateway {
+
+  @WebSocketServer()
+  server: Server;
+
+
+  @SubscribeMessage('joinRoom')
+  joinRoom(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.join(room);
+    return {
+      message: `Joined ${room}`,
+    };
+  }
+
+
+  @SubscribeMessage('leaveRoom')
+  leaveRoom(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    client.leave(room);
+
+    return {
+      message: `Left ${room}`,
+    };
+  }
+
+
+  @SubscribeMessage('sendMessage')
+  sendMessage(
+    @MessageBody() data: { room: string; message: string },
+  ) {
+    this.server.to(data.room).emit('receiveMessage', {
+      message: data.message,
+    });
+  }
+}
+
+notes->
+client — current connected user
+client is a Socket.IO Socket:
+
+@ConnectedSocket() client: Socket
+
+Important properties/methods:
+| Client                    | Purpose                             |
+| ------------------------- | ----------------------------------- |
+| `client.id`               | Unique ID of connected client       |
+| `client.handshake`        | Connection/request information      |
+| `client.handshake.auth`   | Auth data, commonly JWT             |
+| `client.join(room)`       | Join a room                         |
+| `client.leave(room)`      | Leave a room                        |
+| `client.emit()`           | Send to this client                 |
+| `client.broadcast.emit()` | Send to everyone except this client |
+| `client.rooms`            | Rooms this client belongs to        |
+| `client.disconnect()`     | Disconnect client                   |
+
+
+server — entire WebSocket server
+You get it with:
+
+@WebSocketServer()
+server: Server;
+
+Important methods:
+| Server                   | Purpose                      |
+| ------------------------ | ---------------------------- |
+| `server.emit()`          | Send to all clients          |
+| `server.to(room).emit()` | Send to a room               |
+| `server.sockets`         | Access connected sockets     |
+| `server.sockets.sockets` | Map of all connected clients |
+
+---->now frontend for websockets
+. Install Socket.IO client
+In your frontend:
+
+npm install socket.io-client
+
+Your architecture:
+
+React
+  │
+  │ Socket.IO
+  ↓
+NestJS Gateway
+
+2. NestJS Gateway
+import { WebSocketGateway } from '@nestjs/websockets';
+
+
+@WebSocketGateway()
+export class ChatGateway {}
+
+Start NestJS:
+npm run start:dev
+
+By default, Socket.IO will use the same server/port as your NestJS application.
+
+3. React client
+Create a socket:
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:3000');
+
+Now the React application attempts to connect to your NestJS WebSocket server.
+
+4. Check connection
+const socket = io('http://localhost:3000');
+
+
+socket.on('connect', () => {
+  console.log('Connected!');
+  console.log(socket.id);
+});
+
+The flow is:
+
+React
+  │
+  │ io("http://localhost:3000")
+  ↓
+NestJS
+@WebSocketGateway()
+  │
+  ↓
+Connection established
+
+5. Disconnect
+You can also listen for disconnection:
+
+socket.on('disconnect', () => {
+  console.log('Disconnected');
+});
+
+So the basic client code is:
+import { io } from 'socket.io-client';
+const socket = io('http://localhost:3000');
+
+socket.on('connect', () => {
+  console.log('Connected:', socket.id);
+});
+
+socket.on('disconnect', () => {
+  console.log('Disconnected');
+});
+
+
+Important
+This:
+const socket = io('http://localhost:3000');
+creates the client-side Socket connection.
+
+And this:
+@WebSocketGateway()
+creates the NestJS WebSocket server/Gateway.
+
+Next, we can connect this to @SubscribeMessage('hello') and actually send your first React → NestJS event.
+
+notes->
+now listen:
+emit send event as it receive? so it is handled  asyncronously(!important)
+when we register evernt using in server using emit(eventname,data) it should be handle using socket.on(eventname,handler(data)) in frontend;
+and when we register event  in client using socket.emit(eventname,data) ,it should be handled using @SubscribeMessages
+and when we return res directly from backend handler then it is get in socket.on(eventname,data,(res))
+
+.emit can be written inside connect handler or outside but .on is normally kept outside of connect
+
+.With your current code, there is an important React issue first: io() is inside App(), so every React render creates new Socket.IO connections and listeners.
+ For testing, use useEffect or move the sockets outside the component.
+
+
+
+--->
+for making chat enable between users
+ we identify the user using jwt or use a room/conversation.
+
+ 1. What is a Room?
+A room is simply a group of connected clients.
+
+Room: chat123
+
+
+Client A ─┐
+Client B ─┼──→ chat123
+Client C ─┘
+
+You can send a message to chat123 without sending it to users outside that room.
+
+2. Join a room
+
+NestJS:
+
+@SubscribeMessage('joinRoom')
+joinRoom(
+  @MessageBody() room: string,
+  @ConnectedSocket() client: Socket,
+) {
+  client.join(room);
+  console.log(`${client.id} joined ${room}`);
+}
+
+Frontend:
+socket.emit('joinRoom', 'chat123');
+
+3. Two clients join the same room
+
+Client A:
+socketA.emit('joinRoom', 'chat123');
+
+Client B:
+socketB.emit('joinRoom', 'chat123');
+
+Now:
+
+chat123
+├── Client A
+└── Client B
+
+4. Send message to the room
+NestJS:
+@SubscribeMessage('sendMessage')
+sendMessage(
+  @MessageBody() data: {
+    room: string;
+    message: string;
+  },
+) {
+  this.server
+    .to(data.room)
+    .emit('receiveMessage', data.message);
+}
+
+Client A:
+
+socketA.emit('sendMessage', {
+  room: 'chat123',
+  message: 'Hello B!',
+});
+
+Client B listens:
+socketB.on('receiveMessage', (message) => {
+  console.log(message);
+});
+
+Output:
+
+Hello B!
+5. The important three methods
+client.join('chat123');
+➡️ Join room
+
+client.leave('chat123');
+➡️ Leave room
+
+Remember
+this.server.to(room).emit()
+➡️ Everyone in room, including sender
+
+client.to(room).emit()
+➡️ Everyone in room except sender
+
+This distinction is important when we build the chat
+
+Flow
+Client A
+   │
+   │ joinRoom
+   ↓
+chat123 ← Client B
+   │
+   │
+   │ sendMessage
+   ↓
+Gateway
+   │
+   │ server.to('chat123').emit()
+   ↓
+Clients in chat123
+
+That's the core of room-based chat.
+Rooms can create a chat without authentication. JWT is needed when you need reliable user identity and authorization
+now JWT Based Room
+
+| Chat type           | JWT required?     | Room useful? |
+| ------------------- | ----------------- | ------------ |
+| Anonymous chat      | ❌ No              | ✅ Yes        |
+| Temporary chat room | ❌ No              | ✅ Yes        |
+| Private user chat   | ✅ Usually         | ✅ Yes        |
+| WhatsApp-like chat  | ✅ Yes             | ✅ Yes        |
+| Public chat room    | ❌ Not necessarily | ✅ Yes        |
+
+
+
+------------------------>
+
+
+1. Allow all origins
+app.enableCors();
+This allows requests from any origin.
+
+You can also write:
+app.enableCors({
+  origin: '*',
+});
+
+2. Allow one specific frontend
+app.enableCors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+});
+
+3. Allow multiple origins
+app.enableCors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3001',
+  ],
+});
+
+
+4. Dynamic origin
+app.enableCors({
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3001',
+    ];
+
+
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+});
+
+credentials: true means:
+Allow the browser to send credentials along with the request/connection.
+Credentials mainly include cookies and browser authentication information.
+if you're sending JWT in a header/auth object rather than a cookie, credentials: true is not what sends the JWT.
+
+same for @WebSocketGateway
+
+For Socket.IO, also configure the Gateway:
+@WebSocketGateway({
+  cors: {
+    origin: 'http://localhost:5173',
+    credentials: true,
+  },
+})
+
+
+export class ChatGateway {}
+
+
+--->
+1. INSTALL
+npm i cookie-parser//same as express js
+npm i -D @types/cookie-parser
+
+
+2. main.ts
+
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import * as cookieParser from 'cookie-parser';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.use(cookieParser());
+  await app.listen(3000);
+}
+bootstrap();
+
+
+3. SET COOKIE
+
+import {
+  Controller,
+  Post,
+  Res,
+} from '@nestjs/common';
+import { Response } from 'express';
+
+@Controller('auth')
+export class AuthController {
+  @Post('login')
+  login(
+    @Res({ passthrough: true })
+    res: Response,
+  ) {
+    res.cookie('sessionId', 'abc123', {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return {
+      message: 'Login successful',
+    };
+  }
+}
+
+Server sends cookie in the response → Browser stores it.
+and now available with request
+
+
+4. READ COOKIE
+
+import {
+  Controller,
+  Get,
+  Req,
+} from '@nestjs/common';
+
+import { Request } from 'express';
+
+@Controller('auth')
+export class AuthController {
+
+  @Get('profile')
+  profile(@Req() req: Request) {
+    const sessionId =
+      req.cookies.sessionId;
+    return {
+      sessionId,
+    };
+  }
+}
+
+
+5. DELETE COOKIE
+
+@Post('logout')
+logout(
+  @Res({ passthrough: true })
+  res: Response,
+) {
+  res.clearCookie('sessionId');
+
+  return {
+    message: 'Logged out',
+  };
+}
+
+
+6. COOKIE OPTIONS
+
+res.cookie('sessionId', 'abc123', {
+  // JavaScript cannot access it
+  httpOnly: true,
+
+  // HTTPS only in production
+  secure: true,
+
+  // CSRF protection
+  sameSite: 'lax',
+
+  // Cookie lifetime
+  maxAge: 24 * 60 * 60 * 1000,
+
+  // Available for entire application
+  path: '/',
+});
+
+
+7. BASIC COOKIE METHODS
+
+SET:
+res.cookie('key', 'value');
+
+READ:
+req.cookies.key;
+
+DELETE:
+res.clearCookie('key');
+
+
+8. AUTHENTICATION FLOW
+
+LOGIN
+ ↓
+Verify email/password
+ ↓
+Create session/token
+ ↓
+res.cookie('sessionId', sessionId)
+ ↓
+Browser stores cookie
+ ↓
+Future request
+ ↓
+Browser automatically sends cookie
+ ↓
+req.cookies.sessionId
+ ↓
+Validate session/token
+ ↓
+Authenticated
+
+
+9. IMPORTANT
+The browser automatically sends cookies on requests when the cookie matches the request's domain/path and its security rules allow it.
+For your NestJS authentication flow:
+
+1. LOGIN
+
+Browser
+   ↓
+POST /auth/login
+   ↓
+NestJS
+
+2. NESTJS SETS COOKIE
+NestJS
+   ↓
+Set-Cookie: sessionId=abc123
+   ↓
+Browser stores cookie
+
+
+3. NEXT REQUEST
+
+Browser
+   ↓
+GET /auth/profile
+Cookie: sessionId=abc123
+   ↓
+NestJS
+
+
+4. NESTJS READS IT
+req.cookies.sessionId
+        ↓
+     abc123
+
+You don't manually attach the cookie like this:
+
+headers: {
+  Cookie: "sessionId=abc123"
+}
+
+The browser handles that automatically.
+
+But there is one important condition
+
+If your frontend and backend are on different origins, for example:
+
+Next.js → http://localhost:3000
+NestJS  → http://localhost:3002
+
+your frontend request may need:
+
+fetch('http://localhost:3002/auth/profile', {
+  credentials: 'include',
+});
+
+And NestJS CORS needs credentials enabled:
+
+app.enableCors({
+  origin: 'http://localhost:3000',
+  credentials: true,
+});
+
+So remember:
+
+Same-site/simple request
+        ↓
+Browser automatically sends matching cookie
+
+Cross-origin frontend → backend
+        ↓
+credentials: 'include'
+        +
+NestJS credentials: true
+
+And HttpOnly does NOT stop the browser from sending the cookie. It only stops JavaScript from reading it.
+
+Cookie
+→ Stored by the Browser
+→ Automatically sent with matching HTTP requests
+matching http request:
+Cookie belongs to localhost
+          ↓
+Request is to localhost
+          ↓
+       MATCH ✅
+          ↓
+Browser sends cookie
+
+Cookie belongs to localhost
+          ↓
+Request is to google.com
+          ↓
+      NO MATCH ❌
+          ↓
+Browser doesn't send cookie
+
+A cookie is automatically sent when you're making a 
+request to the website/domain that the cookie belongs
+ to (subject to cookie rules like path, Secure, SameSite, and expiration).
+
+localStorage
+→ Stored by the Browser
+→ JavaScript can read/write it
+→ NOT automatically sent with requests
+
+Session
+→ Usually stored on the Server
+→ Or Redis/DB in production
+
+
+-->
+SESSION AUTHENTICATION
+
+Session = server-side information that remembers
+          which user is logged in.
+
+
+1. LOGIN
+
+Client
+  ↓
+/login
+  ↓
+NestJS verifies email/password
+  ↓
+Create unique sessionId
+  ↓
+Store session on server
+  ↓
+Send sessionId to browser as Cookie
+
+
+2. COOKIE
+
+NestJS:
+
+res.cookie('sessionId', sessionId, {
+  httpOnly: true,
+});
+
+Browser stores:
+
+sessionId = abc123
+
+
+3. SESSION
+
+Server stores:
+
+abc123
+   ↓
+{
+  userId: 10,
+  role: "USER"
+}
+
+IMPORTANT:
+
+Cookie → stored in Browser
+Session → stored on Server/Redis
+
+Cookie contains:
+sessionId = abc123
+
+Session contains:
+user information
+
+
+4. NEXT REQUEST
+
+Browser
+  ↓
+GET /profile
+  ↓
+Browser automatically sends:
+
+Cookie: sessionId=abc123
+  ↓
+NestJS reads cookie
+  ↓
+req.cookies.sessionId
+  ↓
+Get session using abc123
+  ↓
+Find user
+  ↓
+Authenticated
+
+
+5. SESSION GUARD
+
+Create:
+
+SessionGuard//it has context which can get req
+
+Flow:
+
+Request
+  ↓
+SessionGuard
+  ↓
+Read sessionId from cookie
+  ↓
+Find session
+  ↓
+Session exists?
+ ├── YES → request.user = session
+ │          ↓
+ │        Allow request
+ │
+ └── NO  → Reject request
+
+
+6. PROTECT ROUTE
+
+@UseGuards(SessionGuard)
+@Get('profile')
+getProfile(@Req() req) {
+  return req.user;
+}
+
+
+7. LOGOUT
+
+User clicks logout
+  ↓
+NestJS gets sessionId
+  ↓
+Delete session
+  ↓
+Clear cookie
+  ↓
+User logged out
+
+
+8. COMPLETE FLOW
+
+LOGIN
+ ↓
+Verify user
+ ↓
+Create sessionId
+ ↓
+Store session
+ ↓
+Set Cookie
+ ↓
+Browser stores Cookie
+ ↓
+Future Request
+ ↓
+Browser sends Cookie automatically
+ ↓
+SessionGuard
+ ↓
+Read sessionId
+ ↓
+Find Session
+ ↓
+Authenticated
+ ↓
+Controller
+
+
+
+
+9. IMPORTANT DIFFERENCE
+
+COOKIE
+→ Browser storage
+→ Sends sessionId
+
+SESSION
+→ Server-side storage
+→ Stores login/user information
+
+GUARD
+→ Checks session
+→ Protects routes
+
+
+11. PRODUCTION
+
+Small/simple application:
+
+NestJS
+  ↓
+Session
+  ↓
+Server memory
+
+
+Production / multiple servers:
+
+NestJS
+  ↓
+Session ID
+  ↓
+Redis
+  ↓
+Session data
+
+
+12. SESSION VS JWT
+
+SESSION:
+
+Browser
+ ↓
+Cookie
+ ↓
+Session ID
+ ↓
+Server/Redis
+ ↓
+User
+
+
+JWT:
+
+Browser
+ ↓
+JWT
+ ↓
+NestJS verifies JWT
+ ↓
+User
+
+
+JWT does NOT require sessions.
+SESSION does NOT require JWT.
+ ✅ You can use either JWT or Session-based authentication
+
+
+
+
+ how session is store:
+ SESSION WITHOUT REDIS
+1. Server creates session ID
+   ↓
+sessionId = "abc123"
+
+2. Store session in server RAM
+const sessions = new Map();
+
+sessions.set("abc123", {
+  userId: 10,
+  role: "USER"
+});
+
+3. Send session ID to browser
+res.cookie("sessionId", "abc123");
+
+4. Browser sends cookie automatically
+Cookie: sessionId=abc123
+
+5. Server finds session
+sessions.get("abc123");
+
+6. User authenticated ✅
+
+If you use Express sessions, you get req.session because a session middleware manages the session for you.
+
+STORAGE:
+
+Browser
+→ Cookie → sessionId
+
+NestJS RAM
+→ Session → user data
+
+
+IMPORTANT:
+Server restart → sessions lost ❌
+Multiple servers → sessions not shared ❌
+Production → Redis is better ✅
+
+
+
+
+
+notes->
+req.user is temporary request data, not a database/session store; it is available only that request 
+It is available only when your authentication Guard/Middleware runs on that request and sets it.
+
+Example
+// Auth Guard
+canActivate(context: ExecutionContext) {
+  const request = context.switchToHttp().getRequest();
+  const payload = verifyJWT(request);
+  request.user = payload;
+  return true;
+}
+
+Then:
+
+Request 1
+   ↓
+AuthGuard
+   ↓
+request.user = payload
+   ↓
+Controller can use req.user
+   ↓
+Request ends
+   ↓
+req.user disappears
+
+Next request:
+
+Request 2
+   ↓
+NEW request object
+   ↓
+req.user doesn't exist yet
+   ↓
+AuthGuard runs again
+   ↓
+JWT verified
+   ↓
+req.user = payload
+   ↓
+Controller/Resolver
+Why it feels like it's "always there"
+
+Because you probably have:
+
+@UseGuards(JwtAuthGuard)
+on your protected routes, or a global guard:
+
+---->
+Remember:REST
+→ req directly
+->res direct
+
+GraphQL
+1. GraphQL context
+GraphQLModule.forRoot({
+  driver: ApolloDriver,
+  autoSchemaFile: true,
+
+  context: ({ req, res }) => ({
+    req,
+    res,
+  }),
+}),
+→ GqlExecutionContext
+→ context
+→ req
+
+cookie settion working same
+
+------------->
+application/Storage tab
+├── Local Storage
+├── Session Storage
+├── Cookies
+└── ...
+
+1. Cookies
+Browser
+└── Cookies
+    └── sessionId = abc123
+
+Cookies can be automatically sent with matching HTTP requests.
+
+2. Local Storage
+Browser
+└── Local Storage
+    └── token = abc123
+
+It stays until you/delete it or the site clears it.
+
+JavaScript can access it:
+localStorage.getItem('token');
+
+3. Session Storage
+This is probably the “Session” you're asking about.
+
+Browser
+└── Session Storage
+    └── token = abc123
+
+It is browser-side storage, just like Local Storage.
+
+The main difference:
+
+Local Storage
+→ survives browser/tab restart
+
+Session Storage
+→ generally exists only for that tab
+→ cleared when that tab/window is closed
+
+JavaScript:
+sessionStorage.setItem('token', 'abc123');
+sessionStorage.getItem('token');
+
+Very important: Session Storage ≠ Server Session
+
+These two names are confusing:
+Browser Session Storage
+        ≠
+Server Authentication Session
+
+Browser Session Storage:
+
+Browser
+ ↓
+sessionStorage
+ ↓
+data
+
+Server authentication session:
+
+Browser
+ ↓
+Cookie: sessionId
+ ↓
+NestJS
+ ↓
+Server/Redis
+ ↓
+Session data
+
+-------->
+Joi Validation
+Joi is a JavaScript validation library used to validate data against a defined schema.
+In NestJS, it is commonly used to validate request body, query parameters, environment variables, configuration, etc.
+
+Install
+npm install joi
+Basic Example
+import Joi from 'joi';
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  age: Joi.number().min(18).required(),
+});
+
+Validate data:
+const data = {
+  name: 'Naeem',
+  email: 'test@gmail.com',
+  age: 22,
+};
+
+const result = schema.validate(data);
+
+if (result.error) {
+  console.log("Validation failed");
+  console.log(result.error.message);
+} else {
+  console.log("Validation successful");
+  console.log(result.value);
+}
+
+console.log(result);
+
+If valid:
+result:
+{
+  value: {
+    name: "Naeem",
+    email: "test@gmail.com"
+  }
+}
+So:
+result.error // undefined
+
+
+Validation fails
+For example:
+
+const data = {
+  name: "",
+  email: "wrong-email"
+};
+
+Result:
+
+{
+  value: {
+    name: "",
+    email: "wrong-email"
+  },
+  error: ValidationError
+}
+
+So:
+
+result.error // exists
+
+Common Joi Validators
+Joi.string()
+Joi.number()
+Joi.boolean()
+Joi.array()
+Joi.object()
+Joi.date()
+
+Common rules:
+
+Joi.string().required()
+Joi.string().min(3)
+Joi.string().max(20)
+Joi.string().email()
+
+Joi.number().required()
+Joi.number().min(18)
+Joi.number().max(100)
+
+Joi.boolean().required()
+
+Joi.array().items(Joi.string())
+Joi vs class-validator
+class-validator
+      ↓
+DTO class + decorators
+
+Joi
+      ↓
+Schema object
+
+Example class-validator:
+
+class UserDto {
+  @IsString()
+  name: string;
+
+  @IsEmail()
+  email: string;
+}
+
+Joi:
+
+const userSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+});
+
+Main idea: Joi validates the actual data, while the Joi schema defines what that data is allowed to look like.
+
+it is like express-validator
+
+Yes. Joi and express-validator solve the same broad problem: validating incoming data, but they work differently.
+
+Simple comparison
+Incoming Request
+       ↓
+   Validation
+       ↓
+ Valid? ───── No → Error
+   ↓
+  Yes
+   ↓
+Controller
+Joi
+
+Joi is schema-based:
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().email().required(),
+  age: Joi.number().min(18),
+});
+
+You define the whole data structure in one schema.
+
+express-validator
+
+express-validator uses validation chains/middleware:
+
+body('name').isString().notEmpty()
+
+body('email').isEmail()
+
+body('age').isInt({ min: 18 })
+
+Then:
+
+const errors = validationResult(req);
+In NestJS
+
+Since you're learning NestJS, the common approach is:
+
+NestJS
+ ├── class-validator ⭐
+ ├── Joi
+ └── custom Pipes
+
+express-validator is more commonly seen in Express.js applications.
+
+So you can think:
+
+Joi              → Schema validation
+express-validator → Validation middleware/chains
+class-validator  → DTO + decorators
+
+All three are used to answer the same basic question:
+
+"Is this incoming data valid?"
+
+---------->
+bcrypt is used to securely hash passwords before storing them in the database.
+
+const hash = await bcrypt.hash(password, 10);
+password → original password
+10 → salt rounds
+hash → encrypted-looking password stored in DB
+
+For login:
+await bcrypt.compare(password, hash);
+
+➡️ Checks whether the entered password matches the stored hash.
+Match → true
+No match → false
+
+
+salt value:
+Lower (e.g. 5) → faster, but less resistant to brute-force attacks.
+Higher (e.g. 12) → slower, but stronger.
+10 → common starting value for development. 
+12 → commonly reasonable for production, depending on server performance.
+
+
+| Function               | Meaning                            |
+| ---------------------- | ---------------------------------- |
+| `bcrypt.hash()`        | **Async** → returns a Promise      |
+| `bcrypt.hashSync()`    | **Sync** → returns result directly |
+| `bcrypt.compare()`     | **Async** → returns a Promise      |
+| `bcrypt.compareSync()` | **Sync** → returns result directly |
+
+---->
+In NestJS, crypto usually means Node.js's built-in crypto module.
+It is used for things like:
+
+🔐 Hashing passwords
+🔑 Generating random tokens
+🔒 Encryption/decryption
+🔢 Generating OTPs
+🧂 Creating salts
+
+Example:
+import * as crypto from 'crypto';
+
+const hash = crypto
+  .createHash('sha256')
+  .update('password123')
+  .digest('hex');
+
+Important: For storing user passwords, prefer bcrypt/argon2 rather than plain crypto.createHash().
+
+in one short all example
+import * as crypto from 'crypto';
+
+// Hash
+const hash = crypto.createHash('sha256').update('password').digest('hex');
+
+// Random token
+const token = crypto.randomBytes(32).toString('hex');
+
+// OTP
+const otp = crypto.randomInt(100000, 1000000).toString();
+
+// UUID
+const id = crypto.randomUUID();
+
+Crypto = hashing + random token + OTP + UUID + encryption/decryption.
+
+what fun what is doing
+In your example, each function does this:
+
+crypto.createHash('sha256')
+➡️ Creates a SHA-256 hash object.
+
+.update('password')
+➡️ Gives the data to be hashed.
+
+.digest('hex')
+➡️ Produces the final hash as a hexadecimal string.
+
+crypto.randomBytes(32)
+➡️ Generates 32 random bytes → useful for secure tokens.
+
+.toString('hex')
+➡️ Converts those bytes into a readable hexadecimal string.
+
+crypto.randomInt(100000, 1000000)
+➡️ Generates a random number from 100000 to 999999 → useful for a 6-digit OTP.
+
+.toString()
+➡️ Converts the number to a string.
+
+crypto.randomUUID()
+➡️ Generates a unique UUID, e.g.
+
+550e8400-e29b-41d4-a716-446655440000
+In one line
+createHash → hash
+randomBytes → random token
+randomInt → OTP/random number
+randomUUID → unique ID
+
+---->
+DEPENDENCY vs DEV DEPENDENCY
+────────────────────────────────
+"dependencies"
+→ Packages needed when your application RUNS in production.
+
+Example:
+npm install @nestjs/microservices
+
+package.json:
+"dependencies": {
+  "@nestjs/microservices": "..."
+}
+
+
+"devDependencies"
+→ Packages needed mainly while DEVELOPING, BUILDING, TESTING, or linting.
+
+Example:
+npm install -D @types/node
+
+package.json:
+"devDependencies": {
+  "@types/node": "..."
+}
+
+
+EASY RULE
+────────────────────────────────
+Does the application need it while RUNNING?
+        ↓
+       YES
+        ↓
+dependencies
+
+Only needed for development/build/test?
+        ↓
+       YES
+        ↓
+devDependencies
+
+EXAMPLES
+────────────────────────────────
+
+dependencies:
+→ @nestjs/common
+→ @nestjs/core
+→ @nestjs/microservices
+→ express
+→ mongoose
+→ mysql2
+→ jsonwebtoken
+
+devDependencies:
+→ typescript
+→ @types/node
+→ jest
+→ eslint
+→ prettier
+→ ts-node
+
+
+COMMANDS
+────────────────────────────────
+
+npm install package
+→ dependencies
+
+npm install -D package
+→ devDependencies
+
+
+FOR YOUR CASE
+────────────────────────────────
+@nestjs/microservices
+Since your NestJS application actually uses it at runtime:
+npm install @nestjs/microservices
+✅ Put it in "dependencies"

@@ -1,0 +1,123 @@
+-->forRoot()       → direct configuration
+forRootAsync()  → configuration using ConfigService / factory / async logic
+
+-->
+export const dbConfig = (
+  configService: ConfigService,
+): TypeOrmModuleOptions ()=>{}
+you tell TypeScript:
+"This function must return a valid TypeORM configuration
+
+-->
+Option 1 — @BeforeInsert() / @BeforeUpdate() ⭐
+For your case, this is the simplest approach.
+
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
+
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ unique: true })
+  email: string;
+
+  @Column()
+  password: string;
+
+  @Column({ unique: true })
+  username: string;
+
+  @Column({ nullable: true })
+  avatar: string;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  generateAvatar() {
+    this.avatar = `https://robohash.org/${this.username}`;
+  }
+}
+What happens?
+When you do:
+await userRepository.save(user);
+
+TypeORM does:
+
+save(user)
+   ↓
+@BeforeInsert()
+   ↓
+generateAvatar()
+   ↓
+avatar = https://robohash.org/naeem
+   ↓
+INSERT into users
+
+For an existing user:
+
+save(user)
+   ↓
+@BeforeUpdate()
+   ↓
+generateAvatar()
+   ↓
+UPDATE users
+But there is an important difference
+
+Mongoose:
+pre('save')
+is a middleware hook.
+
+TypeORM:
+@BeforeInsert()
+@BeforeUpdate()
+
+are entity lifecycle hooks/listeners.
+
+Option 2 — Subscriber
+For more complex logic, use a TypeORM subscriber:
+@EventSubscriber()
+export class UserSubscriber
+  implements EntitySubscriberInterface<User> {
+  listenTo() {
+    return User;
+  }
+  beforeInsert(event: InsertEvent<User>) {
+    event.entity.avatar =
+      `https://robohash.org/${event.entity.username}`;
+  }
+}
+Use a subscriber when the logic is more complicated or you want to keep the Entity clean.
+For your project
+For this simple avatar generation:
+
+Mongoose:
+pre('save')
+
+       ↓ equivalent idea ↓
+
+TypeORM:
+@BeforeInsert()
+@BeforeUpdate()
+
+I'd use @BeforeInsert() if the avatar should only be generated when creating the user, 
+or both decorators if it should change whenever the username changes.
+note->
+@BeforeInsert() does NOT run with:
+repository.insert()
+same for Mongoose because
+insert() is a direct database operation. It bypasses entity lifecycle hooks.
+then put login at the time of insertion
+
+save()   → lifecycle hooks ✅
+insert() → lifecycle hooks ❌
+update() → lifecycle hooks ❌
+
+--->
+

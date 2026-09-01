@@ -1,0 +1,183 @@
+# Common Web Attacks & Helmet Security in Express.js
+
+## 1. XSS (Cross-Site Scripting)
+
+A hacker injects malicious JavaScript into your website.
+### Example
+
+Suppose users can comment:
+
+```html id="mwrlm6"
+<script>alert("Hacked")</script>
+```
+
+If your site runs this script in other users’ browsers, attacker can:
+
+* steal cookies
+* steal tokens
+* redirect users
+
+`helmet` helps reduce this risk using security headers like CSP.
+
+---
+
+## 2. Clickjacking
+
+A malicious site hides your website inside an invisible iframe and tricks users into clicking buttons unknowingly.
+
+### Example
+User thinks they are clicking:
+
+```text id="6gxvs1"
+Play Game
+```
+
+But actually they click:
+
+```text id="h3qf0p"
+Transfer Money
+```
+
+`helmet` prevents this using:
+
+```http id="k18grv"
+X-Frame-Options
+```
+
+---
+
+## 3. MIME Sniffing
+Browser guesses file type incorrectly.
+### Example
+Server sends:
+
+```text id="9ul0ye"
+image.jpg
+```
+
+But browser treats it as:
+
+```text id="c3r6lt"
+JavaScript
+```
+
+This can execute harmful code.
+
+`helmet` stops this using:
+
+```http id="n9t0tq"
+X-Content-Type-Options: nosniff
+```
+
+---
+
+## 4. Data Injection Attacks
+Attacker injects harmful input into app.
+### Example
+
+```js id="01kzzq"
+username = "<script>hack()</script>"
+```
+
+or malicious database query input.
+This may:
+
+* change data
+* steal data
+* execute unwanted code
+
+`helmet` helps reduce browser-side risks, but validation is also needed.
+
+---
+
+## 5. Information Leakage
+
+Your server accidentally reveals sensitive details.
+
+### Example
+
+Headers may expose:
+
+* Express version
+* Server technology
+* Backend details
+
+Attackers use this info to find vulnerabilities.
+
+`helmet` hides many unnecessary headers like:
+
+```http id="qsvwzt"
+X-Powered-By: Express
+```
+
+---
+
+# Very Short Revision Table
+
+| Attack              | Meaning                         |
+| ------------------- | ------------------------------- |
+| XSS                 | Inject malicious JS             |
+| Clickjacking        | Trick user clicks               |
+| MIME Sniffing       | Browser guesses wrong file type |
+| Data Injection      | Insert harmful input            |
+| Information Leakage | Reveal sensitive server info    |
+
+---
+
+# Helmet in Express.js
+
+`helmet` is an Express middleware that improves security by setting HTTP security headers.
+
+## Install
+
+```bash id="2s40x4"
+npm install helmet
+```
+
+## Use
+
+### ES Module
+
+```js id="ghsqf5"
+import express from "express"
+import helmet from "helmet"
+
+const app = express()
+
+app.use(helmet())
+
+app.get("/", (req,res)=>{
+   res.send("Secure App")
+})
+
+app.listen(3000)
+```
+
+### CommonJS
+
+```js id="z71c1w"
+const express = require("express")
+const helmet = require("helmet")
+
+const app = express()
+
+app.use(helmet())
+```
+
+---
+
+# Important Headers Added by Helmet
+
+| Header                    | Purpose                       |
+| ------------------------- | ----------------------------- |
+| X-Frame-Options           | Prevents clickjacking         |
+| X-Content-Type-Options    | Stops MIME sniffing           |
+| Content-Security-Policy   | Helps prevent XSS             |
+| Strict-Transport-Security | Forces HTTPS                  |
+| Referrer-Policy           | Controls referrer information |
+
+---
+
+# Interview Answer
+
+Helmet is an Express middleware that secures applications by setting HTTP security headers to protect against common web vulnerabilities like XSS, clickjacking, MIME sniffing, data injection risks, and information leakage.

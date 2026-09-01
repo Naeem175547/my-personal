@@ -1,0 +1,16 @@
+{
+    "name": "redixcode",
+    "version": "1.0.0",
+    "description": "Redis and MongoDB project",
+    "main": "src/index.js",
+    "type": "module",
+    "scripts": {
+        "start": "node src/index.js",
+        "dev": "node --watch src/index.js"
+    },
+    "dependencies": {
+        "express": "^5.1.0",
+        "ioredis": "^5.7.0",
+        "mongoose": "^8.18.0"
+    }
+}

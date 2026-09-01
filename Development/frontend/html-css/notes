@@ -1,0 +1,328 @@
+ -->grid-template-columns: repeat(auto-fit,minmax(200px,1fr));
+ ✅ repeat(auto-fit, …)
+repeat() → repeats column pattern
+auto-fit → automatically fits as many columns as possible in the container
+
+👉 Difference:
+
+auto-fit → collapses empty columns (good for responsiveness)
+auto-fill → keeps empty columns (can leave gaps)
+
+✅ minmax(200px, 1fr)
+
+Defines column size range:
+
+Minimum width: 200px
+Maximum width: 1fr (fraction of available space)
+
+👉 Meaning:
+
+Each column will be at least 200px
+If space is available, it will expand equall
+👉 "It creates a responsive grid where columns automatically 
+fit into the container, each having
+ a minimum width of 200px and expanding equally using 1fr."
+ 🔥 Priority Order
+Fit as many columns as possible using the minimum (200px)
+Only after that → distribute extra space (1fr)
+
+-->
+/* Enable transition only after page loads */
+button.ready {
+    transition: background-color 0.3s ease, border 0.3s ease;
+}
+
+
+--> if there are two inline text if we give width 100% for one then
+ they above and below each other as (flex-dierction:column)
+
+ -->
+ 🔹 html, body { ... }
+
+This is a group selector.
+
+👉 It means: apply the same styles to both the <html> and <body> elements.
+
+<html> → root of the page
+<body> → visible content area
+
+💡 Why both?
+Because sometimes height-related styles don’t work properly unless both are set.
+html,body{ height: 100%;}
+
+🔹 height: 100%;
+
+👉 This sets the height of both <html> and <body> to 100% of the viewport (screen height).
+
+Without this, body height depends on content
+With this, body takes full screen height
+
+💡 Useful for:
+
+Full-screen layouts
+Flexbox or centering content vertically
+| Feature      | `html`            | `body`                |
+| ------------ | ----------------- | --------------------- |
+| Position     | Root element      | Inside `html`         |
+| Purpose      | Structure of page | Visible content       |
+| Contains     | `head` + `body`   | UI elements           |
+| CSS Usage    | Global settings   | Layout & design       |
+| Units impact | Controls `rem`    | Doesn’t control `rem` |
+
+-->🔹 Short Answer
+
+👉 Yes, if the parent height decreases:
+
+height: 100% → child will reduce
+min-height: 100% → child will also reduce (minimum is based on parent)
+
+BUT the real difference shows when content is involved.
+
+🔍 Case 1: No extra content inside
+
+Parent = 500px → then reduced to 300px
+
+With height: 100%
+.child {
+  height: 100%;
+}
+
+👉 Child = exactly same as parent
+
+500px → becomes 300px ✔
+With min-height: 100%
+.child {
+  min-height: 100%;
+}
+
+👉 Child = at least parent height
+
+500px → becomes 300px ✔
+
+✅ So in this case: both behave same
+
+🔥 Case 2: Content inside child (IMPORTANT)
+
+Parent = 300px
+Content inside child needs = 600px
+
+❌ With height: 100%
+
+👉 Child is forced to stay 300px
+
+Content overflows ❌
+Layout breaks
+✅ With min-height: 100%
+
+👉 Child starts at 300px but can grow
+
+Expands to 600px ✔
+No overflow
+🧠 Key Understanding
+height: 100% → strict / fixed
+min-height: 100% → flexible / expandable
+🔁 So your exact question:
+
+if we reduce parent height then both height reduces?
+
+👉 ✅ YES, both will reduce
+👉 ❗ BUT:
+
+height → always forced to match parent
+min-height → only minimum, can grow if needed
+🧱 Simple Analogy
+height = "You must be exactly this tall"
+min-height = "You must be at least this tall, but can grow"
+🚀 Practical Tip (important)
+
+For sections like .pimg1:
+
+👉 Best:
+
+min-height: 100vh;
+
+
+->
+🔹 html { font-size: 62.5%; }
+
+This is a very common technique used in CSS for easier sizing with rem.
+
+✅ What it means
+By default, most browsers set:
+1rem = 16px
+When you write:
+html {
+    font-size: 62.5%;
+}
+
+It changes root font size to:
+
+62.5% of 16px = 10px
+✅ Why developers use this
+
+Because 10px is easier to calculate than 16px.
+
+So now:
+
+1rem = 10px
+✅ Easy conversion
+rem	px
+1rem	10px
+1.6rem	16px
+2rem	20px
+3rem	30px
+
+👉 Just multiply by 10
+
+✅ Benefits
+Easier math (no need to divide by 16)
+Cleaner and more readable code
+Helps in responsive design
+Works well with rem units instead of px
+✅ Example
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem; /* 16px */
+}
+
+h1 {
+    font-size: 3.2rem; /* 32px */
+}
+⚠️ Important Notes
+This affects the entire website because html is the root.
+Some users change browser default font size → this still respects accessibility.
+Avoid mixing too much px with rem.
+
+-->
+📘 CSS all Property – Complete Guide
+🔹 What is all?
+all: value;
+
+👉 It is a shorthand that resets or controls ALL CSS properties at once
+(except a few like direction and unicode-bidi)
+
+🔹 Possible Values of all
+✅ 1. all: unset;
+all: unset;
+
+👉 Behavior:
+
+Inherited properties → inherit
+Non-inherited → initial
+✔ Example
+button {
+    all: unset;
+}
+
+👉 Removes almost everything → clean slate
+
+✅ 2. all: initial;
+all: initial;
+
+👉 Behavior:
+
+Resets everything to default CSS values
+✔ Example
+div {
+    all: initial;
+}
+
+👉 Acts like browser default styles
+
+✅ 3. all: inherit;
+all: inherit;
+
+👉 Behavior:
+
+Takes all properties from parent
+✔ Example
+div {
+    all: inherit;
+}
+
+👉 Fully copies parent styling
+
+✅ 4. all: revert; (🔥 Important)
+all: revert;
+
+👉 Behavior:
+
+Reverts styles to browser stylesheet OR previous CSS layer
+Ignores your custom CSS
+
+-->if we have two div and first get width and for second we give 100% then it will cover all remaining area
+--->🔥 Direction Difference (VERY IMPORTANT)
+✅ In relative
+
+👉 Values are like movement
+
+Property	Meaning
+top: 20px	move DOWN
+left: 20px	move RIGHT
+right: 20px	move LEFT
+bottom: 20px	move UP
+✅ In absolute
+
+👉 Values are like distance from edges
+
+Property	Meaning
+top: 20px	20px from top of parent
+left: 20px	20px from left
+right: 20px	20px from right
+bottom: 20px	20px from bottom
+
+
+👉 All three (absolute, fixed, sticky) use top, left, right, bottom the SAME way
+| Position | Reference                          |
+|----------|-----------------------------------|
+| static   | normal document flow              |
+| relative | itself (original position)        |
+| absolute | nearest positioned(relative or absolute) parent         |
+| fixed    | viewport (screen)                 |
+| sticky   | parent (then viewport on scroll)  |
+
+
+--->disply:flex vs flex-inline
+| Feature     | flex           | inline-flex   |
+| ----------- | -------------- | ------------- |
+| Line break  | Yes (block)    | No (inline)   |
+| Width       | Full available | Content-based |
+| Layout flow | New line       | Same line     |
+| Children    | Flex items     | Flex items    |
+
+
+-->
+1. flex: 1 1 0
+flex: 1 1 0;
+Meaning:
+flex-grow: 1 → grow equally
+flex-shrink: 1 → shrink equally
+flex-basis: 0 ⭐ (IGNORE content)//means all the flex-items will have equal width regardless of thier content
+✔ Result:
+
+👉 All items get exact equal width
+👉 Content does NOT affect layout
+
+2. flex: 1 1 auto
+flex: 1 1 auto;
+Meaning:
+flex-grow: 1
+flex-shrink: 1
+flex-basis: auto ⭐ (content decides starting size)//means if one flex-item has more content then it will not wrap first it 
+fill try to cover area that is available then all grow 
+✔ Result:
+👉 Content affects initial width
+👉 Then space is distributed
+
+
+-->inline-block elements shrink according to content unless (fixed)width is given
+-->text-align: center;
+only centers:
+text
+inline elements
+inline-block elements
+
+It does NOT center block elements like div.

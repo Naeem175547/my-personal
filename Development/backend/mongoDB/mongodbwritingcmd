@@ -1,0 +1,12 @@
+db.student.aggregate([
+    {
+        $match:{age:{$gt:20}}
+    }
+,
+   {
+      $group: {
+         _id: "$course",
+         count: { $sum: 1 }
+      }
+   }
+])

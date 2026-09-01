@@ -1,0 +1,564 @@
+In MySQL, a transaction lets you treat multiple SQL operations as one unit of work.
+
+Think:
+
+START TRANSACTION
+      ↓
+   SQL 1
+      ↓
+   SQL 2
+      ↓
+   SQL 3
+      ↓
+COMMIT → permanently save
+ROLLBACK → undo everything
+
+1. START TRANSACTION
+Starts a transaction.
+
+START TRANSACTION;
+
+You can also use:
+BEGIN;
+
+Example:
+START TRANSACTION;
+
+
+INSERT INTO users (name, username)
+VALUES ('Ali', 'ali');
+
+
+INSERT INTO posts (title, content, userId)
+VALUES ('My Post', 'Hello', 1);
+
+At this point, the changes are not permanently committed yet.
+
+2. COMMIT
+Permanently saves all changes made in the current transaction.
+
+COMMIT;
+
+Example:
+START TRANSACTION;
+
+
+UPDATE users
+SET name = 'Rahul'
+WHERE id = 1;
+
+
+UPDATE users
+SET name = 'Aman'
+WHERE id = 2;
+
+
+COMMIT;
+
+Both updates are permanently saved.
+
+3. ROLLBACK
+
+Undo all changes made since the transaction started.
+ROLLBACK;
+
+Example:
+START TRANSACTION;
+
+
+UPDATE users
+SET name = 'Rahul'
+WHERE id = 1;
+
+
+DELETE FROM posts
+WHERE id = 5;
+
+
+ROLLBACK;
+
+Both operations are undone.
+
+UPDATE ❌ undone
+DELETE ❌ undone
+
+4. SAVEPOINT
+A savepoint creates a checkpoint inside a transaction.
+SAVEPOINT savepoint_name;
+
+Example:
+
+START TRANSACTION;
+
+
+INSERT INTO users (name, username)
+VALUES ('Ali', 'ali');
+
+
+SAVEPOINT user_created;
+
+
+INSERT INTO posts (title, content, userId)
+VALUES ('Post 1', 'Hello', 1);
+
+
+SAVEPOINT post_created;
+
+Now you have:
+
+START TRANSACTION
+       ↓
+   INSERT user
+       ↓
+SAVEPOINT user_created
+       ↓
+   INSERT post
+       ↓
+SAVEPOINT post_created
+
+5. ROLLBACK TO SAVEPOINT
+
+You can go back to a specific savepoint without cancelling the entire transaction.
+ROLLBACK TO SAVEPOINT user_created;
+
+Then:
+
+INSERT user     ✅ remains
+INSERT post     ❌ undone
+
+The transaction is still active.
+
+You can continue:
+
+INSERT INTO posts (title, content, userId)
+VALUES ('New Post', 'New content', 1);
+
+
+COMMIT;
+
+Final result:
+
+User       → saved
+Old post   → removed/undone
+New post   → saved
+
+6. RELEASE SAVEPOINT
+When you no longer need a savepoint:
+
+RELEASE SAVEPOINT user_created;
+
+This removes the savepoint.
+
+It does not commit the transaction.
+
+Complete Example
+Imagine transferring money:
+
+START TRANSACTION;
+
+
+UPDATE accounts
+SET balance = balance - 1000
+WHERE id = 1;
+
+
+SAVEPOINT money_deducted;
+
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 2;
+
+Suppose the second operation has a problem.
+
+You can:
+ROLLBACK TO SAVEPOINT money_deducted;
+
+Now the transaction goes back to:
+
+Account 1 → money deducted ✅
+Account 2 → transfer undone ❌
+
+You could fix the second operation:
+
+UPDATE accounts
+SET balance = balance + 1000
+WHERE id = 3;
+
+
+COMMIT;
+Important difference
+
+| Command                 | What it does                  |
+| ----------------------- | ----------------------------- |
+| `START TRANSACTION`     | Starts transaction            |
+| `COMMIT`                | Permanently saves transaction |
+| `ROLLBACK`              | Undoes entire transaction     |
+| `SAVEPOINT`             | Creates checkpoint            |
+| `ROLLBACK TO SAVEPOINT` | Goes back to checkpoint       |
+| `RELEASE SAVEPOINT`     | Deletes checkpoint            |
+
+Both COMMIT and ROLLBACK end the current transaction.
+COMMIT                    → Transaction ends
+ROLLBACK                  → Transaction ends
+ROLLBACK TO SAVEPOINT     → Transaction continuess
+
+---->
+n MySQL, both IF() and CASE WHEN can do conditional logic, but they are used slightly differently.
+1. IF()
+Syntax:
+IF(condition, value_if_true, value_if_false)
+
+Example:
+SELECT IF(state = 'approved', 1, 0)
+FROM Transactions;
+Meaning:
+
+If state = 'approved' → 1
+Otherwise → 0
+
+For your query:
+SUM(IF(state = 'approved', 1, 0)) AS approved_count
+
+2. CASE WHEN
+Syntax:
+
+CASE
+    WHEN condition THEN value
+    ELSE value
+END
+
+Example:
+
+SELECT
+    CASE
+        WHEN state = 'approved' THEN 1
+        ELSE 0
+    END
+FROM Transactions;
+
+For your query:
+
+SUM(
+    CASE
+        WHEN state = 'approved' THEN 1
+        ELSE 0
+    END
+) AS approved_count
+
+CASE
+    WHEN amount > 1000 THEN 'HIGH'
+    WHEN amount > 500 THEN 'MEDIUM'
+    ELSE 'LOW'
+END
+
+more:
+count(state = 'approved') AS approved_count
+SUM(IF(state = 'approved', 1, 0))
+
+
+
+---->
+composite primary key
+CREATE TABLE enrollments (
+    student_id INT,
+    course_id INT,
+
+    PRIMARY KEY (student_id, course_id)
+);
+
+PRIMARY KEY
+    ↓
+uniquely identifies a row
+
+UNIQUE
+    ↓
+prevents duplicate values
+
+AUTO_INCREMENT
+    ↓
+generates numeric IDs
+
+COMPOSITE KEY
+    ↓
+multiple columns form identity
+
+FOREIGN KEY
+    ↓
+connects tables
+
+REFERENTIAL INTEGRITY
+    ↓
+prevents invalid references
+
+ON DELETE
+    ↓
+CASCADE
+SET NULL
+RESTRICT
+
+ON UPDATE
+    ↓
+controls parent-key changes
+
+1 : 1
+    ↓
+UNIQUE FK
+
+1 : N
+    ↓
+FK on MANY side
+
+N : 1
+    ↓
+same relationship viewed from other side
+
+N : M
+    ↓
+junction table
+
+SELF-REFERENCE
+    ↓
+table references itself
+
+NULLABILITY
+    ↓
+optional vs mandatory relationship
+
+INDEXING
+    ↓
+performance of FK lookups/joins
+
+
+---->
+alter table tablename
+1. Add a column
+ALTER TABLE users ADD  column age INT;
+
+Adds a new column to the table.
+
+2. Add multiple columns
+ALTER TABLE users
+ADD age INT,
+ADD phone VARCHAR(15);
+
+Adds multiple columns at once.
+
+3. Modify a column
+ALTER TABLE users
+MODIFY age BIGINT;
+
+Changes the data type or properties of an existing column.
+
+4. Rename a column
+ALTER TABLE users
+RENAME COLUMN name TO full_name;
+
+Changes the name of an existing column.
+
+5. Rename a table
+ALTER TABLE users
+RENAME TO customers;
+
+Changes the table name.
+
+6. Drop a column
+ALTER TABLE users
+DROP COLUMN age;
+
+Deletes a column from the table.
+
+7. Add a PRIMARY KEY
+ALTER TABLE users
+ADD PRIMARY KEY (id);
+
+Makes a column the primary key of the table.
+
+8. Drop a PRIMARY KEY
+ALTER TABLE users
+DROP PRIMARY KEY;
+
+Removes the table's primary key.
+
+9. Add UNIQUE constraint
+ALTER TABLE users
+ADD CONSTRAINT unique_email UNIQUE (email);
+
+Prevents duplicate values in the email column.
+
+10. Drop UNIQUE constraint
+ALTER TABLE users
+DROP INDEX unique_email;
+
+Removes the specified unique constraint/index.
+
+11. Add AUTO_INCREMENT
+ALTER TABLE users
+MODIFY id INT NOT NULL AUTO_INCREMENT;
+
+Makes MySQL automatically generate increasing values for id.
+
+12. Add FOREIGN KEY
+ALTER TABLE posts
+ADD CONSTRAINT posts_ibfk_1
+FOREIGN KEY (user_id)
+REFERENCES users(id);
+
+Creates a relationship between posts.user_id and users.id.
+
+13. Drop FOREIGN KEY
+ALTER TABLE posts
+DROP FOREIGN KEY posts_ibfk_1;
+
+Removes the specified foreign key relationship.
+
+14. Add NOT NULL
+ALTER TABLE users
+MODIFY name VARCHAR(100) NOT NULL;
+
+Prevents name from containing NULL.
+
+15. Remove NOT NULL
+ALTER TABLE users
+MODIFY name VARCHAR(100) NULL;
+
+Allows name to contain NULL.
+
+16. Add DEFAULT value
+ALTER TABLE users
+ALTER COLUMN status SET DEFAULT 'active';
+
+Sets a default value when no value is provided.
+
+17. Remove DEFAULT value
+ALTER TABLE users
+ALTER COLUMN status DROP DEFAULT;
+
+Removes the column's default value.
+
+18. Add CHECK constraint
+ALTER TABLE users
+ADD CONSTRAINT check_age CHECK (age >= 18);
+
+Ensures that inserted/updated values satisfy the specified condition.
+
+19. Drop CHECK constraint
+ALTER TABLE users
+DROP CHECK check_age;
+
+Removes the specified check constraint.
+
+20. Add index
+ALTER TABLE users
+ADD INDEX idx_email (email);
+
+Creates an index to improve searches on email.
+
+21. Drop index
+ALTER TABLE users
+DROP INDEX idx_email;
+
+Removes the specified index.
+
+Most important ones for your users → posts project
+
+Focus especially on these:
+
+ADD COLUMN
+MODIFY COLUMN
+RENAME COLUMN
+DROP COLUMN
+
+
+ADD PRIMARY KEY
+DROP PRIMARY KEY
+
+
+ADD UNIQUE
+DROP UNIQUE
+
+
+AUTO_INCREMENT
+
+
+ADD FOREIGN KEY
+DROP FOREIGN KEY
+
+
+ADD CHECK
+DROP CHECK
+
+
+ADD INDEX
+DROP INDEX
+
+
+RENAME TABLE
+
+And remember the distinction:
+
+Constraint → PRIMARY KEY, FOREIGN KEY, UNIQUE, CHECK
+
+Column property → NOT NULL, AUTO_INCREMENT, DEFAULT
+
+Index → improves searching/query performance.
+
+
+posts_ibfk_1
+It means:
+posts → table where the foreign key exists
+ibfk → InnoDB foreign key
+1 → first foreign key constraint on that table
+
+So:
+ALTER TABLE posts
+DROP FOREIGN KEY posts_ibfk_1;
+means "remove the foreign key constraint named posts_ibfk_1."
+
+
+
+-->
+many to many relation 
+just maintain junction table which will contain user_id and Post_id references to their respective table
+
+
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from '../users/user.entity';
+import { Post } from '../posts/post.entity';
+
+
+
+sql
+CREATE TABLE likes (
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+
+    PRIMARY KEY (user_id, post_id),
+
+    CONSTRAINT fk_likes_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_likes_post
+        FOREIGN KEY (post_id)
+        REFERENCES posts(id)
+        ON DELETE CASCADE
+);
+
+fk_likes_user is just the name of the constraint. You can give it almost any valid constraint name.
+
+
+--->
+ON DUPLICATE KEY UPDATE: If an INSERT causes a duplicate value
+ in a PRIMARY KEY or UNIQUE column, MySQL performs an UPDATE instead.
+It prevents the query from failing with a duplicate-key error.
+
+ INSERT INTO users (username, email, password)
+  VALUES ('admin', 'admin@gmail.com', '123456')
+  ON DUPLICATE KEY UPDATE
+    username = VALUES(username)
+
+If you want to directly set it to "irman", write:
+username = 'imaran'
+

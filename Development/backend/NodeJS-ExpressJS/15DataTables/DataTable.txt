@@ -1,0 +1,1330 @@
+# 📘 DataTables.js Complete Master Notes (One-Copy Format)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 What is DataTables?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DataTables is a powerful JavaScript/jQuery plugin used to convert 
+normal HTML tables into advanced interactive tables.
+
+It provides:
+
+✅ Searching
+✅ Sorting
+✅ Pagination
+✅ Responsive tables
+✅ Dynamic data handling
+✅ Export options
+✅ API integration
+✅ Professional UI
+
+Officially:
+
+```js
+$('#table').DataTable()
+```
+
+turns a simple HTML table into a smart table.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Why DataTables is Used?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Normal HTML tables only show static data.
+
+DataTables adds advanced features automatically.
+
+Without DataTables:
+
+❌ No search
+❌ No pagination
+❌ No sorting
+❌ Hard to manage large data
+❌ Poor UI
+
+With DataTables:
+
+✅ Fast searching
+✅ Pagination
+✅ Column sorting
+✅ Dynamic updates
+✅ Better user experience
+✅ Admin dashboard ready
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Real World Usage
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Used in:
+
+✅ Student Management Systems
+✅ Employee Dashboards
+✅ CRM Systems
+✅ Admin Panels
+✅ School Management
+✅ Hospital Systems
+✅ E-commerce Admin Panels
+✅ Analytics Dashboards
+✅ Banking Dashboards
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 DataTable Architecture
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```txt
+MongoDB
+   ↓
+Node.js / Express API
+   ↓
+Frontend Fetch
+   ↓
+HTML Table
+   ↓
+DataTable()
+   ↓
+Interactive Table
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Installation Methods
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1️⃣ CDN Method (Most Common)
+
+━━━━━━━━━━━━━━━━━━━━
+
+# CSS
+
+━━━━━━━━━━━━━━━━━━━━
+
+```html
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+```
+
+━━━━━━━━━━━━━━━━━━━━
+
+# jQuery
+
+━━━━━━━━━━━━━━━━━━━━
+
+```html
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+```
+
+━━━━━━━━━━━━━━━━━━━━
+
+# DataTables JS
+
+━━━━━━━━━━━━━━━━━━━━
+
+```html
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Basic HTML Table
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```html
+<table id="myTable">
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Course</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td>Naeem</td>
+            <td>21</td>
+            <td>MERN</td>
+        </tr>
+
+        <tr>
+            <td>Ali</td>
+            <td>22</td>
+            <td>Java</td>
+        </tr>
+
+    </tbody>
+
+</table>
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Activating DataTable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```html
+<script>
+
+$(document).ready(function(){
+
+    $('#myTable').DataTable();
+
+})
+
+</script>
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 What Happens After Activation?
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DataTables automatically adds:
+
+✅ Search Bar
+✅ Pagination
+✅ Sorting
+✅ Entries Dropdown
+✅ Footer Info
+✅ Better UI
+✅ Fast Navigation
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 DataTable Internal Working
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```txt
+HTML Table
+     ↓
+DataTable Reads Table
+     ↓
+Converts Data into Internal Objects
+     ↓
+Adds Search Engine
+     ↓
+Adds Pagination Logic
+     ↓
+Adds Sorting Logic
+     ↓
+Renders Enhanced Table
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Important Features
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1️⃣ Searching
+
+```js
+$('#myTable').DataTable({
+    searching:true
+})
+```
+
+Searches entire table data instantly.
+
+---
+
+# 2️⃣ Pagination
+
+```js
+$('#myTable').DataTable({
+    paging:true
+})
+```
+
+Splits large data into pages.
+
+---
+
+# 3️⃣ Sorting
+
+```js
+$('#myTable').DataTable({
+    ordering:true
+})
+```
+
+Sorts columns ascending/descending.
+
+---
+
+# 4️⃣ Entries Dropdown
+
+```js
+$('#myTable').DataTable({
+    lengthMenu:[5,10,20,50]
+})
+```
+
+Controls rows shown per page.
+
+---
+
+# 5️⃣ Default Page Length
+
+```js
+$('#myTable').DataTable({
+    pageLength:5
+})
+```
+
+Default rows per page.
+
+---
+
+# 6️⃣ Disable Search
+
+```js
+$('#myTable').DataTable({
+    searching:false
+})
+```
+
+Removes search functionality.
+
+---
+
+# 7️⃣ Disable Pagination
+
+```js
+$('#myTable').DataTable({
+    paging:false
+})
+```
+
+Shows all data at once.
+
+---
+
+# 8️⃣ Disable Sorting
+
+```js
+$('#myTable').DataTable({
+    ordering:false
+})
+```
+
+Disables column sorting.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Full Initialization Example
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```js
+$(document).ready(function(){
+
+    $('#myTable').DataTable({
+
+        paging:true,
+
+        searching:true,
+
+        ordering:true,
+
+        pageLength:5,
+
+        lengthMenu:[5,10,20,50]
+
+    })
+
+})
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Dynamic Row Operations
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Add Row
+
+```js
+const table = $('#myTable').DataTable();
+
+table.row.add([
+    "Naeem",
+    "21",
+    "MERN"
+]).draw();
+```
+
+---
+
+# Remove Row
+
+```js
+table.row(0).remove().draw();
+```
+
+---
+
+# Update Row
+
+```js
+table.row(0).data([
+    "Ali",
+    "22",
+    "Python"
+]).draw();
+```
+
+---
+
+# Get Row Data
+
+```js
+const data = table.row(0).data();
+
+console.log(data);
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Common DataTable Methods
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+| Method       | Purpose         |
+| ------------ | --------------- |
+| row.add()    | Add new row     |
+| row.remove() | Delete row      |
+| draw()       | Refresh table   |
+| clear()      | Remove all rows |
+| destroy()    | Destroy table   |
+| search()     | Search data     |
+| data()       | Get row data    |
+| page()       | Change page     |
+| rows()       | Access rows     |
+
+---
+
+# Search Example
+
+```js
+table.search('Naeem').draw();
+```
+
+---
+
+# Clear Table
+
+```js
+table.clear().draw();
+```
+
+---
+
+# Destroy DataTable
+
+```js
+table.destroy();
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Reinitialize DataTable
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Very important when fetching data multiple times.
+
+```js
+if($.fn.DataTable.isDataTable('#myTable')){
+
+    $('#myTable').DataTable().destroy();
+
+}
+```
+
+Why?
+
+Without destroying:
+
+❌ Duplicate tables
+❌ Duplicate pagination
+❌ Errors occur
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Loading Data from Backend API
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Backend (Node.js)
+
+```js
+app.get('/students',(req,res)=>{
+
+    res.json([
+        {
+            name:"Naeem",
+            age:21,
+            course:"MERN"
+        },
+        {
+            name:"Ali",
+            age:22,
+            course:"Java"
+        }
+    ])
+
+})
+```
+
+---
+
+# Frontend Fetch
+
+```js
+fetch('http://localhost:3000/students')
+.then(res => res.json())
+.then(data => {
+
+    $('#myTable').DataTable({
+
+        data:data,
+
+        columns:[
+            {data:'name'},//name,age ,course are keys inside data
+            {data:'age'},
+            {data:'course'}
+        ]
+
+    })
+
+})
+```
+
+---
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+using ajax
+$(document).ready(function(){
+
+    $('#myTable').DataTable({
+
+        ajax:{
+            url:'http://localhost:3000/api/users',
+            dataSrc:'data'
+        },
+
+        columns:[
+            {data:'name'},
+            {data:'age'},
+            {data:'course'}
+        ]
+
+    })
+
+})
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 DataTable with MongoDB
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```txt
+MongoDB
+   ↓
+Express API
+   ↓
+Fetch API
+   ↓
+DataTable
+```
+
+Example:
+
+```js
+const users = await User.find();
+
+res.json(users)
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Responsive DataTables
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Makes table mobile friendly.
+
+━━━━━━━━━━━━━━━━━━━━
+
+# Responsive CSS
+
+━━━━━━━━━━━━━━━━━━━━
+
+```html
+<link rel="stylesheet"
+href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+```
+
+━━━━━━━━━━━━━━━━━━━━
+
+# Responsive JS
+
+━━━━━━━━━━━━━━━━━━━━
+
+```html
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+```
+
+━━━━━━━━━━━━━━━━━━━━
+
+# Enable Responsive
+
+━━━━━━━━━━━━━━━━━━━━
+
+```js
+$('#myTable').DataTable({
+    responsive:true
+})
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Buttons Extension
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Used for:
+
+✅ Copy
+✅ CSV Export
+✅ Excel Export
+✅ PDF Export
+✅ Print Table
+
+---
+
+# CDN
+
+```html
+<link rel="stylesheet"
+href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+```
+
+---
+
+# Enable Buttons
+
+```js
+$('#myTable').DataTable({
+
+    dom:'Bfrtip',
+
+    buttons:[
+        'copy',
+        'csv',
+        'excel',
+        'pdf',
+        'print'
+    ]
+
+})
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Server Side Processing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Used for huge data.
+
+Instead of loading all data into browser:
+
+```txt
+Browser
+   ↓
+Request Page Data
+   ↓
+Backend API
+   ↓
+MongoDB
+```
+
+Advantages:
+
+✅ Faster
+✅ Less memory
+✅ Better for millions of rows
+
+---
+
+# Enable Server Side
+
+```js
+$('#myTable').DataTable({
+
+    processing:true,
+
+    serverSide:true,
+
+    ajax:'/api/users'
+
+})
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 DataTables Important Options
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+| Option     | Purpose            |
+| ---------- | ------------------ |
+| paging     | Enable pagination  |
+| searching  | Enable search      |
+| ordering   | Enable sorting     |
+| responsive | Mobile responsive  |
+| pageLength | Rows per page      |
+| lengthMenu | Entries dropdown   |
+| ajax       | Fetch API data     |
+| data       | Local data         |
+| columns    | Column mapping     |
+| serverSide | Backend processing |
+| processing | Loading indicator  |
+| dom        | Control layout     |
+| buttons    | Export buttons     |
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Column Configuration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```js
+columns:[
+    {data:'name'},
+    {data:'age'},
+    {data:'course'}
+]
+```
+
+Maps API data to columns.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Custom Render Function
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```js
+columns:[
+    {
+        data:'name'
+    },
+    {
+        data:'age'
+    },
+    {
+        data:'course'
+    },
+    {
+        data:null,
+        render:function(data){
+
+            return `
+                <button>Edit</button>
+            `
+        }
+    }
+]
+```
+
+Used for buttons/actions.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Styling DataTables
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Custom CSS
+
+```css
+table{
+    width:100%;
+}
+
+thead{
+    background:black;
+    color:white;
+}
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Bootstrap DataTables
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Bootstrap CSS
+
+```html
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+```
+
+---
+
+# Bootstrap JS
+
+```html
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+```
+
+---
+
+# Initialize
+
+```js
+$('#myTable').DataTable();
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 DataTable Life Cycle
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```txt
+HTML Table Created
+        ↓
+DataTable Initialized
+        ↓
+Internal Cache Created
+        ↓
+Search/Sort/Pagination Added
+        ↓
+Rendered to Browser
+        ↓
+Updates Dynamically
+```
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Advantages
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Easy to use
+✅ Fast searching
+✅ Pagination
+✅ Sorting
+✅ Dynamic updates
+✅ Responsive support
+✅ Export features
+✅ API support
+✅ Professional UI
+✅ Production ready
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Disadvantages
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❌ Depends on jQuery
+❌ Large data can slow browser
+❌ Complex customization
+❌ Too many plugins increase size
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Best Practices
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Use server-side processing for huge data
+✅ Destroy before reinitialize
+✅ Use responsive mode
+✅ Validate backend data
+✅ Use pagination
+✅ Use loading states
+✅ Keep columns optimized
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Common Errors
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 1️⃣ DataTable Already Initialized
+
+Error:
+
+```txt
+Cannot reinitialise DataTable
+```
+
+Solution:
+
+```js
+$('#myTable').DataTable().destroy();
+```
+
+---
+
+# 2️⃣ jQuery Not Loaded
+
+Error:
+
+```txt
+$ is not defined
+```
+
+Reason:
+
+jQuery loaded after DataTable.
+
+---
+
+# 3️⃣ Table ID Wrong
+
+Error:
+
+```txt
+Cannot read properties of null
+```
+
+Reason:
+
+Wrong table selector.
+
+---
+
+# 4️⃣ API Data Format Wrong
+
+Reason:
+
+columns mapping incorrect.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Interview Questions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Q1. What is DataTables?
+
+A jQuery plugin for advanced HTML tables.
+
+---
+
+# Q2. Why use DataTables?
+
+For searching, sorting, pagination, export, responsiveness.
+
+---
+
+# Q3. Difference between HTML table and DataTable?
+
+HTML table only displays data.
+DataTable provides dynamic features.
+
+---
+
+# Q4. What is server-side processing?
+
+Backend handles pagination/search/sort instead of browser.
+
+---
+
+# Q5. Why destroy DataTable before reinitialize?
+
+To avoid duplicate initialization errors.
+
+---
+
+# Q6. What is responsive DataTable?
+
+A mobile-friendly adaptive table.
+
+---
+
+# Q7. What is draw()?
+
+Refreshes/rerenders DataTable.
+
+---
+
+# Q8. Why use columns option?
+
+Maps API data fields to table columns.
+
+---
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Complete Final Example
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<link rel="stylesheet"
+href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+</head>
+
+<body>
+
+<table id="myTable">
+
+    <thead>
+
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Course</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        <tr>
+            <td>Naeem</td>
+            <td>21</td>
+            <td>MERN</td>
+        </tr>
+
+        <tr>
+            <td>Ali</td>
+            <td>22</td>
+            <td>Java</td>
+        </tr>
+
+    </tbody>
+
+</table>
+
+<script>
+
+$(document).ready(function(){
+
+    $('#myTable').DataTable({
+
+        paging:true,
+        searching:true,
+        ordering:true,
+        pageLength:5,
+
+        responsive:true
+
+    })
+
+})
+
+</script>
+
+</body>
+</html>
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# 🔷 Final Summary
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DataTables is one of the most important plugins for:
+
+✅ MERN Stack
+✅ Admin Dashboards
+✅ Full Stack Projects
+✅ Placement Projects
+✅ Real World Web Apps
+
+Core Features:
+
+✅ Search
+✅ Sort
+✅ Pagination
+✅ Responsive
+✅ API Integration
+✅ Export
+✅ Dynamic Data Handling
+
+Most Common Usage:
+
+```js
+$('#table').DataTable()
+```
+
+-->
+# 📘 Tabulator.js Short Notes
+
+# 🔷 What is Tabulator?
+
+Tabulator is a modern JavaScript library for creating advanced interactive tables.
+
+It provides:
+
+✅ Search
+✅ Sort
+✅ Pagination
+✅ Filtering
+✅ AJAX data fetching
+✅ Editable cells
+✅ Export CSV/PDF/Excel
+✅ Responsive tables
+
+❌ No jQuery required
+
+---
+
+# 🔷 Installation
+
+## CSS
+
+```html id="p5pfrs"
+<link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+```
+
+## JS
+
+```html id="v0ckzq"
+<script src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+```
+
+---
+
+# 🔷 HTML
+
+```html id="o7tjlwm"
+<div id="table"></div>
+```
+
+---
+
+# 🔷 Basic Example
+
+```js id="g0p8h6"
+const table = new Tabulator("#table", {
+
+    data:[
+        {
+            name:"Naeem",
+            age:21
+        }
+    ],
+
+    columns:[
+        {title:"Name", field:"name"},
+        {title:"Age", field:"age"}
+    ]
+
+});
+```
+
+---
+
+# 🔷 AJAX Example
+
+```js id="cc3s8l"
+const table = new Tabulator("#table", {
+
+    ajaxURL:"http://localhost:3000/api/users",
+
+    columns:[
+        {title:"Name", field:"name"},
+        {title:"Age", field:"age"}
+    ]
+
+});
+```
+
+---
+
+# 🔷 Important Features
+
+| Feature    | Purpose        |
+| ---------- | -------------- |
+| ajaxURL    | Fetch API data |
+| columns    | Define columns |
+| pagination | Enable pages   |
+| selectable | Select rows    |
+| editor     | Editable cells |
+| formatter  | Custom UI      |
+
+---
+
+# 🔷 Pagination
+
+```js id="e8ewm0"
+pagination:true,
+paginationSize:5
+```
+
+---
+
+# 🔷 Search / Filter
+
+```js id="jlwm3j"
+table.setFilter("name", "like", "Naeem");
+```
+
+---
+
+# 🔷 Add Row
+
+```js id="t4k2lf"
+table.addRow({
+    name:"Ali",
+    age:22
+});
+```
+
+---
+
+# 🔷 Delete Row
+
+```js id="u1s39n"
+table.deleteRow(1);
+```
+
+---
+
+# 🔷 Update Row
+
+```js id="qjlwm7"
+table.updateData([
+    {
+        id:1,
+        name:"Updated"
+    }
+]);
+```
+
+---
+
+# 🔷 Export Data
+
+```js id="p6ijr1"
+table.download("csv", "data.csv");
+```
+
+---
+
+# 🔷 Advantages
+
+✅ No jQuery
+✅ Modern UI
+✅ Fast
+✅ Better React support
+✅ Advanced editing
+
+---
+
+# 🔷 Disadvantages
+
+❌ Slightly harder than DataTables
+❌ Smaller community
+
+---
+
+# 🔷 DataTables vs Tabulator
+
+| Feature | DataTables | Tabulator    |
+| ------- | ---------- | ------------ |
+| jQuery  | Required   | Not Required |
+| UI      | Basic      | Modern       |
+| Editing | Basic      | Advanced     |
+
+---
+
+# 🔷 Most Common Syntax
+
+```js id="s44c7h"
+new Tabulator("#table", {})
+```

@@ -1,0 +1,337 @@
+-->REPL(read-evaluate-print-loop).it is used by console
+--> for making variable ,letter ,digit,underscore and doller allow,but should not start with digit.
+writing way->camelCase(js),PascalCase,snake_case
+
+
+
+
+-->🔹 Primitive Data Types in JavaScript
+These are 7 (primitive)basic types and store single values.
+1. Number
+let a = 10;
+let b = 3.5;
+2. String
+let name = "Naeem";
+3. Boolean
+let isTrue = true;
+4. Undefined
+let x;
+5. Null
+let y = null;
+6. BigInt
+let big = 12345678901234567890n;
+7. Symbol
+let id = Symbol("id");
+⚡ Important
+👉 Total 7 primitive types
+🔹 Non-Primitive (after that)
+Object
+Array
+Function
+
+
+
+-->🔹 Why Symbol?
+Even if values look same, symbols are always different
+let a = Symbol("id");
+let b = Symbol("id");
+console.log(a === b); // false ❗
+👉 Both have "id" but still not equal
+🔹 How to create Symbol
+let id = Symbol("userId");
+👉 "userId" is just a description (not the value)
+🔹 Use case (important)
+1. Unique keys in objects
+let id = Symbol("id");
+let user = {
+  name: "Naeem",
+  [id]: 123
+};
+
+console.log(user[id]); // 123
+
+👉 No conflict with other keys
+🔹 Hidden from normal loops
+for (let key in user) {
+  console.log(key);
+}
+👉 Symbol keys won’t appear ❗
+🔹 Access Symbol keys
+console.log(Object.getOwnPropertySymbols(user));
+🔹 Real-life use
+Avoid duplicate keys
+Internal properties in frameworks
+Safe object properties
+⚡ Important points
+Symbol is primitive
+Always unique
+Used as object keys
+Not visible in normal loops
+🔥 One-line definition
+👉 Symbol = unique and immutable identifier
+
+
+
+-->👉NaN
+NaN = invalid number
+Type = "number"
+Not equal to itself
+Use Number.isNaN() to check
+console.log(0 / 0);           // NaN
+console.log(Number("abc"));   // NaN
+console.log("hello" * 2);     // NaN
+
+
+
+-->🔴 Fact 
+console.log(typeof null); // "object" ❗
+👉 But still we say:
+👉 null is a primitive type
+🔹 Why this happens?
+👉 This is actually a JavaScript bug from the early days.
+In the first version of JS
+Values were stored in a low-level way
+null got tagged as an object type by mistake
+👉 That mistake was never fixed (for backward compatibility)
+👉 typeof null === "object" is a historical bug — ignore it
+
+
+
+
+-->👉🔹 Operator Precedence & Associativity Table(BODMAS)
+| Precedence | Operator(s)                                 | Description                       | Associativity |
+| ---------- | ------------------------------------------- | --------------------------------- | ------------- |
+| 1️⃣        | `()`                                        | Grouping                          | —             |
+| 2️⃣        | `.` `?.` `[]` `new` (with args)             | Member access / optional chaining | Left → Right  |
+| 3️⃣        | `()`                                        | Function call                     | Left → Right  |
+| 4️⃣        | `new` (without args)                        | Object creation                   | Right → Left  |
+| 5️⃣        | `++` `--` (postfix)                         | Increment/Decrement               | Left → Right  |
+| 6️⃣        | `++` `--` `+` `-` `!` `~` `typeof` `delete` | Unary operators                   | Right → Left  |
+| 7️⃣        | `**`                                        | Exponentiation                    | Right → Left  |
+| 8️⃣        | `*` `/` `%`                                 | Multiplication                    | Left → Right  |
+| 9️⃣        | `+` `-`                                     | Addition/Subtraction              | Left → Right  |
+| 🔟         | `<<` `>>` `>>>`                             | Bitwise shift                     | Left → Right  |
+| 1️⃣1️⃣     | `<` `<=` `>` `>=` `in` `instanceof`         | Relational                        | Left → Right  |
+| 1️⃣2️⃣     | `==` `!=` `===` `!==`                       | Equality                          | Left → Right  |
+| 1️⃣3️⃣     | `&`                                         | Bitwise AND                       | Left → Right  |
+| 1️⃣4️⃣     | `^`                                         | Bitwise XOR                       | Left → Right  |
+| 1️⃣5️⃣     | `|`                                        | Bitwise OR                        | Left → Right  |
+| 1️⃣6️⃣     | `&&`                                        | Logical AND                       | Left → Right  |
+| 1️⃣7️⃣     | `||`                                      | Logical OR                        | Left → Right  |
+| 1️⃣8️⃣     | `??`                                        | Nullish coalescing                | Left → Right  |
+| 1️⃣9️⃣     | `?:`                                        | Ternary operator                  | Right → Left  |
+| 2️⃣0️⃣     | `=` `+=` `-=` `*=` `/=` `%=` `**=` etc      | Assignment                        | Right → Left  |
+| 2️⃣1️⃣     | `,`                                         | Comma operator                    | Left → Right  |
+
+
+
+-->what is typeScript
+Static Typed, where JS is dynamic Typed.
+in TypeScript you generally cannot change the type once it’s defined. ✅
+👇
+📘
+Superset of JavaScript
+Adds static typing
+Developed by Microsoft
+Runs after compilation to JS
+let a: number = 10;
+let name: string = "Naeem";
+let isTrue: boolean = true;
+👉 TypeScript = JavaScript + Types
+
+
+
+-->✅ List of falsy values
+in JavaScript there are 8 falsy values.
+false
+0
+-0
+0n   // BigInt zero
+""   // empty stringnull
+undefined
+null
+NaN
+🤔 Why they seem "equal"?
+They are NOT actually equal in strict comparison,
+ but in loose comparison (==), JavaScript does type coercion (automatic conversion)(mostly in Number),
+ which makes them behave as equal in some cases.
+⚠️ Important rule
+👉 Falsy values are not equal to each other by default
+👉 They only look equal when JavaScript converts them in ==
+
+note->every non-falsy value is treated as true when converted to a boolean (this is called truthy values).
+note->empty string is falsy value .but empty array and empty obj is true.
+| Value | Result  |
+| ----- | ------- |
+| `""`  | ❌ false |
+| `[]`  | ✅ true  |
+| `{}`  | ✅ true  |
+
+same as c and python but in java only boolean value(true) is true .
+
+
+
+
+
+-->JavaScript uses Unicode, not just ASCII.
+🔹 What does that mean?
+ASCII → only ~128 characters
+(A–Z, a–z, 0–9, basic symbols)
+Unicode → huge character set 🌍
+Includes:
+English letters
+Hindi, Arabic, Chinese, etc.
+Emojis 😄🔥
+Special symbols
+👉 JavaScript strings are based on Unicode (UTF-16 encoding)
+console.log("A")        // ASCII character
+console.log("अ")        // Hindi (Unicode)
+console.log("😊")       // Emoji (Unicode)
+console.log("A".charCodeAt(0))   // 65
+console.log("अ".charCodeAt(0))   // 2309
+
+
+
+-->
+let arr = [10, 2, 5];
+arr.sort();
+console.log(arr);//[10, 2, 5]  ❌ (looks unsorted)
+ Why?
+ Because JS converts numbers to strings:
+ "10" "2" "5"
+ Then compares character by character:
+ "1" comes before "2" → so "10" comes before "2"
+ So it sorts like dictionary order, not numeric order.
+ 🧠 Lexicographic (string) sorting rule
+ "10" < "2"   // true (because '1' < '2')
+ That’s why it behaves “wrong” for numbers.
+ ✅ Correct way: use comparator function
+let arr = [10, 2, 5];
+arr.sort((a, b) => a - b);
+console.log(arr); // [2, 5, 10]
+// Descending order
+arr.sort((a, b) => b - a);
+how comparator works
+(a, b) => a - b
+| Result | Meaning          |
+| ------ | ---------------- |
+| < 0    | a comes before b |
+| > 0    | b comes before a |
+| 0      | unchanged        |
+| Case               | Behavior                   |
+| ------------------ | -------------------------- |
+| `sort()`           | treats elements as strings |
+| `sort((a,b)=>a-b)` | numeric sort               |
+
+
+-->
+🔹 Why JSON looks like a string?
+let json = '{"name":"Naeem","age":20}';
+👉 This is NOT an object
+👉 This is a string that contains JSON data
+🔥 Interview Line (Remember This)
+👉 "JSON is a string format used to represent objects for data transfer."
+| Feature | JSON                     | JS Object       |
+| ------- | ------------------------ | --------------- |
+| Type    | String                   | Object          |
+| Keys    | Must be in double quotes | Quotes optional |
+| Use     | Data transfer            | Programming     |
+
+
+-->
+// | Operator          | Conversion Rule                                                    | Example     | Output                     |    |   |    |     |
+// | ----------------- | ------------------------------------------------------------------ | ----------- | -------------------------- | -- | - | -- | --- |
+// | `+`               | If any operand is string → convert to string (concatenation)       | `3 + "5"`   | `"35"`                     |    |   |    |     |
+// | `-`               | Convert both to number                                             | `"10" - 2`  | `8`                        |    |   |    |     |
+// | `*`               | Convert both to number                                             | `"5" * 2`   | `10`                       |    |   |    |     |
+// | `/`               | Convert both to number                                             | `"10" / 2`  | `5`                        |    |   |    |     |
+// | `%`               | Convert both to number                                             | `"10" % 3`  | `1`                        |    |   |    |     |
+// | `==`              | Convert types before comparing                                     | `5 == "5"`  | `true`                     |    |   |    |     |
+// | `===`             | No conversion (strict check)                                       | `5 === "5"` | `false`                    |    |   |    |     |
+// | `!=`              | Convert types before comparing                                     | `5 != "5"`  | `false`                    |    |   |    |     |
+// | `!==`             | No conversion (strict check)                                       | `5 !== "5"` | `true`                     |    |   |    |     |
+// | `>` `<` `>=` `<=` | Mostly convert to number (except string vs string → lexicographic) | `"10" > 5`  | `true`                     |    |   |    |     |
+// | `&&`              | Returns first falsy or last value                                  | `0 && 5`    | `0`                        |    |   |    |     |
+// | `                 |                                                                    | `           | Returns first truthy value | `0 |   | 5` | `5` |
+// | `!`               | Convert to boolean then reverse                                    | `!0`        | `true`                     |    |   |    |     |
+// | `+x` (unary plus) | Convert to number                                                  | `+"10"`     | `10`                       |    |   |    |     |
+// 👉 Number(x) and +x both convert values to numbers, but +x is shorthand
+
+-->fun is called first calss citizen 
+  becuase we can store a fun in variable,passs as a argument and return a fun from a fun;
+
+  📘 What is JSDoc?
+// JSDoc is a standard way to write documentation
+// inside JavaScript code using special comments
+👉 It starts with /** ... */
+
+🔹 Basic Structure
+/**
+ * Description of function
+ * @param {type} name - description
+ * @returns {type} description
+ */
+🔥 Example
+/**
+ * Adds two numbers
+ * @param {number} a - first number
+ * @param {number} b - second number
+ * @returns {number} sum
+ */
+
+function add(a, b) {
+  return a + b;
+}
+
+
+
+-->// 🔥 Lexical Environment + Closure Reference (FINAL NOTES)
+
+🧠 What is Lexical Environment?
+
+A Lexical Environment is an internal JavaScript structure created whenever a function or block runs.
+It represents the scope of that code.
+It stores:
+👉 Variables (variable bindings: name → value)
+👉 Functions (function bindings: name → function object)
+👉 A reference to its outer lexical environment (scope chain)
+
+
+📦 Simple meaning:
+Lexical Environment = Scope + Variables + Outer scope reference
+
+
+🧠 Function Binding
+Function binding means storing a function’s name mapped to its actual function object inside the Lexical Environment.
+
+
+🧠 Function Object (Important)
+
+A JavaScript function is internally an object.
+It contains:
+👉 executable code
+👉 properties (name, length, etc.)
+👉 hidden reference to outer scope ([[Environment]] for closure)
+
+
+🔥 Key Concept (Closure base)
+
+A Lexical Environment is stored in heap memory,
+and it is kept alive if a function is still referencing it.
+
+👉 This is what enables CLOSURE.
+
+
+🧠 Closure Rule
+
+A child function has its own Lexical Environment,
+and it also contains a reference to its outer Lexical Environment.
+
+👉 Variables are NOT copied.
+👉 They are accessed through the scope chain.
+
+
+📦 Final Simple Definition:
+
+Lexical Environment = A structure that defines scope, stores variables & functions, and links to outer scope.
+Closure = When a function remembers its outer Lexical Environment even after the outer function has finished execution.

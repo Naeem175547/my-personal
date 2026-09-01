@@ -1,0 +1,3559 @@
+--> MONGODB  INTRODUCTION
+
+MongoDB is a NoSQL document-oriented database used to store 
+large amounts of data in a flexible and scalable way.
+ It stores data in the form of documents
+ instead of tables and rows used in relational databases like MySQL.
+MongoDB stores data in BSON (Binary JSON) format, which is similar to
+ JSON.
+
+Example of a Document:
+
+{
+   "name": "Naeem",
+   "age": 21,
+   "skills": ["Java", "MongoDB"]
+}
+========================
+JSON VS BSON
+========================
+
+JSON (JavaScript Object Notation) is a text-based
+data format used for storing and exchanging data.
+
+BSON (Binary JSON) is a binary-encoded format used
+internally by MongoDB to store documents.
+
+--------------------------------------------------
+EXAMPLE OF JSON
+--------------------------------------------------
+
+{
+   "name": "Naeem",
+   "age": 21,
+   "skills": ["Java", "MongoDB"]
+}
+
+--------------------------------------------------
+EXAMPLE OF BSON
+--------------------------------------------------
+
+BSON is stored in binary format, so it is not
+human-readable like JSON.
+
+MongoDB converts JSON-like documents into BSON
+before storing them.
+
+--------------------------------------------------
+MAIN DIFFERENCES
+--------------------------------------------------
+
+Feature            JSON                 BSON
+---------------------------------------------------------
+Format             Text-based           Binary format
+Readability        Human-readable       Not human-readable
+Speed              Slower parsing       Faster parsing
+Data Types         Limited              More data types
+Size               Smaller              Slightly larger
+Used In            APIs/Web             MongoDB internally
+
+--------------------------------------------------
+DATA TYPES
+--------------------------------------------------
+
+JSON Supports:
+* String
+* Number
+* Boolean
+* Array
+* Object
+* Null
+
+BSON Supports:
+* String
+* Integer
+* Boolean
+* Array
+* Object
+* Date
+* Binary Data
+* ObjectId
+* Decimal128
+* Timestamp
+* Regexp
+* Null
+and more...
+
+--------------------------------------------------
+WHY MONGODB USES BSON
+--------------------------------------------------
+
+MongoDB uses BSON because:
+
+* Faster data traversal
+* Better performance
+* Supports more data types
+* Efficient storage and retrieval
+
+--------------------------------------------------
+IMPORTANT POINT
+--------------------------------------------------
+
+When you write data in MongoDB shell or Node.js,
+it looks like JSON, but MongoDB actually stores
+it internally as BSON.
+
+--------------------------------------------------
+CONCLUSION
+--------------------------------------------------
+
+JSON is a lightweight text format mainly used for
+data exchange, while BSON is a binary format used
+by MongoDB for faster storage and processing.
+
+--------------------------------------------------
+MONGODB STRUCTURE
+--------------------------------------------------
+
+Database
+   └── Collection
+           └── Document
+
+Example:
+
+College (Database)
+   └── Students (Collection)
+           └── {name:"Naeem", age:21}
+
+--------------------------------------------------
+MAIN FEATURES OF MONGODB
+--------------------------------------------------
+
+1. Document-Oriented Database
+   - Data is stored as documents.
+
+2. NoSQL Database
+   - Does not use tables and rows.
+
+3. Flexible Schema
+   - Different documents can have different fields.
+
+4. High Performance
+   - Fast read and write operations.
+
+5. Scalability
+   - Supports horizontal scaling using sharding.
+   sharding->
+   Sharding is a method of distributing data across
+   multiple servers to handle very large databases
+   and high traffic efficiently.
+In MongoDB, sharding is used for horizontal scaling.
+
+Instead of storing all data on one server,
+MongoDB divides data into smaller parts called
+shards and stores them on different servers.
+
+
+6. Replication
+   - Provides backup and high availability using replica sets.
+
+--------------------------------------------------
+SCHEMA-LESS PROPERTY
+--------------------------------------------------
+
+Documents inside the same collection can have
+different structures.
+
+Example:
+
+{ "name": "Ali" }
+
+{ "name": "Sara", "age": 20 }
+
+--------------------------------------------------
+MONGODB TERMINOLOGY
+--------------------------------------------------
+
+MongoDB Term          SQL Equivalent
+-----------------------------------------
+Database              Database
+Collection            Table
+Document              Row
+Field                 Column
+
+--------------------------------------------------
+ADVANTAGES OF MONGODB
+--------------------------------------------------
+
+* Flexible data model
+* Easy scalability
+* Faster development
+* Good for real-time applications
+* Works well with JavaScript and MERN stack
+
+--------------------------------------------------
+DISADVANTAGES OF MONGODB
+--------------------------------------------------
+
+* More memory usage
+* Complex joins are difficult
+* Less strict consistency than SQL databases
+
+--------------------------------------------------
+APPLICATIONS OF MONGODB
+--------------------------------------------------
+
+* Web applications
+* MERN stack projects
+* Chat applications
+* E-commerce websites
+* Content management systems
+* Big data applications
+
+
+-->/
+DATABASE AND COLLECTION COMMANDS IN MONGODB
+for starting MongoDB in shell just write mongosh or open directly from directory
+==================================================
+
+1. CREATE / SWITCH DATABASE
+
+Command:
+
+use college
+
+Explanation:
+Creates or switches to the database named college.
+
+Output:
+
+switched to db college
+
+until data in inserted in db , db is Temporary.
+as we close terminal db is removed.
+
+
+==================================================
+
+2. SHOW ALL DATABASES
+
+Command:
+
+show dbs
+
+Explanation:
+Displays all databases.
+
+Example Output:
+
+admin
+college
+local
+
+==================================================
+
+3. CHECK CURRENT DATABASE
+
+Command:
+
+db
+
+Explanation:
+Shows the current database name.
+
+Output:
+
+college
+
+==================================================
+
+4. DATABASE HELP
+
+Command:
+
+db.help()
+
+Explanation:
+Shows all important database-related commands.
+
+Example Output:
+
+DB methods:
+   db.dropDatabase()
+   db.createCollection()
+   db.getCollectionNames()
+   ...
+
+==================================================
+
+5. CREATE COLLECTION
+
+Command:
+
+db.createCollection("students")
+
+Explanation:
+Creates a collection named students.
+
+Output:
+
+{ ok: 1 }
+
+==================================================
+
+6. SHOW COLLECTIONS
+
+Command:
+
+show collections
+
+Explanation:
+Displays all collections in current database.
+
+Output:
+
+students
+teachers
+
+==================================================
+
+7. COLLECTION HELP
+
+Command:
+
+db.students.help()
+
+Explanation:
+Shows all methods related to the students collection.
+
+Example Output:
+
+DBCollection help
+   db.students.find()
+   db.students.insert()
+   db.students.drop()
+   ...
+
+==================================================
+
+8. RENAME COLLECTION
+
+Command:
+
+db.students.renameCollection("users")
+
+Explanation:
+Renames students collection to users.
+
+Output:
+
+{ ok: 1 }
+
+==================================================
+
+9. DROP COLLECTION
+
+Command:
+
+db.students.drop()
+
+Explanation:
+Deletes the students collection.
+
+Output:
+
+true
+
+==================================================
+
+10. GET COLLECTION NAMES
+
+Command:
+
+db.getCollectionNames()
+
+Explanation:
+Returns all collection names as array.
+
+Output:
+
+[ "students", "teachers" ]
+
+==================================================
+
+11. GET COLLECTION
+
+Command:
+
+db.getCollection("students")
+
+Explanation:
+Accesses the students collection.
+
+Output:
+
+college.students
+
+==================================================
+
+12. STATS OF DATABASE
+
+Command:
+
+db.stats()
+
+Explanation:
+Shows database statistics.
+
+Example Output:
+
+{
+   db: 'college',
+   collections: 2,
+   objects: 10
+}
+
+==================================================
+
+13. STATS OF COLLECTION
+
+Command:
+
+db.students.stats()
+
+Explanation:
+Shows statistics of students collection.
+
+Example Output:
+
+{
+   ns: 'college.students',
+   count: 5,
+   size: 1024
+}
+
+==================================================
+
+14. DROP DATABASE
+
+Command:
+
+db.dropDatabase()
+
+Explanation:
+Deletes the current database.
+
+Output:
+
+{ ok: 1 }
+
+==================================================
+==================================================
+
+
+->INSERT COMMANDS IN MONGODB
+
+==================================================
+
+1. INSERT ONE DOCUMENT
+
+Command:
+
+db.students.insertOne({
+   name:"Naeem",
+   age:21
+})
+
+Explanation:
+Inserts one document into students collection.
+
+Output:
+
+{
+   acknowledged: true,
+   insertedId: ObjectId("...")
+}
+
+==================================================
+
+2. INSERT MULTIPLE DOCUMENTS
+
+Command:
+
+db.students.insertMany([
+   {name:"Ali", age:20},
+   {name:"Sara", age:22},
+   {name:"Aman", age:19}
+])
+
+Explanation:
+Inserts multiple documents at once.
+
+Output:
+
+{
+   acknowledged: true,
+   insertedIds: {
+      '0': ObjectId("..."),
+      '1': ObjectId("..."),
+      '2': ObjectId("...")
+   }
+}
+
+==================================================
+
+3. INSERT USING insert()
+
+Command:
+
+db.students.insert({
+   name:"Rahul",
+   age:23
+})
+
+Explanation:
+Older method used to insert document.
+
+Output:
+
+WriteResult({ "nInserted" : 1 })
+
+==================================================
+
+4. CHECK INSERTED DATA
+
+Command:
+
+db.students.find()
+
+Explanation:
+Displays all inserted documents.
+
+Example Output:
+
+{
+   _id:ObjectId("..."),
+   name:"Naeem",
+   age:21
+}
+
+{
+   _id:ObjectId("..."),
+   name:"Ali",
+   age:20
+}
+
+==================================================
+
+5. INSERT WITH CUSTOM _id
+
+Command:
+
+db.students.insertOne({
+   _id:101,
+   name:"Zaid",
+   age:24
+})
+
+Explanation:
+Inserts document with custom _id value.
+if we don't give then it automatically generates _id.
+
+Output:
+
+{
+   acknowledged: true,
+   insertedId: 101
+}
+
+==================================================
+
+6. INSERT NESTED DATA
+
+Command:
+
+db.students.insertOne({
+   name:"Naeem",
+   address:{
+      city:"Delhi",
+      pincode:110001
+   }
+})
+
+Explanation:
+Inserts document with nested object.
+
+Output:
+
+{
+   acknowledged: true,
+   insertedId: ObjectId("...")
+}
+
+==================================================
+
+7. INSERT ARRAY DATA
+
+Command:
+
+db.students.insertOne({
+   name:"Ali",
+   skills:["Java","MongoDB","React"]
+})
+
+Explanation:
+Inserts array inside document.
+
+Output:
+
+{
+   acknowledged: true,
+   insertedId: ObjectId("...")
+}
+==================================================
+
+IMPORTANT POINTS
+
+* insertOne() inserts single document.
+* insertMany() inserts multiple documents.
+* MongoDB automatically creates _id field.
+* Collection is created automatically if it does not exist.
+
+==================================================
+-->DATA TYPES IN MONGODB
+==================================================
+MongoDB stores data in BSON (Binary JSON) format.
+BSON supports many data types.
+=================================================
+1. STRING
+Used to store text values.
+Example:
+
+{
+   name:"Naeem"
+}
+==================================================
+2. INTEGER
+Used to store whole numbers.
+Example:
+
+{
+   age:21
+}
+
+==================================================
+3. DOUBLE
+Used to store decimal values.
+Example:
+
+{
+   percentage:85.5
+}
+==================================================
+4. BOOLEAN
+Used to store true or false values.
+Example:
+
+{
+   isStudent:true
+}
+
+==================================================
+
+5. ARRAY
+
+Used to store multiple values in a single field.
+
+Example:
+
+{
+   skills:["Java","MongoDB","React"]
+}
+==================================================
+6. OBJECT / EMBEDDED DOCUMENT
+Used to store nested data.
+Example:
+
+{
+   address:{
+      city:"Delhi",
+      pincode:110001
+   }
+}
+==================================================
+7. NULL
+Represents empty or unknown value.
+Example:
+{
+   middleName:null
+}
+==================================================
+8. OBJECTID
+Special unique identifier automatically created
+by MongoDB for each document.
+Example:
+
+{
+   _id:ObjectId("665f1ab23cd45ef678901234")
+}
+
+==================================================
+9. 
+.new Date()
+* Returns the current system date and time.
+Example:
+
+{
+   createdAt:new Date()
+}
+
+Possible Output:
+
+{
+   createdAt: ISODate("2026-05-27T12:45:30.000Z")
+}
+
+
+.ISODate()
+
+* Returns date and time in ISO standard format.
+
+Example:
+
+{
+   createdAt:ISODate()
+}
+
+Possible Output:
+
+{
+   createdAt: ISODate("2026-05-27T12:45:30.000Z")
+}
+
+
+note->ISO STANDARD DATE FORMAT
+
+ISO standard date format is an international
+standard used to represent date and time.
+
+MongoDB uses ISO 8601 format for dates.
+
+==================================================
+
+BASIC FORMAT
+
+YYYY-MM-DDTHH:MM:SSZ
+
+==================================================
+
+MEANING OF EACH PART
+
+YYYY  → Year
+MM    → Month
+DD    → Day
+
+T     → Separates date and time
+
+HH    → Hours
+MM    → Minutes
+SS    → Seconds
+
+Z     → UTC timezone
+
+==================================================
+
+EXAMPLE
+
+2026-05-27T12:45:30Z
+
+Explanation:
+
+2026  → Year
+05    → May
+27    → Day
+
+12    → Hour
+45    → Minute
+30    → Second
+
+Z     → UTC timezone
+
+UTC TIMEZONE (Simple Meaning)
+UTC = World's common reference time
+UTC is the main standard time of the world.
+All countries compare their local time with UTC.
+
+Example:
+If UTC time is:
+12:00 PM
+Then India time becomes:
+05:30 PM
+Because India is 5 hours 30 minutes ahead of UTC.
+
+In ISO Date:
+2026-05-27T12:45:30Z
+
+Z means:
+UTC time
+==================================================
+
+IN MONGODB
+
+Example:
+
+{
+   createdAt:ISODate("2026-05-27T12:45:30Z")
+}
+
+==================================================
+
+WHY ISO FORMAT IS USED
+
+* International standard
+* Avoids date confusion
+* Easy sorting
+* Timezone support
+* Used in databases and APIs
+
+==================================================
+
+COMMON CONFUSION
+
+Wrong / Confusing Formats:
+
+05/06/2026
+06/05/2026
+
+Different countries may read them differently.
+
+ISO Format avoids confusion:
+
+2026-05-06
+
+==================================================
+
+IMPORTANT POINTS
+
+* ISO format starts from Year → Month → Day.
+* T separates date and time.
+* Z means UTC timezone.
+* MongoDB stores dates internally in ISO format.
+
+
+==================================================
+10. TIMESTAMP
+Used for internal MongoDB timestamp values.
+Example:
+
+{
+   time:Timestamp()
+}
+==================================================
+11. BINARY DATA
+Used to store binary files or binary content.
+Example:
+
+{
+   file:BinData()
+}
+
+==================================================
+
+12. DECIMAL128
+
+Used for high-precision decimal values.
+
+Example:
+
+{
+   amount:NumberDecimal("1234.56")
+}
+
+==================================================
+
+13. REGULAR EXPRESSION
+
+Used for pattern matching.
+
+Example:
+
+{
+   name:/^N/
+}
+
+==================================================
+
+14. JAVASCRIPT
+
+Used to store JavaScript code.
+
+Example:
+
+{
+   code:function(){ return "Hello"; }
+}
+
+==================================================
+Data type list
+STRING
+INTEGER
+DOUBLE
+BOOLEAN
+ARRAY
+OBJECT / EMBEDDED DOCUMENT
+NULL
+OBJECTID
+DATE
+TIMESTAMP
+BINARY DATA
+DECIMAL128
+REGULAR EXPRESSION
+JAVASCRIPT
+MINKEY
+MAXKEY
+SYMBOL
+UNDEFINED
+
+IMPORTANT POINTS
+
+* MongoDB uses BSON internally.
+* BSON supports more data types than JSON.
+* _id field uses ObjectId by default.
+* Arrays and nested objects are commonly used.
+
+==================================================
+
+-->  BSON SCHEMA VALIDATION IN MONGODB
+MongoDB Schema Validation
+MongoDB allows us to validate documents before inserting them into a collection.
+
+Validation checks:
+• Required fields
+• Data types
+• Value ranges
+• Allowed values
+• String patterns etc.
+It helps keep data correct and consistent.
+
+Syntax
+db.createCollection("collection_name",{
+   validator:{
+      $jsonSchema:{
+         
+      }
+   }
+})
+
+
+$jsonSchema
+$jsonSchema is used to define validation rules using JSON Schema format.
+
+Example:
+
+validator:{
+   $jsonSchema:{
+      
+   }
+}
+
+Important Fields in $jsonSchema
+1. title
+Used to give schema name.
+title:"Student"
+
+2. required
+Defines mandatory fields.
+required:["name","age"]
+If these fields are missing, insertion fails.
+
+3. properties
+Used to define rules for each field.
+
+properties:{
+   name:{
+      
+   },
+   age:{
+      
+   }
+}
+
+Field Validation Keywords
+1. bsonType
+Defines datatype of field.
+Example:
+
+bsonType:"string"
+
+
+Common bsonType Values
+
+"string"   → Text
+"int"      → Integer
+"double"   → Decimal number
+"bool"     → true/false
+"array"    → Array
+"object"   → Object
+"date"     → Date
+"objectId" → MongoDB ObjectId
+
+
+2. description
+Adds message/documentation for validation rule.
+description:"Name must be string"
+
+3. minimum
+Defines minimum numeric value.
+minimum:18
+
+4. maximum
+Defines maximum numeric value.
+maximum:60
+
+
+5. enum
+Allows only specific values.
+enum:["BCA","BTech","BSc"]
+Only these values are accepted.
+Full Example
+
+db.createCollection("student",{
+   validator:{
+      $jsonSchema:{
+         title:"Student",
+         required:["name","age","course"],
+         properties:{
+            name:{
+               bsonType:"string",
+               description:"Name must be string and required"
+            },
+            age:{
+               bsonType:"int",
+               minimum:18,
+               maximum:60,
+               description:"Age must be between 18 and 60"
+            },
+            course:{
+               bsonType:"string",
+               enum:["BCA","BTech","BSc"],
+               description:"Course must be BCA, BTech or BSc"
+            }
+         }
+      }
+   }
+})
+
+Valid Document
+
+db.student.insertOne({
+   name:"Rahul",
+   age:20,
+   course:"BTech"
+})
+Inserted successfully.
+
+Invalid Document
+db.student.insertOne({
+   name:"Rahul",
+   age:70,
+   course:"MBA"
+})
+
+Fails because:
+• age > 60
+• MBA not in enum list
+
+➡️ Array validation:(skills is array)
+db.createCollection("student",{
+   validator:{
+      $jsonSchema:{
+         properties:{
+            skills:{
+               bsonType:"array",
+               items:{
+                  bsonType:"string"  //this define value of array elements
+               },
+               description:"Skills must contain only strings"
+            }
+         }
+      }
+   }
+})
+
+➡️ Object validation(address is object)
+
+db.createCollection("student",{
+   validator:{
+      $jsonSchema:{
+         properties:{
+            address:{
+               bsonType:"object",
+               properties:{
+                  city:{
+                     bsonType:"string"
+                  },
+                  pincode:{
+                     bsonType:"int"
+                  }
+               },
+
+               description:"Address must be valid object"
+            }
+         }
+      }
+   }
+})
+
+➡️ ADDING VALIDATION TO ALREADY EXISTING COLLECTION
+MongoDB uses collMod command to add or modify
+validation rules in an existing collection.
+Syntax
+
+db.runCommand({
+   collMod:"collection_name",
+
+   validator:{
+      $jsonSchema:{
+         
+      }
+   }
+})
+Explanation
+
+* collMod works only on existing collections.
+* Validation applies on future inserts/updates.
+* Old documents remain unchanged.
+
+Important Notes
+• Validation works only on insert/update.
+• Existing documents are not checked automatically.
+• MongoDB is schema-less, but validation adds rules.
+• Validation improves data consistency.
+
+-->
+UPDATE COMMANDS IN MONGODB
+
+MongoDB provides updateOne(), updateMany()
+and replaceOne() methods to modify documents.
+
+1. updateOne()
+Used for:
+✅ Update first matching document
+
+Syntax:
+db.collection.updateOne(
+   {filter}, // selects document(s) to update
+   {$set:{field:value}} // defines the changes to apply
+)
+
+Example:
+db.student.updateOne(
+   {name:"Rahul"},
+   {$set:{age:25}}
+)
+
+Output:
+
+{
+   acknowledged:true,
+   matchedCount:1,
+   modifiedCount:1
+}
+
+2. updateMany()
+Used for:
+✅ Update all matching documents
+
+Syntax:
+
+db.collection.updateMany(
+   {filter},
+   {$set:{field:value}}
+)
+
+Example:
+db.student.updateMany(
+   {course:"BTech"},
+   {$set:{status:"Active"}}
+)
+Output:
+{
+   acknowledged:true,
+   matchedCount:5,
+   modifiedCount:5
+}
+
+3. replaceOne()
+Used for:
+✅ Replace entire document
+
+Example:
+
+db.student.replaceOne(
+   {name:"Rahul"},
+   {
+      name:"Rahul",
+      age:22,
+      course:"BCA"
+   }
+)
+
+Output:
+
+{
+   acknowledged:true,
+   matchedCount:1,
+   modifiedCount:1
+}
+
+==================================================
+
+COMMON UPDATE OPERATORS
+
+🔷 $set
+Updates or adds field.
+Example:
+{$set:{age:25}}
+
+
+🔷 $unset
+Removes field.
+Example:
+{$unset:{age:""}}
+
+
+
+🔷 $inc
+Increases numeric value.
+Example:
+{$inc:{age:2}}
+//age will be increased by 2
+
+
+🔷 $mul
+Multiplies numeric value.
+Example:
+{$mul:{salary:2}}
+//salary will be multiplied by 2
+
+
+🔷 $rename
+Renames field.
+Example:
+{$rename:{"name":"fullName"}}
+
+
+🔷 $min
+Updates only if new value is smaller.
+Example:
+{$min:{age:18}}
+
+
+🔷 $max
+Updates only if new value is greater.
+Example:
+{$max:{age:60}}
+
+
+🔷 $currentDate
+Sets current date.
+Example:
+{$currentDate:{updatedAt:true}}
+
+UPDATE OPERATORS FOR ARRAYS IN MONGODB
+
+
+
+🔷 $push
+Used for:
+✅ Add element to array
+Example:
+{$push:{skills:"React"}}
+
+Before:
+{
+   skills:["Java","MongoDB"]
+}
+
+After:
+{
+   skills:["Java","MongoDB","React"]
+}
+
+
+🔷 $addToSet
+Used for:
+✅ Add element only if not already present
+
+Example:
+{$addToSet:{skills:"React"}}
+
+Before:
+{
+   skills:["Java","React"]
+}
+
+After:
+{
+   skills:["Java","React"]
+}
+(No duplicate added)
+
+
+🔷 $pop
+Used for:
+✅ Remove first or last element
+
+Example:
+{$pop:{skills:1}}
+Removes last element
+Example:
+{$pop:{skills:-1}}
+Removes first element
+
+
+
+🔷 $pull
+Used for:
+✅ Remove matching element from array
+
+Example:
+{$pull:{skills:"Java"}}
+
+Before:
+{
+   skills:["Java","MongoDB","React"]
+}
+
+After:
+{
+   skills:["MongoDB","React"]
+}
+
+
+🔷 $pullAll
+Used for:
+✅ Remove multiple specified elements from an array
+
+Syntax:
+{$pullAll:{field:[value1,value2,...]}}
+Example
+
+{$pullAll:{skills:["Java","React"]}}
+
+Before:
+{
+   skills:["Java","MongoDB","React","NodeJS"]
+}
+After:
+{
+   skills:["MongoDB","NodeJS"]
+}
+
+
+
+🔷 $each
+
+Used for:
+✅ Add multiple values with $push
+
+Example:
+
+{
+   $push:{
+      skills:{
+         $each:["React","NodeJS"]
+      }
+   }
+}
+
+
+🔷 $set
+Used for:
+✅ Update array element by index
+
+Example:
+
+{$set:{"skills.0":"Python"}}
+
+Before:
+{
+   skills:["Java","MongoDB"]
+}
+After:
+{
+   skills:["Python","MongoDB"]
+}
+
+
+Example Command
+
+db.student.updateOne(
+   {name:"Naeem"},
+   {$push:{skills:"React"}}
+)
+
+==================================================
+
+
+IMPORTANT POINTS
+If filter is empty:
+{}
+MongoDB selects the first document for updateOne()
+and all documents for updateMany().
+
+* updateOne() updates first matching document.
+* updateMany() updates all matching documents.
+* replaceOne() replaces entire matched document.
+* $set is the most commonly used operator.
+
+==================================================
+
+--->DELETE COMMANDS IN MONGODB
+
+MongoDB provides deleteOne() and deleteMany()
+methods to remove documents.
+
+1. deleteOne()
+
+Used for:
+✅ Delete first matching document
+
+Syntax:
+
+db.collection.deleteOne(
+   {filter}
+)
+Example
+db.student.deleteOne(
+   {name:"Rahul"}
+)
+Before:
+
+[
+   {name:"Rahul", age:20},
+   {name:"Aman", age:21}
+]
+
+After:
+
+[
+   {name:"Aman", age:21}
+]
+
+
+2. deleteMany()
+
+Used for:
+✅ Delete all matching documents
+Syntax:
+db.collection.deleteMany(
+   {filter}
+)
+Example
+db.student.deleteMany(
+   {course:"BTech"}
+)
+
+3. Delete AllDocuments
+Command:
+db.student.deleteMany({})
+
+Result:
+All documents are deleted.
+Collection remains.
+
+Output
+{
+   acknowledged:true,
+   deletedCount:1
+}
+
+4. findOneAndDelete()
+Used for:
+✅ Find and delete a document
+✅ Returns deleted document
+
+Example:
+
+db.student.findOneAndDelete(
+   {name:"Rahul"}
+)
+
+
+--> FIND COMMANDS IN MONGODB
+
+MongoDB provides various methods to retrieve
+documents from a collection.
+
+1. find()
+Used for:
+✅ Fetch all matching documents
+Syntax:
+db.collection.find()
+
+Example:
+db.student.find()
+
+Output
+
+[
+   {name:"Rahul", age:20},
+   {name:"Aman", age:21}
+]
+
+2. findOne()
+
+Used for:
+✅ Fetch first matching document
+
+Syntax:
+db.collection.findOne({filter})
+Example:
+db.student.findOne({name:"Rahul"})
+
+Output
+{
+   name:"Rahul",
+   age:20
+}
+
+4. findBy ObjectId
+Example:
+
+db.student.find({
+   _id:ObjectId("665f1ab23cd45ef678901234")
+})
+
+
+5. find().pretty()
+
+Used for:
+✅ Display formatted output
+Example:
+db.student.find().pretty()
+
+6. Limit Documents
+Example:
+db.student.find().limit(2)
+
+7. Skip Documents
+
+Example:
+db.student.find().skip(2)
+
+
+In MongoDB, these two give the same result:
+db.student.find().skip(2).limit(2)
+db.student.find().limit(2).skip(2)
+
+MongoDB applies skip before limit internally,
+regardless of the order written in the query.
+
+
+==================================================
+
+8. Sort Documents
+
+Ascending:
+db.student.find().sort({age:1})
+
+Descending:
+db.student.find().sort({age:-1})
+
+==================================================
+
+9. Count Documents
+
+db.student.countDocuments()
+
+db.student.find().count()
+
+==================================================
+
+10. Projection
+Projection is used to select which fields should
+be returned in the result.
+Syntax:
+db.collection.find(
+   {filter},
+   {projection}
+)
+or
+db.collection.find(
+   {filter}
+).projection({})
+
+
+.Include Fields
+Example:
+
+db.student.find(
+   {},
+   {name:1, age:1}
+)
+Output:
+
+{
+   _id:ObjectId("..."),
+   name:"Rahul",
+   age:20
+}
+
+
+
+.Exclude _id Field
+Example:
+
+db.student.find(
+   {},
+   {name:1, age:1, _id:0}
+)
+
+Output:
+
+{
+   name:"Rahul",
+   age:20
+}
+
+
+
+.Exclude Fields
+
+Example:
+db.student.find(
+   {},
+   {age:0}
+)
+
+Output:
+
+{
+   _id:ObjectId("..."),
+   name:"Rahul",
+   course:"BTech"
+}
+
+
+.Rules
+1 → Include field
+0 → Exclude field
+
+
+IMPORTANT POINT
+
+You cannot mix inclusion (1) and exclusion (0)
+in the same projection except for _id.
+
+Valid:
+{name:1, age:1, _id:0}
+Invalid:
+{name:1, age:0}
+
+Output
+
+{
+   name:"Rahul",
+   age:20
+}
+
+--->comparison operator
+| Operator | Meaning               | Example                                   |
+| -------- | --------------------- | ----------------------------------------- |
+| `$eq`    | equal to              | `db.student.find({age: {$eq: 20}})`       |
+| `$ne`    | not equal to          | `db.student.find({age: {$ne: 20}})`       |
+| `$gt`    | greater than          | `db.student.find({age: {$gt: 20}})`       |
+| `$gte`   | greater than or equal | `db.student.find({age: {$gte: 20}})`      |
+| `$lt`    | less than             | `db.student.find({age: {$lt: 20}})`       |
+| `$lte`   | less than or equal    | `db.student.find({age: {$lte: 20}})`      |
+| `$in`    | value exists in array | `db.student.find({age: {$in: [20,21]}})`  |
+| `$nin`   | value not in array    | `db.student.find({age: {$nin: [20,21]}})` |
+db.student.find({age:{$not:{$eq:20}}})
+
+---->LOGICAL OPERATORS IN MONGODB
+
+Logical operators are used to combine multiple
+conditions in queries.
+
+1. $and
+Used for:
+✅ All conditions must be true
+Syntax:
+{
+   $and:[
+      {condition1},
+      {condition2}
+   ]
+}
+Example:
+db.student.find({
+   $and:[
+      {age:20},
+      {course:"BTech"}
+   ]
+})
+Output:
+
+[
+   {
+      name:"Rahul",
+      age:20,
+      course:"BTech"
+   }
+]
+
+2. $or
+Used for:
+✅ At least one con
+
+{
+   $or:[
+      {condition1},
+      {condition2}
+   ]
+}
+
+Example:
+db.student.find({
+   $or:[
+      {age:20},
+      {course:"BCA"}
+   ]
+})
+
+
+3. $not
+Used for:
+✅ Reverse a condition
+Syntax:
+{
+   field:{
+      $not:{condition}
+   }
+}
+
+Example:
+
+db.student.find({
+   age:{
+      $not:{$gt:20}
+   }
+})
+
+
+4. $nor
+
+Used for:
+✅ All conditions must be false
+Syntax:
+{
+   $nor:[
+      {condition1},
+      {condition2}
+   ]
+}
+Example:
+
+db.student.find({
+   $nor:[
+      {age:{$gt:20}},
+      {course:"BTech"}
+   ]
+})
+
+-->OTHER QUERY OPERATORS IN MONGODB
+
+==================================================
+
+1. ELEMENT OPERATORS
+
+🔷 $exists
+
+Used for:
+✅ Check whether field exists or not
+Example:
+
+db.student.find({
+   age:{$exists:true}
+})
+ 
+values:
+true-this will show all the document where age attribute is not exist.
+false-this will show all the document where age attribute in not exist
+Output:
+
+[
+   {
+      name:"Rahul",
+      age:20
+   }
+]
+
+
+🔷 $type
+
+Used for:
+✅ Check BSON datatype of field
+Example:
+db.student.find({
+   age:{$type:"int"}
+   //age:{$type:["int","bool"]}  //Find documents where age field datatype is: int OR bool
+
+})
+//this will go all the document where age datatype is integer.
+Output:
+[
+   {
+      name:"Rahul",
+      age:20
+   }
+]
+
+==================================================
+
+2. EVALUATION OPERATORS
+
+🔷 $regex
+
+Used for:
+✅ Pattern matching
+syntex:
+{ <field>: { $regex: /pattern/, $options: '<options>' } }
+{ "<field>": { "$regex": "pattern", "$options": "<options>" } }
+{ <field>: { $regex: /pattern/<options> } }
+options=flags
+but does not support global g (see in mongodb website for more)
+Example:
+
+db.student.find({
+   name:{$regex:"^R"}
+})
+
+Output:
+
+[
+   {
+      name:"Rahul"
+   },
+   {
+      name:"Rohan"
+   }
+]
+
+==================================================
+
+🔷 $text
+
+Used for:
+✅ Text searching
+
+Example:
+
+db.student.find({
+   $text:{$search:"MongoDB"}
+})
+
+Output:
+
+[
+   {
+      title:"MongoDB Tutorial"
+   }
+]
+
+==================================================
+
+🔷 $expr
+
+Used for:
+✅ Compare fields using aggregation expressions
+
+Example:
+
+db.student.find({
+   $expr:{
+      $gt:["$marks", "$age"]
+   }
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      marks:80,
+      age:20
+   }
+]
+
+Example2:
+// Compare marks with (age * 5)
+
+db.student.find({
+   $expr: {
+      $gt: [
+         "$marks",
+         { $multiply: ["$age", 5] }
+      ]
+   }
+})
+
+// 🔷 $mod
+
+// Used for:
+// ✅ Find documents where remainder matches after division
+// Syntax:
+{ <field>: { $mod: [ divisor, remainder ] } }
+
+
+// Example:
+// Find students whose age is divisible by 5
+
+db.student.find({
+   age: { $mod: [5, 0] }
+})
+
+// Output:
+
+[
+   {
+      name: "Rahul",
+      age: 20
+   },
+   {
+      name: "Rohan",
+      age: 25
+   }
+]
+
+// Example:
+// Find students whose age gives remainder 1 when divided by 5
+
+db.student.find({
+   age: { $mod: [5, 1] }
+})
+
+
+// Output:
+
+[
+   {
+      name: "Aman",
+      age: 21
+   },
+   {
+      name: "Karan",
+      age: 26
+   }
+]
+
+
+==================================================
+
+3. ARRAY OPERATORS
+
+🔷 $all
+
+Used for:
+✅ Match all array elements
+
+Example:
+
+db.student.find({
+   skills:{$all:["Java","MongoDB"]}
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      skills:["Java","MongoDB","React"]
+   }
+]
+
+
+🔷 $elemMatch
+
+Used for:
+✅ Match array elements with condition
+
+Example:
+
+db.student.find({
+   marks:{
+      $elemMatch:{
+         $gt:70,
+         $lt:90
+      }
+   }
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      marks:[60,80,95]
+   }
+]
+
+
+
+🔷 $size
+
+Used for:
+✅ Match array length
+
+Example:
+
+db.student.find({
+   skills:{$size:3}
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      skills:["Java","MongoDB","React"]
+   }
+]
+
+
+4. BITWISE OPERATORS
+
+🔷 $bitsAllSet
+
+Example:
+
+db.student.find({
+   flags:{$bitsAllSet:[1,2]}
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      flags:7
+   }
+]
+
+
+
+🔷 $bitsAnySet
+
+Example:
+
+db.student.find({
+   flags:{$bitsAnySet:[1,2]}
+})
+
+Output:
+
+[
+   {
+      name:"Rahul",
+      flags:2
+   }
+]
+
+==================================================
+
+IMPORTANT POINTS
+
+* Element operators work on fields.
+* Evaluation operators evaluate expressions/patterns.
+* Array operators work on arrays.
+* Query operators start with $ symbol.
+
+==================================================
+
+-->
+==============================
+findOneAndUpdate()
+==============================
+
+Purpose:
+Find one document and update fields.
+
+Syntax:
+db.collection.findOneAndUpdate(
+   filter,
+   update,
+   options
+)
+
+Example:
+db.users.findOneAndUpdate(
+   { name: "Naeem" },
+   { $set: { age: 21 } },
+   { returnDocument: "after" }
+)
+
+Important Options:
+returnDocument:"after"
+-> return updated document
+
+returnDocument:"before"
+-> return old document
+
+upsert:true
+-> create document if not found
+
+projection:{name:1}
+-> return selected fields
+
+sort:{age:-1}
+-> choose document using sorting
+
+maxTimeMS:5000
+-> max execution time
+
+bypassDocumentValidation:true
+-> skip schema validation
+
+
+
+==============================
+findOneAndReplace()
+==============================
+
+Purpose:
+Find one document and replace full document.
+
+Syntax:
+db.collection.findOneAndReplace(
+   filter,
+   replacement,
+   options
+)
+
+Example:
+db.users.findOneAndReplace(
+   { name: "Naeem" },
+   {
+      name: "Mohammad",
+      age: 22,
+      city: "Delhi"
+   },
+   { returnDocument: "after" }
+)
+
+Note:
+Old fields not included will be removed.
+
+
+==============================
+findOneAndDelete()
+==============================
+
+Purpose:
+Find one document and delete it.
+
+Syntax:
+db.collection.findOneAndDelete(filter)
+
+Example:
+db.users.findOneAndDelete(
+   { name: "Naeem" }
+)
+
+
+==============================
+Note-->
+Update
+db.users.updateOne(
+   { name:"Naeem" },
+   { $set:{ age:21 } }
+)
+
+After:
+
+{
+   name:"Naeem",
+   age:21,
+   city:"Delhi"
+}
+
+Only age changed.
+
+Replace(only replaceOne exist in mongodb) 
+db.users.replaceOne(
+   { name:"Naeem" },
+   {
+      name:"Mohammad",
+      age:22
+   }
+)
+
+After:
+
+{
+   name:"Mohammad",
+   age:22
+}
+
+-->
+MongoDB Aggregation Framework
+The MongoDB Aggregation Framework is used to process, filter, transform, and analyze data in collections.
+It works like a pipeline where documents pass through multiple stages.
+Collection → Stage1 → Stage2 → Stage3 → Output
+ aggregation works like a pipeline, and the output of the last stage is returned as the final result.
+--------------------------------------------------
+Basic Syntax
+
+db.collection.aggregate([
+   { stage1 },
+   { stage2 },
+   { stage3 }
+])
+--------------------------------------------------
+
+1. $match
+Used to filter(find) documents.
+Example:
+db.users.aggregate([
+   {
+      $match: { age: { $gte: 18 } }
+   }
+])
+
+SQL Equivalent:
+WHERE age >= 18
+
+Yes, if you do not use $match, aggregation will process all documents in the collection.
+
+--------------------------------------------------
+2. $project
+Used to select fields or create new fields.
+Example:
+db.users.aggregate([
+   {
+      $project: {
+         name: 1,
+         email: 1,
+         _id: 0
+      }
+   }
+])
+
+ $project with Custom Field
+Used to create new fields.
+
+Example:
+db.users.aggregate([
+   {
+      $project: {
+         fullName: {
+            $concat: ["$firstName", " ", "$lastName"]
+            //$gt: ["$age", 20] → Checks if age is greater than 20.so this will so true false
+         },
+         age: 1
+      }
+   }
+])
+
+--------------------------------------------------
+
+3. $sort
+Sort documents.
+Example:
+db.users.aggregate([
+   {
+      $sort: { age: -1 }
+      //$sort: { age: -1, name: 1 } → First sort by age descending, then if age is same sort by name ascending.
+   }
+])
+
+1  → ascending
+-1 → descending
+
+
+$sortByCount → Groups documents and sorts them by count in descending order.
+
+Example:
+db.users.aggregate([
+   {
+      $sortByCount: "$city" → Groups documents by city and sorts them by number of documents in descending order.
+   }
+])
+
+Output:
+[
+   { _id: "Delhi", count: 5 },
+   { _id: "Mumbai", count: 3 },
+   { _id: "Pune", count: 2 }
+]
+
+--------------------------------------------------
+
+4. $limit
+Limit number of documents.
+Example:
+db.users.aggregate([
+   {
+      $limit: 5
+   }
+])
+--------------------------------------------------
+5. $skip
+Used for pagination.
+Example:
+db.users.aggregate([
+   { $skip: 10 },
+   { $limit: 10 }
+])
+
+Example->
+db.users.aggregate([
+   { $match: { age: { $gte: 18 } } },
+   { 
+      $project: {
+         fullName: { $concat: ["$firstName", " ", "$lastName"] },
+         age: 1,
+         city: 1
+      }
+   },
+   { $sort: { age: -1, fullName: 1 } },
+   { $skip: 2 },
+   { $limit: 5 },
+   { $count: "totalUsers" }
+])
+it will return only total count with key totalUsers
+-------------------------------------------------
+
+# 6. `$group`
+
+The `$group` stage is used in the MongoDB Aggregation Framework to:
+
+- Group documents based on a field
+- Perform calculations on grouped data
+- Generate summarized results
+
+It works similarly to `GROUP BY` in SQL.
+
+---
+
+# Basic Syntax
+
+db.collection.aggregate([
+   {
+      $group: {
+         _id: "$fieldName"
+      }
+   }
+])
+# Important Point
+
+The `_id` field inside `$group` decides on which field the grouping will happen.
+Documents having the same value of that field become one group.
+
+# Example Collection
+
+[
+   { name: "Ali", course: "BTech", marks: 80 },
+   { name: "Rahul", course: "BTech", marks: 70 },
+   { name: "Aman", course: "BCA", marks: 90 },
+   { name: "Sara", course: "BCA", marks: 60 }
+]
+
+
+# Example 1 — Group By Course
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course"
+      }
+   }
+])
+
+## Output
+
+[
+   { _id: "BTech" },
+   { _id: "BCA" }
+]
+# Example 2 — Count Students Per Course
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         count: { $sum: 1 }
+      }
+   }
+])
+
+
+## Output
+
+[
+   { _id: "BTech", count: 2 },
+   { _id: "BCA", count: 2 }
+]
+
+
+---
+
+# Understanding `$sum`
+
+count: { $sum: 1 }
+
+
+For every document in the group:
+- Add `1`
+- Final result becomes total count
+
+---
+
+# Example 3 — Total Marks Per Course
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         totalMarks: { $sum: "$marks" }
+      }
+   }
+])
+
+
+## Output
+
+[
+   { _id: "BTech", totalMarks: 150 },
+   { _id: "BCA", totalMarks: 150 }
+]
+
+
+---
+
+# Common Accumulator Operators
+| Operator    | Purpose                               |
+| ----------- | ------------------------------------- |
+| `$sum`      | Adds values                           |
+| `$avg`      | Calculates average                    |
+| `$max`      | Finds maximum value                   |
+| `$min`      | Finds minimum value                   |
+| `$push`     | Stores values in an array             |
+| `$addToSet` | Stores unique values in an array      |
+| `$first`    | Returns first value                   |
+| `$last`     | Returns last value                    |
+| `$count`    | Counts documents                      |
+| `$top`      | Returns top value based on sorting    |
+| `$bottom`   | Returns bottom value based on sorting |
+| `$topN`     | Returns top N values                  |
+| `$bottomN`  | Returns bottom N values               |
+| `$median`   | Finds approximate median value        |
+
+
+## 1. `$sum`
+
+Adds values.
+total: { $sum: "$marks" }
+
+## 2. `$avg`
+
+alculates average.
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         averageMarks: { $avg: "$marks" }
+      }
+   }
+])
+
+
+
+## 3. `$max`
+
+Finds maximum value.
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         highestMarks: { $max: "$marks" }
+      }
+   }
+])
+
+## 4. `$min`
+Finds minimum value.
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         lowestMarks: { $min: "$marks" }
+      }
+   }
+])
+
+
+---
+
+## 5. `$push`
+Stores values into an array.
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         students: { $push: "$name" }
+      }
+   }
+])
+
+## Output
+[
+   {
+      _id: "BTech",
+      students: ["Ali", "Rahul"]
+   },
+   {
+      _id: "BCA",
+      students: ["Aman", "Sara"]
+   }
+]
+
+
+---
+
+## 6. `$first`
+
+Returns first value from the group.
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         firstStudent: { $first: "$name" }
+      }
+   }
+])
+ouput:
+[
+   { _id: "BTech", firstStudent: "Ali" },
+   { _id: "BCA", firstStudent: "Aman" }
+]
+
+
+Important:
+`$first` depends on document order.
+Usually used with `$sort`.
+
+## 7. `$last`
+
+Returns last value from the group.
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         lastStudent: { $last: "$name" }
+      }
+   }
+])
+
+
+---
+
+## 8. `$top`
+Returns top document based on sorting
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         topper:{
+            $top: {
+               sortBy: { marks: -1 },
+               output: ["$name","$course"]//what do you want to show
+            }
+         }        
+            
+         
+      }
+   }
+])
+
+ouput:
+[
+   {
+      _id: "BTech",
+      topper: ["Ali", "BTech"]
+   },
+   {
+      _id: "BCA",
+      topper: ["Aman", "BCA"]
+   }
+]
+
+
+same $topN just give n in top
+## 9. `$bottom`
+
+Returns lowest document based on sorting.
+
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+            $bottom: {
+               sortBy: { marks: -1 },
+               output: "$name"
+            }
+         
+      }
+   }
+])
+
+same $bottomN just give n in bottom
+
+
+#10 `$median`
+`$median` is an aggregation accumulator operator used to find the approximate median (middle value) of numeric data.
+
+## Syntax
+
+
+$median: {
+   input: "$fieldName",
+   method: "approximate"
+}
+Example
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         medianMarks: {
+            $median: {
+               input: "$marks",
+               method: "approximate"
+            }
+         }
+      }
+   }
+])
+Important Points
+Works only with numeric values
+Finds the middle value after sorting
+Uses approximate calculation for performance
+Commonly used in statistics and analytics
+Less affected by extreme values compared to $avg
+
+# Multiple Calculations Together
+db.student.aggregate([
+   {
+      $group: {
+         _id: "$course",
+         totalStudents: { $sum: 1 },
+         averageMarks: { $avg: "$marks" },
+         highestMarks: { $max: "$marks" },
+         lowestMarks: { $min: "$marks" }
+      }
+   }
+])
+
+
+---
+
+# Using `$match` Before `$group`
+
+db.student.aggregate([
+   {
+      $match: {
+         marks: { $gte: 70 }
+      }
+   },
+   {
+      $group: {
+         _id: "$course",
+         count: { $sum: 1 }
+      }
+   }
+])
+
+
+Flow:
+
+text
+Documents → Filter using $match → Group using $group
+
+
+---
+
+# SQL Comparison
+
+| SQL | MongoDB |
+|------|------|
+| GROUP BY | $group |
+| SUM() | $sum |
+| AVG() | $avg |
+| MAX() | $max |
+| MIN() | $min |
+
+---
+
+# Important Interview Points
+
+- `_id` is mandatory in `$group`
+- other key name anything what every we want 
+- `_id: null` means all documents become one group
+- how many keys we write in group it return that
+- `$group` reduces multiple documents into summarized output
+- Usually used with:
+  - `$match`
+  - `$sort`
+  - `$project`
+
+---
+
+# Example — Group All Documents Together
+db.student.aggregate([
+   {
+      $group: {
+         _id: null,
+         totalStudents: { $sum: 1 },
+         averageMarks: { $avg: "$marks" }
+      }
+   }
+])
+
+
+## Output
+
+[
+   {
+      _id: null,
+      totalStudents: 4,
+      averageMarks: 75
+   }
+]
+
+
+--------------------------------------------------
+
+# MongoDB `$lookup`
+## Definition
+`$lookup` is used to perform joins between two collections in MongoDB.
+
+It works like `JOIN` in SQL.
+# Syntax
+
+db.collection.aggregate([
+   {
+      $lookup:{
+         from:"secondCollection",
+         localField:"field1",
+         foreignField:"field2",
+         as:"outputField"
+      }
+   }
+])
+# Meaning of Fields
+
+| Field          | Meaning                                     |
+| -------------- | ------------------------------------------- |
+| `from`         | Second collection name                      |
+| `localField`   | Field from current collection               |
+| `foreignField` | Field from second collection                |
+| `as`           | Field name where joined data will be stored |
+
+
+# Example Collections
+
+## users Collection
+
+{
+   _id:1,
+   name:"Naeem",
+   age:21
+}
+{
+   _id:2,
+   name:"Ali",
+   age:22
+}
+
+## orders Collection
+
+{
+   _id:101,
+   product:"Laptop",
+   userId:1
+}
+```
+
+{
+   _id:102,
+   product:"Phone",
+   userId:2
+}
+
+
+# Aggregation Query
+
+db.orders.aggregate([
+   {
+      $lookup:{
+         from:"users",
+         localField:"userId",
+         foreignField:"_id",
+         as:"userDetails"
+      }
+   }
+])
+
+# Matching Condition
+
+orders.userId == users._id
+
+Example:
+
+1 == 1
+
+Match found ✅
+
+---
+
+# Output
+
+[
+   {
+      _id:101,
+      product:"Laptop",
+      userId:1,
+
+      userDetails:[
+         {
+            _id:1,
+            name:"Naeem",
+            age:21
+         }
+      ]
+   },
+
+   {
+      _id:102,
+      product:"Phone",
+      userId:2,
+
+      userDetails:[
+         {
+            _id:2,
+            name:"Ali",
+            age:22
+         }
+      ]
+   }
+]
+```
+
+---
+
+# Important Points
+1. Original collection data remains same.
+2. Matching documents from second collection are added in as array.
+3. Joined data is stored inside field given by `as`.
+
+
+4. `as` always returns an array.
+
+Even one match returns:
+
+userDetails:[ {...} ]
+
+5. If no match found:
+
+userDetails:[]
+# SQL Equivalent
+
+```sql
+SELECT *
+FROM orders
+JOIN users
+ON orders.userId = users._id;
+
+later->$replaceRoot
+
+
+# Simple One-Line Definition
+--------------------------------------------------
+
+8. $unwind
+$unwind is used to break an array into separate documents.
+Example
+Before
+{
+  name: "Ali",
+  marks: [10, 20, 30]
+}
+
+Query
+db.students.aggregate([
+{
+  $unwind: "$marks"
+}
+])
+Output
+{ name: "Ali", marks: 10 }
+
+{ name: "Ali", marks: 20 }
+
+{ name: "Ali", marks: 30 }
+
+example with loopup
+db.orders.aggregate([ { $lookup:{ from:"users", localField:"userId", foreignField:"_id", as:"userDetails" } }, { $unwind:"$userDetails" } ])
+--------------------------------------------------
+
+9. $addFields
+Adds new fields.
+
+Example:
+db.users.aggregate([
+   {
+      $addFields: {
+         //fullName:"imran Khan"
+         fullName: {
+            $concat: ["$firstName", " ", "$lastName"]
+         }
+      }
+   }
+])
+
+Example 2 — Calculated Field
+db.students.aggregate([
+{
+  $addFields: {
+    total: { $add: ["$math", "$science"] }
+  }
+}
+])
+
+Example 3 — Modify Existing Field
+db.students.aggregate([
+{
+  $addFields: {
+    marks: 100
+  }
+}
+])
+
+-->removes age filed from all document
+$$REMOVE is a special variable used with
+ $addFields or $project to remove a field 
+db.students.aggregate([
+{
+  $addFields: {
+    age: "$$REMOVE"
+  }
+}
+])
+
+conditional remove
+
+db.students.aggregate([
+{
+  $addFields: {
+    phone: {
+      $cond: {
+        if: { $eq: ["$phone", ""] },
+        then: "$$REMOVE",
+        else: "$phone"
+      }
+    }
+  }
+}
+])
+
+
+.cancate array
+db.students.aggregate([
+{
+  $addFields: {
+    allMarks: {
+      $concatArrays: ["$mathMarks", "$scienceMarks"]
+    }
+  }
+}
+])
+
+
+.add in existing array
+
+db.students.aggregate([
+{
+  $addFields: {
+    marks: {
+      $concatArrays: ["$marks", [50]]
+    }
+  }
+}
+])
+
+--------------------------------------------------
+
+10. $count
+Counts documents.
+
+Example:
+db.users.aggregate([
+   {
+      $count: "totalUsers"
+   }
+])
+
+it will show count of all document
+
+--------------------------------------------------
+
+11. $facet
+Runs multiple pipelines together.
+
+Example:
+db.products.aggregate([
+   {
+      $facet: {
+         expensive: [
+            { $match: { price: { $gt: 1000 } } }
+         ],
+         cheap: [
+            { $match: { price: { $lt: 1000 } } }
+         ]
+      }
+   }
+])
+
+--------------------------------------------------
+
+12. $bucket
+Groups documents into ranges.
+
+Example:
+Syntax
+db.collection.aggregate([
+{
+  $bucket: {
+    groupBy: "$age",
+    boundaries: [0, 18, 30, 50],
+    default: "Other",
+    output: {
+      count: { $sum: 1 }
+    }
+  }
+}
+])
+Meaning:
+groupBy
+
+Field on which grouping happens.
+groupBy: "$age"
+
+→ Group documents based on age.
+boundaries
+Defines ranges.
+
+boundaries: [0, 18, 30, 50]
+
+Creates buckets:
+0 → 18
+18 → 30
+30 → 50
+
+Rule:
+lower <= value < upper
+
+Example:
+18 goes in second bucket
+30 goes in third bucket
+
+
+default
+Stores values outside boundaries.
+
+default: "Other"
+
+If age is:
+less than 0
+greater/equal 50
+
+then document goes into "Other" bucket.
+
+Output Example
+[
+  {
+    _id: 0,
+    count: 2
+  },
+  {
+    _id: 18,
+    count: 5
+  },
+  {
+    _id: 30,
+    count: 3
+  },
+  {
+    _id: "Other",
+    count: 1
+  }
+]
+
+_id
+Represents bucket starting boundary.
+
+-->$bucketAuto
+ automatically creates buckets with almost equal number of documents.
+You do not give boundaries manually.
+
+Syntax
+db.collection.aggregate([
+{
+  $bucketAuto: {
+    groupBy: "$marks",
+    buckets: 4
+  }
+}
+])
+
+Example:
+[
+ { marks: 10 },
+ { marks: 20 },
+ { marks: 30 },
+ { marks: 40 },
+ { marks: 50 },
+ { marks: 60 },
+ { marks: 70 },
+ { marks: 80 }
+]
+
+ouput:
+[
+ {
+   _id: { min: 10, max: 30 },
+   count: 2
+ },
+ {
+   _id: { min: 30, max: 50 },
+   count: 2
+ },
+ {
+   _id: { min: 50, max: 70 },
+   count: 2
+ },
+ {
+   _id: { min: 70, max: 80 },
+   count: 2
+ }
+]
+ 
+ note->if we want to show only count then we dont need to define ouput
+
+| `$bucket`             | `$bucketAuto`              |
+| --------------------- | -------------------------- |
+| Manual ranges         | Automatic ranges           |
+| You define boundaries | MongoDB defines boundaries |
+| More control          | Easier to use              |
+
+--------------------------------------------------
+
+13. $sample
+Random document
+
+
+Example:
+db.products.aggregate([
+   {
+      $sample: { size: 3 }
+   }
+])
+
+--------------------------------------------------
+
+14. $expr
+Use aggregation expressions inside queries.
+
+Example:
+db.products.aggregate([
+   {
+      $match: {
+         $expr: {
+            $gt: ["$price", "$discountPrice"]
+         }
+      }
+   }
+])
+
+--------------------------------------------------
+
+15. Aggregation Expressions
+
+Examples:
+- $sum
+- $avg
+- $multiply
+- $divide
+- $concat
+- $substr
+- $toUpper
+- $toLower
+- $cond
+
+Example:
+db.products.aggregate([
+   {
+      $project: {
+         totalPrice: {
+            $multiply: ["$price", "$quantity"]
+         }
+      }
+   }
+])
+
+--------------------------------------------------
+
+Real Full Stack Example
+
+Suppose:
+- users collection
+- orders collection
+
+Get all orders with user details.
+
+db.orders.aggregate([
+   {
+      $lookup: {
+         from: "users",
+         localField: "userId",
+         foreignField: "_id",
+         as: "user"
+      }
+   },
+   {
+      $unwind: "$user"
+   },
+   {
+      $project: {
+         product: 1,
+         amount: 1,
+         "user.name": 1,
+         "user.email": 1
+      }
+   }
+])
+
+--------------------------------------------------
+$out
+$out is used to save aggregation result into a collection.
+
+It permanently writes data to database.
+
+Syntax
+db.collection.aggregate([
+  { pipeline stages },
+  {
+    $out: "newCollection"
+  }
+])
+Example
+db.students.aggregate([
+{
+  $match: { marks: { $gt: 50 } }
+},
+{
+  $out: "passedStudents"
+}
+])
+Meaning
+Aggregation result stored in passedStudents
+Collection created automatically if not exists
+Existing collection data gets replaced
+Result
+students  → original collection
+passedStudents → new saved collection
+Important
+
+✅ Changes database permanently
+✅ Last stage in pipeline
+
+| `$out`       | Normal Aggregation |
+| ------------ | ------------------ |
+| Saves result | Temporary output   |
+| Changes DB   | Does not change DB |
+
+
+--------------------------------------------------
+$merge
+$merge is used to save aggregation results into a collection
+ without fully replacing it.
+
+It can:
+Insert new documents
+Update existing documents
+Merge data
+
+Syntax
+db.collection.aggregate([
+  { pipeline stages },
+  {
+    $merge: "targetCollection"
+  }
+])
+
+Example
+db.students.aggregate([
+{
+  $match: { marks: { $gt: 50 } }
+},
+{
+  $merge: "passedStudents"
+}
+])
+
+Meaning
+
+Result documents are merged into passedStudents.
+
+If document exists:
+update it
+
+If document does not exist:
+insert it
+
+$merge supports:
+
+into
+on
+whenMatched
+whenNotMatched
+
+Syntax
+{
+  $merge: {
+    into: "targetCollection",
+    on: "_id",
+    whenMatched: "merge",
+    whenNotMatched: "insert"
+  }
+}
+Meaning
+
+into
+Target collection name.
+
+into: "students"
+Save result into students.
+
+on
+Field used to match documents.
+
+on: "_id"
+MongoDB compares _id values.
+
+whenMatched
+What to do if matching document already exists.
+
+Options
+"replace"
+"merge"
+"keepExisting"
+"fail"
+Example
+whenMatched: "merge"
+
+Merge fields with existing document.
+
+whenNotMatched
+What to do if no matching document exists.
+
+Options
+"insert"
+"discard"
+"fail"
+Example
+whenNotMatched: "insert"
+
+Insert new document.
+
+Full Example
+db.newData.aggregate([
+{
+  $merge: {
+    into: "students",
+    on: "_id",
+    whenMatched: "merge",
+    whenNotMatched: "insert"
+  }
+}
+])
+--------------------------------------------------
+$unionWith is used to combine documents from multiple collections.
+
+Like SQL UNION.
+
+Syntax
+db.collection1.aggregate([
+{
+  $unionWith: "collection2"
+}
+])
+Example
+students
+[
+ { name: "Ali" }
+]
+
+teachers
+[
+ { name: "Sara" }
+]
+Query
+db.students.aggregate([
+{
+  $unionWith: "teachers"
+}
+])
+Output
+[
+ { name: "Ali" },
+ { name: "Sara" }
+]
+With Pipeline
+db.students.aggregate([
+{
+  $unionWith: {
+    coll: "teachers",//union with teachers
+    pipeline: [
+      { $match: { age: { $gt: 30 } } }
+    ]
+  }
+}
+])
+Meaning
+Combine collections
+Optional filtering using pipeline
+Does not remove duplicates automatically
+
+--------------------------------------------------
+$fill is used to fill missing or null field values in documents.
+
+Mostly used in:
+
+Time-series data
+Missing records
+Analytics
+Syntax
+{
+  $fill: {
+    output: {
+      fieldName: {
+        value: value
+      }
+    }
+  }
+}
+Example
+Before
+[
+ { name: "Ali", marks: 90 },
+ { name: "Sara", marks: null },
+ { name: "John" }
+]
+Query
+db.students.aggregate([
+{
+  $fill: {
+    output: {
+      marks: {
+            value: 0
+          }
+    }
+  }
+}
+])
+Output
+[
+ { name: "Ali", marks: 90 },
+ { name: "Sara", marks: 0 },
+ { name: "John", marks: 0 }
+]
+Meaning
+null or missing → replaced with 0
+
+Other Fill Methods
+1. value
+Fixed value filling.
+
+marks: {
+  value: 0
+}
+
+2. linear
+Fills values using interpolation.
+
+marks: {
+  method: "linear"
+}
+
+3. locf
+Last Observation Carried Forward.
+Uses previous value.
+
+marks: {
+  method: "locf"
+}
+--------------------------------------------------
+
+
+Most Important Topics Priority Order
+
+1. $match
+2. $project
+3. $sort
+4. $limit
+5. $skip
+6. $group
+7. $lookup
+8. $unwind
+9. $addFields
+10. Aggregation Expressions
+11. $facet
+12. $bucket
+
+--------------------------------------------------
+
+For MERN Stack Interviews
+
+Must know deeply:
+- $match
+- $group
+- $lookup
+- $project
+- $unwind
+- Pagination ($skip + $limit)
+- Aggregation expressions
+
+--------------------------------------------------
+
+Easy Memory Trick
+
+Filter → Transform → Group → Join → Output
+
+- $match   → Filter
+- $project → Transform
+- $group   → Group
+- $lookup  → Join
+- $sort/$limit → Output control
+
+
+
+--->Relationship
+one-to-one
+one-to-many-(i)stores the child document inside parent (ii) stores a reference to the chidl document in the parents
+many-to-one-s
+many-to-many

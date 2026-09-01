@@ -1,0 +1,340 @@
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           WINDOWS + LINUX TERMINAL COMMANDS(linus cmd in bracket but may work for window shell)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+BASIC COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+dir (ls)
+→ list files and folders
+
+cd (cd)
+→ show/change current directory
+
+cls (clear)
+→ clear terminal screen
+
+cd folderName (cd folderName)
+→ change directory
+
+cd .. (cd ..)
+→ one step back
+
+cd ..\.. (cd ../..)
+→ two steps back
+
+mkdir folderName (mkdir folderName)
+→ create folder
+
+type nul > file.txt (touch file.txt)
+→ create file
+
+del file.txt (rm file.txt)
+→ delete file
+
+rmdir folderName (rmdir folderName)
+→ remove empty folder
+
+rmdir /s /q folderName (rm -rf folderName)
+→ remove folder with all contents permanently
+
+copy file1 file2 (cp file1 file2)
+→ copy file
+
+move oldName newName (mv oldName newName)
+→ move or rename
+
+type file.txt (cat file.txt)
+→ show file contents
+
+echo Hello (echo Hello)
+→ print text
+
+doskey /history (history)
+→ show command history
+
+exit (exit)
+→ close terminal
+
+
+EXAMPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+mkdir project
+
+type nul > index.html
+(touch index.html)
+
+cd project
+
+cd ..
+
+del app.js
+(rm app.js)
+
+rmdir /s /q project
+(rm -rf project)
+
+
+IMPORTANT NOTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+del / rm permanently delete files.
+
+rmdir /s /q
+and
+rm -rf
+
+permanently delete folders and contents.
+
+Files do NOT go to Recycle Bin / Trash.
+
+
+PATHS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Absolute Path
+→ starts from root/drive
+
+Windows:
+D:\Coding\Java
+
+Linux:
+/home/imran/projects
+
+Absolute path works from anywhere.
+
+
+2. Relative Path
+→ starts from current directory
+
+Windows:
+Projects\Test
+
+Linux:
+projects/test
+
+Relative path depends on current location.
+
+
+SPECIAL SYMBOLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+\  (Windows)
+→ backslash
+
+/  (Linux)
+→ forward slash
+
+.
+→ current directory
+
+..
+→ parent directory
+
+~
+→ home directory (Linux)
+
+
+EXAMPLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cd \
+(cd /)
+→ go to root directory
+
+cd %USERPROFILE%
+(cd ~)
+→ go to home directory
+
+
+FLAGS / OPTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+dir /a
+(ls -a)
+→ show hidden files
+
+dir /p
+→ page-by-page output
+
+dir /w
+→ wide list view
+
+ls -l
+→ detailed list
+
+ls -la
+→ detailed + hidden files
+
+rmdir /s
+(rm -r)
+→ recursive delete
+
+del /f
+(rm -f)
+→ force delete
+
+
+HELP COMMANDS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+help
+→ list Windows commands
+
+man ls
+→ Linux manual page
+
+command /?
+(command --help)
+→ help for command
+
+Examples:
+
+mkdir /?
+(mkdir --help)
+
+copy /?
+(cp --help)
+
+
+SHORTCUT KEYS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Tab
+→ auto complete
+
+↑
+→ previous command
+
+Ctrl + C
+→ stop running process
+
+Ctrl + L
+→ clear screen
+
+Ctrl + A
+→ move cursor to start
+
+Ctrl + E
+→ move cursor to end
+
+
+
+
+COMMON NAVIGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cd folderName
+→ move into folder
+
+cd ..
+→ move back
+
+cd \
+(cd /)
+→ root directory
+
+cd %USERPROFILE%
+(cd ~)
+→ home directory
+
+
+CURRENT DIRECTORY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.
+→ current directory
+
+Example:
+
+cd .
+
+..
+→ parent directory
+
+Example:
+
+cd ..
+
+
+IMPORTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+mkdir
+→ creates folders
+
+touch
+→ creates files
+
+del / rm
+→ deletes files
+
+rmdir /s /q
+or
+rm -rf
+→ deletes folders permanently
+
+
+WINDOWS vs LINUX PATH SEPARATORS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Windows CMD
+→ \
+
+PowerShell
+→ \
+
+Git Bash
+→ /
+
+Linux
+→ /
+
+
+WEB URLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Web URLs use forward slash (/)
+
+Example:
+
+https://google.com/search/images
+
+
+EXAMPLES OF ABSOLUTE vs RELATIVE PATH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Current Directory:
+
+Windows:
+D:\Coding
+
+Linux:
+/home/imran/coding
+
+
+Relative Path:
+
+mkdir test
+
+Creates:
+
+Windows:
+D:\Coding\test
+
+Linux:
+/home/imran/coding/test
+
+
+Absolute Path:
+
+Windows:
+mkdir D:\Projects\test
+
+Linux:
+mkdir /home/imran/projects/test
+
+
+END
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

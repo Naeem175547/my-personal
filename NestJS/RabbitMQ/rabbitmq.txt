@@ -1,0 +1,1311 @@
+NOW RABBITMQ
+12
+============================================================
+RabbitMQ is a Message Broker.
+It is commonly used for communication between services.
+
+Example:
+User Service
+      ↓
+   RabbitMQ
+      ↓
+Email Service
+
+User Service does not directly call Email Service.
+RabbitMQ sits between them.
+
+
+============================================================
+13. RABBITMQ MAIN COMPONENTS
+============================================================
+
+You MUST understand these:
+
+
+Producer
+Message
+Exchange
+Routing Key
+Binding
+Queue
+Consumer
+Acknowledgement
+Channel
+Connection
+
+
+Most important flow:
+
+
+Producer
+   ↓
+Exchange
+   ↓
+Routing Key
+   ↓
+Queue
+   ↓
+Consumer
+   ↓
+ACK
+
+
+============================================================
+14. RABBITMQ PRODUCER
+============================================================
+Producer sends a message.
+
+Example:
+User Service
+     ↓
+Producer
+     ↓
+RabbitMQ
+
+
+Message:
+{
+    "userId": 10,
+    "email": "user@gmail.com"
+}
+============================================================
+15. RABBITMQ EXCHANGE
+============================================================
+Producer normally sends a message to an Exchange.
+
+Exchange decides which queue should receive
+the message.
+
+
+Producer
+   ↓
+Exchange
+   ↓
+Queue
+   ↓
+Consumer
+
+
+Exchange types:
+
+
+1. Direct
+2. Fanout
+3. Topic
+4. Headers
+
+
+============================================================
+16. DIRECT EXCHANGE
+============================================================
+Uses an exact Routing Key.
+
+
+Producer
+   ↓
+Direct Exchange
+   ↓
+routingKey = "user.created"
+   ↓
+user_queue
+
+Only the appropriate binding receives it.
+============================================================
+17. FANOUT EXCHANGE
+============================================================
+Broadcasts the message to all bound queues.
+
+Producer
+     ↓
+Fanout Exchange
+   /    |    \
+  ↓     ↓     ↓
+Queue1 Queue2 Queue3
+
+
+Example:
+User Created
+
+Email Service
+Notification Service
+Analytics Service
+
+All receive the event.
+
+============================================================
+18. TOPIC EXCHANGE
+============================================================
+Uses routing-key patterns.
+Examples:
+
+user.created
+user.updated
+user.deleted
+
+
+Binding:
+user.*
+
+
+matches:
+user.created
+user.updated
+user.deleted
+
+
+Another:
+user.#
+
+can match multiple levels.
+============================================================
+19. BINDING
+============================================================
+Binding connects:
+
+Exchange
+    ↓
+Queue
+
+
+Example:
+events_exchange
+      ↓
+   Binding
+      ↓
+email_queue
+
+
+with routing key:
+user.created
+============================================================
+20. ROUTING KEY
+============================================================
+
+Routing Key tells the Exchange how to route
+the message.
+
+
+Example:
+"user.created"
+
+Producer:
+
+publish(
+    "user.created",
+    data
+)
+
+
+Exchange checks the bindings.
+============================================================
+21. QUEUE
+============================================================
+
+Queue stores messages until consumers process them.
+
+
+Exchange
+   ↓
+Queue
+   ↓
+Consumer
+
+
+Example:
+email_queue
+
+============================================================
+22. CONSUMER
+============================================================
+Consumer receives and processes messages.
+
+RabbitMQ
+   ↓
+email_queue
+   ↓
+Email Service
+   ↓
+Process Message
+============================================================
+23. ACKNOWLEDGEMENT
+===========================================================
+ACK means:
+"I successfully processed this message."
+Flow:
+
+
+RabbitMQ
+   ↓
+Consumer
+   ↓
+Process
+   ↓
+ACK
+   ↓
+RabbitMQ removes message
+
+
+If the consumer crashes before ACK,
+RabbitMQ can deliver the message again.
+============================================================
+24. NACK
+============================================================
+NACK means:
+"I could not process this message."
+
+Example:
+
+Consumer
+   ↓
+Process
+   ↓
+FAIL
+   ↓
+NACK
+
+
+Depending on configuration:
+
+- Requeue
+- Retry
+- Dead Letter Queue
+
+
+============================================================
+25. PREFETCH
+============================================================
+
+Prefetch controls how many unacknowledged messages
+a consumer can receive.
+Example:
+
+prefetch = 1
+Consumer gets:
+
+Message 1
+After ACK:
+
+Message 2
+This prevents one worker from receiving too many
+messages at once.
+============================================================
+26. DURABLE QUEUE
+============================================================
+A durable queue survives a RabbitMQ restart.
+
+Example:
+durable: true
+
+Important for production systems.
+
+============================================================
+27. PERSISTENT MESSAGE
+============================================================
+A persistent message asks RabbitMQ to persist
+the message.
+
+Useful when message durability is important.
+
+Remember:
+
+Durable Queue
++
+Persistent Message
+
+helps protect messages from broker restarts.
+
+============================================================
+28. RABBITMQ + NESTJS
+============================================================
+NestJS has built-in microservice support for RabbitMQ.
+Package:
+@nestjs/microservices
+
+Transport:
+
+Transport.RMQ
+
+
+============================================================
+29. NESTJS RABBITMQ MICROservice
+============================================================
+
+Example:
+
+
+main.ts
+
+
+NestFactory.createMicroservice()
+
+
+Transport.RMQ
+
+
+RabbitMQ URL:
+
+
+amqp://localhost:5672
+
+
+Queue:
+
+
+email_queue
+
+
+Concept:
+
+
+NestJS
+   ↓
+RMQ Transport
+   ↓
+RabbitMQ
+   ↓
+email_queue
+
+
+============================================================
+30. @EventPattern
+============================================================
+
+Used for event-based communication.
+
+
+Producer:
+
+
+client.emit(
+    'user.created',
+    data
+);
+
+
+Consumer:
+
+
+@EventPattern('user.created')
+handleUserCreated(data) {
+
+    console.log(data);
+
+}
+
+
+Flow:
+
+
+emit()
+ ↓
+RabbitMQ
+ ↓
+@EventPattern()
+
+
+============================================================
+31. @MessagePattern
+============================================================
+
+Used for request-response communication.
+
+
+Producer:
+
+
+client.send(
+    'user.get',
+    userId
+);
+
+
+Consumer:
+
+
+@MessagePattern('user.get')
+getUser(id) {
+
+    return user;
+
+}
+
+
+Flow:
+
+
+send()
+ ↓
+RabbitMQ
+ ↓
+@MessagePattern()
+ ↓
+Response
+
+
+============================================================
+32. emit() vs send()
+============================================================
+
+
+emit()
+
+→ Event-based
+→ Usually no response required
+→ Asynchronous
+
+
+send()
+
+→ Request-response
+→ Response expected
+
+
+Remember:
+
+
+client.emit()
+     ↓
+@EventPattern()
+
+
+client.send()
+     ↓
+@MessagePattern()
+
+
+============================================================
+33. CLIENTPROXY
+============================================================
+
+NestJS uses ClientProxy to communicate with
+another microservice.
+
+
+Concept:
+
+
+API
+ ↓
+ClientProxy
+ ↓
+RabbitMQ
+ ↓
+Microservice
+
+
+Example:
+
+
+this.client.emit(
+    'user.created',
+    user
+);
+
+
+============================================================
+34. RABBITMQ MICROSERVICES
+============================================================
+
+
+             RabbitMQ
+            /        \
+           /          \
+          ↓            ↓
+
+    User Service    Email Service
+        ↓                 ↓
+      MySQL          Email Provider
+
+
+User Service:
+
+User created
+     ↓
+RabbitMQ
+
+
+Email Service:
+
+RabbitMQ
+     ↓
+Receive event
+     ↓
+Send email
+
+
+============================================================
+35. COMPETING CONSUMERS
+============================================================
+
+Multiple workers can consume from the same queue.
+
+
+              Queue
+           /    |    \
+          ↓     ↓     ↓
+       Worker1 Worker2 Worker3
+
+
+RabbitMQ distributes messages among them.
+
+
+This provides horizontal scaling.
+
+
+============================================================
+36. RETRY IN RABBITMQ
+============================================================
+
+A message may fail processing.
+
+
+Message
+ ↓
+Consumer
+ ↓
+FAIL
+ ↓
+Retry
+ ↓
+Consumer
+ ↓
+SUCCESS
+
+
+Possible strategies:
+
+
+- Immediate retry
+- Delayed retry
+- Exponential backoff
+- Dead Letter Queue
+
+
+============================================================
+37. DEAD LETTER QUEUE
+============================================================
+
+DLQ stores messages that cannot be processed.
+
+
+Main Queue
+    ↓
+Consumer
+    ↓
+FAIL
+    ↓
+Retry
+    ↓
+FAIL
+    ↓
+DLQ
+
+
+Useful for:
+
+- Debugging
+- Failed messages
+- Manual retry
+- Error investigation
+
+
+============================================================
+38. DEAD LETTER EXCHANGE
+============================================================
+
+RabbitMQ can route failed messages through
+a Dead Letter Exchange.
+
+
+Main Queue
+    ↓
+Failure
+    ↓
+DLX
+    ↓
+Dead Letter Queue
+
+
+============================================================
+39. IDEMPOTENCY
+============================================================
+
+Messages can sometimes be delivered more than once.
+
+
+Example:
+
+
+payment.completed
+
+
+Consumer receives it twice.
+
+
+If consumer blindly processes it twice:
+
+Payment could be duplicated.
+
+
+Therefore:
+
+
+Check whether the event was already processed.
+
+
+Example:
+
+
+eventId = "abc123"
+
+
+Database:
+
+
+abc123 already exists?
+
+
+YES
+ ↓
+Ignore
+
+
+NO
+ ↓
+Process
+
+
+This is called:
+
+IDEMPOTENCY
+
+
+============================================================
+40. AT-LEAST-ONCE DELIVERY
+============================================================
+
+RabbitMQ systems commonly use
+at-least-once delivery patterns.
+
+
+Meaning:
+
+
+Message should be processed,
+but duplicate delivery can happen.
+
+
+Therefore:
+
+
+ACK
++
+Idempotent Consumer
+
+
+is very important.
+
+
+============================================================
+41. MESSAGE ORDER
+============================================================
+
+RabbitMQ can preserve queue order in simple cases.
+
+
+But ordering becomes more complicated with:
+
+
+- Multiple consumers
+- Retries
+- Requeue
+- Failures
+
+
+Therefore do not blindly depend on global ordering
+in distributed systems.
+
+
+============================================================
+42. RABBITMQ RPC
+============================================================
+
+RPC means:
+
+Remote Procedure Call.
+
+
+Service A:
+
+
+"Give me User 10"
+
+
+RabbitMQ
+    ↓
+
+
+Service B:
+
+
+Returns User 10
+
+
+Useful for request-response communication.
+
+
+============================================================
+43. CORRELATION ID
+============================================================
+
+Used to match a request with its response.
+
+
+Request:
+
+
+correlationId = abc123
+
+
+Response:
+
+
+correlationId = abc123
+
+
+This is useful for RPC and distributed systems.
+
+
+============================================================
+44. TRACE ID
+============================================================
+
+Used to track one request across multiple services.
+
+
+Example:
+
+
+API
+ ↓
+Order Service
+ ↓
+Payment Service
+ ↓
+Notification Service
+
+
+All logs contain:
+
+
+traceId = abc123
+
+
+Makes distributed debugging much easier.
+
+
+============================================================
+45. RABBITMQ + DATABASE PROBLEM
+============================================================
+
+Suppose:
+
+
+Create Order in Database
+        ↓
+Publish RabbitMQ Event
+
+
+What if:
+
+
+Database succeeds
+        ↓
+RabbitMQ publish fails
+
+
+Now the database contains the order,
+but other services never receive the event.
+
+
+This is a distributed consistency problem.
+
+
+============================================================
+46. OUTBOX PATTERN
+============================================================
+
+Solution:
+
+Store the event in an Outbox table
+inside the same database transaction.
+
+
+Transaction:
+
+
+Order
++
+Outbox Event
+
+
+Both succeed or fail together.
+
+
+Then:
+
+
+Outbox Worker
+     ↓
+RabbitMQ
+     ↓
+Other Services
+
+
+This prevents losing important events.
+
+
+============================================================
+47. REDIS + RABBITMQ
+============================================================
+
+Redis and RabbitMQ can be used together,
+but they have different primary purposes.
+
+
+Redis:
+
+- Cache
+- Sessions
+- OTP
+- Temporary data
+- Rate limiting
+- Fast key-value storage
+
+
+RabbitMQ:
+
+- Message broker
+- Event-driven communication
+- Microservices communication
+- Reliable message delivery
+- Queues
+- Routing
+
+
+Example:
+
+
+NestJS API
+   |
+   +------ Redis
+   |         ↓
+   |       Cache
+   |
+   +------ RabbitMQ
+             ↓
+          Events
+             ↓
+       Microservices
+
+
+============================================================
+48. REDIS + RABBITMQ EXAMPLE
+============================================================
+
+Order Service:
+
+
+1. Create Order
+2. Save Order in MySQL
+3. Cache frequently used data in Redis
+4. Publish order.created to RabbitMQ
+
+
+Flow:
+
+
+Order API
+   ↓
+MySQL
+   ↓
+Redis
+   ↓
+RabbitMQ
+   ↓
+Payment Service
+   ↓
+Notification Service
+
+
+Redis is NOT replacing RabbitMQ.
+
+RabbitMQ is NOT replacing Redis.
+
+
+============================================================
+49. RABBITMQ vs BULLMQ
+============================================================
+
+
+RabbitMQ:
+
+
+Main purpose:
+
+Message Broker / Microservice Communication
+
+
+Good for:
+
+- Microservices
+- Events
+- Service-to-service communication
+- Routing
+- Pub/Sub
+- Request-response
+
+
+BullMQ:
+
+
+Main purpose:
+
+Background Job Queue
+
+
+Uses:
+
+Redis
+
+
+Good for:
+
+- Background jobs
+- Delayed jobs
+- Scheduled jobs
+- Retry
+- Job processing
+
+
+============================================================
+50. WHEN TO USE WHAT?
+============================================================
+
+
+Need microservice communication?
+
+
+→ RabbitMQ
+
+
+Need background jobs in Node.js?
+
+
+→ BullMQ + Redis
+
+
+Need caching?
+
+
+→ Redis
+
+
+Need OTP?
+
+
+→ Redis
+
+
+Need service-to-service events?
+
+
+→ RabbitMQ
+
+
+Need delayed background jobs?
+
+
+→ BullMQ + Redis
+
+
+============================================================
+51. ADVANCED RABBITMQ TOPICS
+============================================================
+
+After the basics, learn:
+
+
+1. Dead Letter Exchange
+2. Dead Letter Queue
+3. Retry strategies
+4. Exponential backoff
+5. Delayed messaging
+6. Prefetch
+7. Publisher confirms
+8. Consumer acknowledgements
+9. Idempotency
+10. At-least-once delivery
+11. Competing consumers
+12. Message ordering
+13. RPC
+14. Correlation IDs
+15. Trace IDs
+16. Outbox Pattern
+17. Event-driven architecture
+18. Saga Pattern
+19. Distributed transactions
+20. RabbitMQ clustering
+21. High availability
+22. Monitoring
+23. Security
+24. TLS
+25. Authentication
+26. Authorization
+27. Connection management
+28. Failure recovery
+
+
+============================================================
+52. PRODUCTION ARCHITECTURE
+============================================================
+
+
+                    API Gateway
+                         |
+                         ↓
+                   Order Service
+                         |
+                         ↓
+                     RabbitMQ
+                    /    |    \
+                   /     |     \
+                  ↓      ↓      ↓
+             Payment   Email   Notification
+              Service  Service    Service
+                 |       |          |
+                 ↓       ↓          ↓
+                DB      API         Push
+
+
+RabbitMQ provides:
+
+
+- Decoupling
+- Async communication
+- Routing
+- Scaling
+- Retry
+- Failure handling
+- Event-driven architecture
+
+
+============================================================
+53. COMPLETE FLOW TO REMEMBER
+============================================================
+
+
+PRODUCER
+   ↓
+EXCHANGE
+   ↓
+ROUTING KEY
+   ↓
+BINDING
+   ↓
+QUEUE
+   ↓
+CONSUMER
+   ↓
+PROCESS
+   ↓
+ACK
+
+
+If processing fails:
+
+
+PROCESS
+   ↓
+FAIL
+   ↓
+RETRY
+   ↓
+FAIL AGAIN
+   ↓
+DLX
+   ↓
+DLQ
+
+
+============================================================
+54. MOST IMPORTANT NESTJS MAPPING
+============================================================
+
+
+RabbitMQ                  NestJS
+
+
+Producer                  ClientProxy
+
+Event                     client.emit()
+
+Request/Response          client.send()
+
+Consumer                  @EventPattern()
+
+Consumer RPC              @MessagePattern()
+
+RabbitMQ Transport        Transport.RMQ()
+
+
+Remember:
+
+
+emit()
+  ↓
+@EventPattern()
+
+
+send()
+  ↓
+@MessagePattern()
+
+
+============================================================
+55. LEARNING ORDER
+============================================================
+
+
+PHASE 1 — QUEUE BASICS
+
+✓ Why queues
+✓ Jobs
+✓ Producer
+✓ Consumer
+✓ Queue
+✓ Message
+
+
+PHASE 2 — RABBITMQ CORE
+
+✓ Broker
+✓ Connection
+✓ Channel
+✓ Exchange
+✓ Binding
+✓ Routing Key
+✓ Direct Exchange
+✓ Fanout Exchange
+✓ Topic Exchange
+
+
+PHASE 3 — NESTJS
+
+✓ @nestjs/microservices
+✓ Transport.RMQ
+✓ ClientProxy
+✓ emit()
+✓ send()
+✓ @EventPattern()
+✓ @MessagePattern()
+
+
+PHASE 4 — RELIABILITY
+
+✓ ACK
+✓ NACK
+✓ Prefetch
+✓ Durable Queue
+✓ Persistent Message
+✓ Retry
+✓ DLX
+✓ DLQ
+
+
+PHASE 5 — SCALING
+
+✓ Multiple consumers
+✓ Competing consumers
+✓ Horizontal scaling
+✓ Load distribution
+✓ Consumer failure
+
+
+PHASE 6 — DISTRIBUTED SYSTEMS
+
+✓ Idempotency
+✓ At-least-once delivery
+✓ Message ordering
+✓ RPC
+✓ Correlation ID
+✓ Trace ID
+
+
+PHASE 7 — ADVANCED
+
+✓ Outbox Pattern
+✓ Saga Pattern
+✓ Distributed transactions
+✓ Publisher confirms
+✓ Failure recovery
+✓ Monitoring
+✓ Security
+✓ TLS
+✓ High availability
+✓ RabbitMQ clustering
+
+
+============================================================
+56. FINAL ARCHITECTURE
+============================================================
+
+
+                    CLIENT
+                       |
+                       ↓
+                  API Gateway
+                       |
+                       ↓
+                 Order Service
+                       |
+              ┌────────┴────────┐
+              ↓                 ↓
+            MySQL            RabbitMQ
+                                |
+                    ┌───────────┼───────────┐
+                    ↓           ↓           ↓
+                Payment       Email      Notification
+                Service       Service       Service
+                    |           |           |
+                    ↓           ↓           ↓
+                   DB         Email         Push
+
+
+                    Redis
+                      ↑
+                      |
+              Cache / Session /
+              OTP / Temporary Data
+
+
+============================================================
+CORE CONCEPT
+============================================================
+
+RabbitMQ is primarily for:
+
+SERVICE → MESSAGE → SERVICE
+
+
+BullMQ + Redis is primarily for:
+
+APPLICATION → JOB → WORKER
+
+
+Redis itself is primarily for:
+
+APPLICATION → FAST TEMPORARY DATA
+
+
+============================================================

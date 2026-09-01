@@ -1,0 +1,2756 @@
+----------->WHY MICROSERVICES?
+Microservices are used to divide a large application into
+small, independent services.
+
+Instead of building everything inside one application:
+
+                Monolith
+                   ↓
+        ┌──────────┼──────────┐
+        ↓          ↓          ↓
+      Users      Orders     Payments
+        ↓          ↓          ↓
+      Email     Products    Notification
+
+
+We separate them:
+
+        User Service
+             ↓
+        User Database
+
+        Order Service
+             ↓
+        Order Database
+
+        Payment Service
+             ↓
+        Payment Database
+
+
+MAIN REASONS TO USE MICROSERVICES
+
+1. Independent Development
+Each service can be developed independently.
+
+Example:
+Team A → User Service
+Team B → Order Service
+Team C → Payment Service
+
+
+2. Independent Deployment
+You can deploy one service without deploying the
+entire application.
+
+Example:
+Payment Service
+     ↓
+New version deployed
+
+User Service does not need to be redeployed.
+
+3. Independent Scaling
+Suppose your Payment Service receives huge traffic.
+You can scale only Payment Service:
+
+Payment Service
+      ↓
+ ┌────┼────┐
+ ↓    ↓    ↓
+ P1   P2   P3
+
+While User Service remains unchanged.
+
+
+4. Fault Isolation
+If one service fails, other services can continue working.
+
+Example:
+Payment Service ❌
+
+User Service       ✅
+Product Service    ✅
+Order Service      ✅
+
+
+5. Technology Flexibility
+Different services can potentially use different
+technologies.
+
+Example:
+User Service    → NestJS
+Payment Service → Java
+Analytics       → Python
+
+
+6. Team Independence
+Different teams can own different services.
+
+Team A
+ ↓
+User Service
+
+Team B
+ ↓
+Order Service
+
+Team C
+ ↓
+Payment Service
+
+
+7. Smaller Codebases
+Instead of one huge application:
+
+Huge Application
+       ↓
+Millions of lines of code
+
+
+You get smaller applications:
+
+User Service
+Order Service
+Payment Service
+Notification Service
+
+
+8. Better Scalability
+Only the service that needs more resources
+can be scaled.
+
+Example:
+100 requests/sec → User Service
+10,000 requests/sec → Product Service
+
+Scale Product Service more.
+
+
+9. Independent Database
+Each service can own its data.
+
+User Service
+     ↓
+User DB
+
+Order Service
+     ↓
+Order DB
+
+This reduces tight coupling between services.
+
+10. Easier Maintenance
+A smaller service is generally easier to:
+
+- Understand
+- Test
+- Debug
+- Deploy
+- Scale
+- Maintain
+
+11. Continuous Deployment
+A team can release changes to one service
+without waiting for the entire application.
+
+Example:
+
+Order Service v2
+     ↓
+Deploy
+
+Other services remain running.
+
+
+12. Better Team Scalability
+As the organization grows, teams can work
+independently on different services.
+==================================================
+REAL-WORLD EXAMPLE
+E-Commerce Application
+
+
+                 API Gateway
+                      ↓
+        ┌─────────────┼─────────────┐
+        ↓             ↓             ↓
+   User Service   Order Service  Product Service
+        ↓             ↓             ↓
+     User DB       Order DB      Product DB
+                      ↓
+                   RabbitMQ
+                 /    |     \
+                ↓     ↓      ↓
+           Payment  Email  Notification
+           Service  Service   Service
+
+
+Redis can be used for:
+
+- Caching
+- Sessions
+- OTP
+- Rate Limiting
+
+
+RabbitMQ can be used for:
+- Service-to-service events
+- Asynchronous communication
+- Background processing
+
+==================================================
+MONOLITH vs MICROSERVICES
+
+MONOLITH:
+
+                One Application
+                      ↓
+       ┌──────────────┼──────────────┐
+       ↓              ↓              ↓
+     Users          Orders        Payments
+
+
+MICROSERVICES:
+
+                API Gateway
+                      ↓
+          ┌───────────┼───────────┐
+          ↓           ↓           ↓
+       Users        Orders      Payments
+       Service      Service      Service
+
+
+==================================================
+
+IMPORTANT
+Microservices are NOT automatically better.
+
+They introduce complexity such as:
+
+- Network communication
+- Distributed failures
+- Data consistency
+- Service discovery
+- Monitoring
+- Logging
+- Deployment complexity
+- Distributed transactions
+
+
+So:
+Small/simple application
+        ↓
+     Monolith
+        ↓
+Often easier
+
+
+Large/complex application
+        ↓
+   Microservices
+        ↓
+Can provide better scalability and independence
+==================================================
+CORE IDEA
+
+MONOLITH:
+One application owns everything.
+
+MICROSERVICES:
+Multiple independent services communicate
+with each other.
+
+The main reason to use microservices is:
+
+INDEPENDENCE
+Independent:
+
+- Development
+- Deployment
+- Scaling
+- Failure handling
+- Ownership
+- Maintenance
+
+note->
+A separate NestJS Service is NOT a Microservice. This is an important distinction.
+What you have now
+In a normal NestJS application:
+
+NestJS Application
+       ↓
+    PostModule
+       ├── PostController
+       ├── PostResolver
+       └── PostService
+
+PostService is just a class containing business logic.
+
+For example:
+
+@Injectable()
+export class PostService {
+  createPost() {
+    // business logic
+  }
+}
+
+It still runs inside the same NestJS application/process.
+but:
+A microservice is a separate application/service.
+For example:
+
+Application 1
+User Service
+    ↓
+User Database
+
+
+Application 2
+Order Service
+    ↓
+Order Database
+
+
+Application 3
+Notification Service
+    ↓
+Notification Database
+
+They communicate through something like:
+
+User Service
+     ↓
+ RabbitMQ/Kafka
+     ↓
+Order Service
+
+Very important difference
+NestJS Service
+      ↓
+A class inside an application
+
+
+NestJS Microservice
+      ↓
+A separate running application
+
+For example, you might have:
+project/
+│
+├── api-gateway/
+│   └── NestJS application
+│
+├── user-service/
+│   └── NestJS application
+│
+├── order-service/
+│   └── NestJS application
+│
+└── notification-service/
+    └── NestJS application
+
+Each can run separately:
+
+API Gateway       → port 3000
+User Service      → separate process
+Order Service     → separate process
+Notification      → separate process
+
+And then:
+
+                    API Gateway
+                         ↓
+              ┌──────────┼──────────┐
+              ↓          ↓          ↓
+          User Service Order      Notification
+                       Service      Service
+                          ↓
+                       RabbitMQ
+
+So when you were using:
+
+Module
+ ↓
+Controller/Resolver
+ ↓
+Service
+
+that's NestJS application architecture, not microservices.
+When you split your application into independently running services
+, then you're doing microservices.
+
+Monolith->redeploy full application after change/update
+microservice->redeploy only particular services after change/update
+
+---->
+MONOREPO vs POLYREPO
+==================================================
+MONOREPO
+==================================================
+Monorepo = Multiple services/projects stored in ONE repository.
+
+Example:
+
+my-company/
+│
+├── api-gateway/
+├── user-service/
+├── order-service/
+├── payment-service/
+└── notification-service/
+
+All of them are inside:
+        ONE Git Repository
+
+
+Advantages:
+
+- One repository
+- Easy code sharing
+- Easy to manage common packages
+- Easy to see all services
+- One place for CI/CD
+- Easier refactoring across services
+
+Disadvantages:
+- Repository can become very large
+- CI/CD can become complex
+- Changes can affect multiple services
+- Requires good project structure
+==================================================
+POLYREPO
+==================================================
+Polyrepo = Each service/project has its OWN repository.
+
+Example:
+GitHub:
+company-api-gateway
+company-user-service
+company-order-service
+company-payment-service
+company-notification-service
+Each repository is separate:
+
+user-service
+     ↓
+Git Repository 1
+
+
+order-service
+     ↓
+Git Repository 2
+
+
+payment-service
+     ↓
+Git Repository 3
+
+
+Advantages:
+
+- Services are completely separated
+- Independent repositories
+- Independent CI/CD
+- Teams can work independently
+- Smaller repositories
+
+Disadvantages:
+
+- Code sharing is harder
+- Managing many repositories
+- Dependency management becomes harder
+- Cross-service changes require multiple PRs
+- More repository management
+=================================================
+You can have:
+
+Monorepo + Microservices ✅
+Polyrepo + Microservices ✅
+Monorepo + Monolith      ✅
+Polyrepo + Monolith      ✅
+==================================================
+MICROSERVICES + MONOREPO
+==================================================
+Example:
+company/
+│
+├── apps/
+│   ├── api-gateway/
+│   ├── user-service/
+│   ├── order-service/
+│   └── payment-service/
+│
+├── packages/
+│   ├── common/
+│   ├── types/
+│   └── config/
+│
+└── package.json
+
+
+One repository contains multiple services.
+==================================================
+MICROSERVICES + POLYREPO
+==================================================
+
+GitHub:
+company-api-gateway
+        ↓
+company-user-service
+        ↓
+company-order-service
+        ↓
+company-payment-service
+
+Each service has its own repository.
+==================================================
+npm install nx
+Nx is a build system/toolkit for managing large JavaScript/TypeScript projects,
+ especially monorepos.
+For your NestJS microservices learning, the important part is:
+Nx
+ ↓
+Monorepo management
+ ↓
+Multiple NestJS applications
+ + shared libraries
+
+Example:
+my-project/
+│
+├── apps/
+│   ├── api-gateway/
+│   ├── user-service/
+│   └── order-service/
+│
+└── libs/
+    ├── auth/
+    ├── database/
+    └── common/
+
+Nx helps with:
+
+Creating/managing multiple applications
+Sharing code through libraries
+Running specific services
+Building services
+Testing
+Dependency management
+Caching builds
+Managing monorepos
+----->
+npx create-nx-workspace@latest my-workspace
+This command creates a new Nx workspace/project structure.
+
+Break it down:
+
+npx
+ ↓
+Runs an npm package without needing to install it globally
+
+create-nx-workspace
+ ↓
+Nx tool that creates a new workspace
+
+@latest
+ ↓
+Uses the latest version
+
+my-workspace
+ ↓
+Name of your new workspace
+
+After running it, you'll get something like:
+
+my-workspace/
+│
+├── nx.json
+├── package.json
+├── tsconfig.base.json
+├── node_modules/
+└── ...
+
+Think of workspace as the main container for your projects.
+So instead of creating 5 completely separate repositories,
+ Nx lets you manage multiple applications and shared code inside one workspace.
+
+Important: Nx itself is not a microservice and it doesn't create your microservices automatically.
+ It is a tool for organizing, building, testing, and managing the projects.
+
+
+----->
+npm i --save-dev @nx/nest
+This installs the Nx NestJS plugin into your Nx workspace.
+
+What each part means
+npm
+ ↓
+Node package manager
+
+i
+ ↓
+install
+
+--save-dev
+ ↓
+Add package to devDependencies
+
+@nx/nest
+ ↓
+Nx plugin for NestJS
+
+ Nx
+ ↓
+Manages workspace
+
+@nx/nest
+ ↓
+Adds NestJS support to Nx
+
+
+Why do you need @nx/nest?
+Nx itself manages the workspace, but @nx/nest gives Nx NestJS-specific generators and support.
+
+After installing it, you can use commands such as:
+npx nx g @nx/nest:application user-service
+
+This can generate a NestJS application inside your Nx workspace.
+You can then have:
+my-workspace/
+│
+├── apps/
+│   ├── user-service/
+│   ├── order-service/
+│   └── api-gateway/
+│
+└── libs/
+
+-------->
+npx nx g @nx/nest:lib shared
+This creates a shared NestJS library named shared inside your Nx workspace.
+
+----->
+ npx nx serve auth-service ->this will run auth-service(application)
+
+note->
+In microservices
+Each service normally has its own port:
+
+                 ┌── auto-service   :3000
+API Gateway ─────┼── order-service  :3001
+                 ├── user-service   :3002
+                 └── payment-service:3003
+
+If you try to start both on 3000
+, the second service will get an error such as:
+EADDRINUSE: address already in use
+One important exception: services running in separate containers can each use the same internal 
+port because they have separate network namespaces. But from your host,
+ their exposed ports still need to be distinct.
+---------->
+Important for Nx
+Nx itself does not automatically provide @nestjs/microservices.
+When you generate a NestJS application/library with Nx, 
+some Nest packages may already be present depending on your setup, 
+but @nestjs/microservices is a separate NestJS package.
+
+So the rule is:
+npm install @nestjs/microservices   ← if not already installed
+---------->
+MICROSERVICE COMMUNICATION
+notes->communication method are independent so we can use it in many language but we 
+will learn it in nest js mostly.
+
+Synchronous
+├── HTTP / REST
+├── gRPC
+└── TCP
+
+SYNCHRONOUS MICROSERVICE COMMUNICATION
+Synchronous = Service A sends a request to Service B
+and WAITS for Service B's response.
+
+
+1. HTTP / REST
+────────────────────────────────
+Service A
+   ↓ HTTP Request
+Service B
+   ↓ Response
+Service A
+
+Use when:
+- Simple request/response
+- Public APIs
+- CRUD operations
+- Browser → Backend
+- Services need an immediate response
+
+Example:
+Order Service → HTTP → User Service
+"Give me user 10"
+
+
+HTTP / REST MICROSERVICE EXAMPLE
+Suppose we have 2 microservices:
+
+API Gateway
+     ↓
+User Service
+
+
+1. User Service
+@Controller('users')
+export class UserController {
+  @Get(':id')
+  getUser(@Param('id') id: number) {
+    return {
+      id,
+      name: 'Naeem',
+    };
+  }
+}
+
+
+2. Order Service calls User Service
+const response = await fetch(
+  'http://localhost:3001/users/10'
+);
+const user = await response.json();
+console.log(user);
+
+
+3. Communication
+Order Service
+      |
+      | HTTP GET
+      ↓
+http://localhost:3001/users/10
+      |
+      ↓
+User Service
+      |
+      | Response
+      ↓
+{
+  "id": 10,
+  "name": "Naeem"
+}
+
+
+WHY SYNCHRONOUS?
+Order Service sends:
+
+GET /users/10
+      ↓
+     WAIT
+      ↓
+User Service responds
+      ↓
+Continue processing
+
+
+WHEN TO USE HTTP?
+Use HTTP when you need an immediate response.
+
+Example:
+
+Order Service
+   ↓ HTTP
+User Service
+   ↓
+"Is this user valid?"
+   ↓
+YES
+   ↓
+Create Order
+
+note->
+Node.js also supports fetch() in modern versions.
+In NestJS, you also have another option
+NestJS provides HttpModule / HttpService:
+
+HttpService
+   ↓
+Axios
+   ↓
+HTTP Request
+
+So:
+
+fetch()
+   → Native Node.js HTTP client
+
+HttpService
+   → NestJS wrapper around Axios
+
+
+note->
+For HTTP, you use:
+NestFactory.create(AppModule)
+For a microservice transport like TCP, Redis, RabbitMQ, Kafka, etc., you use:
+NestFactory.createMicroservice(AppModule, options)
+| Purpose               | Method                             |
+| --------------------- | ---------------------------------- |
+| HTTP API              | `NestFactory.create()`             |
+| TCP microservice      | `NestFactory.createMicroservice()` |
+| Redis microservice    | `NestFactory.createMicroservice()` |
+| RabbitMQ microservice | `NestFactory.createMicroservice()` |
+| Kafka microservice    | `NestFactory.createMicroservice()` |
+
+this is only for that service which is receiving communication ;
+
+For example, HTTP:
+const app = await NestFactory.create(AppModule);
+await app.listen(3000);
+
+TCP:
+const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  AppModule,
+  {
+    transport: Transport.TCP,
+    options: {
+      host: '127.0.0.1',
+      port: 5005,
+    },
+  },
+);
+
+await app.listen();
+
+Think of it this way:
+NestFactory.create()
+        ↓
+    HTTP Server
+        ↓
+    app.listen(3000)
+
+
+NestFactory.createMicroservice()
+        ↓
+  Microservice Transport
+        ↓
+ TCP / Redis / RabbitMQ / Kafka
+
+One more important point: a NestJS app can have both HTTP and microservice transport at the same time, 
+but the setup is slightly different (connectMicroservice()).
+
+-->one service is using http and another tcp then , tcp will be used by which will return tcp response
+
+for graphql:
+const response = await fetch('http://localhost:3001/graphql', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    query: `
+      query {
+        user(id: 10) {
+          id
+          name
+          email
+        }
+      }
+    `,
+  }),
+});
+
+const result = await response.json();
+console.log(result);
+using body call resolver method
+
+2. gRPC
+────────────────────────────────
+Service A
+   ↓ gRPC Request
+Service B
+   ↓ Response
+Service A
+
+Use when:
+- Internal microservice communication
+- High performance is important
+- Many service-to-service calls
+- Strongly typed contracts are useful
+
+Example:
+Order Service → gRPC → Payment Service
+3. TCP
+────────────────────────────────
+Service A
+   ↓ TCP message
+Service B
+   ↓ Response
+Service A
+
+Use when:
+- You want simple, fast internal communication
+- Using NestJS's built-in TCP transport
+- Communication is mainly between NestJS microservices
+- You don't need REST/HTTP semantics
+Example:
+API Gateway → TCP → User Microservice
+
+full Example:
+AUTH SERVICE 
+main.ts
+────────
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app/app.module';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+
+async function bootstrap() {
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.TCP,
+      options: {
+        host: '127.0.0.1',
+        port: 5005,
+      },
+    },
+  );
+  await app.listen();
+  console.log('Auth MicroService is listening via TCP....');
+}
+
+bootstrap();
+explanation:
+
+import { NestFactory } from '@nestjs/core';
+→ Used to create/start the NestJS application.
+
+import { AppModule } from './app/app.module';
+→ Imports the root AppModule.
+
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+→ Transport.TCP tells Nest to use TCP communication.
+→ MicroserviceOptions is the TypeScript type for microservice configuration.
+
+async function bootstrap() 
+→ Function responsible for starting the Auth Microservice.
+
+const app = await NestFactory.createMicroservice<MicroserviceOptions>()
+→ Creates a NestJS MICROservice instead of an HTTP application.
+
+AppModule,
+→ Uses AppModule as the root module.
+
+transport: Transport.TCP,
+→ Communication protocol is TCP.
+
+host: '127.0.0.1',
+→ Microservice runs on localhost.
+
+port: 5005,
+→ Auth Microservice listens on TCP port 5005.
+
+await app.listen();
+→ Starts the microservice and begins listening for messages.
+
+console.log(...)
+→ Only prints a message in the terminal.
+
+bootstrap();
+→ Executes the bootstrap function.
+
+
+CONTROLLER
+──────────
+import { Controller, Get } from '@nestjs/common';
+import { AppService } from './app.service';
+import { MessagePattern,Payload } from '@nestjs/microservices';
+
+@Controller()
+export class AppController {
+  constructor() {}
+  @MessagePattern({cmd:'validate_user'})
+  handleUserValidation(@Payload() data:any){
+    console.log('Auth Service recieved data',data)
+    if(data.userId===1){
+      return {status:'success',user:{id:1,name:'Farzeen'}}
+    }
+    else{
+      return {status:'error',user:{message:"user not found"}}
+    }
+  }
+
+}
+
+
+@Controller()
+→ Marks AppController as a NestJS controller.
+
+
+@MessagePattern({ cmd: 'validate_user' })
+→ Registers a TCP message handler.
+→ When another service sends { cmd: 'validate_user' }, this method runs.
+
+handleUserValidation(@Payload() data: any)
+→ Handles the incoming message.
+→ @Payload() extracts the data sent by the other microservice.
+
+console.log(..., data)
+→ Prints the received data.
+
+if (data.userId === 1)
+→ Checks whether the received userId is 1.
+
+return { status: 'success', user: {...} }
+→ Sends a successful response back to the requesting microservice.
+
+else
+→ Runs when the userId is not 1.
+
+return { status: 'error', ... }
+→ Sends a user-not-found response.
+
+
+TCP Microservice
+
+now Order Service:
+ORDER SERVICE
+────────────────────────────────────────────
+📄 app.module.ts
+
+import { Module } from '@nestjs/common';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+@Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: '127.0.0.1',
+          port: 5005,
+        },
+      },
+    ]),
+  ],
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+
+
+📄 app.controller.ts
+
+import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
+
+@Controller('orders')
+export class AppController {
+
+  constructor(
+    @Inject('AUTH_SERVICE')
+    private readonly authClient: ClientProxy,
+  ) {}
+
+  @Get(':id')
+  async createOrder(@Param('id') userId: string) {
+    const pattern = { cmd: 'validate_user' };
+    const payload = {
+      userId: Number(userId),
+    };
+
+    const authResponse = await firstValueFrom(
+      this.authClient.send(pattern, payload),
+    );
+
+    if (authResponse.status !== 'success') {
+      return {
+        message: 'Failed to create order',
+        reason: authResponse.user?.message,
+      };
+    }
+
+    return {
+      message: 'Order created successfully',
+    };
+  }
+}
+
+
+
+FLOW
+────────────────────────────────────────────
+
+GET /orders/1
+      ↓
+Order Controller
+      ↓
+authClient.send()
+      ↓
+TCP :5005
+      ↓
+Auth Controller
+      ↓
+@MessagePattern({ cmd: 'validate_user' })
+      ↓
+handleUserValidation()
+      ↓
+Response back to Order Service
+
+
+IMPORTANT
+────────────────────────────────────────────
+ClientsModule.register([
+      {
+        name: 'AUTH_SERVICE',
+        transport: Transport.TCP,
+        options: {
+          host: '127.0.0.1',
+          port: 5005,
+        },
+      },
+    ]),
+→ Registers TCP client for Order Service with port and host
+
+@Inject('AUTH_SERVICE')
+→ Gets that TCP client.
+
+authClient.send()
+→ Sends message to Auth Service.
+
+@MessagePattern()
+→ Receives/handles the message in Auth Service.
+
+firstValueFrom()
+→ Converts Observable response to Promise so we can use await.
+
+ClientProxy              → Type
+@Inject('AUTH_SERVICE')  → Get actual client
+authClient.send()        → Send TCP message
+ClientProxy in NestJS is an object/class provided by NestJS Microservices
+ that lets one application communicate with another microservice.
+
+And ClientsModule.register() is what makes AUTH_SERVICE available for injection.
+Pattern must match on both sides:
+
+Order:
+{ cmd: 'validate_user' }
+
+Auth:
+@MessagePattern({ cmd: 'validate_user' })
+
+MAIN FLOW
+─────────
+
+Order Service
+     │
+     │ TCP message
+     │ { cmd: 'validate_user', userId: 1 }
+     ▼
+Auth Service :5005
+     │
+     ▼
+@MessagePattern({ cmd: 'validate_user' })
+     │
+     ▼
+handleUserValidation()
+     │
+     ▼
+Response
+{ status: 'success', user: {...} }
+
+
+NOTE
+────────────────────────────────────────────
+
+If using GraphQL:
+→ Use Resolver instead of Controller as the GraphQL entry point.
+→ Resolver can use authClient.send() to communicate with a microservice.
+
+authClient.send() can technically be used from:
+→ Controller
+→ Service
+
+But normally:
+→ Controller / Resolver → Service → AUTH_SERVICE.send()
+
+
+Example:
+
+GraphQL Resolver/http Controller
+      ↓
+Service
+authClient.send()
+      ↓
+Auth Microservice
+      ↓
+@MessagePattern()
+
+
+
+
+| Communication    | NestJS handler                                               |
+| ---------------- | ------------------------------------------------------------ |
+| HTTP REST        | `@Controller()` + `@Get()`, `@Post()`                        |
+| TCP Microservice | `@Controller()` + `@MessagePattern()`                        |
+| GraphQL          | `@Resolver()` + `@Query()`, `@Mutation()`, `@Subscription()` |
+
+
+
+
+
+
+QUICK CHOICE
+────────────────────────────────
+
+HTTP/REST → Simple + common APIs ⭐
+gRPC       → Fast internal service communication ⭐
+TCP        → Simple NestJS-to-NestJS communication
+
+
+IMPORTANT:
+All three are SYNCHRONOUS because:
+
+Request
+   ↓
+WAIT
+   ↓
+Response
+
+---->
+Asynchronous
+├── RabbitMQ ⭐
+├── Kafka
+├── Redis
+└── NATS
+----------------------------------->
+Service Discovery
+In microservices, service discovery means finding where another service is running.
+Without service discovery:
+
+Order Service
+     ↓
+host: 127.0.0.1
+port: 5005
+     ↓
+Auth Service
+
+Order Service must know the Auth Service's exact host and port.
+With service discovery:
+
+Order Service
+     ↓
+"AUTH_SERVICE"
+     ↓
+Service Discovery
+     ↓
+Finds Auth Service
+     ↓
+IP + Port
+Why needed?
+
+Imagine Auth Service has multiple instances:
+
+AUTH_SERVICE
+   ├── 10.0.0.5:5005
+   ├── 10.0.0.6:5005
+   └── 10.0.0.7:5005
+
+Order Service doesn't need to hardcode all these addresses. 
+The service discovery system finds an available instance.
+
+Common tools:
+Consul
+Eureka
+Kubernetes Service
+AWS Cloud Map
+
+Your current code:
+options: {
+  host: '127.0.0.1',
+  port: 5005
+}
+
+is manual service location, not service discovery.
+In production, service discovery is useful because services can move,
+ restart, scale up/down, or have multiple instances.
+
+
+-->Consul
+starting a Consul server inside a Docker container and making its UI/API available on your machine.
+Your command:
+sudo docker run -d  --name consule-server -p 8500:8500  --add-host=host.docker.internal:172.17.0.1  consul:1.15
+
+| Part                    | Meaning                                             |
+| ----------------------- | --------------------------------------------------- |
+| `sudo docker run`       | Create and start a new container                    |
+| `-d`                    | Run in **background** (detached mode)               |
+| `--name consule-server` | Give container the name `consule-server`            |
+| `-p 8500:8500`          | Map **host port 8500 → container port 8500**        |
+| `--add-host=...`        | Add `host.docker.internal` pointing to `172.17.0.1` |
+| `consul:1.15`           | Use the **Consul version 1.15 Docker image**        |
+
+Why Consul?
+In your NestJS microservices project, Consul can be used for service discovery.
+
+For example:
+
+User Service
+     ↓
+   Consul
+     ↓
+Auth Service
+
+Instead of hardcoding:
+http://192.168.1.20:3001
+
+services can register themselves with Consul, and other services can discover them.
+
+Why port 8500?
+Consul's web UI/API normally uses port 8500.
+
+After starting it, you can access:
+http://localhost:8500
+
+Why --add-host?
+This:
+--add-host=host.docker.internal:172.17.0.1
+
+adds an entry inside the container equivalent to:
+host.docker.internal → 172.17.0.1
+
+So the Consul container can refer to your Docker/host gateway using the name:
+host.docker.internal
+
+In short: you're launching Consul as a Dockerized service, exposing it on port 
+8500, so your NestJS microservices can use Consul for service discovery/registration.
+
+
+
+now working:
+Payment service:
+main.ts:
+
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app/app.module';
+import Consul from 'consul';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  const port = 3005;
+  const consul = new Consul({
+    host: 'localhost',
+    port: 8500,
+  });
+  const serviceId = 'payment-unique-id-1';
+  const registeringDetails = {
+    name: 'payment-service',
+    address: 'host.docker.internal',
+    port: port,
+    id: serviceId,
+    check: {
+      name: 'payment-service-health',
+      http: `http://host.docker.internal:${port}/api/health`,
+      interval: '10s',
+      timeout: '5s',
+    },
+  };
+
+  // Start NestJS first
+  await app.listen(port);
+
+  // Register service in Consul
+  await consul.agent.service.register(registeringDetails);
+
+  console.log(
+    `Payment Service is running on port ${port} and registered in Consul`,
+  );
+
+  // Deregister service when application is stopped
+  process.on('SIGINT', async () => {
+    await consul.agent.service.deregister(serviceId);
+    console.log('Payment Service deregistered from Consul');
+    await app.close();
+    process.exit(0);
+  });
+}
+
+bootstrap();
+
+
+now:
+install: npm i consul
+
+import Consul from 'consul';
+→ Node.js client used to communicate with Consul. 
+--------------------------------------------------
+2. CREATE NESTJS APP
+const app = await NestFactory.create(AppModule);
+→ Creates the NestJS application using AppModule.
+--------------------------------------------------
+3. PORT
+const port = 3005;
+→ Payment service runs on port 3005.
+Service:
+http://localhost:3005
+--------------------------------------------------
+4. CREATE CONSUL CLIENT
+const consul = new Consul({
+  host: 'localhost',
+  port: 8500,
+});
+→ Connects NestJS to Consul server.
+
+Consul:
+localhost:8500
+
+Flow:
+NestJS → Consul :8500
+--------------------------------------------------
+5. SERVICE ID
+const serviceId = 'payment-unique-id-1';
+→ Unique ID for this particular payment-service instance.
+name = payment-service
+id   = payment-unique-id-1
+--------------------------------------------------
+
+6. REGISTRATION DETAILS
+const registeringDetails = {
+  name: 'payment-service',
+  address: 'host.docker.internal',
+  port: 3005,
+  id: serviceId,
+};
+1. this part → IDENTITY / LOCATION of the service
+→ Tells Consul how to find the payment service.
+
+
+Consul stores:
+
+Name:    payment-service 
+Address: host.docker.internal
+Port:    3005
+ID:      payment-unique-id-1
+--------------------------------------------------
+7. HEALTH CHECK
+check: {
+  name: 'payment-service-health',
+  http: 'http://host.docker.internal:3005/api/health',
+  interval: '10s',
+  timeout: '5s',
+}
+
+→ Consul checks whether payment-service is healthy.
+
+name(any)
+→ Name of the health check
+
+http
+→ Which URL should Consul call?
+→ /api/health
+
+interval
+→ How often should Consul check?
+→ Every 10 seconds
+
+timeout
+→ How long should Consul wait?
+→ Maximum 5 seconds
+
+--------------------------------------------------
+
+8. START NESTJS
+await app.listen(port);
+
+→ Starts the payment service on port 3005.
+
+Payment service:
+localhost:3005
+
+--------------------------------------------------
+
+9. REGISTER SERVICE
+await consul.agent.service.register(registeringDetails);
+→ Registers payment-service in Consul.
+
+Flow:
+
+Payment Service
+      ↓
+Consul
+      ↓
+payment-service registered
+      ↓
+Health check starts
+--------------------------------------------------
+10. CONSOLE MESSAGE
+console.log(
+  `Payment Service is running on port ${port} and registered in Consul`,
+);
+--------------------------------------------------
+11. HANDLE CTRL + C
+process.on('SIGINT', async () => {})
+
+→ Runs this code when application receives Ctrl+C.
+
+--------------------------------------------------
+
+12. DEREGISTER SERVICE
+await consul.agent.service.deregister(serviceId);
+→ Removes payment-service from Consul when the application stops.
+
+Without deregistering:
+Consul might still have the old service registered.
+--------------------------------------------------
+
+13. CLOSE NESTJS
+await app.close();
+→ Gracefully shuts down the NestJS application.
+--------------------------------------------------
+14. EXIT
+process.exit(0);
+→ Terminates Node.js successfully.
+--------------------------------------------------
+
+OVERALL FLOW
+
+START
+  ↓
+Create NestJS app
+  ↓
+Start payment-service :3005
+  ↓
+Register payment-service in Consul :8500
+  ↓
+Consul performs health check every 10s
+  ↓
+/api/health
+  ↓
+UP → Passing ✅
+  ↓
+When Ctrl+C
+  ↓
+Deregister from Consul
+  ↓
+Close NestJS
+  ↓
+Exit
+
+--------------------------------------------------
+
+controller.ts
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('api')
+export class AppController {
+  @Get('health')
+  checkHealth() {
+    return {
+      status: 'UP',
+    };
+  }
+}
+
+
+now:
+checkout service:
+import { Injectable } from '@nestjs/common';
+import Consul from 'consul';
+
+@Injectable()
+export class AppService {
+  private consul=new Consul({host:'localhost',port:8500})
+  async discoverAndCallPayment(){
+    const services=await this.consul.agent.service.list()
+    const paymentInfo=services['payment-unique-id-1']
+    if(!paymentInfo){
+      throw new Error('Payment Service not found found in registry!')
+    }
+    const address='localhost'
+    const port=paymentInfo.Port;
+    const finalUrl=`http://${address}:${port}/api/health`
+    console.log(`Discovery Successfull Calling ${finalUrl}`)
+    return {
+      message:'Service Discovered Successfully',
+      discoverUrl:finalUrl,
+      serviceData:paymentInfo
+    }
+  }
+}
+
+--------------------------------------------------
+
+private consul = new Consul({
+  host: 'localhost',
+  port: 8500
+});
+→ Creates a Consul client.
+It connects to:
+localhost:8500
+So AppService can communicate with Consul.
+--------------------------------------------------
+async discoverAndCallPayment() 
+→ Creates an asynchronous method.
+Purpose:
+Find the payment-service from Consul.
+
+IMPORTANT:
+This method is doing SERVICE DISCOVERY.
+It asks Consul:
+"Where is payment-service?"
+
+--------------------------------------------------
+const services = await this.consul.agent.service.list();
+→ Asks Consul for all registered services.
+Example Consul response:
+{
+  "payment-unique-id-1": {
+    ID: "payment-unique-id-1",
+    Service: "payment-service",
+    Address: "host.docker.internal",
+    Port: 3005
+  }
+}
+
+--------------------------------------------------
+const paymentInfo = services['payment-unique-id-1'];
+→ Gets the payment service information using its Service ID.
+
+So:
+
+services
+   ↓
+'payment-unique-id-1'
+   ↓
+paymentInfo
+
+paymentInfo contains information such as:
+
+ID
+Service
+Address
+Port
+Health information
+--------------------------------------------------
+if (!paymentInfo) {
+→ Checks whether payment-service was found.
+If NOT found:
+throw new Error(
+  'Payment Service not found found in registry!'
+);
+→ Stops execution and throws an error.
+
+Meaning:
+
+Consul
+  ↓
+Payment service not found ❌
+--------------------------------------------------
+const address = 'localhost';
+→ Creates the address that will be used to call the payment service.
+IMPORTANT:
+This is NOT taking the address from Consul.
+Even though Consul gives you an Address, your code is manually using:
+localhost
+--------------------------------------------------
+const port = paymentInfo.Port;
+→ Gets the payment service's port from Consul.
+
+For example:
+paymentInfo.Port
+      ↓
+    3005
+
+--------------------------------------------------
+const finalUrl = `http://${address}:${port}/api/health`;
+
+→ Builds the URL to the payment service.
+
+address = localhost
+port = 3005
+
+Result:
+http://localhost:3005/api/health
+--------------------------------------------------
+console.log(
+  `Discovery Successfull Calling ${finalUrl}`
+);
+→ Prints the discovered URL in the terminal.
+Example:
+
+Discovery Successfull Calling
+http://localhost:3005/api/health
+--------------------------------------------------
+return {
+  message: 'Service Discovered Successfully',
+  discoverUrl: finalUrl,
+  serviceData: paymentInfo
+};
+→ Returns information to the caller.
+
+message:
+Confirms service discovery succeeded.
+
+discoverUrl:
+The URL your code created.
+
+serviceData:
+The complete payment-service information received from Consul.
+
+--------------------------------------------------
+
+OVERALL FLOW
+
+AppService
+    ↓
+Consul :8500
+    ↓
+Ask: "What services are registered?"
+    ↓
+Get payment-unique-id-1
+    ↓
+paymentInfo
+    ↓
+Get Port = 3005
+    ↓
+Create URL
+    ↓
+http://localhost:3005/api/health
+    ↓
+Return discovered service information
+
+--------------------------------------------------
+
+IMPORTANT CONCEPT
+
+SERVICE REGISTRATION:
+
+Payment Service
+      ↓
+register()
+      ↓
+Consul Registry
+
+SERVICE DISCOVERY:
+
+App Service
+      ↓
+Consul Registry
+      ↓
+Find payment-service
+      ↓
+Get its information
+      ↓
+Call payment-service
+
+--------------------------------------------------
+
+ONE IMPORTANT THING IN YOUR CODE
+
+You have:
+const address = 'localhost';
+
+This means you are NOT using the address discovered from Consul.
+If you want to actually use the address stored in Consul, you would use:
+const address = paymentInfo.Address;
+
+Then Consul decides where the payment service is running.
+Example:
+
+Consul:
+Address = 172.18.80.1
+Port = 3005
+
+Your code creates:
+http://172.18.80.1:3005/api/health
+
+
+---->
+If your structure is:
+microservice/
+├── package.json
+├── node_modules/
+├── apps/
+│   ├── auth-service/
+│   ├── order-service/
+│   └── payment-service/
+
+and you run:
+cd microservice
+npm install @nestjs/microservices
+
+then it is installed at the root of the monorepo.
+All services can generally use it because Node resolves packages from the root node_modules.
+
+microservice/
+│
+├── node_modules/
+│   └── @nestjs/microservices  ← installed here
+│
+└── apps/
+    ├── auth-service  ──┐
+    ├── order-service ──┼── can use it
+    └── payment-service ┘
+But important ⚠️
+It does not mean every service automatically has it in its own package.json.
+
+The package is listed in the root package.json.
+For a typical Nx monorepo, this is normal:
+
+Root package.json
+      ↓
+Shared dependencies
+      ↓
+All applications
+
+So if you're working with your Nx microservice monorepo,
+ installing a package from the root is usually the way to go.
+If you have separate package.json files for each service, then the behavior is different.
+
+we can install for each services(application) also  but you can, but in an Nx monorepo you usually don't need to.
+so npm i @nestjs/microservices is also nest package we can install it for simple application.if we are using Monolithic approach
+
+--->
+Hybrid Microservice in NestJS
+A hybrid microservice means one NestJS application handles both HTTP requests and microservice
+ messages.
+
+HTTP + Microservice
+       ↓
+Same NestJS App
+Example
+// main.ts
+
+const app = await NestFactory.create(AppModule);
+// Add TCP microservice
+app.connectMicroservice<MicroserviceOptions>({
+  transport: Transport.TCP,
+  options: {
+    host: '127.0.0.1',
+    port: 5005,
+  },
+});
+
+await app.startAllMicroservices();
+await app.listen(3000);
+
+Now the same application supports:
+
+                 NestJS App
+                /          \
+               /            \
+          HTTP :3000      TCP :5005
+             ↓                ↓
+        @Get() / @Post()   @MessagePattern()
+Controller
+@Controller('orders')
+export class AppController {
+
+  @Get()
+  getOrders() {
+    return 'HTTP request';
+  }
+
+  @MessagePattern({ cmd: 'create_order' })
+  createOrder(data: any) {
+    return 'TCP message';
+  }
+}
+
+So:
+
+Normal HTTP client
+       ↓
+   Port 3000
+       ↓
+   @Get()
+
+
+Microservice
+       ↓
+   Port 5005
+       ↓
+@MessagePattern()
+
+Important difference
+Standalone microservice:
+NestFactory.createMicroservice()
+→ Only microservice transport.
+
+Hybrid application:
+NestFactory.create()
++
+app.connectMicroservice()
+
+→ HTTP + microservice transport in the same application.
+A common real-world pattern is:
+
+Client
+  ↓ HTTP
+API Gateway
+  ↓
+Order Service
+  ├── HTTP
+  └── TCP/RabbitMQ/etc.
+
+So hybrid does NOT mean two microservices. It means one NestJS
+ application exposes both an HTTP server and a microservice listener.
+
+
+But Remember:
+In a hybrid NestJS app, you can have both, but they are accessed differently.
+
+HYBRID APP
+────────────────────────────────
+
+HTTP
+Browser / Postman
+      ↓
+http://localhost:3000/orders
+      ↓
+@Get()
+@Post()
+      ↓
+HTTP Controller
+
+
+TCP
+Another Microservice
+      ↓
+ClientProxy.send()
+      ↓
+TCP :5005
+      ↓
+@MessagePattern()
+Can you call TCP from browser/Postman?
+Not directly like HTTP. ❌
+
+A browser/Postman sends an HTTP request such as:
+GET http://localhost:3000/orders
+
+But TCP microservice communication uses Nest's TCP transport/message protocol, 
+so normally another NestJS service uses:
+
+this.client.send(
+  { cmd: 'validate_user' },
+  { userId: 1 }
+);
+So remember:
+HTTP → Browser/Postman can call it
+TCP → Another microservice/NestJS TCP client normally calls it.
+
+--->
+RabbitMQ/Kafka can be used in both microservices and monoliths, 
+but it's more commonly useful in microservice architectures.
+
+Microservices: Very common → Service A sends a message → RabbitMQ → Service B consumes it.
+Monolith: Also possible → one application can use RabbitMQ for background/asynchronous tasks.
+
+Example:
+Monolith:
+
+NestJS App
+   ↓
+RabbitMQ/Kafka
+   ↓
+Email Worker
+
+Microservices:
+
+User Service
+     ↓
+  RabbitMQ
+     ↓
+Email Service
+👉 For your learning, focus on RabbitMQ + NestJS microservices first.
+
+You have to remember that many package/feature come with @nestjs/microservices in nest js but
+we can use that in monolithic approach also and
+you have to remember difference how two microservice communicate and how two module communicate in monolithic
+in microservice we create seprate services(application) and  in monolithic we create module for seprate task/service
+
+--->
+Kafka in NestJS
+
+Kafka is a distributed event/message streaming system.
+Think:
+
+Producer
+   ↓
+Kafka
+   ↓
+Consumer
+
+For your microservices:
+
+Order Service
+    ↓
+  Kafka
+    ↓
+Notification Service
+
+Kafka-npm instal kafka
+Gateway API = Producer
+Notification Service = Consumer
+Kafka = Middleman / Event broker
+
+1. Notification Service — Consumer
+notification-service/main.ts
+const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+  AppModule,
+  {
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: 'notification-consumer',
+        brokers: ['localhost:9092'],
+      },
+      consumer: {
+        groupId: 'notification-group',
+      },
+      subscribe: {
+        fromBeginning: true,
+      },
+    },
+  },
+);
+
+await app.listen();
+What each part does
+createMicroservice()
+→ Creates a standalone microservice.
+
+Transport.KAFKA
+→ Use Kafka as transport.
+
+clientId
+→ Identifies this Kafka client.
+
+brokers
+→ Kafka server address.
+brokers means the Kafka server(s) your application connects to.
+Example:
+brokers: ['localhost:9092']
+- localhost = the machine running Kafka
+- 9092 = Kafka’s default network port
+
+You can provide multiple broker addresses for reliability:
+brokers: ['kafka1:9092', 'kafka2:9092', 'kafka3:9092']
+
+in my case it is running on docker
+
+
+groupId
+→ Consumer belongs to "notification-group".
+
+fromBeginning: true
+tells the Kafka consumer to start reading a topic from its earliest available messages.
+Important: this mainly applies when that consumer group has no saved offset yet.
+- New groupId → reads old messages from the beginning.
+- Existing groupId with saved offsets → resumes from where it previously stopped, 
+even if fromBeginning is true.
+To reread messages for testing, use a new groupId or reset the existing group’s offsets.
+
+app.listen()
+→ Start listening to Kafka.
+
+notification-service/app.controller.ts
+@Controller()
+export class AppController {
+  @EventPattern('user_created')
+  handleUserCreated(@Payload() data: any) {
+    console.log('Event Received!');
+    console.log(data);
+
+  }
+}
+
+Important:
+
+@EventPattern('user_created')
+        ↓
+Listen for event named "user_created"
+
+This is the consumer.
+
+2. Gateway API — Kafka Client
+gateway-api/app.module.ts
+@Module({
+  imports: [
+    ClientsModule.register([      {
+        name: 'KAFKA_SERVICE',
+        transport: Transport.KAFKA,
+
+        options: {
+          client: {
+            clientId: 'api-gateway',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'api-gateway-group',
+          },
+        },
+      },
+    ]),
+  ],
+
+  controllers: [AppController],
+  providers: [AppService],
+})
+export class AppModule {}
+
+The important part:
+ClientsModule.register()
+        ↓
+Creates a Kafka Client
+        ↓
+Name = KAFKA_SERVICE
+
+Then you can inject it:
+
+@Inject('KAFKA_SERVICE')
+private readonly kafkaClient: ClientProxy
+
+3. Gateway API — Producer
+gateway-api/app.controller.ts
+@Controller()
+export class AppController implements OnModuleInit {
+  constructor(
+    @Inject('KAFKA_SERVICE')
+    private readonly kafkaClient: ClientProxy,
+  ) {}
+
+  async onModuleInit() {
+    await this.kafkaClient.connect();
+  }
+
+  @Get('create-user')
+  async createUser() {
+    const user = {
+      id: 1,
+      name: 'FarzeenAli',
+    };
+    this.kafkaClient.emit('user_created', user);
+    return {
+      message: 'user Created Event Published!',
+      user,
+    };
+  }
+}
+Important lines
+@Inject('KAFKA_SERVICE')
+→ Gets the Kafka client created by ClientsModule.
+
+ClientProxy
+→ Type of the client.
+
+await this.kafkaClient.connect()
+→ Connects the Kafka client.
+
+this.kafkaClient.emit('user_created', user)
+→ Publishes an event to Kafka.
+
+Complete Flow
+
+When you call:
+GET /create-user in our example
+
+this happens:
+
+             GATEWAY API
+                │
+                │ HTTP
+                ▼
+          createUser()
+                │
+                │ emit()
+                │
+                │ event:
+                │ "user_created"
+                │
+                ▼
+              KAFKA
+        ┌─────────────────┐
+        │ user_created    │
+        │     TOPIC       │
+        └────────┬────────┘
+                 │
+                 │
+                 ▼
+       NOTIFICATION SERVICE
+                 │
+                 │ @EventPattern()
+                 ▼
+        handleUserCreated()
+                 │
+                 ▼
+        "Event Received!"
+
+The 3 important concepts
+PRODUCER
+─────────
+Gateway API
+
+ClientProxy
+    ↓
+emit('user_created', user)
+
+        ↓
+
+KAFKA
+─────
+Stores/handles event
+
+Topic:
+user_created
+
+        ↓
+
+CONSUMER
+────────
+Notification Service
+
+@EventPattern('user_created')
+    ↓
+handleUserCreated()
+Why emit() instead of send()?
+
+
+send()
+→ Request → Response
+→ "Give me something back"
+
+emit()
+→ Fire event
+→ "Something happened"
+→ No response needed
+
+So:
+
+User Created
+     ↓
+emit('user_created')
+     ↓
+Kafka
+     ↓
+Notification Service
+     ↓
+Send notification
+
+That's a perfect use case for Kafka events.
+
+
+
+
+
+note->for running these we require same type of thing like docker linux(ubuntu)
+so i use docker.yml file , take this configuration online
+
+
+using this in my monolithic
+KAFKA WITH NESTJS MONOLITH —
+===================================================
+Kafka can be used in a MONOLITHIC NestJS application.
+Kafka ≠ Microservices.
+
+Kafka
+→ Messaging / Event Streaming System
+
+Monolith
+→ One application containing multiple modules.
+
+
+1. BASIC ARCHITECTURE
+---------------------
+
+                 NestJS MONOLITH
+          ┌─────────────────────────┐
+          │                         │
+          │  User Module            │
+          │  Order Module           │
+          │  Auth Module            │
+          │  Notification Module    │
+          │                         │
+          └───────────┬─────────────┘
+                      │
+                   emit()
+                      ↓
+                    Kafka
+                      ↓
+              Notification Worker
+
+
+2. HYBRID MONOLITH
+------------------
+One NestJS application can handle:
+
+HTTP + Kafka
+
+Browser/Postman
+      ↓
+HTTP :3000
+      ↓
+NestJS App
+      ↓
+Kafka :9092
+
+
+main.ts
+--------
+const app = await NestFactory.create(AppModule);
+app.connectMicroservice<MicroserviceOptions>({
+  transport: Transport.KAFKA,
+  options: {
+    client: {
+      clientId: 'my-app',
+      brokers: ['localhost:9092'],
+    },
+    consumer: {
+      groupId: 'my-app-group',
+    },
+  },
+});
+
+await app.startAllMicroservices();
+await app.listen(3000);
+
+
+3. PRODUCER
+-----------
+The monolith publishes an event.
+app.controller.ts
+-----------------
+
+@Controller()
+export class AppController {
+  constructor(
+    @Inject('KAFKA_SERVICE')
+    private readonly kafkaClient: ClientKafka,
+  ) {}
+
+  @Get('create-user')
+  async createUser() {
+
+    const user = {
+      id: 1,
+      name: 'Farzeen',
+    };
+
+    this.kafkaClient.emit('user_created', user);
+
+    return {
+      message: 'User created',
+      user,
+    };
+  }
+}
+
+
+4. KAFKA CLIENT REGISTRATION
+----------------------------
+
+app.module.ts
+-------------
+
+@Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'KAFKA_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'my-app',
+            brokers: ['localhost:9092'],
+          },
+          consumer: {
+            groupId: 'my-app-group',
+          },
+        },
+      },
+    ]),
+  ],
+})
+export class AppModule {}
+
+
+ClientsModule.register()
+→ Creates/registers Kafka client.
+
+@Inject('KAFKA_SERVICE')
+→ Injects the registered Kafka client.
+
+ClientKafka
+→ Kafka-specific client type.
+
+emit()
+→ Publishes an event.
+
+
+5. CONSUMER
+-----------
+If the SAME NestJS app consumes the event:
+app.controller.ts
+-----------------
+
+@Controller()
+export class AppController {
+
+  @EventPattern('user_created')
+  handleUserCreated(@Payload() data: any) {
+
+    console.log('Event Received!');
+    console.log(data);
+
+  }
+}
+
+
+@EventPattern('user_created')
+→ Listen for the "user_created" event.
+
+
+6. COMPLETE FLOW
+----------------
+
+Browser / Postman
+       ↓
+GET /create-user
+       ↓
+NestJS Monolith
+       ↓
+createUser()
+       ↓
+kafkaClient.emit()
+       ↓
+Kafka
+       ↓
+"user_created" topic
+       ↓
+@EventPattern('user_created')
+       ↓
+handleUserCreated()
+       ↓
+Notification
+
+
+7. MONOLITH + SEPARATE WORKER
+-----------------------------
+A more practical notification architecture:
+
+              MONOLITH
+        ┌───────────────────┐
+        │ User Module       │
+        │ Order Module      │
+        │ Auth Module       │
+        └─────────┬─────────┘
+                  │
+                  │ emit()
+                  ↓
+                Kafka
+                  │
+                  ↓
+       Notification Worker
+                  │
+                  ↓
+            Send Email
+
+
+Monolith
+→ Creates user/order.
+
+Kafka
+→ Carries the event.
+
+Notification Worker
+→ Consumes event and sends notification.
+
+
+8. send() vs emit()
+-------------------
+
+send()
+→ Request + Response
+
+Example:
+
+Client
+  ↓
+send()
+  ↓
+Service
+  ↓
+Response
+
+
+emit()
+→ Event / Fire-and-forget
+
+Example:
+
+User Created
+     ↓
+emit()
+     ↓
+Kafka
+     ↓
+Notification
+
+
+For notifications:
+
+emit() ⭐
+
+
+9. KAFKA DOES NOT MEAN MICROSERVICES
+------------------------------------
+
+Kafka = Messaging/Event Streaming
+
+Microservices = Architecture
+
+
+Possible:
+Monolith + Kafka       ✅
+Microservices + Kafka  ✅
+Monolith without Kafka ✅
+Microservices without Kafka ✅
+
+
+KAFKA vs RABBITMQ vs REDIS 
+────────────────────────────────────────────────────────
+| Feature          | Kafka                  | RabbitMQ               | Redis                  |
+|------------------|------------------------|------------------------|------------------------|
+| Main purpose     | Event streaming        | Message broker / Queue | In-memory data store   |
+| Best for         | Events, analytics      | Jobs, tasks, messaging | Cache, sessions, fast data |
+| Message storage  | Yes, durable           | Yes, queue-based       | Mainly memory          |
+| Communication    | Producer → Topic       | Producer → Queue       | Pub/Sub / Streams      |
+| Consumer model   | Consumer groups        | Consumers              | Subscribers / Streams  |
+| Message replay   | ⭐ Excellent            | Limited                | Streams support it     |
+| Very high volume | ⭐ Excellent            | Good                   | Excellent              |
+| Task queue       | Possible               | ⭐ Excellent            | Good                   |
+| Caching          | ❌ No                   | ❌ No                   | ⭐ Excellent            |
+| Request/response | Possible               | Possible               | Possible               |
+| Event-driven     | ⭐ Excellent            | ⭐ Good                 | Good                   |
+| Typical use      | Logs, events, analytics| Email, jobs, orders    | Cache, OTP, sessions   |
+
+
+NOTE — NESTJS MICROSERVICE FEATURES IN A MONOLITH
+=================================================
+If we use features like:
+
+→ TCP
+→ Kafka
+→ RabbitMQ
+→ Redis
+→ ClientProxy
+→ @MessagePattern()
+→ @EventPattern()
+
+inside a MONOLITHIC NestJS application,
+it does NOT automatically mean that we are building microservices.
+These features/communication mechanisms are provided by
+@nestjs/microservices, but the architecture can still be monolithic.
+
+HYBRID / MICROSERVICE COMMUNICATION
+-----------------------------------
+A NestJS application can have:
+HTTP + Microservice Communication
+
+Example:
+
+Browser / Postman
+       ↓
+HTTP
+       ↓
+NestJS Monolith
+       ↓
+Kafka / RabbitMQ / TCP
+       ↓
+Worker / Other Service
+
+
+IMPORTANT
+---------
+
+@nestjs/microservices
+→ Provides communication features.
+
+Microservices Architecture
+→ Means splitting the application into independent services.
+
+Therefore:
+Using @nestjs/microservices package
+                    ≠
+Automatically building microservices.
+
+
+EXAMPLE
+-------
+
+Monolithic NestJS App
+        │
+        ├── User Module
+        ├── Order Module
+        ├── Auth Module
+        └── Notification Module
+                 │
+                 ↓
+              Kafka
+                 │
+                 ↓
+          Notification Worker
+
+The main application can still be a MONOLITH.
+
+So remember:
+"Microservice package = communication tools
+ Microservices architecture = application architecture"
+
+
+---->
+DLQ — DEAD LETTER QUEUE
+========================
+→ A special queue where messages/jobs go when they
+  cannot be successfully processed.
+NORMAL FLOW
+------------
+
+Producer
+   ↓
+Main Queue
+   ↓
+Consumer / Worker
+   ↓
+Process message
+   ↓
+SUCCESS ✅
+
+
+FAILURE FLOW
+------------
+
+Producer
+   ↓
+Main Queue
+   ↓
+Consumer
+   ↓
+Processing fails ❌
+   ↓
+Retry
+   ↓
+Fails again ❌
+   ↓
+DLQ
+   ↓
+Investigate / Fix / Retry later
+
+
+WHY DLQ?
+--------
+
+Without DLQ:
+
+Bad message
+   ↓
+Consumer keeps failing
+   ↓
+Same message repeatedly
+   ↓
+Queue gets blocked / errors continue
+
+
+With DLQ:
+
+Bad message
+   ↓
+Retry several times
+   ↓
+DLQ
+   ↓
+Main queue can continue processing
+
+
+EXAMPLE
+-------
+
+Order Service
+      ↓
+RabbitMQ
+      ↓
+email.queue
+      ↓
+Email Worker
+      ↓
+Email sending fails ❌
+      ↓
+Retry 3 times
+      ↓
+email.dlq
+
+
+DLQ CAN CONTAIN
+---------------
+
+→ Invalid message
+→ Processing failure
+→ External service failure
+→ Poison message
+→ Maximum retries exceeded
+
+
+IMPORTANT
+---------
+DLQ is NOT a separate technology.
+It is a pattern/queue used with messaging systems.
+
+RabbitMQ → DLQ is very common
+Kafka    → Dead-letter topic (DLT) is commonly used
+Redis    → Can implement a DLQ pattern
+
+
+EASY REMEMBER
+-------------
+Queue
+→ Try to process
+
+Retry
+→ Try again
+
+DLQ
+→ "I couldn't process this message;
+   keep it here for investigation/recovery."
+
+
+FLOW
+----
+
+Message
+   ↓
+Queue
+   ↓
+Consumer
+   ↓
+❌ Failed
+   ↓
+Retry
+   ↓
+❌ Failed repeatedly
+   ↓
+DLQ
+
+example syntax:
+@EventPattern('user_created')
+handleUserCreated(@Payload() data: any) {
+  try {
+    // send email   
+
+  } catch (error) {
+    // send failed message to DLT
+  }
+}
+
+--->
+redis from redis

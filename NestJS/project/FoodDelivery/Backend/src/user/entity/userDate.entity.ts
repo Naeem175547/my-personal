@@ -1,0 +1,18 @@
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity({name:'users'})
+export class UserDate{
+    @PrimaryGeneratedColumn()
+    id!:number
+
+    @Column()
+    name!:string;
+
+    @Column()
+    email!:string
+
+    @Column()
+    age!:number
+
+    
+}

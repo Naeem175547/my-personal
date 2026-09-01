@@ -1,0 +1,151 @@
+<div id="admin-content">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <h1 class="admin-heading"><i class="fa fa-comments"></i> Comments Management</h1>
+              </div>
+              <div class="col-md-12">
+                  <div id="commentsTable">
+
+                  </div>
+                 
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="commentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="commentModalLabel">Comment Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="commentModalBody">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/tabulator-tables@6.3.0/dist/js/tabulator.min.js"></script>
+
+  <script>
+    
+    const tableData = <%- JSON.stringify(comments) %>
+    const table = new Tabulator("#commentsTable", {
+        data: tableData,
+        layout: "fitColumns",
+        pagination: "local",        
+        paginationSize: 10,
+        paginationSizeSelector: [5, 10, 20, 50],
+        columns: [
+            { title: "Sr.No.",  formatter:"rownum", width:100 },
+            { title: "Article", field: "article.title",  headerFilter:"input" },
+            { title: "Content", field: "content",  headerFilter:"input" },
+            { title: "Name", field: "name",  headerFilter:"input" },
+            { title: "Date", field: "createdAt",  headerFilter:"input" , formatter:function(cell,formatterparams,onRendered){
+                var date=new Date(cell.getValue())
+                return date.toLocaleDateString()
+            }},
+            { title: "Status",  field: "status",  headerFilter:"input" },           
+            {
+                title: "Actions",
+                formatter: function(cell) {
+                    const id = cell.getRow().getData()._id;
+                    return `
+                        <button onclick="viewComment('${id}')" class="btn btn-sm btn-warning">view</button>
+                       <button class="btn btn-sm btn-danger" onclick="deleteComment('${id}')">Delete</button>
+                    `;
+                }
+            }
+        ]
+    });
+
+
+// view commnent
+async function viewComment(id) {
+  const comment = table.getData().find(c => c._id === id);
+
+  const html=`
+  <p><b>Message:</b> ${comment.content}</p>
+  <select class="form-select" id="statusSelect" onchange="updateCommentStatus('${comment._id}', this.value)">
+    <option value="approved" ${comment.status === 'approved' ? 'selected' : ''}>Approved</option>
+    <option value="rejected" ${comment.status === 'rejected' ? 'selected' : ''}>Rejected</option>
+    <option value="pending" ${comment.status === 'pending' ? 'selected' : ''}>Pending</option> 
+  </select>
+
+  `;
+  const modal=new bootstrap.Modal(document.getElementById('commentModal'));
+  const modalBody=document.getElementById('commentModalBody');
+  const modalTitle=document.getElementById('commentModalLabel');
+  modalTitle.innerText=`Comment by ${comment.name}`;
+  modalBody.innerHTML=html; 
+  modal.show();
+
+    
+}
+//update comment status
+async function updateCommentStatus(id, status) {
+    try {
+        const response = await fetch(`/admin/update-comment-status/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        });
+
+        if (response.ok) {
+            // Update the status in the table
+            // const comment = table.getData().find(c => c._id === id);
+            // if (comment) {
+            //     comment.status = status;
+            //     table.updateData([comment]);
+            // }
+
+            // or Reload the page to reflect the changes
+            window.location.reload();
+        } else {
+            alert('Failed to update comment status');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+
+// Delete comments
+async function deleteComment(id) {
+
+    if (confirm("Are you sure you want to delete this comment?")) {
+
+        try {
+
+            const response = await fetch(`/admin/delete-comment/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                window.location.reload();
+            } else if (response.status === 400) {
+                const data = await response.json();
+                alert(data.message);
+            } else {
+                alert('Failed to delete comment');
+
+            }
+
+        } catch (err) { 
+
+            console.error(err);
+
+        }
+    }
+}
+</script>
+
+
+
+<%- contentFor('tabulatorCSS') %>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://unpkg.com/tabulator-tables@6.3.0/dist/css/tabulator.min.css" rel="stylesheet">

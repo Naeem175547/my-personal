@@ -1,0 +1,10 @@
+# list1=list()
+# list1.append(1)
+# list1.append(3)
+# list1.append(1)
+# list1.append(7)
+# print(list1)
+# print(list1.index(7))
+
+tup=(1,12)
+print(type(tup))

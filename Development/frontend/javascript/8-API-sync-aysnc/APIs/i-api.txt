@@ -1,0 +1,203 @@
+  WHAT IS API?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+API = Application Programming Interface
+
+API allows:
+✔ Two applications to communicate
+✔ Send data
+✔ Receive data
+
+Example:
+📱 Weather App → gets weather from server
+📱 Instagram → gets posts from database
+📱 YouTube → gets videos from server
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ REAL LIFE EXAMPLE OF API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🍔 Restaurant Example
+
+You          → Customer
+Waiter       → API
+Kitchen      → Server
+
+Flow:
+
+Customer gives order
+        ↓
+Waiter takes order
+        ↓
+Kitchen prepares food
+        ↓
+Waiter brings food back
+
+✔ Waiter = API
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+. TYPES OF APIs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🌐 Web APIs
+📱 Browser APIs
+💻 Library APIs
+☁ Third-party APIs
+
+ ======================================================
+ TOP 5 FREE PUBLIC APIs FOR PRACTICE
+ ======================================================
+
+ 1. CAT FACT API
+ Random cat facts
+https://catfact.ninja/fact
+
+
+ 2. BORED API
+ Random activity suggestions
+https://www.boredapi.com/api/activity
+
+
+ 3. DOG API
+ Random dog images
+https://dog.ceo/api/breeds/image/random
+
+
+ 4. RANDOM USER API
+ Fake random users data
+https://randomuser.me/api/
+
+
+ 5. JOKE API
+ Random jokes
+https://official-joke-api.appspot.com/random_joke
+
+examp
+async function getData() {
+
+    // Cat Fact
+    let catRes = await fetch("https://catfact.ninja/fact");
+    let catData = await catRes.json();
+    console.log("Cat Fact:", catData.fact);
+
+    // Activity
+    let actRes = await fetch("https://www.boredapi.com/api/activity");
+    let actData = await actRes.json();
+    console.log("Activity:", actData.activity);
+
+    // Dog Image
+    let dogRes = await fetch("https://dog.ceo/api/breeds/image/random");
+    let dogData = await dogRes.json();
+    console.log("Dog Image:", dogData.message);
+}
+
+getData();
+
+-->
+═══════════════════════════════════════
+🔥 QUERY STRING (SHORT NOTES) 🔥
+═══════════════════════════════════════
+✔ Query String = Extra data in URL
+Syntax:
+URL?key=value
+
+Example:
+https://api.com/users?id=1
+───────────────────────────────────────
+✔ Multiple Parameters
+https://api.com/users?id=1&name=imran
+
+?  → Starts query string
+&  → Separates parameters
+
+───────────────────────────────────────
+
+✔ Common Uses
+
+✅ Search
+✅ Filter
+✅ Pagination
+✅ API requests
+
+───────────────────────────────────────
+✔ JavaScript Read Query String
+
+let params = new URLSearchParams(window.location.search);
+
+console.log(params.get("name"));
+
+───────────────────────────────────────
+
+✔ Important Methods
+
+get()     → Get value
+has()     → Check parameter
+append()  → Add parameter
+delete()  → Remove parameter
+
+───────────────────────────────────────
+
+✔ Example
+
+let params = new URLSearchParams();
+params.append("name", "imran");
+console.log(params.toString());
+
+Output:
+name=imran
+
+───────────────────────────────────────
+
+✔ Query String vs Route Parameter
+
+?id=1      → Query String
+/users/1   → Route Parameter
+
+───────────────────────────────────────
+
+✔ encodeURIComponent()
+
+Used for special characters.
+
+encodeURIComponent("New York")
+
+Output:
+New%20York
+
+═══════════════════════════════════════
+🎯 END
+═══════════════════════════════════════
+
+
+-->Hoppscotch and Postman
+Hoppscotch:
+Fast browser API testing tool.
+
+Postman:
+Advanced API testing tool.
+
+Used For:
+- Testing APIs
+- Sending requests
+- Checking JSON responses
+
+Hoppscotch:
+- Lightweight
+- Beginner friendly
+- No install
+
+Postman:
+- Professional
+- More features
+- Automation support
+
+Common Requests:
+- GET
+- POST
+- PUT
+- DELETE
+
+API returns data mostly in JSON format.
+
+
+

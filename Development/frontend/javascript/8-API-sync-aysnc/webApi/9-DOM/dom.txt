@@ -1,0 +1,1016 @@
+# DOM (Document Object Model) Full Notes
+
+```js
+/*
+========================================
+DOM (Document Object Model)
+========================================
+
+Definition:
+DOM is a Web API provided by the browser.
+It represents HTML document as a tree-like structure of objects.
+JavaScript uses DOM to:
+- access HTML
+- change HTML
+- change CSS
+- handle events
+
+Important:
+DOM is NOT part of JavaScript language.
+Browser provides DOM to JavaScript.
+
+Example:
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+const el = document.getElementById("title")
+el.innerText = "Hi"
+
+========================================
+DOM Tree Structure
+========================================
+
+HTML:
+
+<html>
+  <body>
+    <h1>Hello</h1>
+  </body>
+</html>
+
+DOM Tree:
+
+document
+ └── html
+      └── body
+           └── h1
+                └── "Hello"
+
+========================================
+Window Object
+========================================
+
+window is the global object in browser.
+All browser APIs come inside window.
+
+Example:
+window.document
+window.console
+window.alert
+window.setTimeout
+
+Browser automatically uses window.
+
+So these are same:
+console.log("hello")
+window.console.log("hello")
+
+========================================
+Document Object
+========================================
+
+document represents the webpage.
+Used to access HTML elements.
+
+Example:
+console.log(document)
+
+========================================
+Selecting Elements
+========================================
+
+1. getElementById()
+----------------------------------------
+Selects single element by id.
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+const el = document.getElementById("title")
+console.log(el)
+
+Output:
+<h1 id="title">Hello</h1>
+
+Returns:
+Single Element
+
+----------------------------------------
+2. getElementsByClassName()
+----------------------------------------
+Selects elements by class.
+
+HTML:
+<p class="text">One</p>
+<p class="text">Two</p>
+
+JS:
+const els = document.getElementsByClassName("text")
+console.log(els)
+
+Output:
+HTMLCollection(2)
+
+Access:
+els[0]
+els[1]
+
+Returns:
+HTMLCollection
+
+----------------------------------------
+3. getElementsByTagName()
+----------------------------------------
+Selects elements by tag.
+
+HTML:
+<h1>Hello</h1>
+<h1>World</h1>
+
+JS:
+const els = document.getElementsByTagName("h1")
+console.log(els)
+
+Output:
+HTMLCollection(2)
+
+----------------------------------------
+4. getElementsByName()
+----------------------------------------
+Selects elements using name attribute.
+
+HTML:
+<input name="username">
+<input name="username">
+
+JS:
+const els = document.getElementsByName("username")
+console.log(els)
+
+Output:
+NodeList(2)
+
+----------------------------------------
+5. querySelector()
+----------------------------------------
+Selects first matching element.
+Uses CSS selectors.
+
+HTML:
+<h1 class="title">Hello</h1>
+
+JS:
+const el = document.querySelector(".title")
+const el = document.querySelector(".title a")
+console.log(el)
+
+Output:
+<h1 class="title">Hello</h1>
+
+----------------------------------------
+6. querySelectorAll()
+----------------------------------------
+Selects all matching elements.
+
+HTML:
+<p class="text">One</p>
+<p class="text">Two</p>
+
+JS:
+const els = document.querySelectorAll(".text")
+console.log(els)
+
+Output:
+NodeList(2)
+
+========================================
+Difference Between Single Element,
+HTMLCollection and NodeList
+========================================
+
+Single Element:
+- stores one element
+- returned by getElementById()
+
+HTMLCollection:
+- collection of HTML elements
+- array-like
+- live collection
+- returned by:
+  - getElementsByClassName()
+  - getElementsByTagName()
+
+NodeList:
+- collection of nodes
+- supports forEach()
+- usually static
+- returned by:
+  - querySelectorAll()
+  - getElementsByName()
+
+/*
+========================================
+HTMLCollection
+========================================
+
+HTMLCollection is a DOM collection object
+that stores only HTML elements.
+
+It contains element nodes like:
+- div
+- p
+- h1
+- button
+========================================
+NodeList
+========================================
+
+NodeList is a DOM collection object
+that stores nodes.
+
+A node can be:
+- element node
+- text node
+- comment node
+
+========================================
+Changing Content
+========================================
+
+1. innerText
+----------------------------------------
+access and Changes visible text.
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+
+const el = document.getElementById("title")
+console.log(e1.innerText)
+el.innerText = "Hi"
+
+Output:
+Hi
+
+----------------------------------------
+2. innerHTML
+----------------------------------------
+Reads or changes HTML.
+
+HTML:
+<div id="box"></div>
+
+JS:
+const box = document.getElementById("box")
+box.innerHTML = "<h1>Hello</h1>"
+
+Output:
+<h1>Hello</h1>
+
+----------------------------------------
+3. textContent
+----------------------------------------
+Gets all text content(hidden text also).
+
+JS:
+el.textContent
+
+========================================
+Changing CSS Using JS
+========================================
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+const el = document.getElementById("title")
+
+el.style.color = "red"
+el.style.backgroundColor = "yellow"
+el.style.fontSize = "40px"
+
+========================================
+Attributes
+========================================
+
+HTML:
+<a id="link" href="https://google.com">Google</a>
+
+1. getAttribute()
+----------------------------------------
+Gets attribute value.
+
+JS:
+const link = document.getElementById("link")
+console.log(link.getAttribute("href"))
+
+Output:
+https://google.com
+
+----------------------------------------
+2. setAttribute()
+----------------------------------------
+Sets attribute.
+
+JS:
+link.setAttribute("target", "_blank")
+
+----------------------------------------
+3. removeAttribute()
+----------------------------------------
+Removes attribute.
+
+JS:
+link.removeAttribute("href")
+
+----------------------------------------
+4. hasAttribute()
+----------------------------------------
+Checks attribute exists or not.
+
+JS:
+console.log(link.hasAttribute("href"))
+
+Output:
+true
+
+5.Attributes -list of all attributes
+
+========================================
+Class Manipulation
+========================================
+
+HTML:
+<h1 id="title" class="heading">Hello</h1>
+
+JS:
+const el = document.getElementById("title")
+
+----------------------------------------
+1. classList.add()
+----------------------------------------
+el.classList.add("active")
+
+----------------------------------------
+2. classList.remove()
+----------------------------------------
+el.classList.remove("heading")
+
+----------------------------------------
+3. classList.toggle()
+----------------------------------------
+el.classList.toggle("dark")
+
+----------------------------------------
+4. classList.contains()
+----------------------------------------
+console.log(el.classList.contains("active"))
+
+5.classList.length
+6.classList.item(index)
+
+========================================
+ Elements modificaton
+========================================
+
+/*
+========================================
+createElement()
+========================================
+Creates new element.
+const p = document.createElement("p")
+Output:
+<p></p>
+
+========================================
+append()
+========================================
+Adds element/text at END.
+p.innerText="hello"
+box.append(p)
+Output:
+
+<div id="box">
+  ...
+  <p>hello</p>
+</div>
+
+| Feature                 | `append()`  | `appendChild()` |
+| ----------------------- | ----------- | --------------- |
+| Adds Position           | End         | End             |
+| Supports Text           | ✅ Yes       | ❌ No            |
+| Supports Multiple Items | ✅ Yes       | ❌ No            |
+| Supports Elements       | ✅ Yes       | ✅ Yes           |
+| Return Value            | `undefined` | Added node      |
+| Old Method / New Method | New         | Older           |
+| Mostly Used             | Modern JS   | Older DOM       |
+
+
+========================================
+prepend()
+========================================
+
+Adds element/text at START.
+
+box.prepend(p)
+
+/*
+Output:
+
+<div id="box">
+  <p></p>
+  ...
+</div>
+*/
+
+
+
+/*
+========================================
+insertAdjacentHTML(position,element)
+========================================
+
+Inserts HTML.
+
+Positions:
+beforebegin → before element
+afterbegin → inside element at start
+beforeend → inside element at end
+afterend → after element
+*/
+box.insertAdjacentHTML(
+  "beforeend",
+  "<h1>Hello</h1>"
+)
+/*
+Output:
+
+<div id="box">
+  ...
+  <h1>Hello</h1>
+</div>
+*/
+
+
+
+/*
+========================================
+insertAdjacentElement(position,element)
+========================================
+Inserts existing element.
+*/
+
+box.insertAdjacentElement(
+  "beforeend",
+  p
+)
+
+
+
+/*
+========================================
+insertAdjacentText(position,text)
+========================================
+
+Inserts plain text.
+*/
+
+box.insertAdjacentText(
+  "beforeend",
+  "Hello"
+)
+
+========================================
+Removing Elements
+========================================
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+const el = document.getElementById("title")
+el.remove()
+
+========================================
+Traversal
+========================================
+Element properties:
+- parentElement
+- children
+- firstElementChild
+- lastElementChild
+- nextElementSibling
+- previousElementSibling
+
+→ work with ELEMENTS only
+
+
+Node properties:
+- parentNode
+- childNodes
+- firstChild
+- lastChild
+- nextSibling
+- previousSibling
+
+→ work with ALL NODES
+(text, comment, element)
+
+
+
+========================================
+Events
+========================================
+Events are actions performed by user.
+Event Handling in JavaScript
+There are mainly 3 ways to handle events:
+1.Inline Event
+2.DOM Property Event
+3.addEventListener()
+
+1. Inline Event
+Event written directly inside HTML.
+<button onclick="sayHello()">
+  Click Me
+</button>
+
+<script>
+function sayHello(){
+  alert("Hello")
+}
+</script>
+ 
+ 2. DOM Property Event
+Attach event using JavaScript property.
+
+<button id="btn">Click Me</button>
+<script>
+let btn = document.querySelector("#btn")
+btn.onclick = function(){
+  alert("Button clicked")
+}
+</script>
+
+Limitation:
+Only one event handler allowed.
+
+btn.onclick = function(){
+  console.log("First")
+}
+
+btn.onclick = function(){
+  console.log("Second")
+}
+
+Output:
+Second
+(first get overwritted)
+
+
+3. addEventListener()
+Modern and best method.
+
+<button id="btn">Click Me</button>
+<script>
+let btn = document.querySelector("#btn")
+
+btn.addEventListener("click", function(){
+  alert("Clicked")
+})
+</script>
+
+3. addEventListener()
+Modern and best method.
+
+<button id="btn">Click Me</button>
+<script>
+let btn = document.querySelector("#btn")
+
+btn.addEventListener("click", function(){
+  alert("Clicked")
+})
+</script>
+
+Advantages of addEventListener()
+Multiple handlers allowed
+btn.addEventListener("click", function(){
+  console.log("First")
+})
+
+btn.addEventListener("click", function(){
+  console.log("Second")
+})
+
+Output:
+
+First
+Second
+
+Syntax:
+element.addEventListener(event, callback,thirdParamter)
+| Value   | Meaning                  |
+| ------- | ------------------------ |
+| `true`  | Capturing phase          |
+| `false` | Bubbling phase (default) |
+
+
+
+removeEventListener()->
+Used to remove an event listener.
+Important
+Anonymous functions cannot be removed.
+❌ Wrong:
+btn.addEventListener("click", function(){
+  console.log("hello")
+})
+
+btn.removeEventListener("click", function(){
+  console.log("hello")
+})
+
+Because both functions are different in memory.
+Correct Way
+Store function in variable.
+
+function greet(){
+  console.log("Hello")
+}
+
+btn.addEventListener("click", greet)
+btn.removeEventListener("click", greet)
+
+--> In JavaScript event handlers, this usually refers
+ to the element on which the event listener is attached.
+
+Example:
+
+<button id="btn">Click Me</button>
+
+<script>
+const btn = document.getElementById("btn");
+
+btn.addEventListener("click", function () {
+    console.log(this);
+});
+</script>
+So here:
+this === btn   // true
+
+-->Type of events
+
+
+🖱️ Mouse Events
+onclick → Runs when element is clicked
+ondblclick → Runs on double click
+onmousedown → When mouse button is pressed
+onmouseup → When mouse button is released
+onmouseenter → When mouse enters (no bubbling)
+onmouseleave → When mouse leaves
+onmousemove → Runs continuously while moving mouse
+onmouseover → When mouse enters (with bubbling)
+onmouseout → When mouse leaves (with bubbling)
+oncontextmenu → Right-click event
+
+
+⌨️ Keyboard Events
+onkeydown → When key is pressed
+onkeypress → Deprecated (avoid using)
+onkeyup → When key is released
+
+
+📝 Form / Input Events
+onchange → When input value changes
+oninput → Runs immediately on input change
+onsubmit → When form is submitted
+oninvalid → When input validation fails
+onreset → When form is reset
+
+note->onchange work like oninput in react
+
+
+🎯 Focus Events
+onfocus → When element gets focus
+onblur → When element loses focus
+
+
+📋 Clipboard Events
+oncopy → When content is copied
+oncut → When content is cut
+onpaste → When content is pasted
+
+
+📦 Drag & Drop Events
+ondrag → While dragging
+ondragstart → When drag starts
+ondragend → When drag ends
+ondragenter → When dragged item enters
+ondragleave → When dragged item leaves
+ondragover → When dragged item is over element
+ondrop → When item is dropped
+
+
+🎬 Media Events
+onplay → When media starts playing
+onpause → When media is paused
+onended → When media ends
+ontimeupdate → While media is playing (time changes)
+onvolumechange → When volume changes
+onloadeddata → When media data loads
+
+
+🖼️ Image Events
+onload → When image loads successfully
+onerror → When image fails to load
+
+
+🌐 Animation Events
+onanimationstart → Animation starts
+onanimationend → Animation ends
+onanimationiteration → Animation repeats
+
+
+🎨 Transition Events
+ontransitionend → CSS transition finishes
+
+
+📜 UI Events
+onscroll → When scrolling
+onwheel → Mouse wheel scroll
+
+
+📱 Touch Events
+ontouchstart → Touch starts
+ontouchmove → Finger moves
+ontouchend → Touch ends
+ontouchcancel → Touch interrupted
+
+
+🧠 Special Event
+ontoggle → When <details> opens/closes
+
+
+Note--> for using event in addEventListener no need to write on,
+just write name like-'click
+
+
+
+========================================
+ Event Bubbling
+========================================
+
+👉 Event Bubbling means:
+When an event happens on a child element,
+it propagates (bubbles up)
+to its parent elements.
+
+🌊 Bubbling Direction:
+child → parent
+
+⚠️ Happens by default 
+
+
+Example:
+
+<div onClick={() => console.log("Parent")}>
+  
+  <button onClick={() => console.log("Child")}>
+    Click
+  </button>
+
+</div>
+
+
+If button is clicked:
+
+Output:
+
+Child
+Parent
+
+
+========================================
+stopPropagation()
+========================================
+
+Used to stop bubbling.
+
+Example:
+<div onClick={() => console.log("Parent")}>
+
+  <button
+    onClick={(e) => {
+      e.stopPropagation()
+      console.log("Child")
+    }}
+  >
+    Click
+  </button>
+
+</div>
+
+Output:
+Child
+
+Parent event will NOT run.
+
+========================================
+Event Object
+========================================
+When an event happens (click, keypress, submit, etc.), 
+JavaScript automatically creates an event object containing
+ information about that event.
+
+JS:
+btn.addEventListener("click", function(event){
+  console.log(event)
+})
+
+Useful Properties:
+- event.target
+- event.type
+- event.clientX
+- event.clientY
+
+| Property / Method         | Meaning                              |
+| ------------------------- | ------------------------------------ |
+| event.target              | Element that triggered event         |
+| event.type                | Event name                           |
+| event.clientX             | Mouse X position                     |
+| event.clientY             | Mouse Y position                     |
+| event.key                 | Pressed keyboard key
+| event.code                | Physical keyboard key code           |                 |
+| event.preventDefault()    | Stops default browser action         |
+| event.stopPropagation()   | Stops event bubbling                 |
+| event.currentTarget       | Element handling the event           |
+| event.button              | Which mouse button was clicked       |
+| event.altKey              | Checks if Alt key was pressed        |
+| event.ctrlKey             | Checks if Ctrl key was pressed       |
+| event.shiftKey            | Checks if Shift key was pressed      |
+| event.metaKey             | Checks if Meta/Windows/Cmd key used  |
+| event.keyCode             | Old numeric key code (deprecated)    |
+| event.which               | Old key/button code (deprecated)     |
+| event.detail              | Click count                          |
+| event.timeStamp           | Time when event occurred             |
+| event.bubbles             | Whether event bubbles                |
+| event.cancelable          | Whether default can be prevented     |
+| event.defaultPrevented    | Checks if preventDefault was called  |
+| event.isTrusted           | True if event from real user action  |
+| event.touches             | Touch points in touch events         |
+| event.changedTouches      | Changed touch points                 |
+| event.deltaY              | Mouse wheel vertical scroll amount   |
+| event.relatedTarget       | Secondary element in mouse events    |
+
+
+Properties of event.target
+| Property                     | Meaning                              |
+| ---------------------------- | ------------------------------------ |
+| event.target.id              | Element id                           |
+| event.target.className       | Element class                        |
+| event.target.tagName         | HTML tag name                        |
+| event.target.innerText       | Visible text inside element          |
+| event.target.textContent     | All text inside element              |
+| event.target.innerHTML       | HTML inside element                  |
+| event.target.value           | Input field value                    |
+| event.target.checked         | Checkbox/radio checked status        |
+| event.target.src             | Image source URL                     |
+| event.target.href            | Link URL                             |
+| event.target.style           | Inline styles object                 |
+| event.target.parentElement   | Parent HTML element                  |
+| event.target.children        | Child elements collection            |
+| event.target.dataset         | Custom data-* attributes             |
+| event.target.disabled        | Disabled state                       |
+| event.target.type            | Input type                           |
+| event.target.name            | Form/input name                      |
+| event.target.placeholder     | Input placeholder text               |
+| event.target.clientWidth     | Element width                        |
+| event.target.clientHeight    | Element height         
+
+Key Vs code
+| Keyboard Key | event.key | event.code   |
+| -------------| ---------- | -------------|
+| A             | a / A      | KeyA          |
+| B             | b / B      | KeyB          |
+| C             | c / C      | KeyC          |
+| 1             | 1          | Digit1        |
+| 2             | 2          | Digit2        |
+| Enter         | Enter      | Enter         |
+| Space         | " "        | Space         |
+| Backspace     | Backspace  | Backspace     |
+| Tab           | Tab        | Tab           |
+| Shift         | Shift      | ShiftLeft     |
+| Ctrl          | Control    | ControlLeft   |
+| Alt           | Alt        | AltLeft       |
+| Arrow Up      | ArrowUp    | ArrowUp       |
+| Arrow Down    | ArrowDown  | ArrowDown     |
+| Arrow Left    | ArrowLeft  | ArrowLeft     |
+| Arrow Right   | ArrowRight | ArrowRight    |
+| Escape        | Escape     | Escape        |
+| Delete        | Delete     | Delete        |
+
+========================================
+DOM vs JavaScript
+========================================
+
+JavaScript:
+- programming language
+- defined by ECMAScript
+
+DOM:
+- browser Web API
+- provided by browser
+- used with JavaScript
+
+========================================
+DOM is Synchronous
+========================================
+
+Example:
+const el = document.getElementById("title")
+console.log(el)
+
+Runs immediately.
+
+========================================
+Web APIs
+========================================
+
+Examples:
+- DOM API
+- Fetch API
+- Timer API
+- LocalStorage API
+- Geolocation API
+
+Some are synchronous.
+Some are asynchronous.
+
+========================================
+console.log() vs console.dir()
+========================================
+
+HTML:
+<h1 id="title">Hello</h1>
+
+JS:
+const h1 = document.getElementById("title")
+
+console.log(h1)
+console.dir(h1)
+
+console.log():
+- shows HTML-like view
+
+Output:
+<h1 id="title">Hello</h1>
+
+console.dir():
+- shows object properties
+
+Output:
+HTMLHeadingElement
+  id: "title"
+  innerText: "Hello"
+  style: CSSStyleDeclaration
+  ...
+
+========================================
+DOM Manipulation Example
+========================================
+
+HTML:
+<h1 id="title">Hello</h1>
+<button id="btn">Change</button>
+
+JS:
+const title = document.getElementById("title")
+const btn = document.getElementById("btn")
+
+btn.addEventListener("click", function(){
+  title.innerText = "Changed"
+  title.style.color = "red"
+})
+
+========================================
+Important Points
+========================================
+
+1. DOM is browser API.
+2. DOM is not JavaScript.
+3. document represents webpage.
+4. window is global browser object.
+5. querySelector uses CSS selectors.
+6. innerHTML can add HTML.
+7. textContent gets all text.
+8. HTMLCollection is live.
+9. NodeList usually static.
+10. addEventListener is preferred.
+
+========================================
+END
+========================================
+*/
+```

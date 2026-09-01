@@ -1,0 +1,697 @@
+══════════════════════════════════════════════════════
+🔥 AJAX IN JAVASCRIPT (BASIC → ADVANCED) 🔥
+══════════════════════════════════════════════════════
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. WHAT IS AJAX?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AJAX = Asynchronous JavaScript And XML
+AJAX stands for Asynchronous JavaScript and XML.
+ It’s a technique used in web development to update
+  parts of a webpage without reloading the entire page.
+
+Used to:
+✔ Send requests to server
+✔ Get data without page reload
+✔ Update webpage dynamically
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+2. WHY AJAX?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Without AJAX:
+❌ Whole page reloads
+
+With AJAX:
+✅ Only required data updates
+
+Examples:
+⭐ Instagram likes
+⭐ YouTube comments
+⭐ Gmail refresh
+⭐ Chat applications
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+3. SYNCHRONOUS vs ASYNCHRONOUS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+▶ SYNCHRONOUS
+
+Code runs line by line.
+
+console.log("1");
+console.log("2");
+console.log("3");
+
+Output:
+1
+2
+3
+
+──────────────────────────────────────────────────────
+
+▶ ASYNCHRONOUS
+
+Some tasks run later.
+
+console.log("1");
+
+setTimeout(() => {
+    console.log("2");
+}, 2000);
+
+console.log("3");
+
+Output:
+1
+3
+2
+
+⚡ AJAX works asynchronously.
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+4. OLD AJAX METHOD → XMLHttpRequest (XHR)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts");
+
+xhr.send();
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+5. XMLHttpRequest STATES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+0 → UNSENT
+1 → OPENED
+2 → HEADERS_RECEIVED
+3 → LOADING
+4 → DONE
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+6. READING RESPONSE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1");
+
+xhr.onload = function () {
+    console.log(xhr.responseText);
+};
+
+xhr.send();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+7. JSON STRING → OBJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1");
+
+xhr.onload = function () {
+
+    let data = JSON.parse(xhr.responseText);
+    console.log(data.title);
+};
+
+xhr.send();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+8. HTTP METHODS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+GET     → Get data
+POST    → Send new data
+PUT     → Update full data
+PATCH   → Update partial data
+DELETE  → Remove data
+
+──────────────────────────────────────────────────────━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. GET REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "https://jsonplaceholder.typicode.com/users");
+
+xhr.onload = function () {
+    console.log(xhr.responseText);
+};
+
+xhr.send();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+10. POST REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("POST", "https://jsonplaceholder.typicode.com/posts");
+
+xhr.setRequestHeader("Content-Type", "application/json");
+
+let data = {
+    title: "Hello",
+    body: "AJAX Tutorial",
+    userId: 1
+};
+
+xhr.onload = function () {
+    console.log(xhr.responseText);
+};
+
+xhr.send(JSON.stringify(data));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. ERROR HANDLING IN XHR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "wrong-url");
+
+xhr.onload = function () {
+    console.log("Success");
+};
+
+xhr.onerror = function () {
+    console.log("Network Error");
+};
+
+xhr.send();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. STATUS CODES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+200 → OK
+201 → Created
+400 → Bad Request
+401 → Unauthorized
+404 → Not Found
+500 → Server Error
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. CHECKING STATUS CODE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+let xhr = new XMLHttpRequest();
+
+xhr.open("GET", "https://jsonplaceholder.typicode.com/posts/1");
+
+xhr.onload = function () {
+
+    if (xhr.status === 200) {
+        console.log("Success");
+    } else {
+        console.log("Error");
+    }
+};
+
+xhr.send();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. MODERN AJAX → FETCH API
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔ Modern replacement of XHR
+✔ Cleaner syntax
+✔ Promise based
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+15. BASIC FETCH REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+.then((response) => {
+    return response.json();
+})
+.then((data) => {
+    console.log(data);
+});
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+16. FETCH FLOW
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch(url)
+   .then(response => response.json())
+   .then(data => console.log(data))
+   .catch(error => console.log(error));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+17. FETCH GET REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/users")
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.log(error));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+18. FETCH POST REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/posts", {
+
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+        title: "JavaScript",
+        body: "Fetch API",
+        userId: 1
+    })
+
+})
+.then(response => response.json())
+.then(data => console.log(data));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+19. FETCH PUT REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/posts/1", {
+
+    method: "PUT",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+        title: "Updated"
+    })
+
+})
+.then(response => response.json())
+.then(data => console.log(data));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+20. FETCH DELETE REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/posts/1", {
+
+    method: "DELETE"
+
+})
+.then(response => console.log(response));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+21. ASYNC AWAIT WITH AJAX
+ fetch full understanding
+✅ Correct Understanding (step-by-step)
+🔹 1. fetch() returns a Promise
+const res = fetch(url);
+
+👉 res is a Promise, not data yet
+
+🔹 2. await fetch() gives Response object
+const res = await fetch(url);
+
+👉 Now res is a Response object
+
+It looks like:
+
+{
+  ok: true,
+  status: 200,
+  json: function() {...}
+}
+
+👉 Still NOT actual data ❌
+
+🔹 3. res.json() also returns a Promise with js object as value
+const dataPromise = res.json();
+
+👉 This is again a Promise
+
+🔹 4. await res.json() gives actual data
+const data = await res.json();
+
+👉 Now data is the real object
+
+🔥 Final Flow (Very Important)
+fetch() → Promise
+   ↓ (await)
+Response object
+   ↓ (res.json())
+Promise
+   ↓ (await)
+Actual data (object)
+
+fetch() returns a Promise → await fetch() gives a Response object → res.json() returns another Promise → await res.json() gives actual data (object)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+async function getData() {
+
+    let response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts/1"
+    );
+
+    let data = await response.json();
+
+    console.log(data);
+}
+
+getData();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+22. ASYNC AWAIT ERROR HANDLING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+async function getData() {
+
+    try {
+
+        let response = await fetch(
+            "https://jsonplaceholder.typicode.com/posts/1"
+        );
+
+        let data = await response.json();
+
+        console.log(data);
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+getData();
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+23. HEADERS IN AJAX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch(url, {
+
+    headers: {
+        Authorization: "Bearer token"
+    }
+
+});
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+24. QUERY PARAMETERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://api.com/users?id=1&name=imran");
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+25. WORKING WITH APIs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Popular APIs:
+⭐ JSONPlaceholder
+⭐ Cat Facts API
+⭐ Dog API
+⭐ OpenWeather API
+
+Example:
+
+fetch("https://catfact.ninja/fact")
+.then(res => res.json())
+.then(data => console.log(data.fact));
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+26. LOADING DATA INTO HTML
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HTML:
+
+<div id="output"></div>
+
+JavaScript:
+
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+.then(res => res.json())
+.then(data => {
+
+    document.getElementById("output").innerHTML = `
+        <h1>${data.title}</h1>
+        <p>${data.body}</p>
+    `;
+});
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+27. LOADING MULTIPLE USERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fetch("https://jsonplaceholder.typicode.com/users")
+.then(res => res.json())
+.then(users => {
+
+    users.forEach(user => {
+
+        console.log(user.name);
+
+    });
+
+});
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+28. AJAX + FORM SUBMISSION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HTML:
+
+<form id="myForm">
+    <input type="text" id="title">
+    <button>Submit</button>
+</form>
+
+JavaScript:
+
+document.getElementById("myForm")
+.addEventListener("submit", async function(e) {
+
+    e.preventDefault();
+
+    let title = document.getElementById("title").value;
+
+    let response = await fetch(
+        "https://jsonplaceholder.typicode.com/posts",
+        {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({ title })
+        }
+    );
+
+    let data = await response.json();
+
+    console.log(data);
+});
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+29. AJAX INTERVIEW QUESTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+▶ Difference between AJAX and Fetch?
+
+AJAX  → Concept
+Fetch → Modern API for AJAX
+
+──────────────────────────────────────────────────────
+
+▶ Difference between XHR and Fetch?
+
+XHR:
+❌ Old
+❌ Callback based
+❌ Complex
+
+Fetch:
+✅ Modern
+✅ Promise based
+✅ Cleaner
+
+──────────────────────────────────────────────────────
+
+▶ Why use async-await?
+
+✔ Cleaner syntax
+✔ Easy error handling
+✔ Looks synchronous
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+30. IMPORTANT CONCEPTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔥 JSON
+🔥 Promise
+🔥 Async Await
+🔥 Fetch API
+🔥 HTTP Methods
+🔥 Status Codes
+🔥 Error Handling
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+31. REAL FLOW OF AJAX
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Browser
+   ↓
+JavaScript fetch()
+   ↓
+Server/API
+   ↓
+JSON Response
+   ↓
+Convert to Object
+   ↓
+Update HTML
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+32. BEST PRACTICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ Use Fetch API
+✅ Use async-await
+✅ Use try-catch
+✅ Check response status
+✅ Handle loading state
+✅ Handle errors properly
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+33. COMPLETE MODERN EXAMPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AJAX</title>
+</head>
+<body>
+
+    <button id="btn">Get Data</button>
+
+    <div id="output"></div>
+
+<script>
+
+document.getElementById("btn")
+.addEventListener("click", getData);
+
+async function getData() {
+
+    try {
+
+        let response = await fetch(
+            "https://jsonplaceholder.typicode.com/users"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed");
+        }
+
+        let users = await response.json();
+
+        let result = "";
+
+        users.forEach(user => {
+
+            result += `
+                <h3>${user.name}</h3>
+                <p>${user.email}</p>
+            `;
+        });
+
+        document.getElementById("output").innerHTML = result;
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+</script>
+
+</body>
+</html>
+
+──────────────────────────────────────────────────────
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+34. FINAL SUMMARY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+AJAX        → Background requests
+JSON        → Data format
+Fetch       → Send requests
+Promise     → Handle async
+Async Await → Cleaner async code
+API         → Data provider
+
+══════════════════════════════════════════════════════
+🎯 END OF AJAX NOTES
+══════════════════════════════════════════════════════

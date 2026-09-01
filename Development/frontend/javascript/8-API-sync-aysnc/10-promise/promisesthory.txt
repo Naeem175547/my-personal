@@ -1,0 +1,39 @@
+then()
+   |
+   |-- return normal value ----------> next then()
+   |
+   |-- return resolved Promise ------> next then()
+   |
+   |-- return rejected Promise ------> catch()
+
+   1. Returning Normal Value
+.then(()=>{
+    return 10;
+})
+A normal value is automatically converted into:
+Promise.resolve(10)
+So the next .then() executes.
+
+2. Returning Resolved Promise
+.then(()=>{
+    return Promise.resolve("success");
+})
+
+The returned Promise state is resolved.
+So control moves to the next .then().
+JavaScript waits for the Promise and continues the chain.
+
+
+3. Returning Rejected Promise
+.then(()=>{
+    return Promise.reject("error");
+})
+The returned Promise state is rejected.
+So the chain immediately stops and jumps to .catch().
+Remaining .then() blocks are skipped.
+
+When a .then() callback returns a Promise, the NEW Promise created by .then() adopts (copies/follows) the state and value of that returned Promise.
+
+
+-->If a .then() callback does NOT return anything, JavaScript automatically returns:
+Promise.resolve(undefined)

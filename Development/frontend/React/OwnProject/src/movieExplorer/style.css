@@ -1,0 +1,46 @@
+.navbar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(60, 58, 58);
+    color:#fff;
+}
+.navbar a{
+    color:#fff;
+    text-decoration: none;
+    font-size: 19px;
+}
+.home{
+    padding-top:20px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+.home{
+    text-align: center;
+}
+.movie-list{
+    /* background-color: green; */
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(240px,1fr));
+    justify-content: center;
+}
+.movie-card{
+    width: 240px;
+    height: 320px;
+    border: 1px solid rgb(127, 133, 127);
+    background-color: rgb(75, 74, 74);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+.movie-card img{
+    width: 240px;
+    height: 60%;    
+    /* background-color: green; */
+    object-fit: contain ;
+
+    
+}

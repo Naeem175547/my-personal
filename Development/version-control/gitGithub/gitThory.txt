@@ -1,0 +1,598 @@
+========================================================
+1. WHAT IS GIT?
+========================================================
+
+Git is a Version Control System.
+that tracks the changes in code .
+
+It helps:
+- Track code changes
+- Save project history
+- Work with teams
+- Restore old code versions
+
+Example:
+Like game save points for your code.
+
+========================================================
+2. WHAT IS GITHUB?
+========================================================
+
+GitHub is a cloud platform to store Git repositories online.
+it allows developers to store and manage code using git.
+
+Git = Tool
+GitHub = Website/platform using Git
+
+Uses:
+- Backup code online
+- Team collaboration
+- Pull Requests
+- Open source projects
+
+========================================================
+3. SETUP GIT
+========================================================
+
+Download Git:
+https://git-scm.com/
+
+# =====================================================
+# GIT INSTALLATION & CONFIGURATION COMMANDS
+# =====================================================
+
+# Check Git installation
+git --version
+
+
+# Configure Git username
+git config --global user.name "Your Name"
+
+
+# Configure Git email
+git config --global user.email "youremail@gmail.com"
+
+
+# Set default editor (VS Code example)
+git config --global core.editor "code --wait"
+
+# Other editor examples:
+# git config --global core.editor "notepad"
+# git config --global core.editor "vim"
+
+
+# Enable colored output
+git config --global color.ui auto
+
+
+# Check all Git configurations
+git config --list
+
+
+# Check only username
+git config --global user.name
+
+
+# Check only email
+git config --global user.email
+
+
+# Open global config file manually
+git config --global --edit
+
+
+# Location of global config file
+# Windows:
+C:/Users/YourName/.gitconfig
+
+# Linux/Mac:
+~/.gitconfig
+
+========================================================
+4. CREATE REPOSITORY
+========================================================
+
+Initialize Git in project:
+
+git init
+
+This creates:
+.git/
+
+.git folder stores all Git tracking data(folder ,files).
+
+========================================================
+5. CLONE REPOSITORY
+========================================================
+
+Copy GitHub repo to local system:
+
+git clone repo_url
+
+Example:
+
+git clone https://github.com/user/project.git
+
+
+for pushing data to remote :
+git push -for main branch 
+  git push --set-upstream origin branch name (for other branch)
+
+========================================================
+6. GIT STATUS
+========================================================
+
+Check current file status:
+git status
+git status -short
+
+Shows:
+- Modified files
+- Untracked files
+- Staged files
+-unmodifed
+
+
+Get-ChildItem -Force → Shows all files and folders in a directory, including hidden files(because of --force).
+
+========================================================
+7. ADD FILES
+========================================================
+
+Add single file:
+git add file.txt
+
+Add all files:
+git add .
+
+Move files to staging area.
+
+========================================================
+8. COMMIT
+========================================================
+
+Save changes permanently:
+git commit -m "message"
+
+Example:
+git commit -m "Added login page"
+
+========================================================
+9. GIT LOG
+========================================================
+
+See commit history:
+
+git log
+
+Short history:
+
+git log --oneline
+
+========================================================
+10. .GITIGNORE
+========================================================
+
+Ignore files/folders from Git tracking.
+
+Create file:
+
+.gitignore
+
+Example:
+
+node_modules/
+.env
+dist/
+api
+
+========================================================
+11. BRANCHES
+========================================================
+
+Branch = Separate working line.
+
+Check branches:
+git branch
+
+Create branch:
+git branch feature
+
+Switch branch:
+git checkout feature
+
+Create + switch:
+git checkout -b feature
+
+New command:
+git switch feature
+
+Create + switch:
+
+git switch -c feature
+
+Delete branch:
+
+git branch -d feature
+
+Force delete:
+
+git branch -D feature
+
+Rename branch:
+
+git branch -m oldname newname
+
+git branch -r  → Shows only remote branches (branches available on GitHub like origin/main).
+git branch -a  → Shows all branches (both local branches + remote branches together).
+
+
+========================================================
+12. MERGE
+========================================================
+
+Combine branches.
+
+Example:
+
+git checkout main
+git merge feature
+
+This merges feature into main.
+
+notes->
+1. Create new branch from main
+
+git checkout main
+git checkout -b feature-branch
+
+------------------------------------------------
+
+2. New branch gets all code from main at creation time
+
+main  ---------> feature-branch
+
+------------------------------------------------
+
+3. After branch creation
+
+- Changes in main will NOT come automatically to feature-branch
+- Changes in feature-branch will NOT come automatically to main
+
+------------------------------------------------
+
+4. Bring latest changes from main to feature-branch
+
+git checkout feature-branch
+git merge main
+
+------------------------------------------------
+
+5. Simple Flow
+
+git checkout main
+git checkout -b feature-branch
+
+# do work in feature-branch
+
+git checkout main
+# new changes added in main
+
+git checkout feature-branch
+git merge main
+
+------------------------------------------------
+Result:
+feature-branch now contains latest changes from main
+========================================================
+13. GIT DIFF
+========================================================
+
+See file changes.
+
+Check unstaged changes(working diretory to last staged/commit):
+git diff
+
+Check staged changes:
+git diff --staged
+
+Compare branches:
+git diff branchName
+git diff feature
+git diff main feature
+
+
+compare commits:
+git diff commit1 commit2
+
+========================================================
+14. REMOTE (FULL CONCEPT)
+========================================================
+
+Remote = Online repository connection.
+
+Check remotes:
+git remote (list remote name)
+git remote -v
+
+Add remote:
+git remote add name url
+
+Example:
+git remote add origin https://github.com/user/project.git
+
+Git allows multiple remotes in a single repository.
+
+Remove remote:
+git remote remove origin
+
+rename remote:
+git remote rename origin
+
+Change remote URL:
+git remote set-url origin new_url
+
+========================================================
+15. GIT PUSH
+========================================================
+
+Upload local code to GitHub.
+syntax->git push -u remotename branchName
+
+First push(first time):
+git push -u origin main
+
+now Normal push:
+git push
+
+Push specific branch:
+git push origin feature
+
+
+for two remote:
+Push to origin:
+git push origin main
+
+Push to upstream:
+git push upstream main
+========================================================
+16. GIT PULL
+========================================================
+Download latest code from GitHub.
+git pull
+
+Pull specific branch:
+git pull origin main
+
+========================================================
+17. FORK
+========================================================
+
+Fork = Copy someone else's GitHub repository into your GitHub account.
+
+Used in open source contribution.
+
+Flow:
+1. Fork repo
+2. Clone forked repo
+3. Make changes
+4. Push changes
+5. Create Pull Request
+
+========================================================
+18. PULL REQUEST (PR)
+========================================================
+
+Request to merge code into another branch/repository.
+Flow:
+- Push code
+- Open GitHub
+- Click "New Pull Request"
+- Review + Merge
+
+Used for:
+- Team review
+- Open source contribution
+
+.when we pull code into another branch (instead of main) in remote then pull Request created in github remote
+.when we fork a repo and make changes then we can create pr request for origion repo .
+
+========================================================
+19. GIT STASH
+========================================================
+
+
+========================================================
+20. GIT REBASE
+========================================================
+
+
+========================================================
+20. 
+========================================================
+========================================================
+21. GIT TAG
+========================================================
+
+
+# =====================================================
+# 22. GIT RESET
+# =====================================================
+
+# Used to:
+# ✔ Unstage files
+# ✔ Undo commits
+# ✔ Move HEAD to previous commit
+
+
+# -----------------------------------------------------
+# 1. REMOVE FILE FROM STAGING
+# -----------------------------------------------------
+
+git reset file.txt
+
+# Removes file from staging area
+# Changes stay in working directory
+
+
+# -----------------------------------------------------
+# 2. SOFT RESET
+# -----------------------------------------------------
+
+git reset --soft HEAD~1
+
+# Removes last commit
+# Keeps changes staged
+
+
+# -----------------------------------------------------
+# 3. MIXED RESET (DEFAULT)
+# -----------------------------------------------------
+
+git reset HEAD~1
+
+# Removes last commit
+# Keeps changes in working directory
+# Unstages changes
+
+
+# -----------------------------------------------------
+# 4. HARD RESET
+# -----------------------------------------------------
+
+git reset --hard HEAD~1
+
+# Removes last commit
+# Deletes all changes permanently
+
+
+# -----------------------------------------------------
+# 5. RESET TO SPECIFIC COMMIT
+# -----------------------------------------------------
+
+git reset --hard commit_id(commit hash)
+
+# Example:
+git reset --hard a1b2c3d
+
+
+# -----------------------------------------------------
+# 6. RESET STAGING AREA ONLY
+# -----------------------------------------------------
+
+git reset
+
+# Unstages all files
+# Keeps file changes
+
+
+# -----------------------------------------------------
+# HEAD~1 MEANING
+# -----------------------------------------------------
+
+# HEAD     = current commit
+# HEAD~1   = one commit before
+# HEAD~2   = two commits before
+
+
+# -----------------------------------------------------
+# WARNING
+# -----------------------------------------------------
+
+# HARD RESET deletes changes permanently
+# Use carefully
+========================================================
+23. IMPORTANT FLOW
+========================================================
+
+git init
+git status
+git add .
+git commit -m "first commit"
+git branch -M main
+git remote add origin URL
+git push -u origin main
+
+========================================================
+24. DAILY WORKFLOW
+========================================================
+
+git pull
+git checkout -b feature
+# do changes
+git add .
+git commit -m "work done"
+git push origin feature
+
+Create Pull Request
+
+========================================================
+25. COMMON COMMANDS SUMMARY
+========================================================
+
+git init
+git clone URL
+git status
+git add .
+git commit -m "msg"
+git log --oneline
+git branch
+git checkout branch
+git merge branch
+git diff
+git pull
+git push
+git stash
+git rebase main
+git tag v1.0
+git reset --hard HEAD~1
+
+========================================================
+26. BEST PRACTICES
+========================================================
+
+- Commit small changes
+- Write meaningful commit messages
+- Pull latest code before push
+- Use branches for features
+- Never push secrets/passwords
+- Use .gitignore properly
+
+========================================================
+END
+========================================================
+
+notes->
+git clone  → Copies an entire remote repository to your local system and automatically adds the remote connection.
+git remote → Manages remote repository connections (add, remove, view, or change remotes) in an existing Git project.
+If you push directly to main branch:
+git push origin main
+
+Then changes go directly into main.
+No Pull Request (PR) is needed.
+
+------------------------------------------------
+
+If you push to another branch:
+
+git push origin feature
+
+Then you usually create a Pull Request (PR)
+to merge feature branch into main branch.
+
+------------------------------------------------
+
+Common Team Workflow:
+
+1. Create feature branch
+2. Do changes
+3. Push feature branch
+4. Create Pull Request
+5. Review + Merge into main
+
+------------------------------------------------
+
+PR is mainly used when:
+- Working in teams
+- Reviewing code
+- Protecting main branch

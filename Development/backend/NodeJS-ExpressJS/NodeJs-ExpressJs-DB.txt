@@ -1,0 +1,2303 @@
+--->mongoose
+MongoDB is the database.
+Mongoose is an ODM (Object Data Modeling) library that provides schemas,
+validation, middleware, and easier interaction with MongoDB.
+
+ mongoose setup
+
+import mongoose from "mongoose"; // Import Mongoose library
+
+mongoose.connect("mongodb://127.0.0.1:27017/mydb") // Connect to MongoDB
+.then(() => {
+    console.log("MongoDB Connected"); // Runs when connection is successful
+})
+.catch((err) => {
+    console.log(err); // Runs when connection fails
+});
+
+/*
+mongodb://127.0.0.1:27017/mydb
+
+mongodb://  -> MongoDB protocol
+127.0.0.1  -> Local machine (localhost)
+27017      -> Default MongoDB port
+mydb       -> Database name 
+*/
+
+mongoose.connection.readyState; // Check connection status
+
+/*
+0 -> Disconnected
+1 -> Connected
+2 -> Connecting
+3 -> Disconnecting
+*/
+
+mongoose.connection.close(); // Close MongoDB connection
+
+
+const db = mongoose.connection;
+
+db.once("open", async () => {
+  console.log("CRUD operations called");
+
+  // CRUD operations
+});
+open is an event fired once when MongoDB successfully connects.
+once() means the callback runs only one time.
+Equivalent to:
+"When the database connection is established, execute this code."
+
+full Example:
+import mongoose from "mongoose"; // Import Mongoose
+
+// Connect to MongoDB
+mongoose.connect("mongodb://127.0.0.1:27017/mydb");
+// Schema Syntax
+const studentSchema = new mongoose.Schema({
+    name:{
+        type:String,
+        required:true,
+        unique:true,
+    },
+     age:{
+        type:Number,
+        min:18
+        //min:[1,"age should be >=1"]
+        enum:[10,30,10,30]
+    }
+    course: String //if only one properties then we write type like this
+});
+// Schema defines the structure of documents
+If a document violates the Schema rules, Mongoose throws a ValidationError and the document is not save
+//Schema validation is mainly checked when you insert(save) data, not when you fetch it.
+//for update validation->User.findByIdAndUpdate(id, data, { runValidators: true })
+//
+//If a field is not defined in the Mongoose schema, Mongoose ignores it by defaul.
+
+// Model Syntax
+const Student = mongoose.model("Student", studentSchema);
+// mongoose.model("CollectionName", SchemaName)
+// Collection name will be converted to lowercase plural form
+// Student -> students
+//mongoose.model(modelName, schema, collectionName) but this will keep the collection name same
+
+//now Student==db.Student(in mondodb)
+
+// CREATE (Insert One)
+await Student.create({
+    name: "Naeem",
+    age: 20,
+    course: "BTech"
+});
+//In Mongoose almost all database operations are asynchronous,
+ so they return a Promise.
+
+ 
+//we can use insertOne also but
+remember:
+ Contact.insertOne({
+       first_name:req.body.first_name,
+       last_name:req.body.last_name,
+       email:req.body.email,
+       phone:req.body.phone,
+       address:req.body.address
+
+     })
+    or
+    const contacts=await Contact.create(req.body)//if we want to keep structre same as req.body then create directly put like above
+    res.redirect("/")
+
+
+// CREATE (Insert Many)
+await Student.insertMany([
+    { name: "Ali", age: 21, course: "BCA" },
+    { name: "Sara", age: 22, course: "MCA" }
+]);
+
+
+
+// READ (Find All)
+const students = await Student.find();
+
+// READ (Find One)
+const student = await Student.findOne({ name: "Naeem" });
+
+// READ (Find By Id)
+const studentById = await Student.findById("document_id");
+
+// UPDATE ONE
+await Student.updateOne(
+    { name: "Naeem" },
+    { $set: { age: 21 } }
+);
+
+// UPDATE MANY
+await Student.updateMany(
+    { course: "BTech" },
+    { $set: { course: "CSE" } }
+);
+
+// DELETE ONE
+await Student.deleteOne({ name: "Naeem" });
+
+// DELETE MANY
+await Student.deleteMany({ course: "BCA" });
+
+// COUNT DOCUMENTS
+const count = await Student.countDocuments();
+
+// CLOSE CONNECTION
+mongoose.connection.close();
+
+notes->
+const {first_name,last_name,email,phone,address}=req.body;
+// Destructures form data from req.body into separate variables.
+
+ Contact.findByIdAndUpdate(req.params.id,{first_name,last_name,email,phone,address});
+// Updates the document with the given id using the extracted variables.
+
+a Contact.findByIdAndUpdate(req.params.id,req.body);
+// Updates the document directly using all fields from req.body (same as above if field names match).
+
+methods->
+Student.model(students,schema)
+// CREATE
+Student.create({})              // db.students.insertOne({})//can be used in mongoose also
+Student.insertMany([])          // db.students.insertMany([])
+
+// READ
+Student.find()                  // db.students.find()
+Student.findOne({})             // db.students.findOne({})
+Student.findById(id)            // db.students.findOne({_id:id})
+
+// UPDATE
+Student.updateOne({}, {})       // db.students.updateOne({}, {})
+Student.updateMany({}, {})      // db.students.updateMany({}, {})
+
+Student.findByIdAndUpdate(
+    id,
+    {}
+)                               // db.students.findOneAndUpdate({_id:id}, {})
+
+Student.findOneAndUpdate(
+    {},
+    {}
+)                               // db.students.findOneAndUpdate({}, {})
+
+// DELETE
+Student.deleteOne({})           // db.students.deleteOne({})
+Student.deleteMany({})          // db.students.deleteMany({})
+
+Student.findByIdAndDelete(id)   // db.students.findOneAndDelete({_id:id})
+
+Student.findOneAndDelete({})    // db.students.findOneAndDelete({})
+
+// COUNT
+Student.countDocuments()        // db.students.countDocuments()
+
+// DISTINCT
+Student.distinct("course")      // db.students.distinct("course")
+
+// EXISTS
+Student.exists({name:"Naeem"})  // Check if document exists
+
+// AGGREGATION
+Student.aggregate([])           // db.students.aggregate([])
+
+// SORT
+Student.find().sort({age:1})    // db.students.find().sort({age:1})
+
+// LIMIT
+Student.find().limit(5)         // db.students.find().limit(5)
+
+// SKIP
+Student.find().skip(5)          // db.students.find().skip(5)
+
+// SELECT FIELDS
+Student.find().select("name")   // db.students.find({}, {name:1})
+
+// POPULATE (Mongoose Only)
+Student.find().populate("user") // No direct MongoDB equivalent (uses lookup-like behavior)
+
+// VALIDATION
+Student.validate()              // Mongoose Only
+
+// SAVE DOCUMENT
+const student = new Student({...});
+student.save();                 // MongoDB insertOne() or updateOne()
+
+// CREATE MODEL INSTANCE
+const student = new Student({...});
+// Mongoose Only, no MongoDB equivalent
+
+// CONNECTION
+mongoose.connect(url)           // Connect to MongoDB
+
+mongoose.connection.close()     // Close connection
+
+✅_id concept
+_id
+// The primary key of every MongoDB document and must be unique.
+
+Default _id
+// If _id is not defined in the schema, 
+Mongoose automatically creates it as an ObjectId.
+
+ObjectId
+// MongoDB's default identifier consisting of 24 hexadecimal 
+characters.
+
+_id: ObjectId
+// findById() expects a valid ObjectId; 
+an invalid value causes a CastError.
+
+_id: String
+// findById() expects a string value.
+
+_id: Number
+// findById() expects a number value.
+
+findById()
+// Returns the matching document if found;
+ otherwise returns null.
+
+CastError
+// Occurs when Mongoose cannot convert the provided
+ value to the expected _id type.
+
+notes->
+ MongoDB
+→ Creates ObjectId automatically and stores documents.
+
+Mongoose
+→ Adds validation and type casting on top of MongoDB.
+
+Invalid ObjectId → "abc"
+
+MongoDB:
+→ Does not have a CastError concept.
+if _id does not match return null.
+
+Mongoose:
+→ Throws CastError because it expects an ObjectId and cannot convert "abc" to one.
+
+-->
+new Student()
+const student = new Student(data)
+new Student() is used to create a new document/object from your Mongoose model
+Does NOT save to MongoDB
+Stored temporarily in memory
+Use save() to store in database
+Example:
+
+const student = new Student({
+   name: "Naeem",
+   age: 22
+})
+await student.save()//.save will store student to database
+
+
+// Add new student exmaple
+router.post('/', upload.single('profile_pic'), async (req, res) => {
+    try {
+        const student = new Student(req.body);//new Student() is used to create a new document/object from your Mongoose model
+        if (req.file) {
+            student.profile_pic = req.file.filename;
+        }
+        const newStudent = await student.save();
+        // new Student() + save() //save() saves data to databse
+        res.status(201).json(newStudent);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+
+
+->create()
+await Student.create(data)
+| `save()`                          | `create()`          |
+| --------------------------------- | ------------------- |
+| Two-step process                  | One-step process    |
+| Can modify document before saving | Direct save         |
+| Uses document instance            | Uses model directly |
+| More flexible                     | Shorter syntax      |
+
+->
+if db is empty then find return [] array (truty value)
+if db is empty then findOne return null
+
+📌 Mongoose Error Object (err, err.errors, etc.)
+1. err
+
+👉 Full error object
+
+catch (err) {
+  console.log(err);
+}
+
+Contains:
+
+name
+message
+stack
+errors (if validation error)
+2. err.errors
+
+👉 Only for Mongoose validation errors
+
+err.errors
+
+Structure:
+
+{
+  username: {...},
+  age: {...}
+}
+
+Each key = field name
+
+3. err.errors.fieldName
+
+👉 Specific field error
+err.errors.username
+Example output:
+
+{
+  message: "Username is required",
+  path: "username",
+  kind: "required",
+  value: ""
+}
+❌ Wrong (typos)
+err.erroes
+err.eroos
+err.errorss
+
+👉 These will cause:
+
+TypeError: Cannot read properties of undefined
+🧠 Quick Memory Rule
+err → full error
+err.errors → all field errors
+err.errors.field → single field error
+
+📌 err.errors.field.message
+👉 This gives the actual readable error message
+spelling must be EXACT
+
+--->
+## What is populate()?
+populate() is used to replace an ObjectId reference with the actual document data from another collection.
+It works like a JOIN in SQL.
+
+# 1. Without Populate
+## User Collection
+{
+   _id: ObjectId("101"),
+   username: "Naeem"
+}
+
+## News Collection
+
+{
+   title: "Cricket News",
+   author: ObjectId("101")
+}
+
+Query:
+
+const news = await News.find()
+
+Output:
+
+{
+   title: "Cricket News",
+   author: "101"
+}
+
+Only id is returned.
+
+---
+
+# 2. With Populate
+
+Query:
+
+const news = await News.find().populate('author')
+
+Output:
+{
+   title: "Cricket News",
+   author: {
+      _id: "101",
+      username: "Naeem"
+   }
+}
+
+Now full user document is returned.
+
+
+# 3. Requirements for Populate
+
+You must use:
+
+type: mongoose.Schema.Types.ObjectId
+
+and
+
+ref: 'ModelName'
+
+
+Example:
+author: {
+   type: mongoose.Schema.Types.ObjectId,
+   ref: 'User'
+}
+
+# 4. Syntax
+
+## Single Populate
+
+```js
+News.find().populate('author')
+```
+
+## Multiple Populate
+
+```js
+News.find()
+    .populate('author')
+    .populate('category')
+```
+
+# 5. Populate Specific Fields
+```js
+News.find().populate('author', 'username email')
+```
+
+Output:
+
+```js
+author: {
+   username: "Naeem",
+   email: "abc@gmail.com"
+}
+
+```
+
+Only selected fields are returned.
+
+# 6. Nested Populate
+
+```js
+Post.find().populate({
+   path: 'author',
+   populate: {
+      path: 'profile'
+   }
+})
+```
+
+---
+
+# 7. Important Points
+
+* populate() works only with ObjectId
+* ref must match model name exactly
+* populate() performs extra query internally
+* Similar to SQL JOIN
+* Used for relationships between collections
+
+---
+
+# 8. Example Schema
+
+## User Schema
+
+```js
+const userSchema = new mongoose.Schema({
+   username: String
+})
+```
+
+## News Schema
+
+```js
+const newsSchema = new mongoose.Schema({
+   title: String,
+
+   author: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+   }
+})
+```
+
+---
+
+# 9. Flow of Populate
+
+```txt
+ObjectId stored in document
+        ↓
+populate() called
+        ↓
+Mongoose searches referenced collection
+        ↓
+ObjectId replaced with full document
+```
+
+notes->
+repositories: {
+  type: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Repository",
+    },
+  ],
+  default: [],
+},
+//same
+repositories:  [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Repository",
+    },
+  ],
+ 
+repositories is an array.
+Each element of the array is an ObjectId.
+Each ObjectId references a document in the Repository collection.
+
+
+
+
+
+--->
+# MongoDB Node.js Driver (mongodb Library) One-Shot
+
+## Install
+```bash
+npm install mongodb
+```
+
+---
+## Import
+```javascript
+import { MongoClient, ObjectId } from "mongodb";
+```
+
+---
+
+## Connection
+
+```javascript
+const uri = process.env.MONGO_URI;
+
+const client = new MongoClient(uri);
+
+await client.connect();
+```
+
+---
+
+## Database
+
+```javascript
+const db = client.db("githubClone");
+```
+
+---
+
+## Collection
+
+```javascript
+const usersCollection = db.collection("users");
+```
+
+---
+
+# CRUD Operations
+
+## Insert One
+
+```javascript
+await usersCollection.insertOne({
+  username: "naeem",
+  email: "naeem@gmail.com",
+});
+```
+
+---
+
+## Insert Many
+
+```javascript
+await usersCollection.insertMany([
+  { username: "A" },
+  { username: "B" },
+]);
+```
+
+---
+
+## Find All
+
+```javascript
+const users = await usersCollection.find().toArray();
+```
+
+---
+
+## Find One
+
+```javascript
+const user = await usersCollection.findOne({
+  username: "naeem",
+});
+```
+
+---
+
+## Find By ObjectId
+
+```javascript
+const user = await usersCollection.findOne({
+  _id: new ObjectId(id),
+});
+```
+
+---
+
+## Projection
+
+```javascript
+await usersCollection.find(
+  {},
+  {
+    projection: {
+      username: 1,
+      email: 1,
+      _id: 0,
+    },
+  }
+).toArray();
+```
+
+---
+
+## Sort
+
+Ascending
+
+```javascript
+.sort({
+  age: 1,
+});
+```
+
+Descending
+
+```javascript
+.sort({
+  age: -1,
+});
+```
+
+---
+
+## Limit
+
+```javascript
+.limit(10);
+```
+
+---
+
+## Skip
+
+```javascript
+.skip(20);
+```
+
+---
+
+## Pagination
+
+```javascript
+const page = 2;
+const limit = 10;
+
+await usersCollection
+  .find()
+  .skip((page - 1) * limit)
+  .limit(limit)
+  .toArray();
+```
+
+same as mongodb operation or mongoose operation
+
+# Close Connection
+
+```javascript
+await client.close();
+```
+
+---
+
+# Important Classes
+
+```javascript
+MongoClient
+ObjectId
+Db
+Collection
+ClientSession
+```
+
+---
+
+why to use mongodb driver when we have mongoose ORM
+
+# MongoDB Driver vs Mongoose (Theory Notes)
+
+# What is the MongoDB Driver?
+
+The MongoDB Driver (`mongodb` package) is the **official Node.js driver** developed and maintained by MongoDB.
+ It provides a direct interface between a Node.js application and the MongoDB database. It allows developers to 
+ perform CRUD operations, aggregation, transactions, indexing, and other database operations without any abstraction layer.
+
+The MongoDB Driver works directly with databases, collections, and documents and does not provide features such as schemas,
+ models, validation, or relationships. Developers are responsible for implementing these features manually if needed.
+
+---
+
+# What is Mongoose?
+
+Mongoose is an **ODM (Object Document Mapper)** library for MongoDB. It is built on top of the official MongoDB Driver and provides a higher-level abstraction 
+for working with MongoDB in Node.js applications.
+
+Mongoose introduces concepts such as Schemas, Models, Validation, Middleware (Hooks), Virtuals, Plugins, and Populate,
+ making database development easier, more organized, and more maintainable.
+
+---
+
+# Relationship Between MongoDB Driver and Mongoose
+
+Mongoose does not communicate directly with MongoDB. Instead, it internally uses the official MongoDB Driver to send requests to the MongoDB server.
+
+```
+Application
+      │
+      ▼
+Mongoose (ODM)
+      │
+      ▼
+MongoDB Driver
+      │
+      ▼
+MongoDB Server
+```
+
+---
+
+# Why Use the MongoDB Driver?
+
+- It is the official driver provided by MongoDB.
+- It offers direct communication with the MongoDB server.
+- It has minimal overhead, resulting in slightly better performance.
+- It provides complete control over database operations.
+- It supports the latest MongoDB features as soon as they are released.
+- It is suitable for small projects, scripts, CLI tools, and performance-critical applications.
+
+---
+
+# Why Use Mongoose?
+
+- It provides a structured way to organize application data.
+- It supports schemas for defining document structures.
+- It includes built-in data validation.
+- It allows creating reusable models.
+- It supports middleware (hooks) for executing logic before or after database operations.
+- It simplifies handling relationships using `populate()`.
+- It makes large applications easier to maintain.
+
+
+
+# When to Use MongoDB Driver
+
+Use the MongoDB Driver when:
+
+- Maximum performance is required.
+- You need direct access to MongoDB features.
+- You are writing scripts or CLI tools.
+- The project is small and does not require schemas or validation.
+- You want full control over database operations.
+
+---
+
+# When to Use Mongoose
+
+Use Mongoose when:
+
+- Building MERN stack applications.
+- Developing medium or large-scale projects.
+- Data validation is required.
+- Relationships exist between collections.
+- You want clean, structured, and maintainable code.
+
+
+
+
+---
+
+# Interview Points
+
+- MongoDB Driver is the official driver for Node.js.
+- Mongoose is an ODM built on top of the MongoDB Driver.
+- Mongoose internally uses the MongoDB Driver to communicate with MongoDB.
+- The MongoDB Driver offers better performance and more control.
+- Mongoose provides schemas, models, validation, middleware, and relationship management.
+- For most MERN applications, Mongoose is preferred.
+- For lightweight or performance-critical applications, the MongoDB Driver is often preferred.
+
+
+
+
+
+
+-->MySql
+import express from 'express'
+import mysql from 'mysql2'
+const app=express()
+
+
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+//MySql connection
+const db=mysql.createConnection({
+    host:'localhost',
+    user:'root',
+    password:"",
+    database:'contectdb'
+})
+
+
+//this method will only check whether connected or not
+db.connect((err)=>{
+    if(err){
+        console.log('Error connection: '+err.stack)
+        return;
+    }
+    console.log("MySQL Connected.")
+})
+
+//read All Contacts
+
+app.get('/',(req,res)=>{
+    res.send("homepage")
+})
+
+app.get('/contacts',(req,res)=>{
+    db.query("SELECT * FROM CONTACTS",(err,result)=>{
+        if(err) return res.status(404).send(err)
+            res.send(result)
+
+    })
+})
+//result store array of all documents(rows)
+
+
+app.get('/contact/:id',(req,res)=>{
+    db.query("SELECT * FROM CONTACTS where id=?",[req.params.id],(err,result)=>{
+        if(err) return res.status(404).send(err)
+        if(result.length===0) return res.status(404).send({message:'Conteact not found'})
+        res.send(result[0])
+
+    })
+})
+
+
+//here://result store array of (matched)documents(rows)
+//create contact
+
+app.post('/contact',(req,res)=>{
+    const {first_name,last_name,email,phone,address}=req.body;
+    const sql='insert into contacts(first_name,last_name,email,phone,address) values(?,?,?,?,?)'
+    db.query(sql,[first_name,last_name,email,phone,address],(err,result)=>{
+        if(err) return res.status(500).send(err)        
+        res.send({
+            message:"Contacts Created",
+            id:result.insertId
+        })
+    })
+})
+
+//
+result becomes an object like this:
+
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 5,
+  info: "",
+  serverStatus: 2,
+  warningStatus: 0
+}
+
+//update data
+
+app.put('/contact/:id',(req,res)=>{
+    const {first_name,last_name,email,phone,address}=req.body;
+    const sql='update  contacts set first_name=?, last_name=?,email=?, phone=?,address=? where id=?'
+    db.query(sql,[first_name,last_name,email,phone,address,req.params.id],(err,result)=>{
+        if(err) return res.status(500).send(err)     
+            
+            if(result.affectedRows===0) return res.status(404).send({message:"Contact not found."})            
+        res.send({
+            message:"Contact updated",
+        })
+    })
+})
+
+//here result
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  changedRows: 1,
+  info: "Rows matched: 1  Changed: 1  Warnings: 0",
+  serverStatus: 2,
+  warningStatus: 0
+}
+
+
+// Delete contact
+app.delete('/contact/:id', (req, res) => {
+    db.query(
+        "DELETE FROM contacts WHERE id = ?",
+        [req.params.id],
+        (err, result) => {
+
+            if (err)
+                return res.status(500).send(err);
+
+            if (result.affectedRows === 0)
+                return res.status(404).send({
+                    message: 'Contact not found'
+                });
+
+            res.send({
+                message: 'Contact deleted successfully'
+            });
+        }
+    );
+});
+
+//here result
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  warningStatus: 0
+}
+
+app.listen(3000,()=>{
+    console.log("server is running on  port 3000")
+})
+
+
+
+notes-->
+🚀 MYSQL2 PROMISE API DEVELOPMENT IN NODE.JS
+
+═══════════════════════════════════════════════
+
+📌 WHY CONVERT CALLBACKS TO PROMISES?
+
+Old mysql2 callback style works fine, but in real projects:
+
+❌ Code becomes messy
+❌ Difficult error handling
+❌ Nested callbacks (callback hell)
+❌ Hard to read and debug
+
+❌ Problems with Callback Style
+1️⃣ Callback Hell
+
+Code becomes deeply nested:
+
+db.query(...,(err,result)=>{
+    db.query(...,(err,result)=>{
+        db.query(...,(err,result)=>{
+        })
+    })
+})
+
+👉 Hard to read 😵
+
+2️⃣ Difficult Error Handling
+
+You must check errors everywhere:
+if(err) return res.status(500).send(err)
+again and again.
+
+3️⃣ Modern Node.js Uses Async/Await
+Most modern backend projects use:
+
+async/await
+which works beautifully with promises.
+Modern Node.js applications use:
+
+✅ async/await
+✅ try/catch
+✅ Promise-based code
+
+═══════════════════════════════════════════════
+
+❌ CALLBACK STYLE
+
+db.query(sql,(err,result)=>{
+    
+    if(err){
+        console.log(err)
+    }
+
+    res.send(result)
+})
+
+Problems:
+⚠ Repeated error handling
+⚠ Nested code
+⚠ Difficult maintenance
+
+═══════════════════════════════════════════════
+
+✅ PROMISE STYLE
+
+const [result] = await db.query(sql);
+
+res.send(result);
+
+Benefits:
+✨ Cleaner code
+✨ Easy to read
+✨ Professional syntax
+✨ Easy error handling using try/catch
+
+📌 WHAT DOES `await db.query()` RETURN ?
+
+In mysql2/promise:
+
+✅ db.query() returns a Promise
+
+After await:
+
+✅ It returns an ARRAY
+
+Like this:
+
+[
+   result,
+   fields
+]
+
+
+═══════════════════════════════════════════════
+
+📌 STEP 1 → INSTALL MYSQL2
+
+npm install mysql2
+
+═══════════════════════════════════════════════
+
+📌 STEP 2 → IMPORT MYSQL2 PROMISE VERSION
+
+❌ OLD
+
+import mysql from 'mysql2'
+
+✅ NEW
+
+import mysql from 'mysql2/promise'
+
+═══════════════════════════════════════════════
+
+📌 STEP 3 → COMPLETE SERVER CODE
+
+import express from 'express';
+import mysql from 'mysql2/promise';
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+// MySQL Connection
+const db = mysql.createConnection({
+
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'contectdb'
+
+})
+.then((connection)=>{
+    console.log("✅ Database Connected")
+
+})
+.catch((err)=>{
+    console.log("❌ Connection Failed")
+    console.log(err.message)
+})
+console.log("✅ MySQL Connected");
+
+═══════════════════════════════════════════════
+
+📌 WHY NO db.connect() ?
+
+In promise version:
+
+✅ createConnection() automatically connects
+
+So this is enough:
+
+const db = await mysql.createConnection({...})
+
+═══════════════════════════════════════════════
+
+📌 IMPORTANT THING
+
+Promise query returns:
+
+[
+   result,
+   fields
+]
+
+So we write:
+
+const [result] = await db.query(...)
+
+👉 result = actual data
+👉 fields = column information
+
+═══════════════════════════════════════════════
+
+🚀 READ ALL CONTACTS
+
+app.get('/contacts', async (req, res) => {
+
+    try {
+
+        const [result] = await db.query(
+            "SELECT * FROM contacts"
+        );
+
+        res.send(result);
+
+    } catch (err) {
+
+        res.status(500).send(err);
+
+    }
+});
+
+═══════════════════════════════════════════════
+
+📌 RESULT OF SELECT QUERY
+
+SELECT query returns:
+
+[
+   {id:1,name:'Naeem'},
+   {id:2,name:'Ali'}
+]
+
+👉 Array of rows/documents
+
+═══════════════════════════════════════════════
+
+🚀 READ SINGLE CONTACT
+
+app.get('/contact/:id', async (req, res) => {
+
+    try {
+
+        const [result] = await db.query(
+            "SELECT * FROM contacts WHERE id=?",
+            [req.params.id]
+        );
+
+        if(result.length === 0){
+
+            return res.status(404).send({
+                message:'Contact not found'
+            });
+
+        }
+
+        res.send(result[0]);
+
+    } catch (err) {
+
+        res.status(500).send(err);
+
+    }
+});
+
+═══════════════════════════════════════════════
+
+🚀 CREATE CONTACT
+
+app.post('/contact', async (req, res) => {
+
+    try {
+
+        const {
+            first_name,
+            last_name,
+            email,
+            phone,
+            address
+        } = req.body;
+
+        const sql = `
+            INSERT INTO contacts
+            (first_name,last_name,email,phone,address)
+            VALUES(?,?,?,?,?)
+        `;
+
+        const [result] = await db.query(sql, [
+            first_name,
+            last_name,
+            email,
+            phone,
+            address
+        ]);
+
+        res.send({
+            message: "Contact Created",
+            id: result.insertId
+        });
+
+    } catch (err) {
+
+        res.status(500).send(err);
+
+    }
+});
+
+═══════════════════════════════════════════════
+
+📌 INSERT QUERY RESULT OBJECT
+
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 5,
+  info: "",
+  serverStatus: 2,
+  warningStatus: 0
+}
+
+📌 IMPORTANT PROPERTY
+
+✅ insertId
+
+Meaning:
+👉 ID of newly inserted row
+
+═══════════════════════════════════════════════
+
+🚀 UPDATE CONTACT
+
+app.put('/contact/:id', async (req, res) => {
+
+    try {
+
+        const {
+            first_name,
+            last_name,
+            email,
+            phone,
+            address
+        } = req.body;
+
+        const sql = `
+            UPDATE contacts
+            SET first_name=?, 
+                last_name=?, 
+                email=?, 
+                phone=?, 
+                address=?
+            WHERE id=?
+        `;
+
+        const [result] = await db.query(sql, [
+            first_name,
+            last_name,
+            email,
+            phone,
+            address,
+            req.params.id
+        ]);
+
+        if(result.affectedRows === 0){
+
+            return res.status(404).send({
+                message: "Contact not found"
+            });
+
+        }
+
+        res.send({
+            message: "Contact updated"
+        });
+
+    } catch (err) {
+
+        res.status(500).send(err);
+
+    }
+});
+
+═══════════════════════════════════════════════
+
+📌 UPDATE QUERY RESULT OBJECT
+
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  changedRows: 1,
+  info: "Rows matched: 1 Changed: 1 Warnings: 0",
+  serverStatus: 2,
+  warningStatus: 0
+}
+
+📌 IMPORTANT PROPERTIES
+
+✅ affectedRows
+→ Rows found using WHERE condition
+
+✅ changedRows
+→ Rows actually updated
+
+═══════════════════════════════════════════════
+
+🚀 DELETE CONTACT
+
+app.delete('/contact/:id', async (req, res) => {
+
+    try {
+
+        const [result] = await db.query(
+            "DELETE FROM contacts WHERE id=?",
+            [req.params.id]
+        );
+
+        if(result.affectedRows === 0){
+
+            return res.status(404).send({
+                message: "Contact not found"
+            });
+
+        }
+
+        res.send({
+            message: "Contact deleted successfully"
+        });
+
+    } catch (err) {
+
+        res.status(500).send(err);
+
+    }
+});
+
+═══════════════════════════════════════════════
+
+📌 DELETE QUERY RESULT OBJECT
+
+{
+  fieldCount: 0,
+  affectedRows: 1,
+  warningStatus: 0
+}
+
+📌 IMPORTANT PROPERTY
+
+✅ affectedRows
+→ Number of deleted rows
+
+═══════════════════════════════════════════════
+
+📌 CRUD RESULT SUMMARY
+
+🟢 SELECT
+→ returns array of rows
+
+🟢 INSERT
+→ result.insertId
+
+🟢 UPDATE
+→ result.affectedRows
+→ result.changedRows
+
+🟢 DELETE
+→ result.affectedRows
+
+═══════════════════════════════════════════════
+
+📌 WHY PROMISES ARE IMPORTANT?
+
+✅ Cleaner syntax
+✅ Professional coding style
+✅ Better scalability
+✅ Easier debugging
+✅ Better async handling
+✅ Industry standard
+✅ Works perfectly with async/await
+
+═══════════════════════════════════════════════
+
+🎯 FINAL LEARNING PATH
+
+1️⃣ Learn Callbacks
+2️⃣ Learn Promises
+3️⃣ Learn Async/Await
+4️⃣ Learn MVC Structure
+5️⃣ Learn Authentication
+6️⃣ Build Full APIs
+
+═══════════════════════════════════════════════
+
+🚀 MYSQL CONNECTION POOL IN NODE.JS
+
+═══════════════════════════════════════════════
+
+📌 WHAT IS POOL?
+
+Pool means:
+
+✅ Collection of reusable database connections
+
+Instead of creating:
+❌ one new connection for every request
+
+Pool:
+✅ creates multiple reusable connections
+
+═══════════════════════════════════════════════
+
+📌 SIMPLE REAL LIFE EXAMPLE
+
+🎯 Without Pool
+
+Every customer entering restaurant:
+
+❌ New table created
+Very slow 😵
+
+═══════════════════════════════════════════════
+
+🎯 With Pool
+
+Restaurant already has tables.
+Customers use available tables.
+After finishing:
+✅ table becomes reusable
+Fast ⚡
+
+═══════════════════════════════════════════════
+
+📌 WITHOUT POOL
+
+const db = await mysql.createConnection({...})
+
+Problem:
+
+❌ Single connection
+❌ Can become busy
+❌ Not scalable
+❌ Bad for large applications
+
+═══════════════════════════════════════════════
+
+📌 WITH POOL
+
+const pool = mysql.createPool({...})
+
+Benefits:
+
+✅ Multiple reusable connections
+✅ Faster queries
+✅ Better performance
+✅ Handles many users
+✅ Production ready
+
+That is one of the biggest reasons pools are used.
+🚀 Example Situation
+
+Suppose:
+
+👤 User 1 → INSERT request
+👤 User 2 → UPDATE request
+👤 User 3 → DELETE request
+👤 User 4 → SELECT request
+
+all come at the same time.
+so pool can handle at same time
+
+═══════════════════════════════════════════════
+
+📌 WHY POOL IS IMPORTANT?
+
+Suppose:
+
+100 users send requests together.
+
+Without pool:
+
+❌ Server may become slow
+❌ Connection overload
+
+With pool:
+
+✅ Requests handled efficiently
+
+═══════════════════════════════════════════════
+
+📌 INSTALL MYSQL2
+
+npm install mysql2
+
+═══════════════════════════════════════════════
+
+📌 IMPORT MYSQL2 PROMISE
+
+import mysql from 'mysql2/promise'
+
+═══════════════════════════════════════════════
+
+📌 CREATE POOL
+
+const pool = mysql.createPool({
+
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'contectdb',
+
+    waitForConnections:true,
+    connectionLimit:10,
+    queueLimit:0
+
+})
+
+═══════════════════════════════════════════════
+
+📌 IMPORTANT OPTIONS
+
+🟢 waitForConnections
+true
+
+Meaning:
+✅ Wait if all connections busy
+
+═══════════════════════════════════════════════
+
+🟢 connectionLimit
+
+connectionLimit:10
+
+Meaning:
+✅ Maximum 10 connections
+
+═══════════════════════════════════════════════
+
+🟢 queueLimit
+
+queueLimit:0
+
+Meaning:
+✅ Unlimited waiting requests
+
+═══════════════════════════════════════════════
+
+📌 USING POOL
+
+Same as db.query()
+
+const [result] = await pool.query(
+    "SELECT * FROM contacts"
+)
+
+═══════════════════════════════════════════════
+
+🚀 COMPLETE EXAMPLE
+
+import express from 'express'
+import mysql from 'mysql2/promise'
+
+const app = express()
+
+app.use(express.json())
+
+
+// CREATE POOL
+const pool = mysql.createPool({
+
+    host:'localhost',
+    user:'root',
+    password:'',
+    database:'contectdb',
+
+    waitForConnections:true,
+    connectionLimit:10,
+    queueLimit:0
+
+})
+
+console.log("✅ Pool Connected")
+
+═══════════════════════════════════════════════
+
+🚀 READ CONTACTS
+
+app.get('/contacts', async(req,res)=>{
+
+    try{
+
+        const [result] = await pool.query(
+            "SELECT * FROM contacts"
+        )
+
+        res.send(result)
+
+    }
+    catch(err){
+
+        res.status(500).send(err)
+
+    }
+
+})
+
+═══════════════════════════════════════════════
+
+📌 HOW POOL WORKS INTERNALLY?
+
+Pool creates connections:
+
+Connection 1
+Connection 2
+Connection 3
+...
+
+When request comes:
+
+✅ Free connection used
+
+After query:
+
+✅ Connection returned back to pool
+
+Reusable ♻
+
+═══════════════════════════════════════════════
+
+
+═══════════════════════════════════════════════
+
+📌 DIFFERENCE
+
+❌ createConnection()
+
+→ Single connection
+
+═══════════════════════════════════════════════
+
+✅ createPool()
+
+→ Multiple reusable connections
+
+═══════════════════════════════════════════════
+
+📌 WHEN TO USE WHAT?
+
+🟢 Learning small projects
+→ createConnection()
+
+🟢 Real APIs / Production
+→ createPool()
+
+═══════════════════════════════════════════════
+
+📌 MOST IMPORTANT
+
+Modern backend applications mostly use:
+✅ Connection Pool
+
+instead of:
+❌ Single connection
+
+═══════════════════════════════════════════════
+
+🎯 FINAL UNDERSTANDING
+
+Pool = Group of reusable DB connections
+
+Purpose:
+
+✅ Better performance
+✅ Better scalability
+✅ Faster API handling
+
+═══════════════════════════════════════════════
+
+
+--->
+
+
+🚀 WHAT IS ORM?
+
+═══════════════════════════════════════════════
+
+📌 ORM = Object Relational Mapping
+
+It is a technique/library that helps:
+
+✅ JavaScript Objects
+communicate with
+✅ Database Tables
+
+WITHOUT writing too much SQL.
+═══════════════════════════════════════════════
+
+📌 SIMPLE UNDERSTANDING
+ORM converts:
+🟢 Database Table
+↔
+🟢 JavaScript Object
+
+═══════════════════════════════════════════════
+
+📌 REAL LIFE ANALOGY
+
+Think ORM as:
+
+🌉 A BRIDGE
+
+between:
+
+Node.js application
+AND
+MySQL database
+
+═══════════════════════════════════════════════
+
+📌 WITHOUT ORM
+
+You write SQL manually.
+
+Example:
+
+const [result] = await db.query(
+   "SELECT * FROM users"
+)
+
+❌ More SQL writing
+
+═══════════════════════════════════════════════
+
+📌 WITH ORM
+
+You use JavaScript methods.
+
+Example:
+
+const users = await User.findAll()
+
+✅ Cleaner
+✅ Easier
+
+═══════════════════════════════════════════════
+
+📌 WHAT ORM DOES INTERNALLY?
+
+When you write:
+User.findAll()
+ORM automatically converts it to:
+
+SELECT * FROM users;
+
+═══════════════════════════════════════════════
+
+📌 OBJECT ↔ TABLE MAPPING
+
+Database Table:
+users
+
+═══════════════
+
+Row in table:
+
+id | name
+1  | Naeem
+
+═══════════════
+
+Converted to JavaScript Object:
+
+{
+   id:1,
+   name:'Naeem'
+}
+
+═══════════════════════════════════════════════
+
+📌 WHY "OBJECT RELATIONAL"?
+
+🟢 Object
+→ JavaScript Object
+
+🟢 Relational
+→ Relational Database (MySQL)
+
+🟢 Mapping
+→ Connecting both
+
+═══════════════════════════════════════════════
+
+📌 EXAMPLE WITHOUT ORM
+
+INSERT INTO users(name,email)
+VALUES('Naeem','n@gmail.com')
+
+═══════════════════════════════════════════════
+
+📌 EXAMPLE WITH ORM
+
+await User.create({
+
+   name:'Naeem',
+   email:'n@gmail.com'
+
+})
+
+═══════════════════════════════════════════════
+
+📌 ORM BENEFITS
+
+✅ Cleaner code
+✅ Less SQL writing
+✅ Faster development
+✅ Easier CRUD
+✅ Better structure
+✅ Easier relationships
+✅ Easier maintenance
+
+═══════════════════════════════════════════════
+
+📌 CRUD USING ORM
+
+🟢 CREATE
+
+User.create()
+
+═══════════════
+
+🟢 READ
+
+User.findAll()
+
+═══════════════
+
+🟢 UPDATE
+
+User.update()
+
+═══════════════
+
+🟢 DELETE
+
+User.destroy()
+
+═══════════════════════════════════════════════
+
+📌 POPULAR ORM IN NODE.JS
+
+✅ Sequelize
+✅ Prisma
+✅ TypeORM
+✅ Mongoose (for MongoDB ODM)
+
+═══════════════════════════════════════════════
+
+📌 IMPORTANT
+
+ORM DOES NOT REMOVE DATABASE.
+Database still exists.
+ORM only helps interact with it easier.
+═══════════════════════════════════════════════
+📌 SQL STILL IMPORTANT?
+✅ YES VERY IMPORTANT
+
+Because ORM internally uses SQL.
+
+If SQL knowledge is weak:
+❌ ORM becomes difficult later.
+
+
+═══════════════════════════════════════════════
+
+🎯 FINAL UNDERSTANDING
+ORM = Tool that converts:
+
+🟢 JavaScript code↔
+🟢 SQL database operations
+So developers can work using:
+✅ Objects
+instead of
+❌ writing too much SQL
+
+
+
+═══════════════════════════════════════════════
+
+📌 Sequelize
+
+Sequelize is an:
+✅ ORM (Object Relational Mapper)
+
+for Node.js.
+
+Used to work with:
+
+✅ MySQL
+✅ PostgreSQL
+✅ SQLite
+✅ MariaDB
+✅ MSSQL
+
+═══════════════════════════════════════════════
+
+📌 SIMPLE MEANING
+
+Instead of writing raw SQL queries manually:
+
+❌ SELECT * FROM users
+
+You can use JavaScript methods:
+
+✅ User.findAll()
+
+═══════════════════════════════════════════════
+
+📌 WITHOUT SEQUELIZE
+
+Using mysql2:
+
+const [result] = await db.query(
+    "SELECT * FROM users"
+)
+
+You write SQL manually.
+
+═══════════════════════════════════════════════
+
+📌 WITH SEQUELIZE
+
+const users = await User.findAll()
+
+No SQL needed ✨
+
+═══════════════════════════════════════════════
+
+📌 WHAT IS ORM?
+
+ORM converts:
+
+🟢 JavaScript Objects
+↔
+🟢 Database Tables
+
+═══════════════════════════════════════════════
+
+📌 TABLE ↔ MODEL
+
+Database Table:
+users
+
+becomes
+
+JavaScript Model:
+
+User
+
+═══════════════════════════════════════════════
+
+📌 WHY USE SEQUELIZE?
+
+✅ Less SQL writing
+✅ Cleaner code
+✅ Easier CRUD operations
+✅ Relationships support
+✅ Validation support
+✅ Migration support
+✅ Better project structure
+✅ Industry usage
+
+═══════════════════════════════════════════════
+
+📌 INSTALLATION
+
+npm install sequelize mysql2
+
+═══════════════════════════════════════════════
+
+📌 WHY mysql2 STILL NEEDED?
+
+Sequelize is ORM only.
+
+mysql2 acts as:
+
+✅ actual MySQL driver
+
+Sequelize internally uses mysql2.
+═══════════════════════════════════════════════
+
+📌 CREATE SEQUELIZE CONNECTION
+
+import { Sequelize } from 'sequelize'
+
+const sequelize = new Sequelize(
+    'dbname',
+    'root',
+    '',
+    {
+        host:'localhost',
+        dialect:'mysql'
+    }
+)
+
+═══════════════════════════════════════════════
+
+📌 connect CONNECTION
+
+try{
+
+    await sequelize.authenticate()
+    console.log("✅ Connected")
+
+}
+catch(err){
+
+    console.log(err)
+
+}
+
+═══════════════════════════════════════════════
+
+📌 CREATE MODEL
+
+import { DataTypes } from 'sequelize'
+
+const Contact = sequelize.define('Contact',{
+
+    first_name:{
+        type:DataTypes.STRING
+    },
+
+    email:{
+        type:DataTypes.STRING
+    }
+
+})
+
+
+📌 WHAT THIS DOES?
+Creates model:
+Contact
+linked to database table:
+
+contacts
+
+═══════════════════════════════════════════════
+
+🚀 CRUD WITH SEQUELIZE
+
+═══════════════════════════════════════════════
+
+🟢 CREATE
+
+await Contact.create({
+
+    first_name:'Naeem',
+    email:'n@gmail.com'
+
+})
+
+═══════════════════════════════════════════════
+
+🟢 READ ALL
+
+const contacts = await Contact.findAll()
+
+═══════════════════════════════════════════════
+
+🟢 READ ONE
+
+const contact = await Contact.findByPk(1)
+
+═══════════════════════════════════════════════
+
+🟢 UPDATE
+
+await Contact.update(
+
+    { first_name:'Ali' },
+
+    { where:{ id:1 } }
+
+)
+
+═══════════════════════════════════════════════
+
+🟢 DELETE
+
+await Contact.destroy({
+
+    where:{ id:1 }
+
+})
+
+═══════════════════════════════════════════════
+
+📌 MYSQL2 VS SEQUELIZE
+
+┌────────────────────┬──────────────────┐
+│ mysql2             │ Sequelize        │
+├────────────────────┼──────────────────┤
+│ Raw SQL            │ ORM              │
+│ More control       │ Easier syntax    │
+│ Faster             │ Cleaner          │
+│ SQL required       │ Minimal SQL      │
+│ Lightweight        │ Feature rich     │
+└────────────────────┴──────────────────┘
+
+═══════════════════════════════════════════════
+
+📌 WHEN TO USE MYSQL2?
+
+✅ Learn SQL deeply
+✅ Small projects
+✅ Better performance
+✅ Full query control
+
+═══════════════════════════════════════════════
+
+📌 WHEN TO USE SEQUELIZE?
+
+✅ Large applications
+✅ Faster development
+✅ Cleaner codebase
+✅ Team projects
+✅ Complex relationships
+
+═══════════════════════════════════════════════
+
+📌 IMPORTANT FEATURES OF SEQUELIZE
+
+✅ Models
+✅ Associations
+✅ Validation
+✅ Migrations
+✅ Hooks
+✅ Transactions
+✅ Pagination
+✅ Timestamps
+
+═══════════════════════════════════════════════
+
+📌 ASSOCIATIONS
+
+Sequelize supports relationships:
+
+✅ One To One
+✅ One To Many
+✅ Many To Many
+
+Example:
+
+User.hasMany(Post)
+
+═══════════════════════════════════════════════
+
+📌 VALIDATIONS
+
+email:{
+   type:DataTypes.STRING,
+   validate:{
+      isEmail:true
+   }
+}
+
+═══════════════════════════════════════════════
+
+📌 AUTO TIMESTAMPS
+
+Sequelize automatically creates:
+
+✅ createdAt
+✅ updatedAt
+
+═══════════════════════════════════════════════
+
+📌 SYNCHRONIZE TABLES
+
+await sequelize.sync()
+
+Creates tables automatically.
+
+═══════════════════════════════════════════════
+
+📌 DISADVANTAGES OF SEQUELIZE
+
+❌ Less SQL control
+❌ Slightly slower
+❌ Complex queries harder
+❌ Learning ORM concepts required
+
+═══════════════════════════════════════════════
+
+📌 REAL INDUSTRY USE
+
+🟢 Small/simple APIs
+→ mysql2
+
+🟢 Large scalable apps
+→ Sequelize OR Prisma
+
+═══════════════════════════════════════════════
+
+🎯 FINAL UNDERSTANDING
+
+mysql2
+→ Direct SQL driver
+
+Sequelize
+→ ORM built on top of mysql2
+
+Purpose of Sequelize:
+
+✅ Easier database handling
+✅ Cleaner backend development
+✅ Less SQL writing
+
+═══════════════════════════════════════════════

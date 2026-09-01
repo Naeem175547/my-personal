@@ -1,0 +1,87 @@
+<%- include('partials/header.ejs') %>
+
+    <section id="main-section">
+        <div class="container">
+            <div class="top">
+                <h1>All Contacts</h1>
+                <a href="/add-contact">Add New</a>
+            </div>
+
+        </div>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>First-Name</th>
+                    <th>Last-Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% let sr=pagingCounter %>
+                <% contacts.forEach((contact)=>{%>
+                    
+                     <tr>
+                    <td><%= sr++ %></td>
+                <td><%= contact.firstName %></td>
+                <td><%= contact.lastName %></td>
+                <td><%= contact.email %></td>                
+                <td><%= contact.phone %></td>
+                    <td>
+                        <div>
+                            <a href="/show-contact/<%= contact._id  %>" class="text-primary fs-5"><i class="fa-solid fa-eye"></i></a>
+                            <a href="/update-contact/<%= contact._id  %>" class="text-secondary fs-5"><i class="fa-regular fa-pen-to-square"></i></a>
+                            <a href="/delete-contact/<%= contact._id  %>" class="text-danger fs-5"><i class="fa-solid fa-delete-left"></i></a>                                                                                 
+
+
+                        </div>
+                    </td>
+                </tr>
+                    
+
+
+              <%  }) %>
+               
+            </tbody>
+
+        </table>
+      
+        <div>
+            <ul class="pagination justify-content-center">
+                <% 
+                  let prevClass=hasPrevPage?"":"disabled";
+                  let nextClass=hasNextPage?"":"disabled"
+                 %>
+                <li class="page-item <%=prevClass %>">
+                   <a href="/?page=<%= prevPage%>" class="page-link">previous</a>
+                </li>
+                <% for(let i=0;i<totalPages;i++) {
+                    let active=currentPage==i+1?'active':'';
+                     %>
+                    <li class="page-item <%=active %>">
+                    <a href="/?page=<%= i+1 %>" class="page-link"><%= i+1%></a>
+                </li>
+
+                <%}             
+                 %>
+                 <li class="page-item <%=nextClass %>">
+                   <a href="/?page=<%= nextPage%>" class="page-link">next</a>
+                </li>
+                
+                
+
+            </ul>
+        </div>
+
+        
+            </div>
+            
+        </div>
+        
+
+    </section>
+    <%- include('partials/footer.ejs')  %>

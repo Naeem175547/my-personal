@@ -1,0 +1,1382 @@
+FULL-STACK LEARNING ROADMAP
+============================
+MySQL + NestJS + TypeORM + GraphQL + React + Apollo Client + Blog/CMS
+
+
+PHASE 1 — MYSQL BASICS
+======================
+
+1. MySQL Fundamentals
+   - Database
+   - Table
+   - Row
+   - Column
+   - Data types
+   - CREATE DATABASE
+   - CREATE TABLE
+   - INSERT
+   - SELECT
+   - UPDATE
+   - DELETE
+   - ALTER TABLE
+   - DROP
+   - TRUNCATE
+
+2. Primary Key
+   - PRIMARY KEY
+   - id
+   - UNIQUE
+   - AUTO_INCREMENT
+   - Composite primary key
+
+3. Foreign Key
+   - Foreign key
+   - Referencing another table
+   - Referential integrity
+   - ON DELETE
+   - ON UPDATE
+   - CASCADE
+   - SET NULL
+   - RESTRICT
+
+4. Relationships
+   - One-to-One
+   - One-to-Many
+   - Many-to-One
+   - Many-to-Many
+
+5. JOIN
+   - INNER JOIN
+   - LEFT JOIN
+   - RIGHT JOIN
+   - Self JOIN
+   - Multiple table JOINs
+
+6. SQL Queries
+   - WHERE
+   - AND
+   - OR
+   - IN
+   - BETWEEN
+   - LIKE
+   - IS NULL
+   - ORDER BY
+   - GROUP BY
+   - HAVING
+   - LIMIT
+   - OFFSET
+   - COUNT
+   - SUM
+   - AVG
+   - MIN
+   - MAX
+
+7. Transactions
+   - START TRANSACTION
+   - COMMIT
+   - ROLLBACK
+   - Atomic operations
+   - ACID basics
+
+
+PHASE 2 — NESTJS FUNDAMENTALS
+=============================
+
+8. NestJS Introduction
+   - What is NestJS?
+   - Node.js vs NestJS
+   - NestJS architecture
+   - Modules
+   - Controllers
+   - Providers
+   - Services
+   - Dependency Injection
+
+9. NestJS Project Structure
+   - src/
+   - main.ts
+   - app.module.ts
+   - Feature modules
+   - Feature-based folder structure
+
+10. Controllers
+    - @Controller()
+    - @Get()
+    - @Post()
+    - @Put()
+    - @Patch()
+    - @Delete()
+    - @Param()
+    - @Query()
+    - @Body()
+    - @Headers()
+    - @Req()
+    - @Res()
+
+11. Services
+    - @Injectable()
+    - Creating services
+    - Injecting services
+    - Controller → Service
+    - Business logic
+
+12. Dependency Injection
+    - Providers
+    - Constructor injection
+    - Custom providers
+    - Provider scope
+
+13. Modules
+    - @Module()
+    - imports
+    - providers
+    - controllers
+    - exports
+
+14. Middleware
+    - What is Middleware?
+    - Global middleware
+    - Route middleware
+    - Middleware execution
+
+15. Pipes
+    - What is a Pipe?
+    - Built-in pipes
+    - ParseIntPipe
+    - ParseUUIDPipe x
+    - ValidationPipe
+    - Custom pipes
+
+16. Exception Handling
+    - BadRequestException
+    - UnauthorizedException
+    - ForbiddenException
+    - NotFoundException
+    - ConflictException
+    - Exception filters
+    - Global exception handling
+
+17. Guards
+    - What is a Guard?
+    - CanActivate
+    - Authentication Guard
+    - Authorization Guard
+    - Protected routes
+
+18. Interceptors
+    - What is an Interceptor?
+    - Request transformation
+    - Response transformation
+    - Logging
+    - Timing
+    - Response mapping
+
+19. Decorators
+    - Built-in decorators
+    - Custom decorators
+    - SetMetadata()
+    - Custom parameter decorators
+
+20. NestJS Request Lifecycle
+    - Request
+    - Middleware
+    - Guards
+    - Interceptors
+    - Pipes
+    - Controller
+    - Service
+    - Database
+    - Response
+
+
+PHASE 3 — NESTJS + MYSQL + TYPEORM
+==================================
+
+21. ORM
+    - What is ORM?
+    - Why use ORM?
+    - ORM vs Raw SQL
+    - TypeORM
+    - Entity
+    - Repository
+    - EntityManager
+
+22. TypeORM Setup
+    - Install TypeORM
+    - Install MySQL driver
+    - TypeOrmModule
+    - MySQL connection
+    - Environment variables
+    - synchronize
+    - migrations
+
+23. Entity
+    - @Entity()
+    - @Column()
+    - @PrimaryGeneratedColumn()
+    - @PrimaryColumn()
+    - @Column({ primary: true })
+    - Column types
+    - nullable
+    - unique
+    - default
+
+24. Repository
+    - find()
+    - findOne()
+    - findBy()
+    - findOneBy()
+    - save()
+    - insert()
+    - update()
+    - delete()
+    - remove()
+    - count()
+
+25. DTO + Validation
+    - DTO
+    - class-validator
+    - class-transformer
+    - ValidationPipe
+    - Create DTO
+    - Update DTO
+    - PartialType()
+    - IsString()
+    - IsEmail()
+    - IsInt()
+    - IsOptional()
+    - IsNotEmpty()
+    - Min()
+    - Max()
+    - Length()
+
+26. TypeORM Relationships
+    - @OneToOne()
+    - @OneToMany()
+    - @ManyToOne()
+    - @ManyToMany()
+    - @JoinColumn()
+    - @JoinTable()
+    - Cascade
+    - Eager loading
+    - Lazy loading
+    - Relation loading
+
+27. QueryBuilder
+    - createQueryBuilder()
+    - where()
+    - andWhere()
+    - orWhere()
+    - leftJoin()
+    - leftJoinAndSelect()
+    - innerJoin()
+    - groupBy()
+    - orderBy()
+    - Pagination
+    - getMany()
+    - getOne()
+    - getRawMany()
+    - getManyAndCount()
+
+28. Transactions
+    - DataSource.transaction()
+    - EntityManager
+    - Commit
+    - Rollback
+    - Atomic operations
+
+29. Migrations
+    - Generate migration
+    - Run migration
+    - Revert migration
+    - Production database changes
+
+
+PHASE 4 — GRAPHQL FUNDAMENTALS
+==============================
+
+30. What is GraphQL?
+    - GraphQL
+    - API
+    - Schema
+    - Client-driven data fetching
+
+31. GraphQL vs REST
+    - REST architecture
+    - GraphQL architecture
+    - REST endpoints
+    - GraphQL endpoint
+    - Over-fetching
+    - Under-fetching
+
+32. GraphQL Schema
+    - Schema definition
+    - Object types
+    - Fields
+    - Root Query
+    - Root Mutation
+
+33. GraphQL Types
+    - String
+    - Int
+    - Float
+    - Boolean
+    - ID
+    - Object Types
+    - Lists
+    - Non-null (!)
+    - Enum
+    - Interface
+    - Union
+    - Scalar
+    - Custom Scalar
+
+34. Query
+    - Reading data
+    - Selection sets
+    - Nested queries
+    - Arguments
+    - Variables
+    - Aliases
+    - Fragments
+
+35. Mutation
+    - Create
+    - Update
+    - Delete
+    - Mutation arguments
+    - Mutation variables
+
+36. Resolver
+    - What is Resolver?
+    - Query resolver
+    - Mutation resolver
+    - Field resolver
+    - Nested resolver
+    - Resolver arguments
+
+37. Arguments
+    - Passing values
+    - Multiple arguments
+    - Variables
+    - Optional arguments
+    - Required arguments
+
+38. Input Types
+    - Input objects
+    - Multiple input fields
+    - Create input
+    - Update input
+    - Input validation
+
+39. Context
+    - Request information
+    - Headers
+    - Authentication information
+    - Current user
+
+40. GraphQL Advanced
+    - Fragments
+    - Interfaces
+    - Unions
+    - Enums
+    - Custom scalars
+    - Directives
+    - Pagination
+    - Error handling
+
+
+PHASE 5 — NESTJS + GRAPHQL
+===========================
+
+41. @nestjs/graphql
+    - Installation
+    - GraphQL package
+    - GraphQL driver
+
+42. GraphQL Setup
+    - GraphQLModule
+    - GraphQL configuration
+    - Apollo driver
+    - Code-first approach
+    - Schema generation
+    - GraphQL Playground / Apollo Sandbox
+
+43. Object Types
+    - @ObjectType()
+    - @Field()
+    - @Field(() => Int)
+    - Nullable fields
+    - Lists
+    - Nested object types
+
+44. Resolvers
+    - @Resolver()
+    - @Query()
+    - @Mutation()
+    - @ResolveField()
+
+45. Arguments
+    - @Args()
+    - Single argument
+    - Multiple arguments
+    - Typed arguments
+    - Nullable arguments
+
+46. Input Types
+    - @InputType()
+    - @Field()
+    - Create input
+    - Update input
+    - Input validation
+
+47. Resolver → Service
+    - Resolver
+    - Service
+    - Business logic
+    - Dependency injection
+
+48. GraphQL + TypeORM
+    - Resolver
+    - Service
+    - Repository
+    - Entity
+    - InputType
+    - ObjectType
+
+49. Important Difference
+    - Entity = Database representation
+    - ObjectType = GraphQL response representation
+    - InputType = GraphQL input representation
+    - DTO = Data validation/transfer structure
+    - Service = Business logic
+    - Repository = Database operations
+
+50. GraphQL Guards
+    - CanActivate
+    - Auth Guard
+    - Protected queries
+    - Protected mutations
+    - Authorization
+
+51. Authentication
+    - Register
+    - Login
+    - Password hashing
+    - JWT
+    - Access token
+    - Refresh token
+    - Token validation
+
+52. GraphQL Context + Authentication
+    - Request
+    - Headers
+    - JWT
+    - Authenticated user
+    - @Context()
+    - Current user decorator
+    - Pass user to resolver
+
+
+PHASE 6 — REACT FUNDAMENTALS
+============================
+
+53. React Basics
+    - What is React?
+    - Components
+    - JSX
+    - Props
+    - State
+    - Events
+    - Conditional rendering
+    - Lists
+    - Keys
+
+54. React Hooks
+    - useState()
+    - useEffect()
+    - useContext()
+    - useRef()
+    - useMemo()
+    - useCallback()
+    - Custom Hooks
+
+55. React Forms
+    - Controlled inputs
+    - Form state
+    - Form validation
+    - Submit handling
+    - Error messages
+
+56. React Routing
+    - React Router
+    - Routes
+    - Route
+    - Nested routes
+    - Dynamic routes
+    - Route parameters
+    - Navigation
+    - Protected routes
+
+57. React API Concepts
+    - HTTP requests
+    - fetch
+    - async/await
+    - Loading states
+    - Error states
+    - Response handling
+
+58. React State Management
+    - Local state
+    - Context API
+    - Global state
+    - Client state
+    - Server state
+
+59. React Performance
+    - React.memo()
+    - useMemo()
+    - useCallback()
+    - Lazy loading
+    - Code splitting
+
+60. React Project Structure
+    - components/
+    - pages/
+    - layouts/
+    - hooks/
+    - graphql/
+    - services/
+    - context/
+    - utils/
+    - types/
+
+
+PHASE 7 — REACT + GRAPHQL + APOLLO CLIENT
+==========================================
+
+61. Apollo Client
+    - What is Apollo Client?
+    - Installation
+    - Apollo Client instance
+    - ApolloProvider
+    - Configuration
+
+62. GraphQL Queries
+    - gql
+    - useQuery()
+    - Query variables
+    - Query results
+    - Nested data
+    - Query options
+
+63. GraphQL Mutations
+    - gql
+    - useMutation()
+    - Mutation variables
+    - Create
+    - Update
+    - Delete
+    - Mutation response
+
+64. Apollo States
+    - loading
+    - error
+    - data
+    - refetch
+
+65. Apollo Cache
+    - Apollo cache
+    - Normalized cache
+    - Cache reads
+    - Cache writes
+    - Cache updates
+    - Refetching
+    - refetchQueries
+    - cache.modify()
+    - cache.writeQuery()
+    - Optimistic updates
+
+66. Apollo Authentication
+    - JWT
+    - Authorization header
+    - Apollo links
+    - Auth link
+    - Token handling
+    - Logout
+    - Protected queries
+
+67. Apollo Advanced
+    - Pagination
+    - Fetch policies
+    - Polling
+    - Optimistic UI
+    - Network errors
+    - GraphQL errors
+
+
+PHASE 8 — BLOG / CMS PROJECT SETUP
+===================================
+
+68. Technology Stack
+
+    Frontend:
+    - React
+    - React Router
+    - Apollo Client
+
+    Backend:
+    - NestJS
+    - GraphQL
+    - TypeORM
+
+    Database:
+    - MySQL
+
+
+69. Project Architecture
+
+    React
+       ↓
+    Apollo Client
+       ↓
+    GraphQL
+       ↓
+    NestJS
+       ↓
+    Resolver
+       ↓
+    Guard
+       ↓
+    Service
+       ↓
+    Repository
+       ↓
+    TypeORM
+       ↓
+    MySQL
+
+
+70. Backend Structure
+
+    backend/
+    │
+    ├── src/
+    │   │
+    │   ├── auth/
+    │   │   ├── auth.module.ts
+    │   │   ├── auth.resolver.ts
+    │   │   ├── auth.service.ts
+    │   │   ├── guards/
+    │   │   ├── strategies/
+    │   │   ├── dto/
+    │   │   └── types/
+    │   │
+    │   ├── users/
+    │   │   ├── user.module.ts
+    │   │   ├── user.resolver.ts
+    │   │   ├── user.service.ts
+    │   │   ├── user.entity.ts
+    │   │   ├── dto/
+    │   │   └── types/
+    │   │
+    │   ├── posts/
+    │   │   ├── post.module.ts
+    │   │   ├── post.resolver.ts
+    │   │   ├── post.service.ts
+    │   │   ├── post.entity.ts
+    │   │   ├── dto/
+    │   │   └── types/
+    │   │
+    │   ├── categories/
+    │   │   ├── category.module.ts
+    │   │   ├── category.resolver.ts
+    │   │   ├── category.service.ts
+    │   │   ├── category.entity.ts
+    │   │   ├── dto/
+    │   │   └── types/
+    │   │
+    │   ├── comments/
+    │   │   ├── comment.module.ts
+    │   │   ├── comment.resolver.ts
+    │   │   ├── comment.service.ts
+    │   │   ├── comment.entity.ts
+    │   │   ├── dto/
+    │   │   └── types/
+    │   │
+    │   ├── database/
+    │   │   └── migrations/
+    │   │
+    │   ├── app.module.ts
+    │   └── main.ts
+    │
+    └── package.json
+
+
+PHASE 9 — BLOG DATABASE
+=======================
+
+71. User Table
+    - id
+    - username
+    - email
+    - password
+    - role
+    - createdAt
+
+72. Post Table
+    - id
+    - title
+    - content
+    - authorId
+    - createdAt
+    - updatedAt
+
+73. Category Table
+    - id
+    - name
+    - slug
+
+74. Comment Table
+    - id
+    - content
+    - userId
+    - postId
+    - createdAt
+
+75. Relationships
+
+    User
+      |
+      └───< Posts
+
+    User
+      |
+      └───< Comments
+
+    Post
+      |
+      ├───< Comments
+      |
+      └───<> Categories
+
+
+76. Relationship Mapping
+
+    User 1 ──── * Post
+
+    User 1 ──── * Comment
+
+    Post 1 ──── * Comment
+
+    Post * ──── * Category
+
+
+PHASE 10 — AUTHENTICATION
+=========================
+
+77. Authentication
+    - Register
+    - Login
+    - Logout
+    - Password hashing
+    - JWT
+    - Access token
+    - Refresh token
+    - Auth Guard
+
+78. Authorization
+    - Roles
+    - Admin
+    - Author
+    - User
+    - Ownership checks
+
+79. Protected Operations
+    - Protected queries
+    - Protected mutations
+    - User-specific operations
+    - Admin-only operations
+
+
+PHASE 11 — USERS
+================
+
+80. User Operations
+
+    Queries:
+    - users
+    - user
+
+    Mutations:
+    - createUser
+    - updateUser
+    - deleteUser
+
+    Features:
+    - Create user
+    - Get users
+    - Get single user
+    - Update user
+    - Delete user
+    - User profile
+
+
+PHASE 12 — POSTS
+================
+
+81. Post Operations
+
+    Queries:
+    - posts
+    - post
+
+    Mutations:
+    - createPost
+    - updatePost
+    - deletePost
+
+    Features:
+    - Create post
+    - Get posts
+    - Get single post
+    - Update post
+    - Delete post
+    - Author relationship
+    - Category relationship
+    - Comments relationship
+
+
+PHASE 13 — CATEGORIES
+=====================
+
+82. Category Operations
+
+    Queries:
+    - categories
+    - category
+
+    Mutations:
+    - createCategory
+    - updateCategory
+    - deleteCategory
+
+    Features:
+    - Create category
+    - Get categories
+    - Get category
+    - Update category
+    - Delete category
+    - Post relationship
+
+
+PHASE 14 — COMMENTS
+===================
+
+83. Comment Operations
+
+    Queries:
+    - comments
+
+    Mutations:
+    - createComment
+    - deleteComment
+
+    Features:
+    - Create comment
+    - Get comments
+    - Delete comment
+    - User relationship
+    - Post relationship
+
+
+PHASE 15 — GRAPHQL API
+======================
+
+84. Queries
+
+    - users
+    - user
+    - posts
+    - post
+    - categories
+    - category
+    - comments
+
+85. Mutations
+
+    - register
+    - login
+    - createUser
+    - updateUser
+    - deleteUser
+    - createPost
+    - updatePost
+    - deletePost
+    - createCategory
+    - updateCategory
+    - deleteCategory
+    - createComment
+    - deleteComment
+
+
+PHASE 16 — REACT BLOG PAGES
+===========================
+
+86. Pages
+
+    - Home
+    - Login
+    - Register
+    - Posts
+    - Post Details
+    - Create Post
+    - Edit Post
+    - Profile
+    - Admin Dashboard
+    - Categories
+
+
+87. Components
+
+    - Navbar
+    - PostCard
+    - PostList
+    - PostForm
+    - CommentList
+    - CommentForm
+    - CategoryList
+    - Pagination
+    - SearchBar
+    - Loading
+    - ErrorMessage
+    - ProtectedRoute
+
+
+PHASE 17 — REACT GRAPHQL STRUCTURE
+===================================
+
+88. GraphQL Frontend Structure
+
+    frontend/
+    │
+    └── src/
+        │
+        ├── graphql/
+        │   ├── queries/
+        │   │   ├── userQueries.ts
+        │   │   ├── postQueries.ts
+        │   │   └── categoryQueries.ts
+        │   │
+        │   ├── mutations/
+        │   │   ├── authMutations.ts
+        │   │   ├── postMutations.ts
+        │   │   ├── categoryMutations.ts
+        │   │   └── commentMutations.ts
+        │   │
+        │   └── fragments/
+        │
+        ├── components/
+        ├── pages/
+        ├── hooks/
+        ├── layouts/
+        ├── context/
+        ├── utils/
+        └── types/
+
+
+PHASE 18 — SEARCH / FILTER / SORT / PAGINATION
+==============================================
+
+89. Search
+    - Search posts
+    - Search categories
+    - Search users
+    - Search by title
+    - Search by content
+
+90. Filtering
+    - Category filtering
+    - Author filtering
+    - Date filtering
+    - Multiple filters
+
+91. Sorting
+    - Newest
+    - Oldest
+    - Most commented
+    - Alphabetical
+    - Custom sorting
+
+92. Pagination
+    - LIMIT
+    - OFFSET
+    - Offset pagination
+    - Cursor pagination
+    - GraphQL pagination
+    - Apollo pagination cache
+
+
+PHASE 19 — ERROR / LOADING HANDLING
+===================================
+
+93. Backend Error Handling
+    - NestJS exceptions
+    - GraphQL errors
+    - Validation errors
+    - Authentication errors
+    - Authorization errors
+    - Database errors
+
+94. Frontend Error Handling
+    - Apollo errors
+    - Network errors
+    - GraphQL errors
+    - Form errors
+    - Error components
+
+95. Loading States
+    - Query loading
+    - Mutation loading
+    - Page loading
+    - Skeleton UI
+    - Button loading
+    - Empty states
+
+
+PHASE 20 — APOLLO CACHE
+=======================
+
+96. Apollo Cache
+    - Normalized cache
+    - Cache read
+    - Cache write
+    - Cache update
+    - Cache eviction
+    - Refetch
+    - refetchQueries
+    - cache.modify()
+    - cache.writeQuery()
+    - cache.writeFragment()
+    - Optimistic updates
+
+97. Apollo Performance
+    - Fetch policies
+    - Cache-first
+    - Network-only
+    - Cache-and-network
+    - No-cache
+    - Pagination cache
+    - Query optimization
+
+
+PHASE 21 — FINAL PROJECT FEATURES
+=================================
+
+98. Authentication
+    - Register
+    - Login
+    - Logout
+    - JWT
+    - Password hashing
+    - Auth Guard
+
+99. Authorization
+    - Roles
+    - Admin
+    - Author
+    - User
+    - Ownership
+
+100. CRUD
+     - Users
+     - Posts
+     - Categories
+     - Comments
+
+101. Relationships
+     - User → Posts
+     - User → Comments
+     - Post → Comments
+     - Post ↔ Categories
+
+102. Search
+     - Search posts
+     - Search users
+     - Search categories
+
+103. Filtering
+     - Category
+     - Author
+     - Date
+
+104. Sorting
+     - Newest
+     - Oldest
+     - Most commented
+     - Alphabetical
+
+105. Pagination
+     - Offset pagination
+     - Cursor pagination
+     - Apollo pagination
+
+106. Comments
+     - Add comment
+     - Delete comment
+     - Display comments
+
+107. Categories
+     - Create
+     - Update
+     - Delete
+     - Assign to posts
+
+108. Admin Panel
+     - Manage users
+     - Manage posts
+     - Manage categories
+     - Moderate comments
+     - Role management
+
+109. Error Handling
+     - Backend errors
+     - GraphQL errors
+     - Apollo errors
+     - Validation errors
+     - Authorization errors
+
+110. Loading States
+     - Query loading
+     - Mutation loading
+     - Skeleton
+     - Button loading
+     - Empty states
+
+111. Apollo Caching
+     - Normalized cache
+     - Cache updates
+     - Refetching
+     - Optimistic updates
+
+
+FINAL ARCHITECTURE
+==================
+
+                         FRONTEND
+                            │
+                         React
+                            │
+                    React Router
+                            │
+                     Apollo Client
+                            │
+                         GraphQL
+                            │
+                            ▼
+                         BACKEND
+                            │
+                         NestJS
+                            │
+                  ┌─────────┴─────────┐
+                  │                   │
+               Guards             Resolver
+                  │                   │
+                  │                Service
+                  │                   │
+                  │              Repository
+                  │                   │
+                  └──────────┬────────┘
+                             │
+                          TypeORM
+                             │
+                             ▼
+                            MySQL
+
+
+FINAL REQUEST FLOW
+==================
+
+GRAPHQL QUERY:
+
+React
+  ↓
+Apollo Client
+  ↓
+GraphQL Query
+  ↓
+NestJS Resolver
+  ↓
+Guard
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL
+  ↓
+TypeORM
+  ↓
+Repository
+  ↓
+Service
+  ↓
+Resolver
+  ↓
+GraphQL Response
+  ↓
+Apollo Client
+  ↓
+React
+
+
+GRAPHQL MUTATION:
+
+React Form
+  ↓
+useMutation()
+  ↓
+GraphQL Mutation
+  ↓
+Resolver
+  ↓
+Guard
+  ↓
+Input Validation
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL
+  ↓
+Response
+  ↓
+Apollo Cache
+  ↓
+React UI
+
+
+IMPORTANT CONCEPTS TO REMEMBER
+==============================
+
+Entity
+  ↓
+Represents database table
+
+ObjectType
+  ↓
+Represents GraphQL output
+
+InputType
+  ↓
+Represents GraphQL input
+
+DTO
+  ↓
+Represents validated input/data structure
+
+Resolver
+  ↓
+Handles GraphQL requests
+
+Service
+  ↓
+Contains business logic
+
+Repository
+  ↓
+Handles database operations
+
+TypeORM
+  ↓
+Connects application code with database
+
+MySQL
+  ↓
+Stores actual data
+
+
+FINAL LEARNING ORDER
+====================
+
+1.  MySQL
+2.  NestJS Fundamentals
+3.  TypeORM
+4.  NestJS + MySQL
+5.  GraphQL Fundamentals
+6.  NestJS + GraphQL
+7.  React Fundamentals
+8.  Apollo Client
+9.  React + GraphQL
+10. Authentication
+11. Authorization
+12. Blog/CMS Project
+13. Search
+14. Filtering
+15. Sorting
+16. Pagination
+17. Apollo Cache
+18. Error Handling
+19. Performance
+20. Production-ready project
+
+
+CORE ARCHITECTURE TO MEMORIZE
+=============================
+
+REST:
+
+Client
+  ↓
+Controller
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL
+
+
+GRAPHQL:
+
+Client
+  ↓
+GraphQL
+  ↓
+Resolver
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL
+
+
+FULL STACK:
+
+React
+  ↓
+Apollo Client
+  ↓
+GraphQL
+  ↓
+NestJS Resolver
+  ↓
+Guard
+  ↓
+Service
+  ↓
+Repository
+  ↓
+TypeORM
+  ↓
+MySQL

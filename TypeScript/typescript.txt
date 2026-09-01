@@ -1,0 +1,1524 @@
+1. What is TypeScript?
+
+TypeScript (TS) is a superset of JavaScript that adds static typing.
+
+TypeScript
+   ↓
+Type checking
+   ↓
+JavaScript
+
+Example:
+
+let name: string = "Naeem";
+let age: number = 22;
+let isActive: boolean = true;
+
+JavaScript:
+
+let age = "22";
+age = true; // allowed
+
+TypeScript:
+
+let age: number = 22;
+age = true; // ❌ Error
+
+Main benefits
+Type safety
+Better autocomplete
+Easier debugging
+Better refactoring
+Excellent for large projects
+Works with React, Node.js, Express, MongoDB
+
+2. Installing TypeScript
+Check Node:
+node -v
+
+| Point                           | Global installation         | Local installation                             |
+| ------------------------------- | --------------------------- | ---------------------------------------------- |
+| Install command                 | `npm install -g typescript` | `npm install -D typescript`                    |
+| Where installed?                | System/user-wide            | Inside current project                         |
+| Run command                     | `tsc`                       | `npx tsc`                                      |
+| Available in other projects?    | ✅ Yes                       | ❌ Only that project                            |
+| Version controlled per project? | ❌ No                        | ✅ Yes                                          |
+| Recommended for projects?       | ❌ Usually no                | ✅ **Yes**                                      |
+| Needed for NestJS?              | ❌ No                        | ✅ NestJS project installs its own dependencies |
+| Example                         | `tsc hello.ts`              | `npx tsc hello.ts`                             |
+
+notes-:
+basic.ts
+   ↓
+tsc basic.ts       ← compile
+   ↓
+basic.js
+   ↓
+node basic.js      ← run
+   ↓
+10
+
+
+To install tsx globally, run:
+npm install -g tsx
+Check it:
+tsx --version
+Then you can directly run your TypeScript file:
+tsx basic.ts
+
+but:
+| Command         | Type checking? | Executes code? |
+| --------------- | -------------: | -------------: |
+| `tsc basic.ts`  |          ✅ Yes |           ❌ No |
+| `node basic.js` |           ❌ No |          ✅ Yes |
+| `tsx basic.ts`  |           ❌ No |          ✅ Yes |
+
+
+tsc --noEmit basic.ts
+This checks the TypeScript without creating basic.js
+
+
+3. JavaScript vs TypeScript
+JavaScript
+function add(a, b) {
+    return a + b;
+}
+
+Problem:
+add(10, "20");
+
+Output:
+1020
+TypeScript
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+
+Now:
+add(10, "20");
+
+❌ TypeScript error.
+
+4. Basic Types
+String
+let username: string = "Naeem";
+
+Number
+let age: number = 22;
+let price: number = 99.99;
+
+Boolean
+let isLoggedIn: boolean = true;
+
+BigInt
+let bigNumber: bigint = 100n;
+
+Symbol
+let id: symbol = Symbol("id");
+
+5. Type Inference
+TypeScript can automatically determine the type.
+let name = "Naeem";
+TS understands:
+name: string
+Therefore:
+name = 100;
+❌ Error.
+
+You don't always need to explicitly write types.
+
+let age = 22;
+is enough.
+
+6. Arrays
+String array
+let names: string[] = ["Ali", "Naeem", "Ahmed"];
+
+Number array
+let numbers: number[] = [10, 20, 30];
+
+Another syntax
+let numbers: Array<number> = [10, 20, 30];
+
+Mixed array
+let data: (string | number)[] = ["Naeem", 22, "Ali", 30];
+
+7. Tuple
+A tuple defines the type and position of values.
+let user: [string, number] = ["Naeem", 22];
+
+Correct:
+["Naeem", 22]
+
+Wrong:
+[22, "Naeem"]
+
+
+8. Object Types
+let user: {
+    name: string;
+    age: number;
+    isAdmin: boolean;
+} = {
+    name: "Naeem",
+    age: 22,
+    isAdmin: false
+};
+
+9. Optional Properties
+Use ?.
+
+let user: {
+    name: string;
+    age: number;
+    email?: string;
+} = {
+    name: "Naeem",
+    age: 22
+};
+
+email is optional.
+
+note->If you don't give email and you have not marked it optional, TypeScript gives an error.
+
+10. Type Alias
+
+Instead of repeatedly writing object types:
+type User = {
+    name: string;
+    age: number;
+    email: string;
+};
+
+Use:
+const user: User = {
+    name: "Naeem",
+    age: 22,
+    email: "abc@gmail.com"
+};
+
+Multiple users:
+
+const user1: User = {
+    name: "Ali",
+    age: 20,
+    email: "ali@gmail.com"
+};
+
+const user2: User = {
+    name: "Ahmed",
+    age: 25,
+    email: "ahmed@gmail.com"
+};
+
+
+
+11. Interface
+
+Interface is commonly used to describe objects.
+
+interface User {
+    name: string;
+    age: number;
+    email: string;
+}
+
+Use:
+
+const user: User = {
+    name: "Naeem",
+    age: 22,
+    email: "naeem@gmail.com"
+};
+
+
+Interface vs Type
+type User = {
+    name: string;
+};
+
+interface User {
+    name: string;
+}
+
+Both can describe objects.
+For React/backend applications, you will frequently see both.
+
+TypeScript types and GraphQL types are different things, although they look similar
+ and are often used together in NestJS.
+
+
+notes:
+
+Object property:
+name: string       → must provide name
+
+Function return:
+(): string         → must return a string
+
+Optional:
+name?: string      → may provide name, may omit it
+
+if in defining type 
+if it is not optional, a value must be provided.
+
+because ts thinks we give type undefined
+
+12. Functions
+Parameter types
+function add(a: number, b: number) {
+    return a + b;
+}
+
+Return type
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+Void
+When a function doesn't return anything:
+
+function greet(name: string): void {
+    console.log(`Hello ${name}`);
+}
+
+
+13. Arrow Functions
+const add = (a: number, b: number): number => {
+    return a + b;
+};
+
+Short form:
+const add = (a: number, b: number): number => a + b;
+
+
+14. Function Type
+let operation: (a: number, b: number) => number;
+
+operation = (a, b) => {
+    return a + b;
+};
+
+by default Parameter has any type
+
+15. Union Type
+A variable can have multiple types.
+let id: string | number;
+
+id = 101;
+id = "101";
+
+But:
+id = true;
+❌ Error.
+
+16. Literal Types
+Restrict a value to specific values
+
+let status: "success" | "error" | "loading";
+
+Valid:
+status = "success";
+status = "error";
+
+Invalid:
+
+status = "pending";
+
+❌ Error.
+Very useful for API states.
+
+17. Type Narrowing
+Suppose:
+
+function printId(id: string | number) {
+    if (typeof id === "string") {
+        console.log(id.toUpperCase());
+    } else {
+        console.log(id.toFixed(2));
+    }
+}
+
+TypeScript understands the type inside each block.
+
+18. any
+any disables type checking.
+
+let value: any = 10;
+
+value = "hello";
+value = true;
+value = {};
+
+Everything is allowed.
+Avoid any whenever possible.
+
+Bad:
+const user: any = response.data;
+
+Better:
+const user: User = response.data;
+
+19. unknown
+Safer alternative to any.
+
+let value: unknown = "hello";
+
+Before using it:
+
+if (typeof value === "string") {
+    console.log(value.toUpperCase());
+}
+
+Remember:
+any     → disables type checking
+unknown → requires checking before use
+
+
+20. never
+Represents something that never successfully returns.
+
+Example:
+function throwError(message: string): never {
+    throw new Error(message);
+}
+
+
+21. null and undefined
+let name: string | null = null;
+let age: number | undefined;
+
+Useful when values may not exist.
+
+22. Enums
+enum Role {
+    ADMIN,
+    USER,
+    GUEST
+}
+
+Use:
+let role: Role = Role.ADMIN;//0
+
+By default, TypeScript gives numbers automatically:
+enum Status {
+    SUCCESS, // 0
+    ERROR,   // 1
+    LOADING  // 2
+}
+
+String enum:
+enum Role {
+    ADMIN = "admin",
+    USER = "user",
+    GUEST = "guest"
+}
+
+23. Type Alias with Union
+type Role = "admin" | "user" | "guest";
+
+let role: Role = "admin";
+Often this is simpler than an enum.
+
+24. Readonly
+Prevent modification.
+
+interface User {
+    readonly id: number;
+    name: string;
+}
+const user: User = {
+    id: 101,
+    name: "Naeem"
+};
+
+This is invalid:
+user.id = 200;
+❌ Error.
+
+25. Intersection Type
+Combine multiple types.
+
+type Person = {
+    name: string;
+};
+
+type Employee = {
+    salary: number;
+};
+
+type User = Person & Employee;
+
+Now:
+
+const user: User = {
+    name: "Naeem",
+    salary: 50000
+};
+
+26. Interface Extension
+interface Person {
+    name: string;
+}
+
+interface Employee extends Person {
+    salary: number;
+}
+
+Use:
+
+const employee: Employee = {
+    name: "Naeem",
+    salary: 50000
+};
+
+27. Type Assertion
+Sometimes you know a type better than TypeScript.
+
+const value: unknown = "hello";
+const name = value as string;
+
+Another syntax:
+const name = <string>value;
+
+Prefer:
+value as string
+especially in React/TSX.
+
+28. typeof Type Guard
+function process(value: string | number) {
+    if (typeof value === "string") {
+        return value.toUpperCase();
+    }
+
+    return value * 2;
+}
+
+
+29. instanceof
+if (error instanceof Error) {
+    console.log(error.message);
+}
+
+Very useful when handling errors.
+
+30. Optional Chaining
+JavaScript + TypeScript:
+
+user?.address?.city
+
+Instead of:
+
+if (user && user.address) {
+    console.log(user.address.city);
+}
+31. Nullish Coalescing
+const name = user.name ?? "Guest";
+
+If user.name is:
+
+null
+undefined
+
+then "Guest" is used.
+
+32. Generics
+Generics allow reusable type-safe code.
+
+Without generic:
+
+function identity(value: any) {
+    return value;
+}
+
+Better:
+function identity<T>(value: T): T {
+    return value;
+}
+
+Use:
+
+identity<string>("Hello");
+identity<number>(100);
+
+for that one fun call T becomes that type
+
+TypeScript can infer it:
+
+
+identity("Hello");
+identity(100);
+
+
+33. Generic Array
+function getFirst<T>(items: T[]): T {
+    return items[0];
+}
+
+Use:
+getFirst<number>([10, 20, 30]);
+
+Returns:
+number
+
+34. Generic Interface
+interface ApiResponse<T> {
+    success: boolean;
+    data: T;
+}
+
+User response:
+
+interface User {
+    name: string;
+    age: number;
+}
+
+const response: ApiResponse<User> = {
+    success: true,
+    data: {
+        name: "Naeem",
+        age: 22
+    }
+};
+
+This pattern is extremely important in real projects.
+
+35. Generic API Response
+interface ApiResponse<T> {
+    success: boolean;
+    message: string;
+    data: T;
+}
+
+For users:
+type UserResponse = ApiResponse<User>;
+
+For products:
+type ProductResponse = ApiResponse<Product>;
+
+
+36. Generic Constraints
+function getLength<T extends { length: number }>(value: T) {
+    return value.length;
+}
+It means T can be any type, but that type MUST have a length property whose value is a number
+
+Valid:
+
+getLength("Hello");
+getLength([1, 2, 3]);
+
+
+37. keyof
+Gets keys of a type.
+
+interface User {
+    name: string;
+    age: number;
+}
+type UserKeys = keyof User;
+
+Equivalent to:
+"name" | "age"
+
+
+38. typeof in Types
+const user = {
+    name: "Naeem",
+    age: 22
+};
+
+type User = typeof user;
+TypeScript creates the type from the object.
+
+39. Utility Types
+Very important for professional TypeScript.
+
+Partial
+Makes everything optional.
+
+interface User {
+    name: string;
+    age: number;
+    email: string;
+}
+const updateUser: Partial<User> = {
+    name: "Ali"
+};
+
+Required
+Makes everything required.
+
+type RequiredUser = Required<User>;
+
+
+Pick
+Select specific properties.
+
+type UserPreview = Pick<User, "name" | "email">;
+
+
+Omit
+Remove properties.
+
+type PublicUser = Omit<User, "email">;
+
+Readonly
+type ReadonlyUser = Readonly<User>;
+
+| Utility           | What it does                |
+| ----------------- | --------------------------- |
+| `Partial<User>`   | Makes everything optional   |
+| `Required<User>`  | Makes everything required   |
+| `Pick<User, ...>` | Keeps selected properties   |
+| `Omit<User, ...>` | Removes selected properties |
+| `Readonly<User>`  | Makes properties read-only  |
+
+
+
+40. Record
+Create an object type with specific keys.
+type Roles = "admin" | "user";
+const permissions: Record<Roles, boolean> = {
+    admin: true,
+    user: false
+};
+The object must have keys from Roles, and every value must be a boolean.
+
+notes->
+Utility Types work with both interface and type, because they take an existing type and create a new type from it.
+
+For example, with an interface:
+
+interface User {
+    name: string;
+    age: number;
+    email: string;
+}
+
+
+type A = Partial<User>;
+type B = Required<User>;
+type C = Pick<User, "name" | "email">;
+type D = Omit<User, "email">;
+type E = Readonly<User>;
+type F = Record<"admin" | "user", boolean>;
+
+You can also use a type:
+
+type User = {
+    name: string;
+    age: number;
+    email: string;
+};
+
+
+type A = Partial<User>;
+type B = Required<User>;
+type C = Pick<User, "name" | "email">;
+
+Important
+The input can be either interface or type.
+But the result is generally written as a type:
+type UserPreview = Pick<User, "name" | "email">;
+
+So think:
+
+interface/type
+      ↓
+Utility Type
+      ↓
+new type
+
+Also, Record is slightly different: it doesn't need an existing interface/type. It can create an object type directly:
+type Roles = "admin" | "user";
+type Permissions = Record<Roles, boolean>;
+
+
+41. Interfaces for API Data
+Suppose backend sends:
+
+{
+    "id": "123",
+    "name": "Naeem",
+    "email": "naeem@gmail.com"
+}
+
+Create:
+
+interface User {
+    id: string;
+    name: string;
+    email: string;
+}
+
+Then:
+const user: User = response.data;
+
+42. TypeScript with Express
+
+Install:
+
+npm install express
+npm install -D typescript @types/node @types/express
+
+Basic server:
+import express, { Request, Response } from "express";
+
+const app = express();
+
+app.get("/", (req: Request, res: Response) => {
+    res.json({
+        message: "Server running"
+    });
+});
+
+app.listen(3000, () => {
+    console.log("Server running");
+});
+43. Express Request Body
+interface User {
+    name: string;
+    email: string;
+    age: number;
+}
+app.post("/users", (req: Request, res: Response) => {
+    const user: User = req.body;
+
+    console.log(user.name);
+
+    res.json(user);
+});
+
+In production, remember: TypeScript types don't validate runtime data. Use a validator such as Zod or express-validator when needed.
+
+44. Express Controller
+import { Request, Response } from "express";
+
+interface User {
+    name: string;
+    email: string;
+}
+
+export const createUser = (
+    req: Request,
+    res: Response
+): void => {
+
+    const user: User = req.body;
+
+    res.status(201).json({
+        success: true,
+        data: user
+    });
+};
+45. Express Custom Request Type
+
+Suppose authentication adds user to request.
+
+interface AuthRequest extends Request {
+    user?: {
+        id: string;
+    };
+}
+
+Then:
+
+const profile = (req: AuthRequest, res: Response) => {
+    console.log(req.user?.id);
+
+    res.json({
+        user: req.user
+    });
+};
+
+46. TypeScript with React
+
+Create React TypeScript project:
+
+npm create vite@latest my-app
+
+Select:
+
+React
+TypeScript
+
+Or:
+
+npm create vite@latest my-app -- --template react-ts
+47. React Component Props
+interface UserProps {
+    name: string;
+    age: number;
+}
+
+function User({ name, age }: UserProps) {
+    return (
+        <div>
+            <h1>{name}</h1>
+            <p>{age}</p>
+        </div>
+    );
+}
+
+Use:
+
+<User name="Naeem" age={22} />
+48. Optional React Props
+interface ButtonProps {
+    text: string;
+    disabled?: boolean;
+}
+function Button({ text, disabled = false }: ButtonProps) {
+    return (
+        <button disabled={disabled}>
+            {text}
+        </button>
+    );
+}
+49. React useState
+
+TypeScript usually infers simple state:
+
+const [count, setCount] = useState(0);
+
+TS knows:
+
+count → number
+
+Explicit type:
+const [name, setName] = useState<string>("");
+
+50. useState with Object
+interface User {
+    name: string;
+    age: number;
+}
+
+const [user, setUser] = useState<User | null>(null);
+Set:
+
+setUser({
+    name: "Naeem",
+    age: 22
+});
+
+51. useState with Array
+const [users, setUsers] = useState<User[]>([]);
+
+Add:
+setUsers(prev => [
+    ...prev,
+    {
+        name: "Naeem",
+        age: 22
+    }
+]);
+
+
+52. React Events
+
+Input:
+
+const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+) => {
+    console.log(event.target.value);
+};
+
+Button:
+
+const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+) => {
+    console.log("Clicked");
+};
+
+Form:
+
+const handleSubmit = (
+    event: React.FormEvent<HTMLFormElement>
+) => {
+    event.preventDefault();
+};
+
+
+53. React Children
+interface CardProps {
+    children: React.ReactNode;
+}
+function Card({ children }: CardProps) {
+    return <div>{children}</div>;
+}
+
+Use:
+<Card>
+    <h1>Hello</h1>
+</Card>
+
+
+54. React API Example
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+const [users, setUsers] = useState<User[]>([]);
+
+const getUsers = async () => {
+    const response = await fetch("/api/users");
+    const data: User[] = await response.json();
+    setUsers(data);
+};
+
+
+55. Async Functions
+async function getUser(): Promise<User> {
+    const response = await fetch("/api/user");
+    return response.json();
+}
+
+If it returns nothing:
+
+async function deleteUser(): Promise<void> {
+    // delete logic
+}
+
+56. Promise
+const promise: Promise<string> = new Promise((resolve) => {
+    resolve("Hello");
+});
+
+
+57. Error Handling
+try {
+    // code
+} catch (error: unknown) {
+
+    if (error instanceof Error) {
+        console.log(error.message);
+    }
+}
+
+Prefer unknown over:
+catch (error: any)
+
+58. Modules
+
+Export:
+
+export interface User {
+    name: string;
+    age: number;
+}
+
+Import:
+import { User } from "./types";
+
+59. Default Export
+export default function add(a: number, b: number) {
+    return a + b;
+}
+
+Import:
+import add from "./add";
+
+60. Type-only Import
+import type { User } from "./types";
+Useful when importing only types.
+
+61. tsconfig.json
+Important TypeScript configuration.
+{
+    "compilerOptions": {
+        "target": "ES2022",
+        "module": "NodeNext",
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "outDir": "./dist"
+    }
+}
+Important options
+target
+↓
+JavaScript version to generate
+
+module
+↓
+Module system
+
+strict
+↓
+Strong type checking
+
+outDir
+↓
+Output directory
+
+esModuleInterop
+↓
+Improves CommonJS/ES module interoperability
+
+skipLibCheck
+↓
+Skips checking declaration files
+
+62. Strict Mode
+"strict": true
+Recommended.
+It catches many potential bugs.
+
+Example:
+let name: string = null;
+
+With strict mode:
+❌ Type 'null' is not assignable to type 'string'
+
+Correct:
+let name: string | null = null;
+
+
+63. Classes
+class User {
+    name: string;
+    age: number;
+
+    constructor(name: string, age: number) {
+        this.name = name;
+        this.age = age;
+    }
+
+    greet(): string {
+        return `Hello ${this.name}`;
+    }
+}
+
+Use:
+const user = new User("Naeem", 22);
+console.log(user.greet());
+
+
+64. Access Modifiers
+class User {
+    public name: string;
+    private password: string;
+    protected id: number;
+    //rollNo by default
+
+    constructor(
+        name: string,
+        password: string,
+        id: number
+    ) {
+        this.name = name;
+        this.password = password;
+        this.id = id;
+    }
+}
+public    → accessible anywhere
+private   → only inside class
+protected → class + child classes
+
+
+65. Abstract Class
+abstract class Animal {
+    abstract makeSound(): void;
+}
+
+Child class:
+class Dog extends Animal {
+    makeSound(): void {
+        console.log("Bark");
+    }
+}
+
+
+66. TypeScript + MongoDB
+With MongoDB documents, define interfaces/types.
+
+interface User {
+    name: string;
+    email: string;
+    age: number;
+}
+
+With Mongoose, you can define a document type:
+
+interface User {
+    name: string;
+    email: string;
+    age: number;
+}
+
+Then define the schema separately.
+
+The key idea:
+
+Database Schema
+       +
+TypeScript Type
+       ↓
+Type-safe backend
+
+67. TypeScript + MERN Architecture
+A common structure:
+
+src/
+│
+├── controllers/
+│   └── user.controller.ts
+│
+├── routes/
+│   └── user.routes.ts
+│
+├── models/
+│   └── user.model.ts
+│
+├── middleware/
+│   └── auth.middleware.ts
+│
+├── types/
+│   └── user.types.ts
+│
+├── services/
+│   └── user.service.ts
+│
+└── server.ts
+
+68. DTO
+DTO = Data Transfer Object
+
+Example:
+interface CreateUserDTO {
+    name: string;
+    email: string;
+    password: string;
+}
+
+Controller:
+
+const createUser = (req: Request, res: Response) => {
+    const data: CreateUserDTO = req.body;
+
+    // create user
+};
+
+
+69. Type-safe API Pattern
+interface User {
+    id: string;
+    name: string;
+    email: string;
+}
+
+interface ApiResponse<T> {
+    success: boolean;
+    message: string;
+    data: T;
+}
+
+Then:
+
+type UserResponse = ApiResponse<User>;
+
+For multiple users:
+type UsersResponse = ApiResponse<User[]>;
+This is a very useful pattern for full-stack development.
+
+70. Important TypeScript Keywords
+Memorize these:
+
+string
+number
+boolean
+object
+array
+tuple
+any
+unknown
+never
+void
+null
+undefined
+
+type
+interface
+extends
+implements
+
+union |
+intersection &
+
+keyof
+typeof
+instanceof
+as
+
+readonly
+public
+private
+protected
+abstract
+
+Partial
+Required
+Pick
+Omit
+Record
+
+generics <T>
+71. Most Important TypeScript Concepts
+
+For your MERN development, prioritize:
+
+1. Basic types
+2. Type inference
+3. Arrays
+4. Objects
+5. Type aliases
+6. Interfaces
+7. Functions
+8. Union types
+9. Type narrowing
+10. Generics
+11. Utility types
+12. Type assertions
+13. keyof
+14. typeof
+15. async/Promise types
+16. React props
+17. React useState
+18. React events
+19. Express Request/Response
+20. API response types
+21. tsconfig
+22. strict mode
+72. TypeScript Interview Questions
+Beginner
+
+Q1. What is TypeScript?
+
+TypeScript is a statically typed superset of JavaScript that compiles to JavaScript.
+
+Q2. TypeScript vs JavaScript?
+
+JavaScript → dynamically typed
+TypeScript → statically typed
+
+Q3. What is type inference?
+TypeScript automatically determines a variable's type.
+
+let age = 22;
+
+Q4. any vs unknown?
+
+any     → can be used without checking
+unknown → must be narrowed before use
+
+Q5. interface vs type?
+
+Both can describe types. Interfaces are particularly useful for object contracts and extension,
+ while type aliases are very flexible for unions, intersections, and other type compositions.
+
+73. Advanced Interview Questions
+type vs interface
+interface User {
+    name: string;
+}
+type User = {
+    name: string;
+};
+Union
+type ID = string | number;
+Intersection
+type Employee = Person & Job;
+
+Generic
+function identity<T>(value: T): T {
+    return value;
+}
+Partial
+Partial<User>
+
+Makes all properties optional.
+
+Pick
+Pick<User, "name">
+
+Selects properties.
+
+Omit
+Omit<User, "password">
+
+Removes properties.
+
+74. JavaScript → TypeScript Conversion
+JavaScript
+function login(user, password) {
+    return {
+        user,
+        password
+    };
+}
+TypeScript
+interface LoginData {
+    user: string;
+    password: string;
+}
+
+function login(user: string, password: string): LoginData {
+    return {
+        user,
+        password
+    };
+}
+
+
+75. Real MERN Example
+types/user.ts
+export interface User {
+    id: string;
+    name: string;
+    email: string;
+}
+Controller
+import { Request, Response } from "express";
+import type { User } from "../types/user";
+
+export const getUser = (
+    req: Request,
+    res: Response
+): void => {
+
+    const user: User = {
+        id: "1",
+        name: "Naeem",
+        email: "naeem@gmail.com"
+    };
+
+    res.json({
+        success: true,
+        data: user
+    });
+};
+React
+interface User {
+    id: string;
+    name: string;
+    email: string;
+}
+
+function UserCard({ user }: { user: User }) {
+    return (
+        <div>
+            <h2>{user.name}</h2>
+            <p>{user.email}</p>
+        </div>
+    );
+}
+
+76. TypeScript Mental Model
+Remember:
+
+JavaScript
+    ↓
+TypeScript adds TYPES
+    ↓
+TS checks your code
+    ↓
+TS compiles/transforms
+    ↓
+JavaScript
+    ↓
+Browser / Node.js
+
+Important: TypeScript types mostly disappear at runtime.
+
+For example:
+let age: number = 22;
+
+The browser/Node ultimately runs JavaScript, not the TypeScript type annotation.
+
+77. The 80/20 TypeScript Cheat Sheet
+// BASIC
+let name: string = "Naeem";
+let age: number = 22;
+let active: boolean = true;
+
+// ARRAY
+let nums: number[] = [1, 2, 3];
+
+// OBJECT
+interface User {
+    name: string;
+    age: number;
+}
+
+// FUNCTION
+function add(a: number, b: number): number {
+    return a + b;
+}
+
+// OPTIONAL
+interface User {
+    name: string;
+    email?: string;
+}
+
+// UNION
+let id: string | number;
+
+// TYPE
+type Role = "admin" | "user";
+
+// GENERIC
+function identity<T>(value: T): T {
+    return value;
+}
+
+// NULL
+let user: User | null = null;
+
+// PARTIAL
+const update: Partial<User> = {
+    name: "Ali"
+};
+
+// PICK
+type UserName = Pick<User, "name">;
+
+// OMIT
+type PublicUser = Omit<User, "age">;
+
+// RECORD
+type Roles = "admin" | "user";
+
+const permissions: Record<Roles, boolean> = {
+    admin: true,
+    user: false
+};
+
+// TYPE ASSERTION
+const value: unknown = "Hello";
+const text = value as string;
+
+// ASYNC
+async function getUser(): Promise<User> {
+    // ...
+}
+
+// REACT
+const [users, setUsers] = useState<User[]>([]);
+
+interface Props {
+    user: User;
+}
+
+function UserCard({ user }: Props) {
+    return <h1>{user.name}</h1>;
+}
+

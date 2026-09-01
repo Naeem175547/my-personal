@@ -1,0 +1,247 @@
+🚀 EJS BASIC TEMPLATE GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 What is EJS?
+EJS
+→ Embedded JavaScript Templates
+Used for:
+✅ Creating dynamic HTML pages in Express.js
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Install EJS
+npm install ejs
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Set EJS as View Engine
+const express = require('express');
+const app = express();
+app.set('view engine','ejs');
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Folder Structure
+project/
+│
+├── views/
+│    └── home.ejs
+│
+└── index.js
+if index.js in not in projects , it is in nested folder then set path
+app.set('views',Path.join(__dirname+'../views'))
+or 
+app.set('views',__dirname+'/../views)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Basic EJS File
+home.ejs
+<h1>Hello EJS</h1>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Render EJS Page
+index.js
+app.get('/',(req,res)=>{
+   res.render('home');
+});
+📌 Output
+Hello EJS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Passing Data to EJS
+app.get('/',(req,res)=>{
+   res.render('home',{
+      name:"Naeem"
+   });
+
+});
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 Receiving Data in EJS
+
+home.ejs
+
+<h1><%= name %></h1>
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Output
+Naeem
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 EJS Tags
+
+1️⃣ <% %>
+
+Used for:
+✅ JavaScript code
+✅ Loops
+✅ Conditions
+
+Example:
+
+<% console.log("Hello") %>
+
+<% if(age >= 18){ %>
+   <h1>Adult</h1>
+<% } %>
+
+==================================================
+
+2️⃣ <%= %>
+
+Used for:
+✅ Printing output/value
+✅ Escaped output
+Escaped output means special HTML characters are
+converted into safe text before displaying.
+It prevents HTML from running in browser.
+
+Example:
+<%= "<h1>Hello</h1>" %>
+Output in Browser:
+<h1>Hello</h1>
+==================================================
+
+3️⃣ <%- %>
+Used for:
+✅ Rendering HTML
+✅ Unescaped output->
+Unescaped output means HTML is rendered directly
+in the browser.
+HTML tags work as actual HTML elements.
+
+Example:
+<%- "<h1>Hello</h1>" %>
+Output in Browser:
+Hello
+Displayed as actual HTML heading.
+==================================================
+
+4️⃣ <%# %>
+Used for:
+✅ Comment in EJS
+✅ Ignored by browser
+
+Example:
+<%# This is comment %>
+==================================================
+
+5️⃣ <%% %>
+Used for:
+✅ Printing literal <% %>
+
+Example:
+<%% console.log("Hello") %>
+Output:
+<% console.log("Hello") %>
+==================================================
+
+6️⃣ %>
+
+Used for:
+✅ Closing EJS tag
+
+Example:
+
+<% let x = 10; %>
+
+==================================================
+
+7️⃣ <%- include("file") %>
+
+Used for:
+✅ Including another EJS file
+✅ Reusable components
+
+Example:
+<%- include("header") %>
+==================================================
+8️⃣ <%_ %>
+
+Used for:
+✅ Removes whitespace before the tag
+
+Example:
+Hello
+<%_ let name = "Naeem"; %>
+World
+Output:
+HelloWorld
+==================================================
+9️⃣ <% _%>
+
+Used for:
+✅ Removes whitespace/new line after the tag
+
+Example:
+<% let name = "Naeem"; _%>
+Hello
+
+Output:
+Hello
+(without extra new line)
+==================================================
+
+🔟 <%_ _%>
+
+Used for:
+✅ Removes whitespace from both sides
+
+Example:
+Hello
+<%_ let name = "Naeem"; _%>
+World
+
+Output:
+HelloWorld
+==================================================
+
+🌟 Loop Example
+
+app.get('/',(req,res)=>{
+
+   res.render('home',{
+      arr:[1,2,3]
+   });
+
+});
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 home.ejs
+
+<% arr.forEach((e)=>{ %>
+   <h1><%= e %></h1>
+<% }) %>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 Output
+
+1
+2
+3
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌟 If Else Example
+
+<% if(name=="Naeem"){ %>
+
+   <h1>Hello Naeem</h1>
+
+<% } else { %>
+
+   <h1>Hello User</h1>
+
+<% } %>
+
+🎯 Final Summary
+
+EJS
+✅ Template Engine
+✅ Creates dynamic HTML
+
+res.render()
+✅ Renders EJS file
+
+<% %>
+✅ JavaScript code
+
+<%= %>
+✅ Print value
+
+<%- %>
+✅ Render HTML
+
+━━━━━━━━━━| Type                    | Purpose             
+| ----------------------- | ------------------- |
+| `<% %>` variable logic  | calculate values    |
+| `<% if { %> HTML <% } %>` | control HTML output |

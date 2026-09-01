@@ -1,0 +1,33 @@
+important  attribute
+text
+bg
+fg
+font
+padx
+pady
+borderwidth
+relief-border styling:
+flat: No border (default)
+RAISED: Raised border to give a 3D effect
+SUNKEN: Sunken border to give a 3D effect
+GROOVED: Grooved border
+RIDGED: Ridged border
+SOLID: Solid border
+
+NOTE: WHERE we write in uppercase no need to write inside " "
+
+
+variable classes ii tkinter:
+BooleanVar, DoubleVar,IntVar,StringVar
+
+
+Note MOst:
+for button command=funname it will invoke fun
+for Entry textvariable =varname by it we can access Entry value by get method
+for Checkbutton variable =varname by it we can get value of Checkbutton by get method and also for Radiobutton()
+
+get() function for all of three 
+
+
+
+

@@ -1,0 +1,59 @@
+char ch[] = {'2','g'};
+int arr[] = {1,2,3};
+String str = "abc";
+
+System.out.println(new String(ch));
+// char[] can be converted into String using String constructor
+// Output: 2g
+
+
+System.out.println(ch.toString());
+// Arrays do not override toString()
+// So default Object class toString() executes
+// [C means char array
+// @hashcode changes every run
+// Output: [C@15db9742
+
+
+System.out.println(str.toCharArray());
+// toCharArray() returns char[]
+// println() has special handling for char[]
+// So characters print directly
+// Output: abc
+
+
+System.out.println(arr.toString());
+// int[] does not have special println handling
+// Arrays also do not override toString()
+// [I means int array
+// @hashcode changes every run
+// Output: [I@6d06d69c
+
+
+System.out.println(new String(arr));
+// String constructor does NOT accept int[]
+// It accepts char[] or byte[]
+// Output: Compilation Error
+// no suitable constructor found for String(int[])
+
+
+| Type     | `println()` Output |
+| -------- | ------------------ |
+| `char[]` | prints characters  |
+| `int[]`  | memory reference   |
+| `String` | actual text        |
+
+
+static int idx = 0;
+cannot be written inside a method because Java does not allow static local variables.but in c it is valid
+
+In Java, static is allowed only:
+inside classes
+for class variables
+for methods
+nested static classes
+
+So this is valid in Java:
+class Solution {
+    static int idx = 0;
+}

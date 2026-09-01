@@ -1,0 +1,20 @@
+-->🧠 In Bootstrap
+👉 Bootstrap “Grid” is NOT CSS Grid
+👉 It is a grid system built using Flexbox
+Use Grid (row + col) → page layout
+Use Flex (d-flex) → alignment inside components
+🔥 What does that mean?
+.row is called a “grid row”
+But internally it uses:
+display: flex;
+flex-wrap: wrap;
+So:
+✔ Concept = Grid (12-column system)
+✔ Implementation = Flexbox
+
+->🧠 In Bootstrap
+🔹 Use d-flex when you want:
+Full control over layout
+Custom alignment
+No 12-column restriction
+in bootstrap d-flex = displex:flex;

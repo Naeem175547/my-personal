@@ -1,0 +1,143 @@
+JavaScript works on a single-threaded model, which means it can execute only one piece of code at a time, and this execution happens inside the Call Stack. 
+The call stack is like a stack of tasks where functions are added and removed following the LIFO (Last In, First Out) principle—so the most recently 
+added function executes first. All synchronous code runs here directly, one line after another.
+(js--->1.native js features 2. additonal capability(DOM and WebApi) of js given by runtime environment(browser or node js))
+For example:
+
+function first() {
+  console.log("First");
+}
+
+function second() {
+  first();
+  console.log("Second");
+}
+
+second();
+
+👉 Execution flow:
+
+second() goes into stack
+first() goes on top → runs → removed
+then "Second" prints
+Output:
+First
+Second
+
+However, JavaScript also needs to handle operations that take time, such as timers, network requests, or user interactions. 
+Instead of blocking the call stack, these tasks are handed off to Web APIs (provided by the browser or Node.js environment). 
+These APIs take care of asynchronous operations like setTimeout, setInterval, fetch, and DOM events in the background.
+(the moment js code encouters a functionaly which is  a runtime features all it does is trigger the request to runtime and donot wait for the exicution , 
+so immedialty come back so main thered(native code) is not distrured by anything where it is running or not)
+
+For example:
+
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timer Done");
+}, 2000);
+
+console.log("End");
+
+👉 Here:
+
+setTimeout is sent to Web APIs
+JS does NOT wait
+Output:
+Start
+End
+Timer Done
+
+Once an asynchronous task is completed by the Web APIs, its associated callback function doesn’t go directly back into the call stack. 
+Instead, it is placed into a waiting area called the Callback Queue (or Task Queue). This queue holds all completed async callbacks in 
+the order they are finished.
+
+Example:
+
+setTimeout(() => {
+  console.log("Task 1");
+}, 1000);
+
+setTimeout(() => {
+  console.log("Task 2");
+}, 500);
+
+👉 Even though Task 2 finishes first, both go into the queue and wait for execution order based on completion and event loop timing.
+Now comes the most crucial part: the Event Loop. The event loop continuously monitors both the call stack and the callback queue.
+ Its job is simple but powerful—it checks whether the call stack is empty. If the call stack is busy executing synchronous code, 
+ the event loop does nothing and waits. But as soon as the call stack becomes empty, the event loop takes the first callback from 
+ the queue and pushes it into the call stack for execution.
+ Example:
+console.log("Start");
+setTimeout(() => {
+  console.log("Async Task");
+}, 0);
+
+console.log("End");
+
+👉 Step-by-step:
+
+"Start" → runs
+setTimeout → goes to Web APIs
+"End" → runs
+Callback enters queue
+Event loop checks → stack empty
+Executes callback
+
+Output:
+
+Start
+End
+Async Task
+
+This cycle continues endlessly, allowing JavaScript to efficiently handle both synchronous and asynchronous operations without blocking execution.
+notes-->All async operations use Web APIs, but not all Web APIs are async.
+
+--->💡 Important Bonus (Microtask Queue – Promises):
+console.log("Start");
+Promise.resolve().then(() => {
+  console.log("Promise");
+});
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+
+console.log("End");
+
+👉 Output:
+
+Start
+End
+Promise
+Timeout
+
+👉 Reason:
+
+Promise goes to Microtask Queue (higher priority)
+Event loop executes microtasks before callback queue
+
+✅ Final understanding:
+
+Sync → Call Stack
+Async → Web APIs → Queue
+Event Loop → manages execution order
+Promises → run before setTimeout
+
+Web APIs
+ ├── DOM API
+ ├── Timer API
+ ├── Fetch API
+ ├── Geolocation API
+ └── Storage API
+
+Only some of them are asynchronous.
+
+-->Callback hell 
+ callback inside a callback inside a callback(code readability issue)
+
+-->Inteversion of control
+you are giving control of your code execution to somebody else.
+(for solving this Promises)
+

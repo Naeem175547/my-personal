@@ -1,0 +1,41 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./auto-service-e2e"
+    },
+    {
+      "path": "./auto-service"
+    },
+    {
+      "path": "./order-service-e2e"
+    },
+    {
+      "path": "./order-service"
+    },
+    {
+      "path": "./shared"
+    },
+    {
+      "path": "./inventory-service-e2e"
+    },
+    {
+      "path": "./inventory-service"
+    },
+    {
+      "path": "./payment-serive-e2e"
+    },
+    {
+      "path": "./payment-serive"
+    },
+    {
+      "path": "./checkout-service-e2e"
+    },
+    {
+      "path": "./checkout-service"
+    }
+  ],
+  "compilerOptions": {}
+}

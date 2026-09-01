@@ -1,0 +1,415 @@
+==========================
+JAVA STREAMS: BASIC TO ADVANCED
+==========================
+
+A Stream is used to process data in a functional style.
+
+Collection/Array → Stream → Operations → Result
+
+
+=================================================
+1. CREATING STREAMS
+=================================================
+
+FROM ARRAY
+
+int arr[] = {1,2,3};
+
+IntStream s = Arrays.stream(arr);
+
+Return Type:
+IntStream
+
+
+FROM LIST
+
+List<Integer> list = Arrays.asList(1,2,3);
+
+Stream<Integer> s = list.stream();
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+PRIMITIVE STREAM TYPES
+=================================================
+
+Data Type      Stream Type
+--------------------------------
+int            IntStream
+long           LongStream
+double         DoubleStream
+Object         Stream<T>
+
+
+
+=================================================
+2. forEach()
+=================================================
+
+Performs action on each element.
+
+list.stream()
+    .forEach(x -> System.out.println(x));
+
+Return Type:
+void
+
+
+
+=================================================
+3. filter()
+=================================================
+
+Keeps elements satisfying condition.
+
+list.stream()
+    .filter(x -> x % 2 == 0);
+
+Return Type:
+Stream<Integer>
+
+For primitive stream:
+IntStream
+
+
+
+=================================================
+4. map()
+=================================================
+
+Transforms elements.
+
+list.stream()
+    .map(x -> x * 2);
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+5. sorted()
+=================================================
+
+Sorts elements.
+
+list.stream()
+    .sorted();
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+6. distinct()
+=================================================
+
+Removes duplicates.
+
+list.stream()
+    .distinct();
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+7. limit()
+=================================================
+
+Takes first n elements.
+
+list.stream()
+    .limit(3);
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+8. skip()
+=================================================
+
+Skips first n elements.
+
+list.stream()
+    .skip(2);
+
+Return Type:
+Stream<Integer>
+
+
+
+=================================================
+9. count()
+=================================================
+
+Counts elements.
+
+long c = list.stream().count();
+
+Return Type:
+long
+
+
+
+=================================================
+10. sum()
+=================================================
+
+Only for primitive streams.
+
+int sum = Arrays.stream(arr).sum();
+
+Return Type:
+int
+
+
+
+=================================================
+11. average()
+=================================================
+
+OptionalDouble avg =
+        Arrays.stream(arr).average();
+
+Return Type:
+OptionalDouble
+
+
+SAFE EXTRACTION
+
+double val =
+        Arrays.stream(arr)
+              .average()
+              .orElse(0);
+
+Final Type:
+double
+
+
+
+=================================================
+12. min() and max()
+=================================================
+
+OptionalInt mn =
+        Arrays.stream(arr).min();
+
+Return Type:
+OptionalInt
+
+
+SAFE EXTRACTION
+
+int mn =
+        Arrays.stream(arr)
+              .min()
+              .orElse(0);
+
+Final Type:
+int
+
+
+
+=================================================
+13. findFirst()
+=================================================
+
+Optional<Integer> x =
+        list.stream().findFirst();
+
+Return Type:
+Optional<Integer>
+
+
+
+=================================================
+14. anyMatch()
+=================================================
+
+boolean ans =
+        list.stream()
+            .anyMatch(x -> x > 5);
+
+Return Type:
+boolean
+
+
+
+=================================================
+15. allMatch()
+=================================================
+
+boolean ans =
+        list.stream()
+            .allMatch(x -> x > 0);
+
+Return Type:
+boolean
+
+
+
+=================================================
+16. noneMatch()
+=================================================
+
+boolean ans =
+        list.stream()
+            .noneMatch(x -> x < 0);
+
+Return Type:
+boolean
+
+
+
+=================================================
+17. reduce()
+=================================================
+
+Combines all values into one.
+
+int sum =
+        list.stream()
+            .reduce(0, (a,b) -> a+b);
+
+Return Type:
+Integer
+
+
+
+=================================================
+18. collect()
+=================================================
+
+Used to convert stream into collection.
+
+List<Integer> result =
+        list.stream()
+            .filter(x -> x % 2 == 0)
+            .collect(Collectors.toList());
+
+Return Type:
+List<Integer>
+
+
+
+=================================================
+19. toList()
+=================================================
+
+Modern shortcut.
+
+List<Integer> result =
+        list.stream()
+            .map(x -> x * 2)
+            .toList();
+
+Return Type:
+List<Integer>
+
+
+
+=================================================
+20. toArray()
+=================================================
+
+Object arr[] =
+        list.stream().toArray();
+
+Return Type:
+Object[]
+
+
+
+=================================================
+FULL PIPELINE EXAMPLE
+=================================================
+
+List<Integer> list =
+        Arrays.asList(1,2,3,4,5,6);
+
+int result =
+        list.stream()
+            .filter(x -> x % 2 == 0)
+            .map(x -> x * 10)
+            .reduce(0, (a,b) -> a+b);
+
+System.out.println(result);
+
+
+STEPS:
+
+1 2 3 4 5 6
+↓ filter
+2 4 6
+↓ map
+20 40 60
+↓ reduce
+120
+
+
+
+=================================================
+IMPORTANT CONCEPT
+=================================================
+
+INTERMEDIATE OPERATIONS
+
+Return another stream.
+
+Examples:
+- filter()
+- map()
+- sorted()
+- distinct()
+
+These are lazy.
+
+
+
+TERMINAL OPERATIONS
+
+Produce final result.
+
+Examples:
+- forEach()
+- count()
+- reduce()
+- collect()
+
+After terminal operation, stream closes.
+
+
+
+=================================================
+STREAM LIFECYCLE
+=================================================
+
+Data Source
+    ↓
+Intermediate Operations
+    ↓
+Terminal Operation
+    ↓
+Final Result
+
+
+
+=================================================
+STREAM PROCESSING PIPELINE
+=================================================
+
+Source
+   ↓
+Intermediate Ops
+   ↓
+Terminal Op
+   ↓
+Result

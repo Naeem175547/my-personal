@@ -1,0 +1,145 @@
+# 📘 Regex Cheat Sheet (JavaScript) — `match()` and `test()`
+
+## 🔤 1. Basic Characters
+
+| Pattern | Meaning              | Text     | match()                             | test()                        |
+| ------- | -------------------- | -------- | ----------------------------------- | ----------------------------- |
+| `a`     | Exact character      | `cat`    | `"cat".match(/a/) → ["a"]`          | `/a/.test("cat") → true`      |
+| `cat`   | Exact word           | `my cat` | `"my cat".match(/cat/) → ["cat"]`   | `/cat/.test("my cat") → true` |
+| `.`     | Any single character | `a1@`    | `"a1@".match(/./g) → ["a","1","@"]` | `/./.test("a1@") → true`      |
+ exact workd character means anywhere in the 
+---
+
+## 🔡 2. Character Sets
+
+| Pattern    | Meaning           | Text    | match()                                        | test()                          |
+| ---------- | ----------------- | ------- | ---------------------------------------------- | ------------------------------- |
+| `[abc]`    | a OR b OR c       | `apple` | `"apple".match(/[abc]/g) → ["a"]`              | `/[abc]/.test("apple") → true`  |
+| `[a-z]`    | lowercase letters | `Hello` | `"Hello".match(/[a-z]/g) → ["e","l","l","o"]`  | `/[a-z]/.test("Hello") → true`  |
+| `[A-Z]`    | uppercase letters | `Hello` | `"Hello".match(/[A-Z]/g) → ["H"]`              | `/[A-Z]/.test("Hello") → true`  |
+| `[0-9]`    | digits            | `A5B`   | `"A5B".match(/[0-9]/g) → ["5"]`                | `/[0-9]/.test("A5B") → true`    |
+| `[a-zA-Z]` | all letters       | `A5b`   | `"A5b".match(/[a-zA-Z]/g) → ["A","b"]`         | `/[a-zA-Z]/.test("A5b") → true` |
+| `[^abc]`   | NOT a,b,c         | `apple` | `"apple".match(/[^abc]/g) → ["p","p","l","e"]` | `/[^abc]/.test("apple") → true` |
+
+---
+
+## 🔢 3. Quantifiers (Repetition)
+
+| Pattern  | Meaning       | Text     | match()                                | test()                           |
+| -------- | ------------- | -------- | -------------------------------------- | -------------------------------- |
+| `a*`     | 0 or more `a` | `aaab`   | `"aaab".match(/a*/) → ["aaa"]`         | `/a*/.test("aaab") → true`       |
+| `a+`     | 1 or more `a` | `aaab`   | `"aaab".match(/a+/) → ["aaa"]`         | `/a+/.test("aaab") → true`       |
+| `a?`     | 0 or 1 `a`    | `abc`    | `"abc".match(/a?/) → ["a"]`            | `/a?/.test("abc") → true`        |
+| `a{3}`   | exactly 3 `a` | `aaab`   | `"aaab".match(/a{3}/) → ["aaa"]`       | `/a{3}/.test("aaab") → true`     |
+| `a{2,5}` | 2 to 5 `a`    | `aaaaab` | `"aaaaab".match(/a{2,5}/) → ["aaaaa"]` | `/a{2,5}/.test("aaaaab") → true` |
+| `a{2,}`  | 2 or more `a` | `aaaaab` | `"aaaaab".match(/a{2,}/) → ["aaaaa"]`  | `/a{2,}/.test("aaaaab") → true`  |
+
+---
+
+## ⚡ 4. Special Shortcuts
+
+| Pattern | Meaning        | Text       | match()                                                   | test()                         |
+| ------- | -------------- | ---------- | --------------------------------------------------------- | ------------------------------ |
+| `\d`    | digit          | `A5B`      | `"A5B".match(/\d/g) → ["5"]`                              | `/\d/.test("A5B") → true`      |
+| `\D`    | NOT digit      | `A5B`      | `"A5B".match(/\D/g) → ["A","B"]`                          | `/\D/.test("A5B") → true`      |
+| `\w`    | word character | `A_5@`     | `"A_5@".match(/\w/g) → ["A","_","5"]`                     | `/\w/.test("A_5@") → true`     |
+| `\W`    | NOT word       | `A_5@`     | `"A_5@".match(/\W/g) → ["@"]`                             | `/\W/.test("A_5@") → true`     |
+| `\s`    | whitespace     | `Hi There` | `"Hi There".match(/\s/g) → [" "]`                         | `/\s/.test("Hi There") → true` |
+| `\S`    | NOT whitespace | `Hi There` | `"Hi There".match(/\S/g) → ["H","i","T","h","e","r","e"]` | `/\S/.test("Hi There") → true` |
+
+---
+
+## 📍 5. Anchors (Position)
+
+| Pattern | Meaning         | Text     | match()                            | test()                         |
+| ------- | --------------- | -------- | ---------------------------------- | ------------------------------ |
+| `^cat`  | starts with cat | `cat123` | `"cat123".match(/^cat/) → ["cat"]` | `/^cat/.test("cat123") → true` |
+| `dog$`  | ends with dog   | `123dog` | `"123dog".match(/dog$/) → ["dog"]` | `/dog$/.test("123dog") → true` |
+
+---
+
+## 🔗 6. Combining Patterns
+
+| Pattern    | Meaning                | Text         | match()                                           | test()                                 |
+| ---------- | ---------------------- | ------------ | ------------------------------------------------- | -------------------------------------- |
+| `^\d{10}$` | exactly 10 digits      | `9876543210` | `"9876543210".match(/^\d{10}$/) → ["9876543210"]` | `/^\d{10}$/.test("9876543210") → true` |
+| `^[a-z]+$` | only lowercase letters | `hello`      | `"hello".match(/^[a-z]+$/) → ["hello"]`           | `/^[a-z]+$/.test("hello") → true`      |
+
+---
+
+## 🔀 7. OR Operator
+
+| Pattern    | Meaning    | Text         | match()                                    | test()                                 |
+| ---------- | ---------- | ------------ | ------------------------------------------ | -------------------------------------- |
+| `cat\|dog` | cat OR dog | `I like dog` | `"I like dog".match(/cat\|dog/) → ["dog"]` | `/cat\|dog/.test("I like dog") → true` |
+
+---
+
+## 🧩 8. Grouping
+
+| Pattern  | Meaning   | Text    | match()                                  | test()                          |
+| -------- | --------- | ------- | ---------------------------------------- | ------------------------------- |
+| `(ab)`   | group ab  | `abcd`  | `"abcd".match(/(ab)/) → ["ab","ab"]`     | `/(ab)/.test("abcd") → true`    |
+| `(ab)+`  | repeat ab | `ababx` | `"ababx".match(/(ab)+/) → ["abab","ab"]` | `/(ab)+/.test("ababx") → true`  |
+| `(a\|b)` | a OR b    | `apple` | `"apple".match(/(a\|b)/) → ["a","a"]`    | `/(a\|b)/.test("apple") → true` |
+
+---
+
+## 🧠 9. Greedy vs Lazy
+
+| Pattern | Meaning | Text          | match()                                         | test()                               |
+| ------- | ------- | ------------- | ----------------------------------------------- | ------------------------------------ |
+| `<.*>`  | greedy  | `<h1>Hi</h1>` | `"<h1>Hi</h1>".match(/<.*>/) → ["<h1>Hi</h1>"]` | `/<.*>/.test("<h1>Hi</h1>") → true`  |
+| `<.*?>` | lazy    | `<h1>Hi</h1>` | `"<h1>Hi</h1>".match(/<.*?>/) → ["<h1>"]`       | `/<.*?>/.test("<h1>Hi</h1>") → true` |
+
+---
+
+## 🔍 10. Lookaheads
+
+| Pattern  | Meaning             | Text   | match()                           | test()                         |
+| -------- | ------------------- | ------ | --------------------------------- | ------------------------------ |
+| `a(?=b)` | a followed by b     | `abac` | `"abac".match(/a(?=b)/g) → ["a"]` | `/a(?=b)/.test("abac") → true` |
+| `a(?!b)` | a NOT followed by b | `ac`   | `"ac".match(/a(?!b)/g) → ["a"]`   | `/a(?!b)/.test("ac") → true`   |
+
+---
+
+## 🔄 11. Lookbehinds
+
+| Pattern   | Meaning       | Text | match()                          | test()                        |
+| --------- | ------------- | ---- | -------------------------------- | ----------------------------- |
+| `(?<=a)b` | b after a     | `ab` | `"ab".match(/(?<=a)b/g) → ["b"]` | `/(?<=a)b/.test("ab") → true` |
+| `(?<!a)b` | b NOT after a | `cb` | `"cb".match(/(?<!a)b/g) → ["b"]` | `/(?<!a)b/.test("cb") → true` |
+
+---
+
+## 🎯 12. Real-World Patterns
+
+| Use Case         | Pattern                                            | Text                | match()                                                                                                 | test()                                                                                |
+| ---------------- | -------------------------------------------------- | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 10-digit phone   | `^\d{10}$`                                         | `9876543210`        | `"9876543210".match(/^\d{10}$/) → ["9876543210"]`                                                       | `/^\d{10}$/.test("9876543210") → true`                                                |
+| only letters     | `^[a-zA-Z]+$`                                      | `Hello`             | `"Hello".match(/^[a-zA-Z]+$/) → ["Hello"]`                                                              | `/^[a-zA-Z]+$/.test("Hello") → true`                                                  |
+| username         | `^[a-zA-Z0-9_]{3,15}$`                             | `naeem_123`         | `"naeem_123".match(/^[a-zA-Z0-9_]{3,15}$/) → ["naeem_123"]`                                             | `/^[a-zA-Z0-9_]{3,15}$/.test("naeem_123") → true`                                     |
+| simple email     | `^\w+@\w+\.\w+$`                                   | `abc@gmail.com`     | `"abc@gmail.com".match(/^\w+@\w+\.\w+$/) → ["abc@gmail.com"]`                                           | `/^\w+@\w+\.\w+$/.test("abc@gmail.com") → true`                                       |
+| Email Validation | `^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$` | `test123@gmail.com` | `"test123@gmail.com".match(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/) → ["test123@gmail.com"]` | `/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test("test123@gmail.com") → true` |
+
+---
+
+## 🚩 13. Regex Flags
+
+| Flag | Meaning             | Text        | match()                                | test()                            |
+| ---- | ------------------- | ----------- | -------------------------------------- | --------------------------------- |
+| `g`  | global match        | `banana`    | `"banana".match(/a/g) → ["a","a","a"]` | `/a/g.test("banana") → true`      |
+| `i`  | ignore case         | `CAT`       | `"CAT".match(/cat/i) → ["CAT"]`        | `/cat/i.test("CAT") → true`       |
+| `m`  | multiline           | `hello\nhi` | `"hello\nhi".match(/^hi/m) → ["hi"]`   | `/^hi/m.test("hello\nhi") → true` |
+| `s`  | dot matches newline | `a\nb`      | `"a\nb".match(/a.b/s) → ["a\nb"]`      | `/a.b/s.test("a\nb") → true`      |
+| `u`  | unicode support     | `😀`        | `"😀".match(/😀/u) → ["😀"]`           | `/😀/u.test("😀") → true`         |
+
+
+
+| Method      | Purpose            |
+| ----------- | ------------------ |
+| `match()`   | get matching text  |
+| `test()`    | true/false check   |
+| `replace()` | replace matches    |
+| `search()`  | get index of match |
+| `split()`   | split using regex  |

@@ -1,0 +1,3482 @@
+---->MySql+ypeORM+nestjs
+NestJS + MySQL Roadmap
+1. Choose an ORM
+
+For NestJS, learn TypeORM first.
+
+NestJS
+   ↓
+TypeORM
+   ↓
+MySQL
+
+TypeORM handles things like:
+
+Entity
+Repository
+Relations
+CRUD
+Queries
+Transactions
+
+2. Install
+npm install @nestjs/typeorm typeorm mysql2
+
+3. Connect MySQL write inside import in appModule
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+  autoLoadEntities: true,
+  synchronize: true,
+})
+
+type: 'mysql'          → database type
+host: 'localhost'      → MySQL is running locally
+port: 3306             → default MySQL port
+username: 'root'       → MySQL username
+password: 'password'   → your MySQL password
+database: 'myapp'      → database name
+autoLoadEntities       → automatically load NestJS entities
+synchronize: true      → automatically sync entities with DB
+
+
+
+4. Entity
+
+Think of an Entity as a TypeScript representation of a database table.
+In Mongoose, you create a Schema/Model.
+In TypeORM, you create an Entity.
+
+| MongoDB + Mongoose | MySQL + TypeORM            |
+| ------------------ | -------------------------- |
+| Schema             | Entity                     |
+| Model              | Repository                 |
+| `User.find()`      | `userRepository.find()`    |
+| `User.findById()`  | `userRepository.findOne()` |
+| `User.create()`    | `userRepository.create()`  |
+| `User.save()`      | `userRepository.save()`    |
+
+The Entity describes the structure of the table, so in that sense it is similar to a schema/model definition.
+User Entity
+     ↓
+users table
+
+Example:
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @Column({ unique: true })
+  email: string;
+
+  @CreateDateColume()
+  createdAt:Date
+}
+
+notes->
+| Decorator                    | Primary key? | Automatically generates value? |
+| ---------------------------- | ------------ | ------------------------------ |
+| `@PrimaryGeneratedColumn()`  | ✅            | ✅                              |
+| `@PrimaryColumn()`           | ✅            | ❌                              |
+| `@Column({ primary: true })` | ✅            | ❌                              |
+
+
+@Entity() syntax
+
+
+Here:
+
+@Entity('users')
+        ↓
+Database table name = users
+
+You can also use the options form:
+
+@Entity({
+  name: 'users',
+})
+export class User {
+}
+
+These two are effectively used to specify the table name:
+
+@Entity('users')
+@Entity({
+  name: 'users',
+})
+entities Property
+| Property       | Description                                                                                     | Example                    |
+| -------------- | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `name`         | Specifies the database table name.                                                              | `name: 'users'`            |
+| `database`     | Specifies the database name for the entity. Mainly useful when working with multiple databases. | `database: 'nextjs_mysql'` |
+| `schema`       | Specifies the database schema. More relevant to databases such as PostgreSQL.                   | `schema: 'public'`         |
+| `synchronize`  | Controls whether this entity participates in schema synchronization.                            | `synchronize: true`        |
+| `withoutRowid` | SQLite-specific option to create a table without a rowid.                                       | `withoutRowid: true`       |
+
+
+
+
+@column Property
+
+
+| Property    | Description                                                                          | Example                 |
+| ----------- | ------------------------------------------------------------------------------------ | ----------------------- |
+| `type`      | Specifies the database column data type.                                             | `type: 'varchar'`       |
+| `length`    | Specifies the maximum length of the column. Mainly used with `varchar`, `char`, etc. | `length: 100`           |
+| `nullable`  | Determines whether the column can contain `NULL`.                                    | `nullable: true`        |
+| `unique`    | Prevents duplicate values in the column.                                             | `unique: true`          |
+| `default`   | Sets a default value when no value is provided.                                      | `default: new Date()`         |
+| `name`      | Specifies a different name for the database column.                                  | `name: 'first_name'`    |
+| `select`    | Controls whether the column is included in normal queries.                           | `select: false`         |
+| `insert`    | Controls whether TypeORM includes the column during `INSERT`.                        | `insert: false`         |
+| `update`    | Controls whether TypeORM includes the column during `UPDATE`.                        | `update: false`         |
+| `precision` | Total number of digits for a decimal number.                                         | `precision: 10`         |
+| `scale`     | Number of digits allowed after the decimal point.                                    | `scale: 2`              |
+| `comment`   | Adds a comment/description to the database column.                                   | `comment: 'User email'` |
+
+ex:
+@Column({
+  type: 'varchar',
+  length: 100,
+  nullable: false,
+  unique: true,
+  default: 'value',
+  name: 'database_column_name',
+})
+propertyName: string;
+
+inside TypeOrmModule.forRoot(), there is an entities option.
+
+There are two ways to connect your entities.
+
+1. Using entities
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'your_password',
+  database: 'nextjs_mysql',
+
+  entities: [User],
+  synchronize: true,
+  logging: true, //It tells TypeORM whether to print database activity in your NestJS console.
+})
+
+Here:
+
+entities: [User]
+
+means:
+"TypeORM, use the User entity with this database connection."
+
+So the flow is:
+
+TypeOrmModule.forRoot()
+        ↓
+   entities: [User]
+        ↓
+     User Entity
+        ↓
+     users table
+        ↓
+   nextjs_mysql
+
+You need to import User:
+import { User } from './user/user.entity';
+
+2. Recommended in NestJS: autoLoadEntities
+Instead of manually writing:
+
+entities: [User]
+
+you can use:
+
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'your_password',
+  database: 'nextjs_mysql',
+
+  autoLoadEntities: true,
+  synchronize: true,
+})
+
+Then in your feature module: feature module can we same or different
+
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([User]),
+  ],
+})
+export class UserModule {}
+
+
+5. Repository
+Repository is how your service communicates with the database.
+
+inside service
+
+constructor(
+  @InjectRepository(User)
+  private userRepository: Repository<User>,
+) {}
+
+Then:
+
+this.userRepository.find();
+this.userRepository.findOne({
+  where: { id: 1 },
+});
+this.userRepository.save(user);
+this.userRepository.delete(id);
+
+| Method      | Async? | Description                                                      | Example                       |
+| ----------- | :----: | ---------------------------------------------------------------- | ----------------------------- |
+| `find()`    |    ✅   | Retrieves **multiple records** from the table.                   | `await repo.find()`           |
+| `findOne()` |    ✅   | Retrieves **one record** based on conditions.                    | `await repo.findOne(...)`     |
+| `save()`    |    ✅   | **Creates or updates** an entity in the database.                | `await repo.save(user)`       |
+| `insert()`  |    ✅   | Directly **inserts new record(s)** into the database.            | `await repo.insert(data)`     |
+| `update()`  |    ✅   | **Updates existing record(s)** without first loading the entity. | `await repo.update(id, data)` |
+| `delete()`  |    ✅   | **Deletes record(s)** based on a condition or ID.                | `await repo.delete(id)`       |
+| `remove()`  |    ✅   | Deletes an **entity object** from the database.                  | `await repo.remove(user)`     |
+
+ when we return directly we no need to use async
+ create is only for creating entities it is not async operations
+ Quick difference
+find()       → Get many
+findOne()    → Get one
+save()       → Create OR update
+insert()     → Create directly
+update()     → Update directly
+delete()     → Delete by condition/ID
+remove()     → Delete entity object
+
+save() vs insert()
+await repo.save(user);
+
+Can insert or update depending on whether the entity has an existing primary key.
+
+await repo.insert({
+  username: 'naeem',
+  password: '1234',
+});
+
+Only performs an insert.
+
+delete() vs remove()
+await repo.delete(1);
+
+Deletes using an ID/condition.
+
+await repo.remove(user);
+
+Deletes an entity object that you already have.
+
+Important
+
+All these repository database methods return Promises, so you can either:
+
+const users = await repo.find();
+
+or simply:
+
+return repo.find();
+
+Both are valid.
+
+notes->
+| Method      | Syntax                          |
+| ----------- | ------------------------------- |
+| `find()`    | `find({ where: { id: 5 } })`    |
+| `findOne()` | `findOne({ where: { id: 5 } })` |
+| `update()`  | `update({ id: 5 }, data)`       |
+| `delete()`  | `delete({ id: 5 })`             |
+
+
+6. Relations ⭐⭐⭐
+
+This is the most important part for you.
+
+1. @OneToOne
+Scenario
+A user has one profile, and a profile belongs to one user.
+
+User
+  │
+  └── Profile
+
+User Entity
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @OneToOne(() => Profile, profile => profile.user)
+  profile: Profile;
+}
+
+
+Profile Entity
+@Entity()
+export class Profile {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  bio: string;
+
+  @OneToOne(() => User, user => user.profile)
+  @JoinColumn()
+  user: User;
+}
+
+
+Important
+
+@JoinColumn() tells TypeORM:
+
+"Put the foreign key here."
+
+So the database can look like:
+
+profile
+-------------------------
+id | bio | userId
+1  | ... | 5
+
+
+
+now understand:
+1. The relationship
+
+User
+  ↓
+Profile
+
+Each user has one profile, and each profile belongs to one user.
+
+2. User entity
+@OneToOne(() => Profile, profile => profile.user)
+profile: Profile;
+
+Break it into pieces:
+
+@OneToOne(
+  () => Profile,
+  profile => profile.user
+)
+profile: Profile;
+
+First part
+() => Profile
+
+means:
+User is connected to the Profile entity.
+
+So:
+User ─────── Profile
+
+Second part
+profile => profile.user
+
+means:
+"Go to the Profile entity and find the property that points back to User."
+
+And in Profile we have:
+user: User;
+
+So these two are connected:
+User.profile
+      ↕
+Profile.user
+
+3. Profile entity
+@OneToOne(() => User, user => user.profile)
+@JoinColumn()
+user: User;
+
+Again:
+
+@OneToOne(
+  () => User,
+  user => user.profile
+)
+@JoinColumn()
+user: User;
+
+First part
+() => User
+
+means:
+Profile is connected to the User entity.
+
+Second part
+user => user.profile
+
+means:
+Go back to User and find its profile property.
+
+So:
+Profile.user
+      ↕
+User.profile
+
+4. Why does @JoinColumn() exist?
+
+This is very important.
+@JoinColumn() tells TypeORM:
+"This side will contain the foreign key."
+Because we put:
+
+@JoinColumn()
+user: User;
+
+inside Profile, the Profile table gets the foreign key.
+
+So MySQL could look like:
+
+users
+----------------
+id | username
+1  | Naeem
+2  | Ali
+
+profiles
+-------------------------
+id | bio       | userId
+1  | Developer | 1
+2  | Student   | 2
+
+The important part:
+profiles.userId
+
+points to:
+
+users.id
+5. Why don't we put @JoinColumn() on both?
+
+Don't do this:
+
+// User
+@OneToOne(...)
+@JoinColumn()
+profile: Profile;
+
+and:
+
+// Profile
+@OneToOne(...)
+@JoinColumn()
+user: User;
+
+Usually, you choose one side as the owning side.
+
+Here:
+
+Profile
+   |
+   └── userId
+
+So Profile owns the relationship.
+
+6. Think of it like this
+User
+profile: Profile;
+
+means:
+"I have a profile."
+
+Profile
+user: User;
+
+means:
+"I belong to a user."
+
+And:
+
+@JoinColumn()
+means:
+"My table stores the ID that connects us."
+
+So:
+
+User
+  │
+  │ profile
+  ↓
+Profile
+  │
+  │ user
+  ↓
+User
+
+7. Full code
+User
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @OneToOne(() => Profile, profile => profile.user)
+  profile: Profile;
+}
+
+
+Profile
+@Entity()
+export class Profile {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  bio: string;
+
+  @OneToOne(() => User, user => user.profile)
+  @JoinColumn()
+  user: User;
+}
+
+The key thing to memorize is:
+
+User.profile  ←→  Profile.user
+
+and:
+
+@JoinColumn()
+      ↓
+foreign key is stored on this side
+
+For  blog project, you don't need to overthink OneToOne. The relationship you'll use much more is:
+
+User 1 ───────< Posts
+
+which is:
+
+// User
+@OneToMany(() => Post, post => post.user)
+posts: Post[];
+
+// Post
+@ManyToOne(() => User, user => user.posts)
+user: User;
+
+That one is worth mastering first.
+
+
+2. @OneToMany + @ManyToOne
+
+This is the most important relationship for your blog.
+
+Scenario
+
+One user can write many posts.
+
+User
+ │
+ ├── Post 1
+ ├── Post 2
+ └── Post 3
+
+But:
+
+Post 1 → belongs to User 1
+Post 2 → belongs to User 1
+Post 3 → belongs to User 1
+User
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  username: string;
+
+  @OneToMany(() => Post, post => post.user)
+  posts: Post[];
+}
+
+
+
+Post
+@Entity()
+export class Post {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  title: string;
+
+  @Column()
+  content: string;
+
+  @ManyToOne(() => User, user => user.posts)
+  user: User;
+}
+
+That's it.
+Database
+The important part is:
+
+users
+----------------
+id
+1
+2
+3
+
+posts
+--------------------------------
+id | title       | userId
+1  | NestJS      | 1
+2  | TypeORM     | 1
+3  | React       | 2
+
+Notice:
+
+Post → userId
+The Post table has the foreign key.
+That's why:
+
+@ManyToOne()
+
+is on Post.
+
+3. Why post => post.user?
+
+This line:
+
+@OneToMany(() => Post, post => post.user)
+posts: Post[];
+
+means:
+User has many Post objects, and the connection is through Post.user.
+
+And:
+
+@ManyToOne(() => User, user => user.posts)
+user: User;
+
+means:
+This Post belongs to one User, and the reverse property is User.posts.
+
+Think:
+
+User.posts  ←→  Post.user
+
+They are connected to each other.
+
+4. Real Blog Example
+
+Suppose:
+
+User
+id = 1
+username = "Naeem"
+
+creates:
+
+Post
+id = 10
+title = "Learning NestJS"
+
+You can create it like:
+
+const user = await this.userRepository.findOne({
+  id: 1,
+});
+
+const post = new Post();
+
+post.title = 'Learning NestJS';
+post.content = 'Today I learned TypeORM relationships.';
+post.user = user;
+
+await this.postRepository.save(post);
+
+Database becomes:
+
+posts
+
+id | title            | content | userId
+---|------------------|---------|-------
+10 | Learning NestJS  | ...     | 1
+
+5. Getting User's Posts
+const user = await this.userRepository.findOne({
+  where: { id: 1 },
+  relations: {
+    posts: true,
+  },
+});
+
+Now:
+user.posts
+
+contains:
+
+[
+  {
+    id: 10,
+    title: 'Learning NestJS'
+  },
+  {
+    id: 11,
+    title: 'Learning TypeORM'
+  }
+]
+
+6. Getting Post's User
+const post = await this.postRepository.findOne({
+  where: { id: 10 },
+  relations: {
+    user: true,
+  },
+});
+
+Now:
+
+post.user
+
+gives:
+
+{
+  id: 1,
+  username: 'Naeem'
+}
+
+
+7. @ManyToMany
+Scenario
+
+A post can have many categories.
+
+And a category can contain many posts.
+
+Post 1 ─────┬── Technology
+             └── Programming
+
+Post 2 ─────┬── Programming
+             └── React
+
+That's:
+
+Post ←→ Category
+Post
+@Entity()
+export class Post {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  title: string;
+
+  @ManyToMany(() => Category, category => category.posts)
+  @JoinTable()
+  categories: Category[];
+}
+Category
+
+@Entity()
+export class Category {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  name: string;
+
+  @ManyToMany(() => Post, post => post.categories)
+  posts: Post[];
+}
+Why @JoinTable()?
+
+Because MySQL needs a separate junction table.
+TypeORM can create something like:
+
+post_categories
+-----------------
+postId | categoryId
+-------|----------8
+1      | 1
+1      | 2
+2      | 2
+2      | 3
+
+| Relationship              | Example            | Foreign Key    |
+| ------------------------- | ------------------ | -------------- |
+| `OneToOne`                | User → Profile     | One side       |
+| `OneToMany` + `ManyToOne` | User → Posts       | `Post`         |
+| `ManyToMany`              | Posts ↔ Categories | Junction table |
+
+The most important rule
+One User
+   ↓
+Many Posts
+
+Use:
+
+// User
+@OneToMany(() => Post, post => post.user)
+posts: Post[];
+
+and:
+
+// Post
+@ManyToOne(() => User, user => user.posts)
+user: User;
+
+ManyToOne is where the foreign key lives.
+
+###foreign key constraint
+n TypeORM, you apply foreign-key behavior through the relation options.
+
+1. Basic Foreign Key
+@ManyToOne(() => User, user => user.posts)
+user: User;
+2. ON DELETE CASCADE
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'CASCADE',
+})
+user: User;
+3. ON DELETE SET NULL
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'SET NULL',
+})
+user: User;
+
+Your column must allow NULL:
+
+@Column({ nullable: true })
+userId: number;
+
+4. ON DELETE RESTRICT
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'RESTRICT',
+})
+user: User;
+
+5. ON UPDATE CASCADE
+@ManyToOne(() => User, user => user.posts, {
+  onUpdate: 'CASCADE',
+})
+user: User;
+6. ON UPDATE SET NULL
+@ManyToOne(() => User, user => user.posts, {
+  onUpdate: 'SET NULL',
+})
+user: User;
+
+The column must allow NULL.
+
+7. Both ON DELETE and ON UPDATE
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+})
+user: User;
+8. Using @JoinColumn
+
+Usually you'll use @JoinColumn to specify the actual FK column:
+
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+})
+@JoinColumn({ name: 'user_id' })
+user: User;
+
+This produces conceptually:
+
+posts
+----------------
+id
+user_id  ───────→ users.id
+9. Complete User/Post example
+// user.entity.ts
+
+
+@OneToMany(() => Post, post => post.user)
+posts: Post[];
+// post.entity.ts
+
+
+@ManyToOne(() => User, user => user.posts, {
+  onDelete: 'CASCADE',
+  onUpdate: 'CASCADE',
+})
+@JoinColumn({ name: 'user_id' })
+user: User;
+
+So the main TypeORM options you need to remember are:
+
+@ManyToOne()
+   ↓
+Creates the relationship
+
+
+@JoinColumn()
+   ↓
+Specifies the FK column
+
+
+onDelete
+   ↓
+What happens when parent is deleted
+
+
+onUpdate
+   ↓
+What happens when parent key is updated
+
+onDelte:cascade means delte corresponding rows from child table
+onUpdate:cascade means update corresponding rows form child table
+
+foreign key contraints are applied to child table (while creating foreign key)
+
+
+
+And cascade is different from onDelete: 'CASCADE'
+cascade: true
+This is a TypeORM operation rule.
+
+@ManyToOne(() => User, user => user.posts, {
+  cascade: true,
+})
+user: User;
+
+It tells TypeORM that operations on one entity can be propagated to the related entity.
+
+For example, when saving:
+const post = new Post();
+post.title = "Hello";
+
+post.user = new User();
+post.user.name = "Imran";
+
+
+await postRepository.save(post);
+
+With cascade: true, TypeORM can save the related User automaticall
+
+
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from '../users/user.entity';
+import { Post } from '../posts/post.entity';
+
+@Entity('likes')
+export class LikesEntity {
+
+  @PrimaryColumn()
+  user_id: number;
+
+  @PrimaryColumn()
+  post_id: number;
+
+  @ManyToOne(() => User, (user) => user.likes, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
+  user: User;
+
+  @ManyToOne(() => Post, (post) => post.likes, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'post_id' })
+  post: Post;
+}
+
+2. User entity
+
+Add the reverse relation:
+
+@OneToMany(() => LikesEntity, (like) => like.user)
+likes: LikesEntity[];
+
+For example:
+
+@Entity('users')
+export class User {
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // other columns...
+
+  @OneToMany(() => LikesEntity, (like) => like.user)
+  likes: LikesEntity[];
+}
+3. Post entity
+
+Similarly:
+
+@OneToMany(() => LikesEntity, (like) => like.post)
+likes: LikesEntity[];
+@Entity('posts')
+export class Post {
+
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  // other columns...
+
+  @OneToMany(() => LikesEntity, (like) => like.post)
+  likes: LikesEntity[];
+}
+
+sql eqavalent
+
+CREATE TABLE likes (
+    user_id INT NOT NULL,
+    post_id INT NOT NULL,
+
+    PRIMARY KEY (user_id, post_id),
+
+    CONSTRAINT fk_likes_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_likes_post
+        FOREIGN KEY (post_id)
+        REFERENCES posts(id)
+        ON DELETE CASCADE
+);
+
+
+
+
+
+9. Your Blog Relationship Map
+For your project, you'll probably have:
+
+User
+ │
+ ├──────< Posts
+ │
+ ├──────< Comments
+ │
+ ├──────< Likes
+ │
+ └──────< Bookmarks
+         
+
+Post
+ │
+ ├──────< Comments
+ │
+ ├──────< Likes
+ │
+ ├──────< Bookmarks
+ │
+ └──────<> Categories
+
+So you'll repeatedly use:
+
+@OneToMany()
+@ManyToOne()
+
+and for categories:
+
+@ManyToMany()
+
+@OneToOne() is less important for the basic blog, but User → Profile is a good example to practice it.
+
+
+
+
+Understand:
+
+@OneToOne
+@OneToMany
+@ManyToOne
+@ManyToMany
+
+
+
+
+7. DTO + Validation
+
+You already know NestJS DTOs, but combine them with database entities:
+
+Request
+  ↓
+DTO
+  ↓
+Validation
+  ↓
+Service
+  ↓
+Repository
+  ↓
+MySQL
+
+Different request types can have different DTOs. You generally should not use one DTO for everything.
+For your blog:
+
+1. Create → CreatePostDto
+
+When creating a post:
+
+export class CreatePostDto {
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @IsString()
+  @IsNotEmpty()
+  content: string;
+}
+
+Request:
+
+{
+  "title": "My Blog",
+  "content": "Hello world"
+}
+
+2. Update → UpdatePostDto
+om '@nestjs/mapped-types';
+For updating, fields are usually optional because you might change only one field.
+
+import { PartialType } fr
+export class UpdatePostDto extends PartialType(CreatePostDto) {}
+
+Now all fields from CreatePostDto become optional.
+
+So this is valid:
+
+{
+  "title": "Updated Blog"}
+
+You don't need to send content.
+
+3. Login → LoginDto
+Login has completely different data:
+
+export class LoginDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
+
+Request:
+
+{
+  "email": "abc@gmail.com",
+  "password": "123456"
+}
+
+4. Register → RegisterDto
+export class RegisterDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  @MinLength(6)
+  password: string;
+}
+Easy rule
+Create Post  → CreatePostDto
+Update Post  → UpdatePostDto
+Login        → LoginDto
+Register     → RegisterDto
+Create User  → CreateUserDto
+Update User  → UpdateUserDto
+Create Comment → CreateCommentDto
+
+Think of DTO as:
+
+"What data is allowed/expected for THIS request?"
+
+So DTOs are usually different for different operations, even when they work with the same entity.
+
+For Create → required fields.
+For Update → usually optional fields using PartialType().
+
+
+
+8. QueryBuilder
+
+Learn this after basic repositories:
+
+createQueryBuilder()
+
+Useful for complex:
+
+JOIN
+WHERE
+GROUP BY
+ORDER BY
+pagination
+
+
+
+TypeORM QueryBuilder
+
+You already have:
+
+repository.find()
+repository.findOne()
+repository.save()
+repository.update()
+repository.delete()
+
+These are good for normal/simple queries.
+When the query becomes more complicated, use:
+
+createQueryBuilder()
+
+Think:
+
+Repository
+   ↓
+Simple query
+   ↓
+find(), findOne()
+
+
+Complex query
+   ↓
+createQueryBuilder()
+
+1. createQueryBuilder()
+
+Basic example:
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .getMany();
+
+Here:
+'user'
+is an alias.
+You can think:
+User table → user
+So instead of:
+User.name
+
+you write:
+user.name
+
+2. WHERE
+
+Suppose you want users whose age is greater than 18.
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .where('user.age > :age', {
+    age: 18,
+  })
+  .getMany();
+
+Conceptually:
+
+SELECT *
+FROM user
+WHERE age > 18;
+
+Why :age?
+This:
+.where('user.age > :age', { age: 18 })
+is better than putting the value directly into the SQL string.
+
+You can also use:
+
+.where('user.name = :name', {
+  name: 'Naeem',
+})
+
+3. Multiple WHERE
+andWhere()
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .where('user.age > :age', {
+    age: 18,
+  })
+  .andWhere('user.status = :status', {
+    status: 'active',
+  })
+  .getMany();
+
+Meaning:
+
+WHERE age > 18
+AND status = 'active'
+
+orWhere()
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .where('user.role = :admin', {
+    admin: 'admin',
+  })
+  .orWhere('user.role = :manager', {
+    manager: 'manager',
+  })
+  .getMany();
+
+Meaning:
+
+WHERE role = 'admin'
+OR role = 'manager'
+
+
+4. JOIN
+Suppose you have:
+User
+  |
+  └── Department
+
+Entities:
+
+// User
+@ManyToOne(() => Department)
+department: Department;
+
+Now you want users with their department information.
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .leftJoinAndSelect(
+    'user.department',
+    'department',
+  )
+  .getMany();
+
+The important part:
+
+.leftJoinAndSelect(
+  'user.department',
+  'department'
+)
+
+means:
+Join the department relationship and include the department data in the result.
+Result could look like:
+
+[
+  {
+    "id": 1,
+    "name": "Naeem",
+    "department": {
+      "id": 10,
+      "name": "IT"
+    }
+  }
+]
+
+leftJoin() vs leftJoinAndSelect()
+
+leftJoinAndSelect
+.leftJoinAndSelect('user.department', 'department')
+
+Join and return department data.
+
+leftJoin
+.leftJoin('user.department', 'department')
+
+Join but don't automatically return the department entity.
+
+For example, you might use leftJoin() when the joined table is only needed for filtering:
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .leftJoin('user.department', 'department')
+  .where('department.name = :name', {
+    name: 'IT',
+  })
+  .getMany();
+
+
+5. ORDER BY
+
+Suppose you want newest users first.
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .orderBy('user.createdAt', 'DESC')
+  .getMany();
+
+SQL:
+ORDER BY createdAt DESC
+Ascending
+.orderBy('user.createdAt', 'ASC')
+Descending
+.orderBy('user.createdAt', 'DESC')
+
+Multiple ORDER BY
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .orderBy('user.name', 'ASC')
+  .addOrderBy('user.createdAt', 'DESC')
+  .getMany();
+
+Meaning:
+First sort by name
+Then sort by createdAt
+
+6. GROUP BY
+
+Suppose you want to count users in each department.
+
+const result = await this.userRepository
+  .createQueryBuilder('user')
+  .select('user.departmentId', 'departmentId')
+  .addSelect('COUNT(user.id)', 'totalUsers')
+  .groupBy('user.departmentId')
+  .getRawMany();
+
+Conceptually:
+
+SELECT
+    departmentId,
+    COUNT(id) AS totalUsers
+FROM user
+GROUP BY departmentId;
+
+Result:
+
+[
+  {
+    "departmentId": 1,
+    "totalUsers": "10"
+  },
+  {
+    "departmentId": 2,
+    "totalUsers": "5"
+  }
+]
+
+Why getRawMany()?
+Because this isn't simply returning User entities.
+You're creating a custom result:
+
+departmentId
+totalUsers
+
+So:
+
+.getRawMany()
+
+is appropriate.
+
+7. getMany() vs getRawMany()
+getMany()
+Returns entities.
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .where('user.age > :age', { age: 18 })
+  .getMany();
+
+Result:
+
+User[]
+
+
+getRawMany()
+
+Returns raw/custom data.
+
+const result = await this.userRepository
+  .createQueryBuilder('user')
+  .select('user.role', 'role')
+  .addSelect('COUNT(user.id)', 'count')
+  .groupBy('user.role')
+  .getRawMany();
+
+Result:
+
+[
+  {
+    "role": "admin",
+    "count": "3"
+  }
+]
+
+8. Pagination
+
+Pagination means:
+Don't return all records. Return a specific number of records and skip some.
+Suppose:
+
+100 users
+
+You want:
+
+Page 1 → users 1-10
+Page 2 → users 11-20
+Page 3 → users 21-30
+
+Two important methods:
+
+.skip()
+.take()
+Example
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .skip(0)
+  .take(10)
+  .getMany();
+
+This gives the first 10.
+
+Page 2
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .skip(10)
+  .take(10)
+  .getMany();
+
+Meaning:
+
+skip first 10
+take next 10
+
+9. Dynamic pagination
+Usually the frontend sends:
+page = 3
+limit = 10
+
+Calculate:
+
+const page = 3;
+const limit = 10;
+
+const skip = (page - 1) * limit;
+
+So:
+
+skip = (3 - 1) × 10
+     = 20
+
+Then:
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .skip(skip)
+  .take(limit)
+  .getMany();
+
+Result:
+
+Page 1 → skip 0
+Page 2 → skip 10
+Page 3 → skip 20
+Page 4 → skip 30
+
+10. Pagination + total count
+
+Very commonly you want:
+
+users
+total users
+
+TypeORM provides:
+
+.getManyAndCount()
+
+Example:
+
+const [users, total] = await this.userRepository
+  .createQueryBuilder('user')
+  .skip(20)
+  .take(10)
+  .getManyAndCount();
+
+You get:
+
+users → current 10 users
+total → total number of users
+
+For example:
+
+users = [
+  // 10 users
+]
+
+total = 100
+11. Combining everything
+
+Here's a realistic complex query:
+
+const users = await this.userRepository
+  .createQueryBuilder('user')
+  .leftJoinAndSelect(
+    'user.department',
+    'department'
+  )
+
+  .where('user.age >= :age', {
+    age: 18,
+  })
+
+  .andWhere('department.name = :department', {
+    department: 'IT',
+  })
+
+  .orderBy('user.createdAt', 'DESC')
+
+  .skip(0)
+  .take(10)
+
+  .getMany();
+
+Read it from top to bottom:
+
+createQueryBuilder
+        ↓
+JOIN department
+        ↓
+WHERE age >= 18
+        ↓
+AND department = IT
+        ↓
+ORDER BY newest
+        ↓
+SKIP 0
+        ↓
+TAKE 10
+        ↓
+getMany
+
+12. What you should remember
+
+Don't try to memorize the entire QueryBuilder API.
+
+Remember these:
+
+.createQueryBuilder('user')
+
+Start query.
+
+.where()
+.andWhere()
+.orWhere()
+
+Filter.
+
+.leftJoin()
+.leftJoinAndSelect()
+
+Join tables/relationships.
+
+.groupBy()
+
+Group records.
+
+.orderBy()
+.addOrderBy()
+
+Sort.
+
+.skip()
+.take()
+
+Pagination.
+
+.getMany()
+Get entities.
+
+.getRawMany()
+Get custom/raw results.
+
+.getManyAndCount()
+Get entities + total count.
+
+One-line mental model
+QueryBuilder =
+JOIN + WHERE + GROUP BY + ORDER BY + pagination
+
+You don't need QueryBuilder for every query. 
+Use Repository methods for simple CRUD; switch to QueryBuilder when the query becomes complex.
+
+
+9. Transactions
+later:first in mysql ->transection rollback commit
+
+You already learned the concept.
+
+Now learn how to implement transactions using TypeORM.
+
+Then → GraphQL
+
+Your complete stack becomes:
+
+             React
+               │
+               ▼
+        Apollo Client
+               │
+               ▼
+           GraphQL
+               │
+               ▼
+            NestJS
+               │
+        ┌──────┴──────┐
+        ▼             ▼
+    Resolver       Service
+                      │
+                      ▼
+                   TypeORM
+                      │
+                      ▼
+                    MySQL
+Your learning order now
+1. NestJS + TypeORM
+2. Entities
+3. Repository
+4. CRUD
+5. Relationships
+6. QueryBuilder
+7. Transactions
+        ↓
+8. GraphQL
+9. NestJS GraphQL
+10. React + Apollo Client
+
+Next topic: NestJS + TypeORM setup and first MySQL CRUD.
+
+
+
+---->
+TYPEORM REPOSITORY METHODS — RETURN VALUES
+============================================
+// 1. find()
+// Gets multiple users
+const users = await this.userRepo.find();
+
+// Actually returns:
+[
+    {
+        id: 1,
+        username: "ali",
+        password: "$2b$10$abc...",
+        role: "USER"
+    },
+    {
+        id: 2,
+        username: "naeem",
+        password: "$2b$10$xyz...",
+        role: "ADMIN"
+    }
+]
+
+// Return → User[]
+
+
+// 2. findOne()
+// Gets one user
+const user = await this.userRepo.findOne({
+    where: { id: 1 }
+});
+
+// Actually returns:
+{
+    id: 1,
+    username: "ali",
+    password: "$2b$10$abc...",
+    role: "USER"
+}
+
+// If user doesn't exist:
+null
+
+// Return → User | null
+
+
+// 3. create()
+// Creates entity object but DOES NOT save it
+const user = this.userRepo.create({
+    username: "ahmed",
+    password: "1234",
+    role: UserRole.USER
+});
+
+// Actually returns:
+{
+    username: "ahmed",
+    password: "1234",
+    role: "USER"
+}
+
+// Return → User
+// Database → NOT changed
+
+
+// 4. save()
+// Saves a new entity OR updates an existing entity
+const savedUser = await this.userRepo.save(user);
+
+// Actually returns:
+{
+    id: 4,
+    username: "ahmed",
+    password: "1234",
+    role: "USER"
+}
+
+// Return → Saved User
+// Database → Changed
+
+
+// 5. insert()
+// Directly inserts into database
+const result = await this.userRepo.insert({
+    username: "sameer",
+    password: "1234",
+    role: UserRole.USER
+});
+
+// Actually returns:
+{
+    identifiers: [
+        { id: 5 }
+    ],
+    generatedMaps: [
+        { id: 5 }
+    ],
+    raw: {
+        affectedRows: 1,
+        insertId: 5
+    }
+}
+
+// Return → InsertResult
+// Does NOT return the complete inserted User
+
+
+// 6. update()
+// Updates an existing row
+const result = await this.userRepo.update(
+    { id: 2 },
+    { username: "newNaeem" }
+);
+
+// Actually returns:
+{
+    affected: 1,
+    generatedMaps: [],
+    raw: {
+        affectedRows: 1
+    }
+}
+
+// Return → UpdateResult
+// affected: 1 → one row updated
+// affected: 0 → no row found/updated
+
+
+// 7. delete()
+// Deletes an existing row
+const result = await this.userRepo.delete({
+    id: 3
+});
+
+// Actually returns:
+{
+    affected: 1,
+    raw: {
+        affectedRows: 1
+    }
+}
+
+// Return → DeleteResult
+// affected: 1 → one row deleted
+// affected: 0 → no row found
+
+
+================================================
+
+QUICK REMEMBER:
+
+find()       → Array of Users
+findOne()    → One User / null
+create()     → Entity object (NOT saved)
+save()       → Saved User
+insert()     → InsertResult
+update()     → UpdateResult
+delete()     → DeleteResult
+
+
+
+
+more opeation:
+repository.find({
+  where: {},
+  select: {},
+  relations: {},
+  order: {},
+  skip: 0,
+  take: 10,
+});
+
+
+
+1. where — filtering
+userRepository.find({
+  where: {
+    age: 25,
+  },
+});
+
+Multiple conditions:
+
+userRepository.find({
+  where: {
+    age: 25,
+    city: "Delhi",
+  },
+});
+
+Means:
+
+WHERE age = 25 AND city = 'Delhi'
+2. Comparison operators
+
+TypeORM provides operators:
+
+import {
+  Equal,
+  Not,
+  MoreThan,
+  MoreThanOrEqual,
+  LessThan,
+  LessThanOrEqual,
+  In,
+  Like,
+  ILike,
+  Between,
+  IsNull,
+} from "typeorm";
+
+Examples:
+
+where: {
+  age: MoreThan(18),
+}
+where: {
+  age: Between(18, 30),
+}
+where: {
+  id: In([1, 2, 3]),
+}
+where: {
+  name: Like("%naeem%"),
+}
+where: {
+  age: Not(25),
+}
+where: {
+  deletedAt: IsNull(),
+}
+3. OR
+repository.find({
+  where: [
+    { age: 20 },
+    { age: 30 },
+  ],
+});
+
+This means:
+
+WHERE age = 20 OR age = 30
+
+4. select
+
+Choose which columns you want:
+
+repository.find({
+  select: {
+    id: true,
+    name: true,
+    email: true,
+  },
+});
+5. relations
+
+Load related entities:
+
+repository.find({
+  relations: {
+    posts: true,
+  },
+});
+
+For example:
+
+User
+ └── posts
+6. order
+repository.find({
+  order: {
+    createdAt: "DESC",
+  },
+});
+7. skip
+repository.find({
+  skip: 10,
+});
+
+Skip first 10 records.
+
+8. take
+repository.find({
+  take: 10,
+});
+
+Get 10 records.
+
+9. Pagination
+repository.find({
+  skip: 10,
+  take: 10,
+});
+10. Combining everything
+const users = await userRepository.find({
+  select: {
+    id: true,
+    name: true,
+    email: true,
+  },
+
+  where: {
+    age: MoreThan(18),
+  },
+
+  relations: {
+    posts: true,
+  },
+
+  order: {
+    createdAt: "DESC",
+  },
+
+  skip: 0,
+  take: 10,
+});
+
+---->
+TYPEORM REPOSITORY METHODS — RETURN VALUES
+============================================
+
+// 1. find()
+// Gets multiple users
+const users = await this.userRepo.find();
+
+// Actually returns:
+[
+    {
+        id: 1,
+        username: "ali",
+        password: "$2b$10$abc...",
+        role: "USER"
+    },
+    {
+        id: 2,
+        username: "naeem",
+        password: "$2b$10$xyz...",
+        role: "ADMIN"
+    }
+]
+
+// Return → User[]
+
+
+// 2. findOne()
+// Gets one user
+const user = await this.userRepo.findOne({
+    where: { id: 1 }
+});
+
+// Actually returns:
+{
+    id: 1,
+    username: "ali",
+    password: "$2b$10$abc...",
+    role: "USER"
+}
+
+// If user doesn't exist:
+null
+
+// Return → User | null
+
+
+// 3. create()
+// Creates entity object but DOES NOT save it
+const user = this.userRepo.create({
+    username: "ahmed",
+    password: "1234",
+    role: UserRole.USER
+});
+
+// Actually returns:
+{
+    username: "ahmed",
+    password: "1234",
+    role: "USER"
+}
+
+// Return → User
+// Database → NOT changed
+
+
+// 4. save()
+// Saves a new entity OR updates an existing entity
+const savedUser = await this.userRepo.save(user);
+
+// Actually returns:
+{
+    id: 4,
+    username: "ahmed",
+    password: "1234",
+    role: "USER"
+}
+
+// Return → Saved User
+// Database → Changed
+
+
+// 5. insert()
+// Directly inserts into database
+const result = await this.userRepo.insert({
+    username: "sameer",
+    password: "1234",
+    role: UserRole.USER
+});
+
+// Actually returns:
+{
+    identifiers: [
+        { id: 5 }
+    ],
+    generatedMaps: [
+        { id: 5 }
+    ],
+    raw: {
+        affectedRows: 1,
+        insertId: 5
+    }
+}
+
+// Return → InsertResult
+// Does NOT return the complete inserted User
+
+
+// 6. update()
+// Updates an existing row
+const result = await this.userRepo.update(
+    { id: 2 },
+    { username: "newNaeem" }
+);
+
+// Actually returns:
+{
+    affected: 1,
+    generatedMaps: [],
+    raw: {
+        affectedRows: 1
+    }
+}
+
+// Return → UpdateResult
+// affected: 1 → one row updated
+// affected: 0 → no row found/updated
+
+
+// 7. delete()
+// Deletes an existing row
+const result = await this.userRepo.delete({
+    id: 3
+});
+
+// Actually returns:
+{
+    affected: 1,
+    raw: {
+        affectedRows: 1
+    }
+}
+
+// Return → DeleteResult
+
+// affected: 1 → one row deleted
+// affected: 0 → no row found
+
+
+================================================
+
+QUICK REMEMBER:
+
+find()       → Array of Users
+findOne()    → One User / null
+create()     → Entity object (NOT saved)
+save()       → Saved User
+insert()     → InsertResult
+update()     → UpdateResult
+delete()     → DeleteResult
+
+
+--->
+| Code             | Meaning                             |
+| ---------------- | ----------------------------------- |
+| `delete(id)`     | Delete by **primary key**           |
+| `delete({ id })` | Delete using a **condition object** |
+
+@CreateDateColume @UpdateDateColume auto create date or we can also give
+
+--->
+const posts = await this.postRepository.find({
+  where: {
+    userId: 3,
+    username:'imran'
+  },
+  skip: (page - 1) * limit,
+  take: limit,
+  order: {
+    createdAt: "DESC",
+  },
+  relations: {
+    user: true,
+  },
+});
+---->
+In NestJS, there are several ways to perfomm my sql operation
+
+1. TypeORM Repository
+const users = await this.userRepository.find();
+
+2. TypeORM QueryBuilder
+
+const users = await this.userRepository
+  .createQueryBuilder("user")
+  .where("user.id = :id", { id })
+  .getMany();
+
+3. Raw SQL through TypeORM
+
+|                               | `repo.query()`               | `dataSource.query()`   |
+| ----------------------------- | ---------------------------- | ---------------------- |
+| Uses                          | Repository                   | DataSource             |
+| Raw SQL                       | ✅                            | ✅                      |
+| Entity-specific repository    | ✅                            | ❌                      |
+| Access to whole DB connection | Through repository           | ✅                      |
+| Good for                      | Queries related to an entity | General/raw DB queries |
+
+
+
+const users = await this.dataSource.query(
+  "SELECT * FROM users WHERE id = ?",
+  [userId],
+);
+
+------------------------>
+DataSource — Theory
+DataSource is a TypeORM object that manages the connection between NestJS and the database.
+
+NestJS
+   ↓
+DataSource
+   ↓
+MySQL
+
+How it works
+When you configure TypeORM:
+
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+});
+
+NestJS/TypeORM creates a DataSource using this configuration.
+Then you can inject that DataSource:
+constructor(
+  private readonly dataSource: DataSource,
+) {}
+
+Now the service can communicate with MySQL through it.
+
+dataSource.query()
+const result = await this.dataSource.query(
+  `SELECT * FROM users`,
+);
+
+Flow:
+dataSource.query()
+       ↓
+TypeORM DataSource
+       ↓
+Database connection
+       ↓
+MySQL executes SQL
+       ↓
+Result returned to NestJS
+
+Important:
+DataSource itself is not your database.
+It is the object that manages the database connection and provides methods to interact with the database.
+
+It can be used for:
+
+dataSource.query()       → Raw SQL
+dataSource.manager       → EntityManager
+dataSource.getRepository() → Repository
+dataSource.createQueryRunner() → Transactions
+
+For your current raw-SQL learning, the main thing is:
+DataSource gives NestJS a way to send SQL directly to MySQL and receive the result.
+notes->
+You do not need @Entity() just to execute raw SQL against those tables which already exists or or create table using sql.
+
+
+import { Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
+
+@Injectable()
+export class UserService {
+  constructor(
+    private readonly dataSource: DataSource,
+  ) {}
+
+  // =========================
+  // 1. GET ALL
+  // =========================
+
+  async getUsers() {
+    const rows = await this.dataSource.query(`
+      SELECT *
+      FROM users
+    `);
+    return rows;
+  }
+
+  // =========================
+  // 2. GET ONE ROW
+  // =========================
+
+  async getUserById(id: number) {
+    const rows = await this.dataSource.query(
+      `      SELECT *
+      FROM users
+      WHERE id = ?
+      `,
+      [id],
+    );
+    return rows[0] ?? null;
+  }
+
+  // =========================
+  // 3. WHERE + MULTIPLE PARAMETERS
+  // =========================
+
+  async getUser(username: string, role: string) {
+    return this.dataSource.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username = ?
+      AND role = ?
+      `,
+      [username, role],
+    );
+  }
+
+  // =========================
+  // 4. INSERT
+  // =========================
+
+  async createUser(
+    username: string,
+    email: string,
+    password: string,
+  ) {
+    const result = await this.dataSource.query(      `
+      INSERT INTO users (username, email, password)
+      VALUES (?, ?, ?)
+      `,
+      [username, email, password],
+    );
+    return result;
+  }
+
+  result:
+  
+  ResultSetHeader {
+    affectedRows: 1,
+    insertId: 5,
+    ...
+  }
+
+
+  // =========================
+  // 5. INSERT + GET INSERTED ID
+  // =========================
+
+  async createUserAndGetId(
+    username: string,
+    email: string,
+    password: string,
+  ) {
+    const result = await this.dataSource.query(      `
+      INSERT INTO users (username, email, password)
+      VALUES (?, ?, ?)
+      `,
+      [username, email, password],
+    );
+    return result.insertId;
+  }
+
+  // =========================
+  // 6. INSERT + RETURN CREATED USER
+  // =========================
+
+  async createUserAndReturn(
+    username: string,
+    email: string,
+    password: string,
+  ) {
+    const result = await this.dataSource.query(
+      `
+      INSERT INTO users (username, email, password)
+      VALUES (?, ?, ?)
+      `,
+      [username, email, password],
+    );
+
+    const rows = await this.dataSource.query(
+      `
+      SELECT *
+      FROM users
+      WHERE id = ?
+      `,
+      [result.insertId],
+    );
+
+    return rows[0];
+  }
+
+  // =========================
+  // 7. UPDATE
+  // =========================
+
+  async updateUser(
+    id: number,
+    username: string,
+    email: string,
+  ) {
+    const result = await this.dataSource.query(
+      `
+      UPDATE users
+      SET username = ?,
+          email = ?
+      WHERE id = ?
+      `,
+      [username, email, id],
+    );
+
+    return result;
+  }
+
+  result:
+  
+  ResultSetHeader {
+    affectedRows: 1,
+    insertId: 5,
+    ...
+  }
+
+
+
+  // =========================
+  // 8. DELETE
+  // =========================
+
+  async deleteUser(id: number) {
+    const result = await this.dataSource.query(
+      `
+      DELETE FROM users
+      WHERE id = ?
+      `,
+      [id],
+    );
+
+    return result;
+  }
+//
+  result.affectedRows
+
+
+  | SQL      | `dataSource.query()` returns               |
+| -------- | ------------------------------------------ |
+| `SELECT` | Array of selected rows                     |
+| `INSERT` | Insert result (`insertId`, `affectedRows`) |
+| `UPDATE` | Update result (`affectedRows`)             |
+| `DELETE` | Delete result (`affectedRows`)             |
+
+
+  // =========================
+  // 9. LIKE / SEARCH
+  // =========================
+
+  async searchUsers(search: string) {
+    return this.dataSource.query(
+      `
+      SELECT *
+      FROM users
+      WHERE username LIKE ?
+      `,
+      [`%${search}%`],
+    );
+  }
+
+  // =========================
+  // 10. ORDER BY
+  // =========================
+
+  async getUsersSorted() {
+    return this.dataSource.query(`
+      SELECT *
+      FROM users
+      ORDER BY id DESC
+    `);
+  }
+
+  // =========================
+  // 11. LIMIT + OFFSET
+  // =========================
+
+  async getUsersPaginated(
+    limit: number,
+    offset: number,
+  ) {
+    return this.dataSource.query(
+      `
+      SELECT *
+      FROM users
+      ORDER BY id DESC
+      LIMIT ? OFFSET ?
+      `,
+      [limit, offset],
+    );
+  }
+
+  // =========================
+  // 12. JOIN
+  // =========================
+
+  async getUsersWithPosts() {
+    return await this.dataSource.query(`
+      SELECT
+        u.id,
+        u.username,
+        p.id AS postId,
+        p.title
+      FROM users u
+      LEFT JOIN posts p
+        ON p.user_id = u.id
+    `);
+  }
+
+  // =========================
+  // 13. COUNT
+  // =========================
+
+  async getUserCount() {
+    const rows = await this.dataSource.query(`
+      SELECT COUNT(*) AS total
+      FROM users
+    `);
+    return rows[0].total;
+  }
+
+  // =========================
+  // 14. GROUP BY
+  // =========================
+
+  async getPostCountByUser() {
+    return this.dataSource.query(`
+      SELECT
+        user_id,
+        COUNT(*) AS totalPosts
+      FROM posts
+      GROUP BY user_id
+    `);
+  }
+
+  // =========================
+  // 15. TRANSACTION
+  // =========================
+
+  async transactionExample() {
+    const queryRunner =
+      this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.query(        `
+        UPDATE accounts
+        SET balance = balance - ?
+        WHERE id = ?
+        `,
+        [100, 1],
+      );
+      await queryRunner.query(
+        `
+        UPDATE accounts
+        SET balance = balance + ?
+        WHERE id = ?
+        `,
+        [100, 2],
+      );
+      await queryRunner.commitTransaction();
+      return true;
+
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+}
+
+--->
+dataSource
+   │
+   ├── manager
+   │      └── EntityManager
+   │
+   └── getRepository(User)
+          └── Repository<User>
+
+dataSource.manager → EntityManager
+
+Used for general database/entity operations:
+
+dataSource.manager.find(User)//all users from this entity
+dataSource.manager.find(User, {
+  where: { role: "ADMIN" }
+});
+dataSource.manager.save(user)     
+dataSource.manager.delete(User, 1)
+
+dataSource.getRepository(User) → Repository<User>//User is Entity
+Used for operations specifically related to one entity:
+
+
+
+const userRepo = dataSource.getRepository(User);
+
+
+userRepo.find()
+userRepo.findOneBy({ id: 1 })
+userRepo.save(user)
+userRepo.delete(1)
+
+Simple difference:
+
+manager → works with many entities
+repository → works with one specific entity
+
+Manager → works with many entities; you provide the entity in each operation.
+Repository → works with one specific entity; methods like find, findOneBy, etc. can take conditions to select particular rows.
+
+
+
+--->
+Why companies use raw SQL?
+Sometimes SQL is easier or more efficient for:
+
+Complex joins
+Aggregations
+Reports
+Complex filtering
+Performance-sensitive queries
+Existing SQL queries
+Database-specific features
+
+
+
+---->
+migration
+TypeORM Migration + DataSource
+1. What is DataSource?
+const dataSource = new DataSource({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+});
+
+DataSource manages the connection to MySQL and gives you:
+
+dataSource
+   │
+   ├── query()              → raw SQL
+   ├── createQueryRunner()  → transactions
+   └── migrations           → database schema changes
+but Remember(in mind)
+2. DataSource configuration for migrations
+Create:
+
+src/data-source.ts
+import { DataSource } from 'typeorm';
+
+export const dataSource = new DataSource({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+  migrations: [
+    'src/migrations/*.ts',
+  ],
+});
+
+Notice:
+
+migrations: ['src/migrations/*.ts']
+
+This tells TypeORM:
+"My migration files are inside src/migrations."
+
+3. What is a migration?
+Suppose your existing database has:
+
+users
+----------------
+id
+username
+email
+
+Now you want:
+
+users
+----------------
+id
+username
+email
+phone
+
+You create a migration.
+
+Migration
+    ↓
+ALTER TABLE users
+ADD phone
+
+
+4. Create migration
+Run:
+npx typeorm migration:create src/migrations/AddPhoneToUsers
+
+TypeORM creates something like:
+
+src/
+├── data-source.ts
+└── migrations/
+    └── 1750000000000-AddPhoneToUsers.ts
+
+5. Migration file
+import { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class AddPhoneToUsers1750000000000
+  implements MigrationInterface {
+
+  async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE users
+      ADD COLUMN phone VARCHAR(20)
+    `);
+  }
+
+  async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE users
+      DROP COLUMN phone
+    `);
+  }
+}
+
+Here you're basically using raw SQL.
+6. up()
+
+up() means:
+Apply the database change.
+
+async up(queryRunner: QueryRunner) {
+  await queryRunner.query(`
+    ALTER TABLE users
+    ADD COLUMN phone VARCHAR(20)
+  `);
+}
+
+Flow:
+migration:run
+      ↓
+    up()
+      ↓
+ALTER TABLE users
+      ↓
+MySQL
+
+7. down()
+down() means:
+Undo the change made by up().
+
+async down(queryRunner: QueryRunner) {
+  await queryRunner.query(`
+    ALTER TABLE users
+    DROP COLUMN phone
+  `);
+}
+
+Flow:
+
+migration:revert
+      ↓
+    down()
+      ↓
+DROP COLUMN phone
+      ↓
+MySQL
+
+8. Why QueryRunner instead of DataSource.query()?
+This is an important distinction.
+
+You normally use:
+dataSource.query()
+
+for normal application SQL:
+const users = await this.dataSource.query(`
+  SELECT * FROM users
+`);
+
+Inside migrations, TypeORM gives you:
+queryRunner
+
+So you write:
+
+await queryRunner.query(`
+  ALTER TABLE users
+  ADD COLUMN phone VARCHAR(20)
+`);
+
+Think:
+
+Normal application
+       ↓
+DataSource
+       ↓
+dataSource.query()
+
+Migration
+       ↓
+QueryRunner
+       ↓
+queryRunner.query()
+
+9. Run migration
+Build your NestJS project:
+npm run build
+Then run:
+npx typeorm migration:run -d dist/data-source.js
+
+TypeORM will:
+
+DataSource
+    ↓
+connect to MySQL
+    ↓
+find migrations
+    ↓
+check executed migrations
+    ↓
+run new migrations
+
+10. Revert migration
+npx typeorm migration:revert -d dist/data-source.js
+
+It executes the latest migration's:
+
+down()
+
+11. Generate migration
+You can also let TypeORM generate the SQL based on entity changes.
+But because you're learning the DataSource + raw SQL approach, focus first on manually creating migrations:
+
+npx typeorm migration:create src/migrations/AddPhoneToUsers
+
+Then write:
+
+async up(queryRunner: QueryRunner) {
+  await queryRunner.query(`
+    ALTER TABLE users
+    ADD COLUMN phone VARCHAR(20)
+  `);
+}
+
+This fits your current approach better.
+
+12. Multiple migrations
+
+Suppose:
+
+migrations/
+├── 001-CreateUsers
+├── 002-AddPhone
+├── 003-CreatePosts
+└── 004-AddRole
+
+You run:
+
+npx typeorm migration:run -d dist/data-source.js
+
+TypeORM executes them in order.
+
+001
+ ↓
+002
+ ↓
+003
+ ↓
+004
+
+It remembers which ones have already run.
+
+13. Why migrations are useful
+
+Imagine your production database has:
+
+users
+id
+username
+email
+
+You change your application and need:
+
+users
+id
+username
+email
+phone
+
+You don't manually tell every developer:
+
+"Run this SQL."
+
+Instead:
+
+Migration file
+      ↓
+Git
+      ↓
+Production
+      ↓
+migration:run
+      ↓
+Database updated
+
+Everyone gets the same database change.
+
+14. synchronize vs Migration
+Development with synchronize
+synchronize: true
+Entity/database changes
+        ↓
+TypeORM automatically changes DB
+Production with migrations
+synchronize: false
+Migration
+   ↓
+up()
+   ↓
+Database changes
+
+For production, migrations are generally preferred because database changes are explicit,
+ reviewable, and version-controlled.
+
+15. Your complete DataSource setup
+src/data-source.ts
+import { DataSource } from 'typeorm';
+export const dataSource = new DataSource({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+  migrations: [
+    'src/migrations/*.ts',
+  ],
+});
+
+export default dataSource;
+Migration
+import { MigrationInterface, QueryRunner } from 'typeorm';
+export class AddPhoneToUsers1750000000000
+  implements MigrationInterface {
+
+  async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE users
+      ADD COLUMN phone VARCHAR(20)
+    `);
+  }
+
+  async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
+      ALTER TABLE users
+      DROP COLUMN phone
+    `);
+  }
+}
+
+Commands
+1. Create an empty migration
+npx typeorm migration:create src/migrations/CreateUsers
+This only creates the migration file.
+
+2. Run migrations
+npx typeorm migration:run -d src/data-source.ts
+This executes the up() method of pending migrations.
+
+3. Revert migration
+npx typeorm migration:revert -d src/data-source.ts
+This executes the down() method of the latest migration.
+
+
+
+# Create migration
+npx typeorm migration:create src/migrations/AddPhoneToUsers
+
+# Build
+npm run build
+
+# Run migrations
+npx typeorm migration:run -d src/data-source.js
+
+# Revert latest migration
+npx typeorm migration:revert -d src/data-source.js
+
+The main thing to remember
+DataSource
+    ↓
+connects to MySQL
+
+dataSource.query()
+    ↓
+normal raw SQL in your service
+
+Migration
+    ↓
+database structure/schema changes
+
+QueryRunner
+    ↓
+executes SQL inside migration
+
+up()
+    ↓
+apply change
+
+down()
+    ↓
+undo change
+
+Since you already know SQL, you don't need to learn more SQL for migrations. Your main new knowledge 
+is how TypeORM manages and executes those migration files through the DataSource configuration and QueryRunner.
+
+
+---->
+The important distinction is that there are two different contexts.
+
+1. Normal NestJS application
+
+You use:
+
+TypeOrmModule.forRoot({
+  type: 'mysql',
+  host: 'localhost',
+  ...
+});
+
+This creates/configures the DataSource that NestJS uses.
+
+Then:
+
+this.dataSource.query(`SELECT * FROM users`);
+2. TypeORM CLI / Migrations
+
+When you run:
+npx typeorm migration:run -d src/data-source.ts
+
+NestJS is not starting your AppModule.
+The TypeORM CLI needs to know:
+"Which database should I connect to?"
+That's why we create:
+
+// data-source.ts
+
+export default new DataSource({
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  username: 'root',
+  password: 'password',
+  database: 'myapp',
+  migrations: ['src/migrations/*.ts'],
+});
+
+The CLI loads this DataSource directly.
+Normal application:
+
+AppModule
+   ↓
+TypeOrmModule.forRoot()
+   ↓
+DataSource
+   ↓
+MySQL
+
+Migration CLI:
+
+typeorm migration:run
+        ↓
+data-source.ts
+        ↓
+DataSource
+        ↓
+MySQL
+So why both?
+
+Because they serve different purposes:
+
+TypeOrmModule.forRoot()
+→ configures TypeORM when NestJS application runs
+
+data-source.ts
+→ tells TypeORM CLI how to connect when running migrations
+
+They can contain essentially the same database configuration.
+
+And importantly: creating data-source.ts for migrations does not mean you need it for every raw SQL query. 
+In your running NestJS app, TypeOrmModule.forRoot() can provide the DataSource you inject into your service.
+it means TypeOrmModule auto inject DataSource provider
+
+
+---->
+
+TypeORM Seeds with DataSource
+Since you're using raw SQL + DataSource, we'll keep seeds simple.
+1. What does a seed do?
+A seed puts predefined data into your database.
+
+For example:
+
+users table
+    ↓
+Insert admin user
+Insert test user
+
+It's mainly useful for:
+
+Default admin/user data
+Initial application data
+Development/test data
+
+2. Create a seed file
+For example:
+
+src/
+├── data-source.ts
+└── seeds/
+    └── user.seed.ts
+import dataSource from '../data-source';
+
+async function seed() {
+  await dataSource.initialize();
+  try {
+    await dataSource.query(`
+      INSERT INTO users (username, email, password)
+      VALUES
+        ('admin', 'admin@gmail.com', '123456'),
+        ('user', 'user@gmail.com', '123456')
+    `);
+
+    console.log('Users seeded successfully');
+  } catch (error) {
+    console.error(error);
+  } finally {
+    await dataSource.destroy();
+  }
+}
+seed();
+
+Flow
+seed.ts
+   ↓
+dataSource.initialize()
+   ↓
+connect to MySQL
+   ↓
+dataSource.query()
+   ↓
+INSERT
+   ↓
+dataSource.destroy()
+
+3. Why initialize()?
+Here you are manually using the DataSource.
+
+Unlike migrations:
+
+typeorm migration:run
+
+where TypeORM CLI handles the connection for you, your seed file is just a normal TypeScript program.
+
+Therefore:
+await dataSource.initialize();
+
+means:
+Connect this DataSource to the database.
+
+And:
+await dataSource.destroy();
+
+means:
+Close the database connection.
+
+4. Run the seed
+You can run the TypeScript file using your project's TypeScript runner, commonly:
+npx ts-node src/seeds/user.seed.ts
+
+If your project uses tsx:
+
+npx tsx src/seeds/user.seed.ts
+
+5. Important problem — running twice
+
+If you run the seed twice:
+
+First run
+→ admin inserted
+
+Second run
+→ admin inserted again
+
+You could get duplicate data, especially if email is UNIQUE.
+
+So seeds often need to be safe to run repeatedly.
+For example:
+
+await dataSource.query(`
+  INSERT INTO users (username, email, password)
+  VALUES ('admin', 'admin@gmail.com', '123456')
+  ON DUPLICATE KEY UPDATE
+    username = VALUES(username)
+`);
+
+Or you can first check whether the record exists.
+
+6. Seed vs Migration — remember this
+Migration
+    ↓
+Database structure
+    ↓
+CREATE / ALTER / DROP
+
+Seed
+    ↓
+Database data
+    ↓
+INSERT / initial data
+
+
+
+Seeds are not a core TypeORM feature like migrations. TypeORM doesn't provide a single built-in typeorm
+ seed:run command in the same way it provides migration:run; teams commonly create seed scripts or use a seeding library.
+
+
+ notes-->
+ if your seed runs inside NestJS
+Then yes, you can use the DataSource created by:
+TypeOrmModule.forRoot(...)
+
+For example:
+
+@Injectable()
+export class UserSeed {
+  constructor(
+    private readonly dataSource: DataSource,
+  ) {}
+
+  async run() {
+    await this.dataSource.query(`
+      INSERT INTO users (username, email)
+      VALUES ('admin', 'admin@gmail.com')
+    `);
+  }
+}
+
+Here:
+
+TypeOrmModule.forRoot()
+        ↓
+DataSource
+        ↓
+NestJS DI
+        ↓
+Seed class
+        ↓
+dataSource.query()
+
+But if seed is a standalone script
+For example:
+
+npx ts-node src/seeds/user.seed.ts
+
+NestJS is not running.
+
+Therefore, this won't work:
+
+constructor(private dataSource: DataSource) {}
+
+because NestJS Dependency Injection isn't active.
+You would create/use the DataSource manually:
+
+const dataSource = new DataSource({
+  // database config
+});
+
+await dataSource.initialize();
+await dataSource.query(`INSERT ...`);
+await dataSource.destroy();
+
+Simple rule
+Seed inside NestJS
+→ TypeOrmModule.forRoot()
+→ Inject DataSource ✅
+
+
+Standalone seed script
+→ new DataSource()
+→ initialize() ✅
+
+--------->
+You need both — they solve different problems. 
+
+ts
+// AppModule — global connection knows about Entities
+TypeOrmModule.forRoot({ entities: [UserDate], ... })
+
+// UserModule — this module can inject Repository<UserDate>
+TypeOrmModule.forFeature([UserDate])
+
+One improvement as your app grows: instead of manually listing every entity in forRoot's entities 
+array (easy to forget one), use a glob pattern so it auto-discovers them:
+
+ts
+TypeOrmModule.forRoot({  ...
+  entities: [__dirname + '/**/*.entity{.ts,.js}'],
+})
+
+This way, when you add a new entity file, you only need to add it to that module's forFeature() 
+— the root connection picks it up automatically.
+
+Bottom line: keep forRoot for the connection-wide entity list,
+ keep forFeature in each module that needs repository injection — 
+
+
+--->
+@Column({
+  type: 'datetime',
+  default: () => 'CURRENT_TIMESTAMP'
+})
+@Index('idx_created_date')
+created_date: Date;
+1. @Column()
+
+Tells TypeORM to create a database column.
+type: 'datetime'
+
+→ Stores date + time.
+Example:
+
+2026-08-31 12:30:45
+2. default: () => 'CURRENT_TIMESTAMP'
+
+If you don't provide created_date while inserting, the database automatically puts the current date/time.
+
+INSERT INTO users (name)
+VALUES ('Naeem');
+
+Database automatically does roughly:
+created_date = current date/time
+
+So:
+default: () => 'CURRENT_TIMESTAMP'
+
+means:
+"If no value is given, use the database's current timestamp."
+
+3. @Index('idx_created_date')
+Creates a database index on created_date.
+Think of an index like the index of a book 📖.
+
+Without index:
+
+SELECT * FROM users
+ORDER BY created_date;
+
+Database may need to scan many rows.
+
+With index:
+
+created_date
+     ↓
+  INDEX
+     ↓
+faster searching/sorting/filtering
+
+Useful for queries like:
+
+WHERE created_date > ...
+ORDER BY created_date
+
+The name of the index is:
+idx_created_date
+
+--->

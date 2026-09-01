@@ -1,0 +1,13 @@
+print(info)
+# # print(type(info))
+# print(info["topics"][0])
+# info["score"]["a"]=100
+# print(info)
+# print(list(info))
+# print(info.keys())
+# print(info.values())
+# print(info.items())
+# a=list(info)
+# b=info.values()
+# print(type(b))
+# print(info.get("aa"))

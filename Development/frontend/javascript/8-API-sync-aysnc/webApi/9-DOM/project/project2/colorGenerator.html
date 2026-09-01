@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Generator</title>
+    <style>
+        body{
+            text-align: center;    
+        }
+        button{
+            margin: 0;;
+            padding: 5px 10px;
+        }
+        .color-box{           
+            
+            border: 1px solid black;
+            max-width: 1200px;
+            height: 200px;
+            margin: 0 auto;
+            margin-top: 60px;
+        }
+        .color-name{
+            color: #fff;
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>Generator a random color</h1>
+    <br>
+    <button>Generate color</button>
+    <br>
+    <div class="color-box">
+        <p >This is you new color: <span class="color-name"> </span></p>
+    </div>
+<script >
+
+
+        document.getElementsByTagName('button')[0].addEventListener('click',function(){
+            const color=getColor();
+            document.getElementsByClassName('color-box')[0].style.backgroundColor=color
+            document.getElementsByClassName('color-name')[0].innerText=color;
+
+            
+
+            
+        })
+        function getColor(){
+            const r=Math.floor(Math.random()*256);
+            const g=Math.floor(Math.random()*256);
+            const b=Math.floor(Math.random()*256);
+            return `rgb(${r},${g},${b})`
+        }
+        
+        </script>
+
+    
+</body>
+</html>

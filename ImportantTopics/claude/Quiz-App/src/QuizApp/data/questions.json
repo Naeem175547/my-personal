@@ -1,0 +1,1241 @@
+[
+  {
+    "id": 1,
+    "question": "Which data structure is used for recursion?",
+    "options": ["Queue", "Stack", "Heap", "Tree"],
+    "answer": "Stack"
+  },
+  {
+    "id": 2,
+    "question": "Time complexity of binary search?",
+    "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+    "answer": "O(log n)"
+  },
+  {
+    "id": 3,
+    "question": "Which traversal gives sorted output in BST?",
+    "options": ["Preorder", "Postorder", "Inorder", "Level order"],
+    "answer": "Inorder"
+  },
+  {
+    "id": 4,
+    "question": "Worst case of QuickSort?",
+    "options": ["O(n log n)", "O(n^2)", "O(n)", "O(log n)"],
+    "answer": "O(n^2)"
+  },
+  {
+    "id": 5,
+    "question": "Which is not a linear data structure?",
+    "options": ["Array", "Stack", "Tree", "Queue"],
+    "answer": "Tree"
+  },
+  {
+    "id": 6,
+    "question": "Which scheduling avoids starvation?",
+    "options": ["FCFS", "Priority", "Round Robin", "SJF"],
+    "answer": "Round Robin"
+  },
+  {
+    "id": 7,
+    "question": "Which memory is fastest?",
+    "options": ["RAM", "Cache", "Hard Disk", "ROM"],
+    "answer": "Cache"
+  },
+  {
+    "id": 8,
+    "question": "Which protocol is connection-oriented?",
+    "options": ["UDP", "IP", "TCP", "HTTP"],
+    "answer": "TCP"
+  },
+  {
+    "id": 9,
+    "question": "Which normal form removes partial dependency?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "2NF"
+  },
+  {
+    "id": 10,
+    "question": "Which algorithm is used for deadlock avoidance?",
+    "options": ["FIFO", "Banker’s Algorithm", "Round Robin", "SJF"],
+    "answer": "Banker’s Algorithm"
+  },
+
+  {
+    "id": 11,
+    "question": "Which layer handles error detection?",
+    "options": ["Physical", "Data Link", "Transport", "Application"],
+    "answer": "Data Link"
+  },
+  {
+    "id": 12,
+    "question": "Which is a non-deterministic model?",
+    "options": ["DFA", "NFA", "PDA", "TM"],
+    "answer": "NFA"
+  },
+  {
+    "id": 13,
+    "question": "Which SQL clause is used to filter rows?",
+    "options": ["WHERE", "GROUP BY", "ORDER BY", "HAVING"],
+    "answer": "WHERE"
+  },
+  {
+    "id": 14,
+    "question": "Which sorting is stable?",
+    "options": ["QuickSort", "HeapSort", "MergeSort", "Selection"],
+    "answer": "MergeSort"
+  },
+  {
+    "id": 15,
+    "question": "Which addressing is used in paging?",
+    "options": ["Logical", "Physical", "Virtual", "Relative"],
+    "answer": "Logical"
+  },
+  {
+    "id": 16,
+    "question": "Which device works at network layer?",
+    "options": ["Switch", "Router", "Hub", "Repeater"],
+    "answer": "Router"
+  },
+  {
+    "id": 17,
+    "question": "Which is not a DBMS anomaly?",
+    "options": ["Update", "Delete", "Insert", "Sorting"],
+    "answer": "Sorting"
+  },
+  {
+    "id": 18,
+    "question": "Which algorithm finds shortest path?",
+    "options": ["DFS", "BFS", "Dijkstra", "Kruskal"],
+    "answer": "Dijkstra"
+  },
+  {
+    "id": 19,
+    "question": "Which is a context-free language?",
+    "options": ["Regular", "Finite", "Grammar-based", "None"],
+    "answer": "Grammar-based"
+  },
+  {
+    "id": 20,
+    "question": "Which is not a scheduling criteria?",
+    "options": ["Throughput", "Turnaround", "Latency", "Compilation"],
+    "answer": "Compilation"
+  },
+
+  {
+    "id": 21,
+    "question": "Which is used in LRU?",
+    "options": ["Stack", "Queue", "Tree", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 22,
+    "question": "Which is volatile memory?",
+    "options": ["ROM", "RAM", "SSD", "HDD"],
+    "answer": "RAM"
+  },
+  {
+    "id": 23,
+    "question": "Which is not OS function?",
+    "options": ["Process", "Memory", "Compilation", "File"],
+    "answer": "Compilation"
+  },
+  {
+    "id": 24,
+    "question": "Which normal form removes transitive dependency?",
+    "options": ["1NF", "2NF", "3NF", "4NF"],
+    "answer": "3NF"
+  },
+  {
+    "id": 25,
+    "question": "Which protocol uses port 80?",
+    "options": ["FTP", "SMTP", "HTTP", "DNS"],
+    "answer": "HTTP"
+  },
+
+  {
+    "id": 26,
+    "question": "Which sorting uses divide and conquer?",
+    "options": ["Bubble", "Selection", "MergeSort", "Insertion"],
+    "answer": "MergeSort"
+  },
+  {
+    "id": 27,
+    "question": "Which is not graph traversal?",
+    "options": ["DFS", "BFS", "Dijkstra", "None"],
+    "answer": "Dijkstra"
+  },
+  {
+    "id": 28,
+    "question": "Which layer provides end-to-end communication?",
+    "options": ["Network", "Transport", "Session", "Application"],
+    "answer": "Transport"
+  },
+  {
+    "id": 29,
+    "question": "Which key uniquely identifies a record?",
+    "options": ["Foreign", "Primary", "Candidate", "Composite"],
+    "answer": "Primary"
+  },
+  {
+    "id": 30,
+    "question": "Which is not a deadlock condition?",
+    "options": ["Mutual exclusion", "Hold and wait", "Preemption", "Circular wait"],
+    "answer": "Preemption"
+  },
+
+  {
+    "id": 31,
+    "question": "Which is used in compiler first phase?",
+    "options": ["Parsing", "Lexical Analysis", "Optimization", "Code Gen"],
+    "answer": "Lexical Analysis"
+  },
+  {
+    "id": 32,
+    "question": "Which storage is fastest?",
+    "options": ["Register", "Cache", "RAM", "Disk"],
+    "answer": "Register"
+  },
+  {
+    "id": 33,
+    "question": "Which is not SQL command?",
+    "options": ["SELECT", "UPDATE", "DELETE", "COMPILE"],
+    "answer": "COMPILE"
+  },
+  {
+    "id": 34,
+    "question": "Which is not a tree?",
+    "options": ["Binary", "AVL", "Heap", "Cycle"],
+    "answer": "Cycle"
+  },
+  {
+    "id": 35,
+    "question": "Which is used in paging?",
+    "options": ["Frames", "Segments", "Blocks", "Tracks"],
+    "answer": "Frames"
+  },
+
+  {
+    "id": 36,
+    "question": "Which is not OS scheduling?",
+    "options": ["FCFS", "RR", "SJF", "SQL"],
+    "answer": "SQL"
+  },
+  {
+    "id": 37,
+    "question": "Which is used in hashing?",
+    "options": ["Key", "Index", "Hash function", "Pointer"],
+    "answer": "Hash function"
+  },
+  {
+    "id": 38,
+    "question": "Which is not logic gate?",
+    "options": ["AND", "OR", "NOT", "RAM"],
+    "answer": "RAM"
+  },
+  {
+    "id": 39,
+    "question": "Which is not compiler phase?",
+    "options": ["Lexical", "Syntax", "Semantic", "Execution"],
+    "answer": "Execution"
+  },
+  {
+    "id": 40,
+    "question": "Which is not a network device?",
+    "options": ["Router", "Switch", "Compiler", "Hub"],
+    "answer": "Compiler"
+  },
+
+  {
+    "id": 41,
+    "question": "Which is used in BFS?",
+    "options": ["Stack", "Queue", "Tree", "Heap"],
+    "answer": "Queue"
+  },
+  {
+    "id": 42,
+    "question": "Which is used in DFS?",
+    "options": ["Queue", "Stack", "Array", "Heap"],
+    "answer": "Stack"
+  },
+  {
+    "id": 43,
+    "question": "Which is not sorting?",
+    "options": ["Merge", "Quick", "Heap", "DFS"],
+    "answer": "DFS"
+  },
+  {
+    "id": 44,
+    "question": "Which is not DBMS key?",
+    "options": ["Primary", "Foreign", "Candidate", "Binary"],
+    "answer": "Binary"
+  },
+  {
+    "id": 45,
+    "question": "Which is used for email receiving?",
+    "options": ["SMTP", "POP3", "FTP", "HTTP"],
+    "answer": "POP3"
+  },
+
+  {
+    "id": 46,
+    "question": "Which is not OS concept?",
+    "options": ["Process", "Thread", "Compiler", "Deadlock"],
+    "answer": "Compiler"
+  },
+  {
+    "id": 47,
+    "question": "Which is not TOC?",
+    "options": ["DFA", "NFA", "SQL", "PDA"],
+    "answer": "SQL"
+  },
+  {
+    "id": 48,
+    "question": "Which is not memory type?",
+    "options": ["Cache", "RAM", "ROM", "CPU"],
+    "answer": "CPU"
+  },
+  {
+    "id": 49,
+    "question": "Which is not graph type?",
+    "options": ["Directed", "Undirected", "Weighted", "Sorted"],
+    "answer": "Sorted"
+  },
+  {
+    "id": 50,
+    "question": "Which is not programming paradigm?",
+    "options": ["OOP", "Functional", "Procedural", "Routing"],
+    "answer": "Routing"
+  }
+  ,
+  {
+    "id": 51,
+    "question": "Which data structure is used in function call management?",
+    "options": ["Queue", "Stack", "Heap", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 52,
+    "question": "Average case time complexity of QuickSort?",
+    "options": ["O(n log n)", "O(n^2)", "O(n)", "O(log n)"],
+    "answer": "O(n log n)"
+  },
+  {
+    "id": 53,
+    "question": "Which traversal is used to delete a tree?",
+    "options": ["Inorder", "Preorder", "Postorder", "Level order"],
+    "answer": "Postorder"
+  },
+  {
+    "id": 54,
+    "question": "Which is not a property of heap?",
+    "options": ["Complete tree", "Heap order", "Sorted", "Binary tree"],
+    "answer": "Sorted"
+  },
+  {
+    "id": 55,
+    "question": "Which algorithm is greedy?",
+    "options": ["Dijkstra", "DFS", "BFS", "MergeSort"],
+    "answer": "Dijkstra"
+  },
+  {
+    "id": 56,
+    "question": "Which scheduling gives minimum average waiting time?",
+    "options": ["FCFS", "SJF", "Round Robin", "Priority"],
+    "answer": "SJF"
+  },
+  {
+    "id": 57,
+    "question": "Which memory management uses variable partition?",
+    "options": ["Paging", "Segmentation", "Swapping", "Caching"],
+    "answer": "Segmentation"
+  },
+  {
+    "id": 58,
+    "question": "Which is connectionless protocol?",
+    "options": ["TCP", "UDP", "HTTP", "FTP"],
+    "answer": "UDP"
+  },
+  {
+    "id": 59,
+    "question": "Which SQL command removes table?",
+    "options": ["DELETE", "DROP", "REMOVE", "TRUNCATE"],
+    "answer": "DROP"
+  },
+  {
+    "id": 60,
+    "question": "Which normal form removes multivalued dependency?",
+    "options": ["2NF", "3NF", "BCNF", "4NF"],
+    "answer": "4NF"
+  },
+
+  {
+    "id": 61,
+    "question": "Which is not a deadlock handling technique?",
+    "options": ["Prevention", "Avoidance", "Detection", "Compilation"],
+    "answer": "Compilation"
+  },
+  {
+    "id": 62,
+    "question": "Which layer uses port numbers?",
+    "options": ["Network", "Transport", "Session", "Application"],
+    "answer": "Transport"
+  },
+  {
+    "id": 63,
+    "question": "Which automata accepts context-free language?",
+    "options": ["DFA", "NFA", "PDA", "TM"],
+    "answer": "PDA"
+  },
+  {
+    "id": 64,
+    "question": "Which SQL clause groups rows?",
+    "options": ["WHERE", "GROUP BY", "ORDER BY", "HAVING"],
+    "answer": "GROUP BY"
+  },
+  {
+    "id": 65,
+    "question": "Which sorting is in-place?",
+    "options": ["MergeSort", "QuickSort", "Counting", "Radix"],
+    "answer": "QuickSort"
+  },
+
+  {
+    "id": 66,
+    "question": "Which page replacement is optimal?",
+    "options": ["FIFO", "LRU", "Optimal", "Clock"],
+    "answer": "Optimal"
+  },
+  {
+    "id": 67,
+    "question": "Which device forwards packets based on MAC?",
+    "options": ["Router", "Switch", "Hub", "Repeater"],
+    "answer": "Switch"
+  },
+  {
+    "id": 68,
+    "question": "Which is DDL command?",
+    "options": ["SELECT", "INSERT", "CREATE", "UPDATE"],
+    "answer": "CREATE"
+  },
+  {
+    "id": 69,
+    "question": "Which grammar generates regular language?",
+    "options": ["Type 0", "Type 1", "Type 2", "Type 3"],
+    "answer": "Type 3"
+  },
+  {
+    "id": 70,
+    "question": "Which is not scheduling algorithm?",
+    "options": ["FCFS", "RR", "SJF", "HTTP"],
+    "answer": "HTTP"
+  },
+
+  {
+    "id": 71,
+    "question": "Which is used in Prim’s algorithm?",
+    "options": ["Greedy", "DP", "Backtracking", "Divide"],
+    "answer": "Greedy"
+  },
+  {
+    "id": 72,
+    "question": "Which memory is non-volatile?",
+    "options": ["RAM", "Cache", "ROM", "Register"],
+    "answer": "ROM"
+  },
+  {
+    "id": 73,
+    "question": "Which protocol resolves IP to MAC?",
+    "options": ["DNS", "ARP", "FTP", "ICMP"],
+    "answer": "ARP"
+  },
+  {
+    "id": 74,
+    "question": "Which SQL clause filters groups?",
+    "options": ["WHERE", "HAVING", "GROUP", "ORDER"],
+    "answer": "HAVING"
+  },
+  {
+    "id": 75,
+    "question": "Which is not compiler phase?",
+    "options": ["Parsing", "Lexical", "Optimization", "Execution"],
+    "answer": "Execution"
+  },
+
+  {
+    "id": 76,
+    "question": "Which data structure is used in BFS?",
+    "options": ["Stack", "Queue", "Tree", "Heap"],
+    "answer": "Queue"
+  },
+  {
+    "id": 77,
+    "question": "Which algorithm detects cycle in graph?",
+    "options": ["DFS", "BFS", "Dijkstra", "Prim"],
+    "answer": "DFS"
+  },
+  {
+    "id": 78,
+    "question": "Which isolation level prevents dirty read?",
+    "options": ["Read Uncommitted", "Read Committed", "Repeatable", "Serializable"],
+    "answer": "Read Committed"
+  },
+  {
+    "id": 79,
+    "question": "Which layer ensures reliability?",
+    "options": ["Network", "Transport", "Data Link", "Session"],
+    "answer": "Transport"
+  },
+  {
+    "id": 80,
+    "question": "Which is not a key constraint?",
+    "options": ["Primary", "Foreign", "Unique", "Sorted"],
+    "answer": "Sorted"
+  },
+
+  {
+    "id": 81,
+    "question": "Which scheduling uses time quantum?",
+    "options": ["FCFS", "RR", "SJF", "Priority"],
+    "answer": "RR"
+  },
+  {
+    "id": 82,
+    "question": "Which memory is closest to CPU?",
+    "options": ["RAM", "Cache", "Register", "Disk"],
+    "answer": "Register"
+  },
+  {
+    "id": 83,
+    "question": "Which protocol is used for file transfer?",
+    "options": ["SMTP", "FTP", "HTTP", "DNS"],
+    "answer": "FTP"
+  },
+  {
+    "id": 84,
+    "question": "Which SQL command deletes all rows?",
+    "options": ["DELETE", "DROP", "TRUNCATE", "REMOVE"],
+    "answer": "TRUNCATE"
+  },
+  {
+    "id": 85,
+    "question": "Which is not a graph algorithm?",
+    "options": ["DFS", "BFS", "MergeSort", "Kruskal"],
+    "answer": "MergeSort"
+  },
+
+  {
+    "id": 86,
+    "question": "Which algorithm builds MST?",
+    "options": ["Dijkstra", "Prim", "DFS", "BFS"],
+    "answer": "Prim"
+  },
+  {
+    "id": 87,
+    "question": "Which normal form removes redundancy most?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "BCNF"
+  },
+  {
+    "id": 88,
+    "question": "Which OS concept avoids deadlock?",
+    "options": ["Prevention", "Scheduling", "Paging", "Segmentation"],
+    "answer": "Prevention"
+  },
+  {
+    "id": 89,
+    "question": "Which is not transport protocol?",
+    "options": ["TCP", "UDP", "IP", "None"],
+    "answer": "IP"
+  },
+  {
+    "id": 90,
+    "question": "Which grammar is most powerful?",
+    "options": ["Type 3", "Type 2", "Type 1", "Type 0"],
+    "answer": "Type 0"
+  },
+
+  {
+    "id": 91,
+    "question": "Which sorting is not comparison-based?",
+    "options": ["Merge", "Quick", "Heap", "Counting"],
+    "answer": "Counting"
+  },
+  {
+    "id": 92,
+    "question": "Which is used in stack implementation?",
+    "options": ["Array", "Linked list", "Both", "None"],
+    "answer": "Both"
+  },
+  {
+    "id": 93,
+    "question": "Which is not DBMS operation?",
+    "options": ["Insert", "Delete", "Update", "Compile"],
+    "answer": "Compile"
+  },
+  {
+    "id": 94,
+    "question": "Which layer converts bits to signals?",
+    "options": ["Physical", "Data Link", "Network", "Transport"],
+    "answer": "Physical"
+  },
+  {
+    "id": 95,
+    "question": "Which is not OS service?",
+    "options": ["Process", "File", "Memory", "Sorting"],
+    "answer": "Sorting"
+  },
+
+  {
+    "id": 96,
+    "question": "Which is used in recursion?",
+    "options": ["Queue", "Stack", "Graph", "Heap"],
+    "answer": "Stack"
+  },
+  {
+    "id": 97,
+    "question": "Which algorithm is divide and conquer?",
+    "options": ["QuickSort", "DFS", "BFS", "Prim"],
+    "answer": "QuickSort"
+  },
+  {
+    "id": 98,
+    "question": "Which is not DBMS key?",
+    "options": ["Primary", "Foreign", "Candidate", "Heap"],
+    "answer": "Heap"
+  },
+  {
+    "id": 99,
+    "question": "Which is not automata?",
+    "options": ["DFA", "NFA", "PDA", "SQL"],
+    "answer": "SQL"
+  },
+  {
+    "id": 100,
+    "question": "Which is not network topology?",
+    "options": ["Star", "Ring", "Bus", "Stack"],
+    "answer": "Stack"
+  }
+  ,
+  {
+    "id": 101,
+    "question": "Which data structure is used in recursion?",
+    "options": ["Queue", "Stack", "Heap", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 102,
+    "question": "Time complexity of linear search?",
+    "options": ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+    "answer": "O(n)"
+  },
+  {
+    "id": 103,
+    "question": "Which traversal visits root first?",
+    "options": ["Inorder", "Preorder", "Postorder", "Level"],
+    "answer": "Preorder"
+  },
+  {
+    "id": 104,
+    "question": "Which sorting is unstable?",
+    "options": ["MergeSort", "Insertion", "Bubble", "QuickSort"],
+    "answer": "QuickSort"
+  },
+  {
+    "id": 105,
+    "question": "Which is not linear structure?",
+    "options": ["Array", "Queue", "Stack", "Graph"],
+    "answer": "Graph"
+  },
+
+  {
+    "id": 106,
+    "question": "Which scheduling may cause starvation?",
+    "options": ["FCFS", "RR", "Priority", "FIFO"],
+    "answer": "Priority"
+  },
+  {
+    "id": 107,
+    "question": "Which memory is fastest?",
+    "options": ["RAM", "Cache", "Disk", "ROM"],
+    "answer": "Cache"
+  },
+  {
+    "id": 108,
+    "question": "Which protocol is reliable?",
+    "options": ["UDP", "IP", "TCP", "ARP"],
+    "answer": "TCP"
+  },
+  {
+    "id": 109,
+    "question": "Which normal form removes redundancy?",
+    "options": ["1NF", "2NF", "3NF", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 110,
+    "question": "Which is deadlock condition?",
+    "options": ["Mutual exclusion", "Sharing", "Execution", "None"],
+    "answer": "Mutual exclusion"
+  },
+
+  {
+    "id": 111,
+    "question": "Which layer handles flow control?",
+    "options": ["Network", "Transport", "Physical", "Application"],
+    "answer": "Transport"
+  },
+  {
+    "id": 112,
+    "question": "Which automata uses stack?",
+    "options": ["DFA", "NFA", "PDA", "TM"],
+    "answer": "PDA"
+  },
+  {
+    "id": 113,
+    "question": "Which SQL command updates data?",
+    "options": ["SELECT", "UPDATE", "DELETE", "DROP"],
+    "answer": "UPDATE"
+  },
+  {
+    "id": 114,
+    "question": "Which sorting uses heap?",
+    "options": ["HeapSort", "MergeSort", "QuickSort", "Bubble"],
+    "answer": "HeapSort"
+  },
+  {
+    "id": 115,
+    "question": "Which addressing is used in segmentation?",
+    "options": ["Logical", "Physical", "Segment", "Virtual"],
+    "answer": "Segment"
+  },
+
+  {
+    "id": 116,
+    "question": "Which device works at data link layer?",
+    "options": ["Router", "Switch", "Gateway", "Modem"],
+    "answer": "Switch"
+  },
+  {
+    "id": 117,
+    "question": "Which is not anomaly?",
+    "options": ["Insert", "Update", "Delete", "Sort"],
+    "answer": "Sort"
+  },
+  {
+    "id": 118,
+    "question": "Which algorithm finds MST?",
+    "options": ["Dijkstra", "Prim", "DFS", "BFS"],
+    "answer": "Prim"
+  },
+  {
+    "id": 119,
+    "question": "Which language is regular?",
+    "options": ["Finite", "Grammar", "Context-free", "None"],
+    "answer": "Finite"
+  },
+  {
+    "id": 120,
+    "question": "Which is not scheduling criteria?",
+    "options": ["Throughput", "Latency", "Compilation", "Turnaround"],
+    "answer": "Compilation"
+  },
+
+  {
+    "id": 121,
+    "question": "Which uses LIFO?",
+    "options": ["Queue", "Stack", "Tree", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 122,
+    "question": "Which memory is volatile?",
+    "options": ["ROM", "RAM", "Disk", "Cache"],
+    "answer": "RAM"
+  },
+  {
+    "id": 123,
+    "question": "Which is OS function?",
+    "options": ["Memory", "Process", "File", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 124,
+    "question": "Which normal form removes transitive dependency?",
+    "options": ["2NF", "3NF", "BCNF", "4NF"],
+    "answer": "3NF"
+  },
+  {
+    "id": 125,
+    "question": "Which protocol uses port 443?",
+    "options": ["HTTP", "HTTPS", "FTP", "SMTP"],
+    "answer": "HTTPS"
+  },
+
+  {
+    "id": 126,
+    "question": "Which is divide and conquer?",
+    "options": ["MergeSort", "DFS", "BFS", "Prim"],
+    "answer": "MergeSort"
+  },
+  {
+    "id": 127,
+    "question": "Which is graph traversal?",
+    "options": ["DFS", "Sorting", "Searching", "None"],
+    "answer": "DFS"
+  },
+  {
+    "id": 128,
+    "question": "Which layer provides reliability?",
+    "options": ["Transport", "Network", "Physical", "Session"],
+    "answer": "Transport"
+  },
+  {
+    "id": 129,
+    "question": "Which key is unique?",
+    "options": ["Foreign", "Primary", "Secondary", "Composite"],
+    "answer": "Primary"
+  },
+  {
+    "id": 130,
+    "question": "Which is not deadlock condition?",
+    "options": ["Mutual", "Hold", "Preemption", "Circular"],
+    "answer": "Preemption"
+  },
+
+  {
+    "id": 131,
+    "question": "Which is first compiler phase?",
+    "options": ["Parsing", "Lexical", "CodeGen", "Optimization"],
+    "answer": "Lexical"
+  },
+  {
+    "id": 132,
+    "question": "Which storage fastest?",
+    "options": ["Register", "Cache", "RAM", "Disk"],
+    "answer": "Register"
+  },
+  {
+    "id": 133,
+    "question": "Which is SQL command?",
+    "options": ["SELECT", "RUN", "EXECUTE", "START"],
+    "answer": "SELECT"
+  },
+  {
+    "id": 134,
+    "question": "Which is tree type?",
+    "options": ["Binary", "Cycle", "Graph", "List"],
+    "answer": "Binary"
+  },
+  {
+    "id": 135,
+    "question": "Which is paging unit?",
+    "options": ["Frame", "Segment", "Block", "Track"],
+    "answer": "Frame"
+  },
+
+  {
+    "id": 136,
+    "question": "Which scheduling is preemptive?",
+    "options": ["FCFS", "SJF", "RR", "FIFO"],
+    "answer": "RR"
+  },
+  {
+    "id": 137,
+    "question": "Which is hashing?",
+    "options": ["Indexing", "Mapping", "Sorting", "Searching"],
+    "answer": "Mapping"
+  },
+  {
+    "id": 138,
+    "question": "Which is logic gate?",
+    "options": ["AND", "RAM", "CPU", "Disk"],
+    "answer": "AND"
+  },
+  {
+    "id": 139,
+    "question": "Which is compiler phase?",
+    "options": ["Syntax", "Execution", "Run", "Load"],
+    "answer": "Syntax"
+  },
+  {
+    "id": 140,
+    "question": "Which is network device?",
+    "options": ["Router", "Compiler", "OS", "RAM"],
+    "answer": "Router"
+  },
+
+  {
+    "id": 141,
+    "question": "Which uses FIFO?",
+    "options": ["Stack", "Queue", "Tree", "Graph"],
+    "answer": "Queue"
+  },
+  {
+    "id": 142,
+    "question": "Which uses LIFO?",
+    "options": ["Queue", "Stack", "Array", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 143,
+    "question": "Which is not sorting?",
+    "options": ["Merge", "Quick", "Heap", "BFS"],
+    "answer": "BFS"
+  },
+  {
+    "id": 144,
+    "question": "Which is DB key?",
+    "options": ["Primary", "Secondary", "Both", "None"],
+    "answer": "Both"
+  },
+  {
+    "id": 145,
+    "question": "Which is email protocol?",
+    "options": ["SMTP", "HTTP", "FTP", "ARP"],
+    "answer": "SMTP"
+  },
+
+  {
+    "id": 146,
+    "question": "Which is OS concept?",
+    "options": ["Thread", "Process", "Deadlock", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 147,
+    "question": "Which is TOC?",
+    "options": ["DFA", "NFA", "PDA", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 148,
+    "question": "Which is memory?",
+    "options": ["Cache", "RAM", "ROM", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 149,
+    "question": "Which is graph?",
+    "options": ["Directed", "Undirected", "Weighted", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 150,
+    "question": "Which is paradigm?",
+    "options": ["OOP", "Functional", "Procedural", "All"],
+    "answer": "All"
+  }
+  , 
+  {
+    "id": 151,
+    "question": "Which data structure is used for BFS traversal?",
+    "options": ["Stack", "Queue", "Tree", "Heap"],
+    "answer": "Queue"
+  },
+  {
+    "id": 152,
+    "question": "Time complexity of insertion in array (worst case)?",
+    "options": ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+    "answer": "O(n)"
+  },
+  {
+    "id": 153,
+    "question": "Which traversal gives postfix expression?",
+    "options": ["Inorder", "Preorder", "Postorder", "Level"],
+    "answer": "Postorder"
+  },
+  {
+    "id": 154,
+    "question": "Which sorting is adaptive?",
+    "options": ["MergeSort", "QuickSort", "Insertion Sort", "HeapSort"],
+    "answer": "Insertion Sort"
+  },
+  {
+    "id": 155,
+    "question": "Which is not a property of binary tree?",
+    "options": ["At most 2 children", "Hierarchical", "Cyclic", "Root node"],
+    "answer": "Cyclic"
+  },
+
+  {
+    "id": 156,
+    "question": "Which scheduling algorithm is non-preemptive?",
+    "options": ["FCFS", "Round Robin", "Priority (preemptive)", "SRTF"],
+    "answer": "FCFS"
+  },
+  {
+    "id": 157,
+    "question": "Which memory allocation suffers external fragmentation?",
+    "options": ["Paging", "Segmentation", "Both", "None"],
+    "answer": "Segmentation"
+  },
+  {
+    "id": 158,
+    "question": "Which protocol is used for domain name resolution?",
+    "options": ["HTTP", "FTP", "DNS", "SMTP"],
+    "answer": "DNS"
+  },
+  {
+    "id": 159,
+    "question": "Which SQL command modifies table structure?",
+    "options": ["ALTER", "UPDATE", "INSERT", "SELECT"],
+    "answer": "ALTER"
+  },
+  {
+    "id": 160,
+    "question": "Which normal form removes join dependency?",
+    "options": ["3NF", "BCNF", "4NF", "5NF"],
+    "answer": "5NF"
+  },
+
+  {
+    "id": 161,
+    "question": "Which is not a deadlock condition?",
+    "options": ["Mutual exclusion", "Hold and wait", "Circular wait", "Preemption"],
+    "answer": "Preemption"
+  },
+  {
+    "id": 162,
+    "question": "Which layer ensures end-to-end delivery?",
+    "options": ["Network", "Transport", "Session", "Data Link"],
+    "answer": "Transport"
+  },
+  {
+    "id": 163,
+    "question": "Which automata recognizes recursively enumerable language?",
+    "options": ["DFA", "PDA", "Turing Machine", "NFA"],
+    "answer": "Turing Machine"
+  },
+  {
+    "id": 164,
+    "question": "Which SQL clause sorts results?",
+    "options": ["GROUP BY", "ORDER BY", "WHERE", "HAVING"],
+    "answer": "ORDER BY"
+  },
+  {
+    "id": 165,
+    "question": "Which sorting is not in-place?",
+    "options": ["QuickSort", "HeapSort", "MergeSort", "Insertion"],
+    "answer": "MergeSort"
+  },
+
+  {
+    "id": 166,
+    "question": "Which page replacement suffers Belady’s anomaly?",
+    "options": ["LRU", "Optimal", "FIFO", "Clock"],
+    "answer": "FIFO"
+  },
+  {
+    "id": 167,
+    "question": "Which device works at physical layer?",
+    "options": ["Router", "Switch", "Hub", "Gateway"],
+    "answer": "Hub"
+  },
+  {
+    "id": 168,
+    "question": "Which is DML command?",
+    "options": ["CREATE", "ALTER", "INSERT", "DROP"],
+    "answer": "INSERT"
+  },
+  {
+    "id": 169,
+    "question": "Which grammar is context-free?",
+    "options": ["Type 0", "Type 1", "Type 2", "Type 3"],
+    "answer": "Type 2"
+  },
+  {
+    "id": 170,
+    "question": "Which is not scheduling algorithm?",
+    "options": ["FCFS", "RR", "SJF", "DNS"],
+    "answer": "DNS"
+  },
+
+  {
+    "id": 171,
+    "question": "Which algorithm is used for topological sorting?",
+    "options": ["DFS", "BFS", "Dijkstra", "Prim"],
+    "answer": "DFS"
+  },
+  {
+    "id": 172,
+    "question": "Which memory is used for booting?",
+    "options": ["RAM", "Cache", "ROM", "Register"],
+    "answer": "ROM"
+  },
+  {
+    "id": 173,
+    "question": "Which protocol sends error messages?",
+    "options": ["TCP", "UDP", "ICMP", "ARP"],
+    "answer": "ICMP"
+  },
+  {
+    "id": 174,
+    "question": "Which SQL command deletes specific rows?",
+    "options": ["DELETE", "DROP", "TRUNCATE", "REMOVE"],
+    "answer": "DELETE"
+  },
+  {
+    "id": 175,
+    "question": "Which is not a compiler phase?",
+    "options": ["Lexical", "Syntax", "Semantic", "Execution"],
+    "answer": "Execution"
+  },
+
+  {
+    "id": 176,
+    "question": "Which data structure is used in DFS?",
+    "options": ["Queue", "Stack", "Heap", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 177,
+    "question": "Which algorithm detects cycle using union-find?",
+    "options": ["Kruskal", "Prim", "Dijkstra", "BFS"],
+    "answer": "Kruskal"
+  },
+  {
+    "id": 178,
+    "question": "Which isolation level prevents non-repeatable read?",
+    "options": ["Read Uncommitted", "Read Committed", "Repeatable Read", "Serializable"],
+    "answer": "Repeatable Read"
+  },
+  {
+    "id": 179,
+    "question": "Which layer handles segmentation and reassembly?",
+    "options": ["Network", "Transport", "Session", "Application"],
+    "answer": "Transport"
+  },
+  {
+    "id": 180,
+    "question": "Which is not a key?",
+    "options": ["Primary", "Foreign", "Candidate", "Pointer"],
+    "answer": "Pointer"
+  },
+
+  {
+    "id": 181,
+    "question": "Which scheduling uses shortest remaining time?",
+    "options": ["FCFS", "RR", "SRTF", "Priority"],
+    "answer": "SRTF"
+  },
+  {
+    "id": 182,
+    "question": "Which memory is slowest?",
+    "options": ["Register", "Cache", "RAM", "Disk"],
+    "answer": "Disk"
+  },
+  {
+    "id": 183,
+    "question": "Which protocol uses port 21?",
+    "options": ["HTTP", "FTP", "SMTP", "DNS"],
+    "answer": "FTP"
+  },
+  {
+    "id": 184,
+    "question": "Which SQL command removes table data but keeps structure?",
+    "options": ["DELETE", "DROP", "TRUNCATE", "REMOVE"],
+    "answer": "TRUNCATE"
+  },
+  {
+    "id": 185,
+    "question": "Which is not a graph algorithm?",
+    "options": ["DFS", "BFS", "Prim", "Insertion"],
+    "answer": "Insertion"
+  },
+
+  {
+    "id": 186,
+    "question": "Which algorithm finds shortest path in weighted graph?",
+    "options": ["DFS", "BFS", "Dijkstra", "Prim"],
+    "answer": "Dijkstra"
+  },
+  {
+    "id": 187,
+    "question": "Which normal form removes all redundancy?",
+    "options": ["1NF", "2NF", "3NF", "BCNF"],
+    "answer": "BCNF"
+  },
+  {
+    "id": 188,
+    "question": "Which OS technique prevents deadlock?",
+    "options": ["Detection", "Avoidance", "Prevention", "All"],
+    "answer": "All"
+  },
+  {
+    "id": 189,
+    "question": "Which is not transport protocol?",
+    "options": ["TCP", "UDP", "IP", "None"],
+    "answer": "IP"
+  },
+  {
+    "id": 190,
+    "question": "Which language is most powerful?",
+    "options": ["Regular", "Context-free", "Context-sensitive", "Recursively enumerable"],
+    "answer": "Recursively enumerable"
+  },
+
+  {
+    "id": 191,
+    "question": "Which sorting is linear time?",
+    "options": ["Merge", "Quick", "Heap", "Counting"],
+    "answer": "Counting"
+  },
+  {
+    "id": 192,
+    "question": "Which structure supports recursion?",
+    "options": ["Queue", "Stack", "Array", "Graph"],
+    "answer": "Stack"
+  },
+  {
+    "id": 193,
+    "question": "Which is not DBMS operation?",
+    "options": ["Insert", "Update", "Delete", "Compile"],
+    "answer": "Compile"
+  },
+  {
+    "id": 194,
+    "question": "Which layer transmits raw bits?",
+    "options": ["Physical", "Data Link", "Network", "Transport"],
+    "answer": "Physical"
+  },
+  {
+    "id": 195,
+    "question": "Which is not OS service?",
+    "options": ["Process", "Memory", "File", "Sorting"],
+    "answer": "Sorting"
+  },
+
+  {
+    "id": 196,
+    "question": "Which uses recursion?",
+    "options": ["DFS", "BFS", "Queue", "Heap"],
+    "answer": "DFS"
+  },
+  {
+    "id": 197,
+    "question": "Which algorithm is divide and conquer?",
+    "options": ["MergeSort", "Prim", "DFS", "BFS"],
+    "answer": "MergeSort"
+  },
+  {
+    "id": 198,
+    "question": "Which is not DB key?",
+    "options": ["Primary", "Foreign", "Candidate", "Stack"],
+    "answer": "Stack"
+  },
+  {
+    "id": 199,
+    "question": "Which is not automata?",
+    "options": ["DFA", "NFA", "PDA", "HTTP"],
+    "answer": "HTTP"
+  },
+  {
+    "id": 200,
+    "question": "Which is not topology?",
+    "options": ["Star", "Ring", "Bus", "Queue"],
+    "answer": "Queue"
+  }
+
+
+  
+]
