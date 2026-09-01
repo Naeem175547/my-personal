@@ -1,3 +1,9 @@
+
+note->
+common response will be handled by interceptor
+common response should be in application level
+
+
 -->forRoot()       → direct configuration
 forRootAsync()  → configuration using ConfigService / factory / async logic
 
@@ -121,3 +127,197 @@ update() → lifecycle hooks ❌
 
 --->
 
+ValidationPipe
+│
+├── whitelist
+│      → remove unknown fields
+│
+├── forbidNonWhitelisted
+│      → reject unknown fields
+│
+└── transform
+       → convert input to DTO types
+
+
+--->
+You should throw a GraphQL exception instead of a NestJS HTTP exception:
+import { GraphQLError } from 'graphql';
+
+throw new GraphQLError('Email or username already exists', {
+  extensions: {
+    code: 'CONFLICT',
+  },
+});
+Yes. The key is understanding that HTTP and GraphQL have different error models.
+
+1. NestJS HTTP exception
+
+When you write:
+
+throw new ConflictException('Email or username already exists');
+
+ConflictException is an HTTP-oriented exception.
+
+It represents:
+
+HTTP 409 Conflict
+
+This makes perfect sense in a REST API:
+
+POST /users
+        ↓
+duplicate email
+        ↓
+HTTP 409
+
+The response might be:
+
+{
+  "statusCode": 409,
+  "message": "Email or username already exists"
+}
+2. GraphQL works differently
+
+GraphQL normally returns one HTTP endpoint:
+
+POST /graphql
+
+Even if your GraphQL operation has a business error, the HTTP request itself can still be successfully processed.
+
+GraphQL puts the error inside the GraphQL response:
+
+{
+  "errors": [
+    {
+      "message": "Email or username already exists",
+      "extensions": {
+        "code": "CONFLICT"
+      }
+    }
+  ],
+  "data": null
+}
+
+So:
+
+HTTP
+└── status code → 200
+    GraphQL
+    └── errors[].extensions.code → CONFLICT
+
+That's the fundamental difference.
+
+How GraphQLError works
+
+You write:
+
+import { GraphQLError } from 'graphql';
+
+throw new GraphQLError(
+  'Email or username already exists',
+  {
+    extensions: {
+      code: 'CONFLICT',
+    },
+  },
+);
+
+GraphQLError is an error class from the GraphQL library.
+
+The important part is:
+
+extensions: {
+  code: 'CONFLICT',
+}
+
+You're adding metadata to the GraphQL error.
+
+Apollo then sends that information to the client:
+
+{
+  "errors": [
+    {
+      "message": "Email or username already exists",
+      "extensions": {
+        "code": "CONFLICT"
+      }
+    }
+  ]
+}
+Why did your ConflictException become INTERNAL_SERVER_ERROR?
+
+You had:
+
+throw new ConflictException(
+  'Email or username already exists',
+);
+
+NestJS knows:
+
+ConflictException
+       ↓
+HTTP 409
+
+But Apollo doesn't treat NestJS's ConflictException as one of its GraphQL error codes.
+
+So Apollo saw an unrecognized exception and produced:
+
+"extensions": {
+  "code": "INTERNAL_SERVER_ERROR"
+}
+
+Even though the underlying exception contained:
+
+"statusCode": 409
+
+That's why your previous response had both:
+
+code: INTERNAL_SERVER_ERROR
+status: 409
+Can you use HTTP exceptions with GraphQL?
+
+Yes, absolutely.
+
+NestJS allows you to use:
+
+BadRequestException
+UnauthorizedException
+ForbiddenException
+NotFoundException
+ConflictException
+
+inside GraphQL resolvers/services.
+
+They won't crash the application.
+
+The question is how you want your GraphQL API to expose those errors.
+
+Option 1 — NestJS exceptions
+throw new ConflictException('Email already exists');
+
+Simple and familiar if you're already using NestJS.
+
+Option 2 — GraphQL errors
+throw new GraphQLError('Email already exists', {
+  extensions: {
+    code: 'CONFLICT',
+  },
+});
+
+More naturally aligned with GraphQL's error model.
+
+One important correction
+
+You don't necessarily need to replace every NestJS exception with GraphQLError.
+
+For example, your validation:
+
+new ValidationPipe()
+
+is already producing a BadRequestException, and NestJS/GraphQL is handling that for you.
+
+So you can choose a consistent strategy rather than thinking:
+
+"HTTP exceptions cannot be used in GraphQL."
+
+They can be used. It's just that GraphQL has its own error-response format.

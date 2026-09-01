@@ -1,4 +1,3 @@
-
 import {
   ConflictException,
   Injectable,
@@ -10,6 +9,9 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input.js';
 import { UpdateUserInput } from './dto/update-user.input.js';
 import { UserEntity } from './entities/user.entity.js';
+import * as bcrypt from 'bcrypt';
+
+
 
 @Injectable()
 export class UserService {
@@ -20,41 +22,30 @@ export class UserService {
 
   // CREATE
   async create(createUserInput: CreateUserInput) {
-    // Check email
-    const existingEmail = await this.userRepo.findOne({
-      where: {
-        email: createUserInput.email,
-      },
-    });
-
-    if (existingEmail) {
-      throw new ConflictException('Email already exists');
+    try {
+      
+      const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
+      const user = this.userRepo.create({
+        ...createUserInput,
+        password: hashedPassword,
+      });
+      const result = await this.userRepo.save(user);
+      return result;
+    } catch (error: any) {
+      
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new ConflictException('Email or username already exists');
+      }
+      
+      console.error('Error creating user:', error);
+      throw error;
     }
-
-    // Check username
-    const existingUsername = await this.userRepo.findOne({
-      where: {
-        username: createUserInput.username,
-      },
-    });
-
-    if (existingUsername) {
-      throw new ConflictException('Username already exists');
-    }
-
-    // Create entity
-    const user = this.userRepo.create(createUserInput);
-
-    // Save to database
-    return await this.userRepo.save(user);
   }
 
-  // FIND ALL
   async findAll() {
     return await this.userRepo.find();
   }
 
-  // FIND ONE
   async findOne(id: number) {
     const user = await this.userRepo.findOne({
       where: { id },
@@ -67,66 +58,44 @@ export class UserService {
     return user;
   }
 
-  // UPDATE
-  async update(
-    id: number,
-    updateUserInput: UpdateUserInput,
-  ) {
-    // Check user exists
-    const user = await this.userRepo.findOne({
-      where: { id },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    // Check email if email is being updated
-    if (updateUserInput.email) {
-      const existingEmail = await this.userRepo.findOne({
-        where: {
-          email: updateUserInput.email,
-        },
+  async update(id: number, updateUserInput: UpdateUserInput) {
+    try {
+      const user = await this.userRepo.findOne({
+        where: { id },
       });
 
-      if (existingEmail && existingEmail.id !== id) {
-        throw new ConflictException('Email already exists');
+      if (!user) {
+        throw new NotFoundException('User not found');
       }
-    }
 
-    // Check username if username is being updated
-    if (updateUserInput.username) {
-      const existingUsername = await this.userRepo.findOne({
-        where: {
-          username: updateUserInput.username,
-        },
+      // if (updateUserInput.email) {
+      //   const existingEmail = await this.userRepo.findOne({
+      //     where: {
+      //       email: updateUserInput.email,
+      //     },
+      //   });
+
+      //   if (existingEmail && existingEmail.id !== id) {
+      //     throw new ConflictException('Email already exists');
+      //   }
+      // }
+
+      await this.userRepo.update({ id }, updateUserInput);
+
+      const result = await this.userRepo.findOne({
+        where: { id },
       });
 
-      if (
-        existingUsername &&
-        existingUsername.id !== id
-      ) {
-        throw new ConflictException(
-          'Username already exists',
-        );
-      }
+      return result;
+    } catch (error) {
+      if (error instanceof ConflictException)
+        throw new ConflictException('either username or email already exists');
+
+      throw error;
     }
-
-    // Update
-    await this.userRepo.update(
-      { id },
-      updateUserInput,
-    );
-
-    // Return updated user
-    return await this.userRepo.findOne({
-      where: { id },
-    });
   }
 
-  // DELETE
   async remove(id: number) {
-    // Check user exists
     const user = await this.userRepo.findOne({
       where: { id },
     });
@@ -135,11 +104,7 @@ export class UserService {
       throw new NotFoundException('User not found');
     }
 
-    // Delete
     await this.userRepo.delete({ id });
-
-    // Return deleted user
     return user;
   }
 }
-
