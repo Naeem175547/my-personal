@@ -3918,7 +3918,6 @@ docker compose up
 
 5. Request Flow
 Your NestJS service runs on:
-
 http://localhost:3001/api/users
 
 But through Kong:
