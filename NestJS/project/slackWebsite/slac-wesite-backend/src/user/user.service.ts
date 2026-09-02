@@ -104,14 +104,20 @@ export class UserService {
       return result;
     } catch (error) {
       if (error instanceof ConflictException)
-        throw new ConflictException('either username or email already exists');
+        throw new GraphQLError('Email or username already exists', {
+          extensions: {
+            code: 'CONFLICT',
+            http: { status: 409 },
+          },
+        });
 
       throw error;
     }
   }
 
   async remove(id: number) {
-    const user = await this.userRepo.findOne({
+    try{
+      const user = await this.userRepo.findOne({
       where: { id },
     });
 
@@ -123,8 +129,11 @@ export class UserService {
         },
       });
     }
-
     await this.userRepo.delete({ id });
     return user;
+    }
+    catch (error) {
+      throw error;
+    }
   }
 }
