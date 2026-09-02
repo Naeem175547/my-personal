@@ -1,0 +1,73 @@
+name: Schedule job ok
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Print Message
+        run: echo "Scheduled Workflow"  
+
+
+
+name: Schedule job ok
+name → Name of the GitHub Actions workflow.
+Here, the workflow name is Schedule job ok.
+on:
+  schedule:
+on → Defines when the workflow will run.
+schedule → Runs the workflow automatically at a specified time.
+- cron: "0 0 * * *"
+cron → Defines the schedule using cron syntax.
+"0 0 * * *" → Runs every day at 12:00 AM UTC.
+Cron format
+minute hour day-of-month month day-of-week
+
+For example:
+
+0 0 * * *
+Minute	Hour	Day	   Month	Weekday
+0	      0	    Every	Every	     Every
+jobs:
+jobs → Contains the tasks that the workflow will perform.
+run-script:
+This is the job name/ID.
+runs-on: ubuntu-latest
+Specifies the operating system for running the job.
+ubuntu-latest means the latest available Ubuntu runner.
+steps:
+steps → Contains the individual commands executed by the job.
+- name: Print Message
+Gives a readable name to this step.
+run: echo "Scheduled Workflow"
+run → Executes a command in the Ubuntu runner.
+echo prints the message:
+Scheduled Workflow
+Flow
+
+Scheduled Time → Workflow Starts → Job Runs → Ubuntu Runner → Print Message
+
+
+--->
+To disable a GitHub Actions workflow, you can do it from GitHub:
+
+Go to your GitHub repository.
+Click Actions.
+Select your workflow, e.g. Schedule job ok.
+Click the ⋯ (three dots) menu.
+Select Disable workflow.
+
+The workflow will remain in your repository, but the scheduled job will no longer run.
+Another option
+
+Remove or comment out the schedule trigger:
+
+on:
+  # schedule:
+  #   - cron: "0 0 * * *"
+
+Or remove the workflow YAML file from .github/workflows/.
