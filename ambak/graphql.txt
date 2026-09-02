@@ -390,4 +390,50 @@ Client handles the response and cache after client.query() / client.mutate().
 | Good for React components        | Good for manually triggered operations |
 
 note->
-f you use client.query() and client.mutate() directly, you do NOT need to wrap your entire React app with ApolloProvider
+f you use client.query() and client.mutate() directly,
+ you do NOT need to wrap your entire React app with ApolloProvider
+
+ --->
+ Different Apollo Client
+        ≠
+Different Database
+
+More accurately:
+
+Different Apollo Client
+        ↓
+Usually different API/server configuration
+        ↓
+That API MAY use a different database
+
+--->
+
+|
+
+cache: true here means Apollo Client is allowed to use its cache when executing the query.
+But there is an important point: in Apollo Client, cache is normally not a standard client.query() option. What you usually want is fetchPolicy.
+
+For example:
+
+return clientInsurance.query({
+  query,
+  variables,
+  fetchPolicy: "cache-first",
+});
+What cache-first means
+Query requested
+      ↓
+Is data already in Apollo cache?
+   ↙           ↘
+ YES            NO
+  ↓              ↓
+Use cache     Call GraphQL API
+                 ↓
+            Store in cache
+
+important fetchPolicy `fetchPolicy`    | Meaning                                 |
+| ---------------- | --------------------------------------- |
+| `"cache-first"`  | Use cache if available; otherwise API   |
+| `"network-only"` | Always call API; don't use cached data  |
+| `"no-cache"`     | Call API and don't save result in cache |
+| `"cache-only"`   | Only use cache; never call API          |
