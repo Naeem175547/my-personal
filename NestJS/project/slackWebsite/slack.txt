@@ -146,6 +146,8 @@ syntax:throw new GraphQLError(message,{
     code:metadata
   }
 })
+
+
 import { GraphQLError } from 'graphql';
 
 
@@ -153,8 +155,14 @@ import { GraphQLError } from 'graphql';
 throw new GraphQLError('Email or username already exists', {
   extensions: {
     code: 'CONFLICT',
+    http:{
+      status:409
+    }
   },
 });
+
+//extensions is operational
+
 Yes. The key is understanding that HTTP and GraphQL have different error models.
 1. NestJS HTTP exception
 When you write:
@@ -552,3 +560,166 @@ context.getHandler().name  // getUsers
 context.getClass().name    // UserResolver
 
 --->
+These are common properties you may see on JavaScript/Node.js errors, but not every error has all of them.
+1. error.code
+Identifies the type/category of error.
+
+Example with MySQL:
+
+error.code === 'ER_DUP_ENTRY'
+
+Means: duplicate value — e.g. trying to insert an email that already exists.
+
+Other examples:
+
+ER_DUP_ENTRY
+ER_NO_SUCH_TABLE
+ER_ACCESS_DENIED_ERROR
+
+Think: "What kind of error is this?"
+
+2. error.message
+Contains the human-readable explanation of the error.
+
+Example:
+
+error.message
+
+Could return:
+Duplicate entry 'test@gmail.com' for key 'users.email'
+Think: "What exactly went wrong?"
+
+3. error.name
+
+Contains the name/type of the JavaScript error.
+Example:
+error.name
+Could return:
+
+Error
+TypeError
+ReferenceError
+SyntaxError
+
+Example:
+
+try {
+  null.someMethod();
+} catch (error) {
+  console.log(error.name);
+}
+
+Output:
+TypeError
+
+Think: "What JavaScript error class is this?"
+
+4. error.status
+Usually represents an HTTP status code, but it is not guaranteed to exist.
+
+Example:
+error.status
+
+Could be:
+
+400
+404
+500
+
+For example:
+
+throw {
+  status: 404,
+  message: 'User not found'
+};
+
+Think: "What HTTP status should I return?"
+
+5. error.statusCode
+Same general idea as status, but commonly used to explicitly mean an HTTP status code.
+
+Example:
+error.statusCode
+
+Could be:
+400
+401
+404
+500
+
+In NestJS, you'll commonly encounter exceptions such as:
+
+throw new NotFoundException('User not found');
+The exception has an HTTP status of:
+404
+Think: "What HTTP status code should the client receive?"
+
+note->
+Some internal/programming errors do not have statusCode at all.
+For example:
+
+try {
+  const user = await User.findById(id);
+} catch (error) {
+  console.log(error.statusCode);
+}
+
+If the database throws an error, it might look like:
+
+{
+  code: "ER_DUP_ENTRY",
+  message: "Duplicate entry...",
+  name: "Error"
+}
+
+There may be no:
+
+statusCode
+status
+
+So:
+
+error.statusCode // undefined
+Common examples
+
+1. Database error
+
+error.code = "ER_DUP_ENTRY"
+error.message = "Duplicate entry..."
+
+❌ statusCode may not exist.
+
+2. Network error
+
+error.code = "ECONNREFUSED"
+error.message = "Connection refused"
+
+❌ statusCode may not exist.
+
+3. JavaScript error
+
+error.name = "TypeError"
+error.message = "Cannot read properties of undefined"
+
+❌ statusCode usually doesn't exist.
+
+4. NestJS HTTP exception
+
+throw new NotFoundException("User not found");
+
+✅ Has HTTP status 404.
+
+Important concept
+Database/Node error
+       ↓
+may NOT have statusCode
+       ↓
+your application should assign one
+       ↓
+500 Internal Server Error
+
+For example:
+const statusCode = error.statusCode || 500;
+
+Meaning:
+If the error has a statusCode, use it. Otherwise, use 500.

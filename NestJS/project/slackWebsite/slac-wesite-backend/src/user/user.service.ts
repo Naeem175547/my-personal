@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input.js';
 import { UpdateUserInput } from './dto/update-user.input.js';
 import { UserEntity } from './entities/user.entity.js';
+import { GraphQLError } from 'graphql/error/GraphQLError.js';
 import * as bcrypt from 'bcrypt';
 
 
@@ -22,8 +23,7 @@ export class UserService {
 
   // CREATE
   async create(createUserInput: CreateUserInput) {
-    try {
-      
+    try {      
       const hashedPassword = await bcrypt.hash(createUserInput.password, 10);
       const user = this.userRepo.create({
         ...createUserInput,
@@ -31,10 +31,15 @@ export class UserService {
       });
       const result = await this.userRepo.save(user);
       return result;
-    } catch (error: any) {
-      
+    } catch (error: any) {      
       if (error.code === 'ER_DUP_ENTRY') {
-        throw new ConflictException('Email or username already exists');
+        // throw new ConflictException('Email or username already exists');
+        throw new GraphQLError('Email or username already exists',{
+          extensions: {
+            code: 'CONFLICT',
+            http: { status: 409 },
+          },
+        });
       }
       
       console.error('Error creating user:', error);
@@ -52,7 +57,12 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new GraphQLError('User not found', {
+        extensions: {
+          code: 'NOT_FOUND',
+          http: { status: 404 },
+        },
+      });
     }
 
     return user;
@@ -65,7 +75,12 @@ export class UserService {
       });
 
       if (!user) {
-        throw new NotFoundException('User not found');
+        throw new GraphQLError('User not found', {
+        extensions: {
+          code: 'NOT_FOUND',
+          http: { status: 404 },
+        },
+      });
       }
 
       // if (updateUserInput.email) {
@@ -101,7 +116,12 @@ export class UserService {
     });
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new GraphQLError('User not found', {
+        extensions: {
+          code: 'NOT_FOUND',
+          http: { status: 404 },
+        },
+      });
     }
 
     await this.userRepo.delete({ id });
