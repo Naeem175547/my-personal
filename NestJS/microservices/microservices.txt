@@ -2754,3 +2754,1194 @@ handleUserCreated(@Payload() data: any) {
 
 --->
 redis from redis
+
+--->
+API Gateway in Microservices
+1. What is an API Gateway?
+An API Gateway is a single entry point between clients and a microservices-based backend system.
+
+In a microservices architecture, an application is divided into multiple independent services. For example:
+
+User Service
+Order Service
+Product Service
+Payment Service
+Notification Service
+
+Instead of allowing the client to communicate directly with every microservice, the client sends requests to the API Gateway.
+
+The API Gateway then:
+
+Receives the client request.
+Identifies which microservice should handle the request.
+Routes the request to that service.
+Performs common tasks such as authentication, authorization, logging, rate limiting, etc.
+Receives the response from the microservice.
+Sends the response back to the client.
+Simple Architecture
+                    CLIENTS
+                       |
+          +------------+------------+
+          |            |            |
+        Web          Mobile       Other Apps
+          |            |            |
+          +------------+------------+
+                       |
+                       v
+                +--------------+
+                |  API GATEWAY |
+                +--------------+
+                  /     |      \
+                 /      |       \
+                v       v        v
+        +---------+ +---------+ +---------+
+        | User    | | Order   | | Payment |
+        | Service | | Service | | Service |
+        +---------+ +---------+ +---------+
+             |           |          |
+             v           v          v
+          User DB     Order DB   Payment DB
+
+
+The main idea is:
+
+Client → API Gateway → Appropriate Microservice
+
+2. Why do we need an API Gateway?
+
+Suppose we have 5 microservices:
+
+User Service
+Product Service
+Order Service
+Payment Service
+Notification Service
+
+
+Without an API Gateway, the client may need to know the address of every service.
+
+Mobile App
+   |
+   +----> User Service
+   |
+   +----> Product Service
+   |
+   +----> Order Service
+   |
+   +----> Payment Service
+   |
+   +----> Notification Service
+
+
+This creates several problems.
+
+The client needs to know:
+
+Where each service is located.
+Which service should be called.
+How authentication works for each service.
+How to handle failures.
+How to deal with different service versions.
+How to communicate with multiple services.
+
+The API Gateway solves this problem by providing a single entry point.
+
+                    Client
+                      |
+                      v
+                API Gateway
+                      |
+       +--------------+--------------+
+       |              |              |
+       v              v              v
+   User Service   Order Service  Payment Service
+
+
+Now the client only needs to know the API Gateway address.
+
+3. Real-Life Example
+
+Consider an e-commerce application.
+
+A customer opens the mobile application and wants to see their orders.
+
+The client sends:
+
+GET /api/orders/1001
+
+
+The request goes to:
+
+Mobile App
+    |
+    v
+API Gateway
+    |
+    v
+Order Service
+    |
+    v
+Order Database
+
+
+The Order Service returns:
+
+{
+  "orderId": 1001,
+  "status": "SHIPPED",
+  "amount": 2500
+}
+
+
+The API Gateway forwards the response to the mobile application.
+
+The mobile application does not need to know where the Order Service is running.
+
+4. Main Responsibilities of API Gateway
+
+An API Gateway can perform many common responsibilities.
+
+4.1 Request Routing
+
+The most important responsibility is routing.
+
+For example:
+
+/api/users/**       → User Service
+/api/products/**    → Product Service
+/api/orders/**      → Order Service
+/api/payments/**    → Payment Service
+
+
+Example:
+
+GET /api/users/101
+
+
+The API Gateway routes it to:
+
+User Service
+
+
+Another request:
+
+POST /api/orders
+
+
+is routed to:
+
+Order Service
+
+
+So:
+
+Request
+   |
+   v
+API Gateway
+   |
+   +---- /users    → User Service
+   |
+   +---- /products → Product Service
+   |
+   +---- /orders   → Order Service
+   |
+   +---- /payments → Payment Service
+
+5. Authentication
+
+The API Gateway can verify whether the user is authenticated.
+
+For example, a client sends a JWT token:
+
+Authorization: Bearer eyJhbGciOi...
+
+
+The Gateway verifies the token.
+
+If valid:
+
+Client
+  |
+  | JWT
+  v
+API Gateway
+  |
+  | Token Valid
+  v
+Microservice
+
+
+If invalid:
+
+Client
+  |
+  | Invalid JWT
+  v
+API Gateway
+  |
+  X
+401 Unauthorized
+
+
+This avoids implementing the same authentication logic independently in every service.
+
+6. Authorization
+
+Authentication answers:
+
+Who are you?
+
+Authorization answers:
+
+What are you allowed to do?
+
+For example:
+
+USER       → Can view products
+USER       → Can create orders
+
+ADMIN      → Can create products
+ADMIN      → Can delete products
+ADMIN      → Can view all users
+
+
+The API Gateway can check roles or permissions before forwarding requests.
+
+Example:
+
+DELETE /api/products/10
+
+
+If the user is an ADMIN:
+
+API Gateway
+     |
+     | ADMIN
+     v
+Product Service
+
+
+If the user is a normal USER:
+
+API Gateway
+     |
+     X
+403 Forbidden
+
+7. Rate Limiting
+
+Rate limiting controls how many requests a client can make in a specific period.
+
+For example:
+
+User → Maximum 100 requests/minute
+
+
+If the client sends:
+
+1 request
+2 requests
+3 requests
+...
+100 requests
+
+
+They are allowed.
+
+But request number 101 may be rejected:
+
+429 Too Many Requests
+
+
+This protects microservices from:
+
+Excessive traffic
+Abuse
+Bots
+Accidental request loops
+DDoS-like application traffic
+8. Load Balancing
+
+Suppose the Order Service has three instances:
+
+Order Service Instance 1
+Order Service Instance 2
+Order Service Instance 3
+
+
+The API Gateway can distribute requests between them.
+
+                    API Gateway
+                   /     |     \
+                  v      v      v
+               Order-1 Order-2 Order-3
+
+
+For example:
+
+Request 1 → Order-1
+Request 2 → Order-2
+Request 3 → Order-3
+Request 4 → Order-1
+
+
+This improves:
+
+Scalability
+Availability
+Performance
+9. Service Discovery
+
+In a dynamic microservices environment, service instances may change.
+
+For example:
+
+Order Service
+    |
+    +--- Instance 1
+    +--- Instance 2
+    +--- Instance 3
+
+
+An instance may go down, or a new instance may be created.
+
+The Gateway can work with a service discovery mechanism to find healthy service instances.
+
+Conceptually:
+
+API Gateway
+     |
+     v
+Service Discovery
+     |
+     +---- Order Service Instance 1
+     +---- Order Service Instance 2
+     +---- Order Service Instance 3
+
+
+Examples of service-discovery technologies include:
+
+Eureka
+Consul
+Kubernetes Service Discovery
+10. SSL/TLS Termination
+
+The API Gateway can handle HTTPS connections.
+
+Instead of every microservice managing external TLS configuration, the Gateway can terminate the TLS connection.
+
+Client
+  |
+  | HTTPS
+  v
+API Gateway
+  |
+  | Internal communication
+  v
+Microservice
+
+
+This can simplify certificate management and centralize security controls.
+
+In some architectures, traffic between internal services is also encrypted.
+
+11. Request Transformation
+
+The API Gateway can modify requests before forwarding them.
+
+For example, the client sends:
+
+{
+  "user": 101
+}
+
+
+The Gateway may transform it into the format expected by a backend service:
+
+{
+  "userId": 101
+}
+
+
+It can also:
+
+Add headers
+Remove headers
+Rewrite URLs
+Transform request formats
+Transform response formats
+12. Response Transformation
+
+The Gateway can modify the response received from a microservice.
+
+For example, the service returns:
+
+{
+  "firstName": "Rahul",
+  "lastName": "Sharma",
+  "internalId": "XYZ123"
+}
+
+
+The Gateway may return only the information needed by the client:
+
+{
+  "name": "Rahul Sharma"
+}
+
+
+However, unnecessary transformation logic should be avoided because it can make the Gateway too complex.
+
+13. API Composition / Aggregation
+
+This is one of the useful features of an API Gateway.
+
+Suppose a mobile application's dashboard requires:
+
+User Information
+Order Information
+Payment Information
+
+
+Without aggregation:
+
+Mobile App
+   |
+   +----> User Service
+   |
+   +----> Order Service
+   |
+   +----> Payment Service
+
+
+With API Gateway aggregation:
+
+                Mobile App
+                    |
+                    v
+              API Gateway
+             /     |      \
+            v      v       v
+         User    Order   Payment
+        Service  Service  Service
+             \     |      /
+              \    |     /
+               \   |    /
+                  v
+             Combined Response
+                    |
+                    v
+                Mobile App
+
+
+The Gateway can combine the results into:
+
+{
+  "user": {
+    "id": 101,
+    "name": "Rahul"
+  },
+  "orders": [
+    {
+      "id": 5001,
+      "status": "SHIPPED"
+    }
+  ],
+  "payment": {
+    "status": "SUCCESS"
+  }
+}
+
+
+This reduces the number of network calls made directly by the client.
+
+14. Caching
+
+The API Gateway can cache frequently requested data.
+
+For example:
+
+GET /api/products
+
+
+If product data does not change frequently, the Gateway can cache the response.
+
+First request:
+
+Client
+  ↓
+Gateway
+  ↓
+Product Service
+  ↓
+Database
+
+
+Later requests:
+
+Client
+  ↓
+Gateway
+  ↓
+Cache
+
+
+This can reduce load on backend services and improve response time.
+
+Caching must be designed carefully because stale data can be returned.
+
+15. Logging
+
+The Gateway is a useful central location for request logging.
+
+For example:
+
+Request ID: 12345
+Method: GET
+Path: /api/orders/1001
+User: 101
+Status: 200
+Response Time: 120 ms
+
+
+This helps developers troubleshoot problems.
+
+For example:
+
+Client
+   |
+   v
+API Gateway
+   |
+   | Request ID = ABC123
+   v
+Order Service
+   |
+   v
+Database
+
+
+The same correlation/request ID can be passed through downstream services.
+
+16. Monitoring
+
+The API Gateway can collect metrics such as:
+
+Total Requests
+Successful Requests
+Failed Requests
+Average Response Time
+5xx Errors
+4xx Errors
+Traffic per API
+Traffic per Client
+
+
+Example:
+
+/api/orders
+Requests:        100,000
+Success:          98,000
+4xx Errors:        1,000
+5xx Errors:        1,000
+Average Latency:      150 ms
+
+
+This helps identify performance and availability problems.
+
+17. Circuit Breaker
+
+Suppose Payment Service is down.
+
+Without protection:
+
+Client
+   ↓
+API Gateway
+   ↓
+Payment Service
+   X
+Failure
+
+
+Repeated requests may continue hitting the failed service.
+
+A circuit breaker can detect repeated failures and temporarily stop sending requests.
+
+Client
+   ↓
+API Gateway
+   ↓
+Circuit Breaker
+   X
+Payment Service
+
+
+The Gateway can return an appropriate error or fallback response.
+
+This prevents cascading failures.
+
+18. Retry
+
+If a service temporarily fails, the Gateway may retry the request.
+
+Example:
+
+Gateway
+   |
+   | Request
+   v
+Order Service
+   |
+   X Temporary Failure
+   |
+   v
+Gateway
+   |
+   | Retry
+   v
+Order Service
+   |
+   v
+Success
+
+
+Retries must be used carefully.
+
+They should generally have:
+
+Limited retry count
+Timeouts
+Backoff
+Idempotency considerations
+
+Otherwise, retries can make an overloaded service even worse.
+
+19. Timeout
+
+The Gateway can define how long it will wait for a downstream service.
+
+For example:
+
+Timeout = 5 seconds
+
+
+If Payment Service does not respond within the configured timeout:
+
+Client
+   |
+   v
+API Gateway
+   |
+   v
+Payment Service
+   |
+   | No response
+   |
+   X 5 seconds
+   |
+   v
+Gateway → Timeout/Error
+
+
+Timeouts prevent requests from waiting indefinitely.
+
+20. API Versioning
+
+Suppose we have:
+
+/api/v1/users
+
+
+and later introduce:
+
+/api/v2/users
+
+
+The Gateway can route them appropriately:
+
+/api/v1/users → User Service V1
+
+/api/v2/users → User Service V2
+
+
+This helps support backward compatibility while newer APIs are introduced.
+
+21. Security
+
+The API Gateway can provide centralized security controls such as:
+
+Authentication
+Authorization
+TLS/HTTPS
+Rate limiting
+IP filtering
+Request validation
+Security headers
+Token validation
+API key validation
+
+Instead of exposing every microservice directly to the internet, the architecture can expose only the Gateway.
+
+Internet
+   |
+   v
+API Gateway
+   |
+   +---- User Service
+   +---- Order Service
+   +---- Payment Service
+
+
+The internal services can remain on a private network where appropriate.
+
+22. API Gateway vs Load Balancer
+
+These two are related but not exactly the same.
+
+Load Balancer
+
+The primary job of a load balancer is to distribute traffic across multiple instances.
+
+Client
+   |
+   v
+Load Balancer
+  / | \
+ v  v  v
+S1 S2 S3
+
+API Gateway
+
+An API Gateway generally provides a broader API-management layer:
+
+Client
+   |
+   v
+API Gateway
+   |
+   +-- Authentication
+   +-- Authorization
+   +-- Rate Limiting
+   +-- Routing
+   +-- Logging
+   +-- Monitoring
+   +-- Transformation
+   +-- Aggregation
+   |
+   v
+Microservices
+
+
+A production architecture can use both.
+
+Client
+   |
+   v
+Load Balancer
+   |
+   v
+API Gateway
+   |
+   +---- Microservices
+
+
+Or, depending on the platform, gateway functionality and load balancing may overlap
+
+
+3. API Gateway vs Reverse Proxy
+A reverse proxy forwards client requests to backend servers.
+
+An API Gateway is essentially a more specialized reverse-proxy layer designed around APIs and commonly includes additional capabilities such as:
+
+Routing
+Authentication
+Authorization
+Rate Limiting
+Observability
+API Versioning
+Request/Response Policies
+Aggregation
+
+So:
+
+Reverse Proxy
+    ↓
+Primarily traffic forwarding/proxying
+
+API Gateway
+    ↓
+API traffic management + policies + routing
+
+24. API Gateway vs Service Mesh
+An API Gateway generally focuses on client-to-service traffic, often called north-south traffic.
+
+A service mesh primarily manages service-to-service traffic, often called east-west traffic.
+
+                 External Client
+                       |
+                       | North-South
+                       v
+                +-------------+
+                | API Gateway |
+                +-------------+
+                       |
+          +------------+------------+
+          |            |            |
+          v            v            v
+      Service A <--> Service B <--> Service C
+            \          |          /
+             \         |         /
+              +----------------+
+                Service Mesh
+
+A system can use both.
+ 
+25.Example Routing Configuration
+Conceptually, a Gateway can have routes like:
+
+routes:
+
+  - path: /api/users/**
+    service: user-service
+
+  - path: /api/products/**
+    service: product-service
+
+  - path: /api/orders/**
+    service: order-service
+
+  - path: /api/payments/**
+    service: payment-service
+
+Therefore:
+
+/api/users/10
+        ↓
+user-service
+
+26. Popular API Gateway Technologies
+Common choices include:
+
+Spring Cloud Gateway
+Kong Gateway
+NGINX
+Traefik
+Envoy
+HAProxy
+Amazon API Gateway
+Azure API Management
+Google Cloud API Gateway
+Apigee
+The choice depends on the deployment environment, required features, traffic, security requirements, and operational model.
+
+27. API Gateway in Kubernetes
+In Kubernetes, an API Gateway or Gateway API implementation can provide an external entry point to workloads.
+
+Conceptually:
+
+Internet
+   |
+   v
+Cloud Load Balancer
+   |
+   v
+API Gateway / Ingress
+   |
+   +---- User Service
+   +---- Product Service
+   +---- Order Service
+
+Kubernetes can provide service discovery for internal services.
+
+For example:
+
+order-service
+product-service
+user-service
+
+The Gateway routes external requests to the appropriate Kubernetes Services.
+
+28. North-South vs East-West Traffic
+This is an important interview concept.
+
+North-South Traffic
+Traffic entering or leaving the system:
+
+Internet
+   |
+   v
+API Gateway
+   |
+   v
+Microservices
+
+API Gateway commonly handles this traffic.
+
+East-West Traffic
+Traffic between internal services:
+
+Service A
+    |
+    v
+Service B
+    |
+    v
+Service C
+
+A service mesh can be used to manage this traffic.
+
+29  . Complete Architecture
+A more complete microservices architecture may look like:
+
+                         USERS
+                           |
+                    Web / Mobile App
+                           |
+                           v
+                  +------------------+
+                  | Load Balancer    |
+                  +------------------+
+                           |
+                           v
+                  +------------------+
+                  |   API Gateway    |
+                  +------------------+
+                    /       |       \
+                   /        |        \
+                  v         v         v
+             User Service Product Service Order Service
+                  |             |             |
+                  v             v             v
+               User DB      Product DB     Order DB
+                                              |
+                                              v
+                                         Payment Service
+                                              |
+                                              v
+                                          Payment DB
+
+The Gateway can handle:
+
+note->what it do
+Remember:
+
+R A R L C L M T
+
+Where:
+R = Routing
+A = Authentication / Authorization
+R = Rate Limiting
+L = Load Balancing
+C = Caching / Circuit Breaker
+L = Logging
+M = Monitoring
+T = Transformation
+
+The most important concept is:
+
+In a microservices architecture, the API Gateway provides a unified entry point for clients. 
+It abstracts the internal services and is responsible for routing requests to the correct 
+microservice. It can also handle cross-cutting concerns such as authentication, authorization,
+ rate limiting, load balancing, logging, monitoring, caching, API versioning, retries, timeouts,
+  and circuit breakers. The Gateway should primarily manage 
+API and infrastructure-level concerns, while business logic remains inside the individual microservices.
+
+ --->Disadvantages of API Gateway
+API Gateway also introduces some risks.
+
+31 Single Point of Failure
+If there is only one Gateway instance and it fails:
+
+Client
+  |
+  X
+API Gateway
+
+the application may become inaccessible.
+
+Solution
+Deploy multiple Gateway instances:
+
+                 Load Balancer
+                 /     |     \
+                v      v      v
+             Gateway Gateway Gateway
+
+.2 Performance Bottleneck
+
+If too much processing is placed inside the Gateway, it can become a bottleneck.
+
+Bad design:
+
+Gateway
+  |
+  +-- Complex business logic
+  +-- Heavy database operations
+  +-- Large transformations
+  +-- Long-running processing
+  |
+  v
+Microservices
+
+Better design:
+
+Gateway
+  |
+  +-- Routing
+  +-- Security
+  +-- Rate limiting
+  +-- Lightweight policies
+  |
+  v
+Microservices
+  |
+  +-- Business logic
+
+32.3 Increased Complexity
+The Gateway itself needs:
+
+Monitoring
+Scaling
+Security
+Deployment
+Configuration
+High availability
+32.4 Overloading the Gateway
+A common mistake is putting business logic inside the Gateway.
+
+--->
+Here is a very simple NestJS microservices + Kong Gateway example.
+Architecture:
+
+Client
+  ↓
+Kong Gateway (Port 8000)
+  ↓
+NestJS User Service (Port 3001)
+
+1. Create NestJS User Service
+npx @nestjs/cli new user-service
+cd user-service
+
+Change src/main.ts:
+
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
+  await app.listen(3001);
+}
+
+bootstrap();
+
+2. Create a simple controller
+
+src/app.controller.ts
+import { Controller, Get } from '@nestjs/common';
+
+@Controller('users')
+export class AppController {
+  @Get()
+  getUsers() {
+    return {
+      message: 'Users fetched successfully',
+      users: [
+        { id: 1, name: 'Naeem' },
+        { id: 2, name: 'John' },
+      ],
+    };
+  }
+
+}
+
+Run the service:
+npm run start:dev
+Test directly:
+http://localhost:3001/api/users
+
+3. Add Kong Gateway
+Create a folder structure like this:
+
+kong-nest-example/
+│
+├── user-service/
+│
+├── docker-compose.yml
+│
+└── kong.yml
+
+docker-compose.yml
+
+version: '3.8'
+
+services:
+
+  kong:
+    image: kong:latest
+    container_name: kong
+
+    environment:
+      KONG_DATABASE: "off"
+      KONG_DECLARATIVE_CONFIG: /kong/declarative/kong.yml
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+
+    volumes:
+      - ./kong.yml:/kong/declarative/kong.yml
+
+kong.yml
+
+_format_version: "3.0"
+
+services:
+  - name: user-service
+    url: http://host.docker.internal:3001
+
+    routes:
+      - name: user-route
+        paths:
+          - /users
+
+4. Start Kong
+From the kong-nest-example folder:
+docker compose up
+
+5. Request Flow
+Your NestJS service runs on:
+
+http://localhost:3001/api/users
+
+But through Kong:
+
+http://localhost:8000/users/api/users
+
+That works, but the URL is not very clean.
+
+Better configuration
+
+Change kong.yml:
+
+_format_version: "3.0"
+
+services:
+  - name: user-service
+    url: http://host.docker.internal:3001/api
+
+    routes:
+      - name: user-route
+        paths:
+          - /users
+        strip_path: false
+
+Then call:
+http://localhost:8000/users
