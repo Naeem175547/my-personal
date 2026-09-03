@@ -9,6 +9,9 @@ import {GraphQLModule} from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import type { Request, Response } from 'express';
 import { AuthModule } from './auth/auth.module.js';
+import { MessageModule } from './message/message.module.js';
+import { ChannelModule } from './channel/channel.module.js';
+import { WorkspaceModule } from './workspace/workspace.module.js';
 
 
 @Module({
@@ -38,6 +41,9 @@ import { AuthModule } from './auth/auth.module.js';
     }),
     UserModule,
     AuthModule,
+    MessageModule,
+    ChannelModule,
+    WorkspaceModule,
   ],
    
 
