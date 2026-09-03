@@ -37,7 +37,7 @@ export class UserService {
         throw new GraphQLError('Email or username already exists',{
           extensions: {
             code: 'CONFLICT',
-            http: { status: 409 },
+            statuscode: 409,
           },
         });
       }
@@ -60,7 +60,40 @@ export class UserService {
       throw new GraphQLError('User not found', {
         extensions: {
           code: 'NOT_FOUND',
-          http: { status: 404 },
+          statuscode: 404,
+        },
+      });
+    }
+
+    return user;
+  }
+  async findOneByEmail(email: string) {
+    const user = await this.userRepo.findOne({
+      where: { email },
+    });
+
+    if (!user) {
+      throw new GraphQLError('User not found', {
+        extensions: {
+          code: 'NOT_FOUND',
+          statuscode: 404,
+        },
+      });
+    }
+
+    return user;
+  }
+
+  async findOneByUsername(username: string) {
+    const user = await this.userRepo.findOne({
+      where: { username },
+    });
+
+    if (!user) {
+      throw new GraphQLError('User not found', {
+        extensions: {
+          code: 'NOT_FOUND',
+          statuscode: 404,
         },
       });
     }
@@ -78,7 +111,7 @@ export class UserService {
         throw new GraphQLError('User not found', {
         extensions: {
           code: 'NOT_FOUND',
-          http: { status: 404 },
+          statuscode: 404,
         },
       });
       }
@@ -107,7 +140,7 @@ export class UserService {
         throw new GraphQLError('Email or username already exists', {
           extensions: {
             code: 'CONFLICT',
-            http: { status: 409 },
+            statuscode: 409,
           },
         });
 
@@ -125,7 +158,7 @@ export class UserService {
       throw new GraphQLError('User not found', {
         extensions: {
           code: 'NOT_FOUND',
-          http: { status: 404 },
+          statuscode: 404,
         },
       });
     }

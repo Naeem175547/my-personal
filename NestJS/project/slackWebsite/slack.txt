@@ -150,14 +150,10 @@ syntax:throw new GraphQLError(message,{
 
 import { GraphQLError } from 'graphql';
 
-
-
 throw new GraphQLError('Email or username already exists', {
   extensions: {
     code: 'CONFLICT',
-    http:{
-      status:409
-    }
+    statusCode:409
   },
 });
 
@@ -724,3 +720,119 @@ const statusCode = error.statusCode || 500;
 Meaning:
 If the error has a statusCode, use it. Otherwise, use 500.
 
+---->
+If you want to modify the GraphQL error response
+This is where your interceptor can be useful.
+
+For example, you might want the client to receive:
+
+{
+  "success": false,
+  "message": "Email or username already exists",
+  "code": "CONFLICT",
+  "statusCode": 409
+}
+
+However, there's an important distinction:
+NestJS interceptors are mainly for successful resolver responses.
+ GraphQL exceptions are handled by GraphQL's exception/error pipeline, 
+ so an interceptor does not modify graphql response
+
+For GraphQL, use a formatError function in GraphQLModule:
+For GraphQL, use a formatError function in GraphQLModule:
+
+GraphQLModule.forRoot({
+  driver: ApolloDriver,
+
+  formatError: (error) => {
+  return {
+    
+    message: error.message,
+    code: error.extensions?.code,
+    statusCode: error.extensions?.statusCode, 
+    path: error.path,
+  };
+},
+});
+
+Then your client can receive something like:
+
+{
+  "errors": [
+    {
+      "message": "Email or username already exists",      '
+      "code": "CONFLICT",
+      "statusCode": 409
+      path:'singup'
+    }
+  ]
+}
+
+
+status code will be shown if you have put it in GraphQLError extensions 
+when we trow graphql and put any property in extensions then that properties it add to and error 
+
+When you throw a GraphQLError, it contains standard properties such as:
+
+GraphQLError
+├── message
+├── locations
+├── path
+└── extensions
+
+extensions is used for additional/custom information.
+extensions: {
+  code: 'INVALID_PASSWORD',
+  statusCode: 401
+}
+
+Whatever properties you put inside extensions become available under:
+error.extensions
+
+So:
+
+extensions
+├── code
+└── statusCode
+-originalError
+stacktrace — stacktrace tells you where and how an error happened inside your code/application.
+
+
+
+originalError in side extensions
+originalError means the underlying/original error from which a GraphQL error was created or wrapped.
+
+For example:
+
+NestJS ValidationPipe
+        ↓
+BadRequestException
+        ↓
+GraphQL wraps the exception
+        ↓
+GraphQL error
+
+The original NestJS exception can be available as:
+
+error.extensions.originalError
+
+Conceptually:
+
+GraphQL Error
+├── message
+├── path
+├── locations
+└── extensions
+    ├── code
+    └── originalError
+        ├── message
+        ├── statusCode
+        └── other original 
+        
+In one line
+extensions = extra information you attach to a GraphQL error.
+originalError = the underlying error that was wrapped into/associated with the GraphQL error.
+And originalError is not guaranteed to exist on every GraphQLError.
+
+
+--->

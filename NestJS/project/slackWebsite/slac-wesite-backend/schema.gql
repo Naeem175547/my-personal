@@ -16,26 +16,51 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type UsersResponse {
+  success: Boolean!
+  message: String!
+  data: [User!]
+}
+
+type UserResponse {
+  success: Boolean!
+  message: String!
+  data: User
+}
+
+type LoginData {
+  user: User!
+  accessToken: String!
+}
+
+type LoginResponse {
+  success: Boolean!
+  message: String!
+  data: LoginData
+}
+
 type Query {
-  users: [User!]!
-  user(id: Int!): User!
+  users: UsersResponse!
+  user(id: Int!): UserResponse!
+  userByEmail(email: String!): UserResponse!
+  userByUsername(username: String!): UserResponse!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(id: Int!, updateUserInput: UpdateUserInput!): User!
-  removeUser(id: Int!): User!
-}
-
-input CreateUserInput {
-  email: String!
-  username: String!
-  password: String!
+  updateUser(id: Int!, updateUserInput: UpdateUserInput!): UserResponse!
+  removeUser(id: Int!): UserResponse!
+  signUp(createUserInput: CreateUserInput!): UserResponse!
+  signIn(email: String!, password: String!): LoginResponse!
 }
 
 input UpdateUserInput {
   email: String
   username: String
   password: String
-  id: Int!
+}
+
+input CreateUserInput {
+  email: String!
+  username: String!
+  password: String!
 }

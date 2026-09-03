@@ -20,3 +20,27 @@ export class User {
   @Field()
   updatedAt: Date;
 }
+
+@ObjectType()
+export class UsersResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field(() => [User], { nullable: true })
+  data?: User[];
+}
+
+@ObjectType()
+export class UserResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field(() => User, { nullable: true })
+  data?: User;
+} 

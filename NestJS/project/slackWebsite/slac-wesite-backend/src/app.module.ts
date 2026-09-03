@@ -7,6 +7,8 @@ import { dbConfig } from './config/dbConfig.js';
 import { UserModule } from './user/user.module.js';
 import {GraphQLModule} from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import type { Request, Response } from 'express';
+import { AuthModule } from './auth/auth.module.js';
 
 
 @Module({
@@ -18,8 +20,16 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     GraphQLModule.forRoot<ApolloDriverConfig>({
     driver: ApolloDriver,
     autoSchemaFile: 'schema.gql',
-      context: ({ req, res }) => ({ req, res })
-
+      context: ({ req, res }: { req: Request; res: Response }) => ({ req, res }),
+    formatError: (error) => {
+  return {
+    message: error.message,
+    code: error.extensions?.code,
+    statusCode: error.extensions?.statusCode,
+    orginalError: error.extensions?.originalError,
+    path: error.path,
+  };
+},
   }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,6 +37,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
       useFactory: dbConfig,
     }),
     UserModule,
+    AuthModule,
   ],
    
 
