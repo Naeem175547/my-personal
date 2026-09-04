@@ -836,3 +836,9 @@ And originalError is not guaranteed to exist on every GraphQLError.
 
 
 --->
+| Registration             | Purpose                                                          |
+| ------------------------ | ---------------------------------------------------------------- |
+| `forRoot()`              | Connect TypeORM + know entities                                  |
+| `forFeature([Entity])`   | Make repository available in that module                         |
+| `autoLoadEntities: true` | Automatically collect entities registered through `forFeature()` |
+if use autoLoadEntities:true then we don't need to registered in entities
