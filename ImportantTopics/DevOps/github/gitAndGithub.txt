@@ -187,3 +187,106 @@ steps:
 Overall
 
 Push → Ubuntu runner → checkout code → setup Node → install dependencies → build Angular app.
+
+--->
+nGitHub Actions, concurrency controls how many workflow runs are allowed to run at the same time.
+Example: Only one deployment at a time
+
+name: Build My Angular App
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular app
+        run: npm run build
+
+What happens?
+
+Suppose you push 3 times quickly:
+
+Push 1 → Workflow A starts
+Push 2 → Workflow B starts
+Push 3 → Workflow C starts
+
+Without concurrency:
+
+A ──────────────────>
+B ──────────────────>
+C ──────────────────>
+
+All three can run simultaneously.
+
+With:
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: true
+
+you get:
+
+A ─────────X
+B ─────X
+C ──────────────────>
+
+Only the latest run (C) continues. Older running/pending runs are cancelled.
+
+group
+group: production-deployment
+
+This gives your workflow a concurrency group name.
+Runs having the same group cannot run concurrently.
+
+cancel-in-progress
+cancel-in-progress: true
+
+Means:
+If a new run comes, cancel the currently running run.
+
+If you use:
+cancel-in-progress: false
+
+the current run finishes, and the newer run waits.
+
+Simple real-world example
+
+For deployment:
+
+concurrency:
+  group: production
+  cancel-in-progress: true
+
+If you push:
+
+commit A → deploy
+commit B → deploy
+commit C → deploy
+
+You generally don't want an old commit deploying after a newer commit.
+ So GitHub cancels the old deployment and keeps the latest one.
+
+Easy way to remember:
+concurrency = "Don't let multiple workflow runs of the same group interfere with each other."
+
+--->
+these are the line which will come after pull request
