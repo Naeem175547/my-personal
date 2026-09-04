@@ -71,3 +71,119 @@ on:
   #   - cron: "0 0 * * *"
 
 Or remove the workflow YAML file from .github/workflows/.
+--->
+name: Build My Angular App
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-angular-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Angular app
+        run: npm run build
+
+
+These are the 3 important parts:
+
+1. actions/checkout
+- name: Checkout code
+  uses: actions/checkout@v6.1.0
+
+Meaning: GitHub Actions runner starts with a fresh Ubuntu machine.
+checkout downloads your GitHub repository code into that machine.
+Without checkout, the runner doesn't have your project files.
+
+2. actions/setup-node
+- name: Setup Node.js
+  uses: actions/setup-node@v6
+  with:
+    node-version: 22
+
+Meaning: Installs/configures Node.js 22 on the GitHub Actions machine.
+
+Now commands like:
+node
+npm
+
+can be used.
+
+3. npm run build
+- name: Build Angular app
+  run: npm run build
+
+Meaning: Runs the build script from your package.json.
+For example:
+
+{
+  "scripts": {
+    "build": "ng build"
+  }
+}
+
+So:
+
+npm run build
+actually executes:
+ng build
+
+and creates the production build of your Angular application.
+
+explanation:
+name: Build My Angular App
+→ Name of the GitHub Actions workflow.
+
+on:
+  push:
+    branches: [main]
+
+→ Workflow runs whenever code is pushed to main.
+
+jobs:
+  build-angular-app:
+→ Defines a job called build-angular-app.
+
+runs-on: ubuntu-latest
+→ Job runs on a GitHub-hosted Ubuntu machine.
+
+steps:
+→ List of tasks the job will perform.
+
+- name: Checkout code
+  uses: actions/checkout@v6.1.0
+→ Downloads/checks out your repository code into the runner.
+
+- name: Setup Node.js
+  uses: actions/setup-node@v6
+  with:
+    node-version: 22
+
+→ Installs/configures Node.js 22 on the runner.
+
+- name: Install dependencies
+  run: npm install
+
+→ Installs packages from package.json.
+
+- name: Build Angular app
+  run: npm run build
+
+→ Runs your Angular build command and checks whether the application builds successfully.
+
+Overall
+
+Push → Ubuntu runner → checkout code → setup Node → install dependencies → build Angular app.
