@@ -7,6 +7,7 @@ import { WorkspaceEntity } from './entity/workspace.entity.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { UserService } from '../user/user.service.js';
 import { WorkspaceMemberEntity } from './entity/workspace-member.entity.js';
+import { ChannelEntity } from '../channel/entity/channel.entity.js';
 
 @Injectable()
 export class WorkRepository {
@@ -16,6 +17,8 @@ export class WorkRepository {
     private userService: UserService,
     @InjectRepository(WorkspaceMemberEntity)
     private workspaceMemberRepository: Repository<WorkspaceMemberEntity>,
+    @InjectRepository(ChannelEntity)
+    private channelRepository: Repository<ChannelEntity>,
   ) {}
 
   // CREATE
@@ -294,28 +297,91 @@ export class WorkRepository {
 
   async addChannelToWorkspace(
     workspaceId: number,
-    channelId: number,
-  ): Promise<void> {
-    // Implementation for adding a channel to a workspace
+    channelName: string,
+  ): Promise<WorkspaceEntity> {
+    try {
+      // 1. Find workspace
+      const workspace = await this.workSpaceRepo.findOne({
+        where: { id: workspaceId },
+      });
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+
+      // 2. Check whether channel already exists in this workspace
+      const existingChannel = await this.channelRepository.findOne({
+        where: {
+          name: channelName,
+          workspace: {
+            id: workspaceId,
+          },
+        },
+      });
+
+      if (existingChannel) {
+        throw new GraphQLError('Channel already part of workspace', {
+          extensions: {
+            code: 'CHANNEL_ALREADY_EXISTS',
+            httpStatus: 400,
+          },
+        });
+      }
+
+      // 3. Create channel and directly associate it with workspace
+      const channel = this.channelRepository.create({
+        name: channelName,
+        workspace: workspace,
+      });
+
+      // 4. Save channel
+      await this.channelRepository.save(channel);
+
+      // 5. Return updated workspace
+      return (await this.workSpaceRepo.findOne({
+        where: { id: workspaceId },
+        relations: {
+          channels: true,
+        },
+      })) as WorkspaceEntity;
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      throw new GraphQLError('Failed to add channel to workspace', {
+        extensions: {
+          code: 'ADD_CHANNEL_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
   }
 
   async fetchAllWorkspacesByMemberId(
     memberId: number,
   ): Promise<WorkspaceEntity[]> {
     // Implementation for fetching all workspaces by member ID
-    return [];
+    try {
+      const workspaces = await this.workSpaceRepo
+        .createQueryBuilder('workspace')
+        .innerJoin('workspace.members', 'member')
+        .where('member.user_id = :memberId', { memberId })
+        .getMany();
+
+      return workspaces;
+    } catch (error) {
+      throw new GraphQLError('Failed to fetch workspaces for member', {
+        extensions: {
+          code: 'WORKSPACE_FETCH_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
   }
 }
-
-// import Workspace from '../schema/workspace.js';
-// import crudRepository from './crudRepository.js';
-// const workspaceRepository = {
-//   ...crudRepository(Workspace),
-//   getWorkspaceByName: async function () {},
-//   getWorkspaceByJoinCode: async function () {},
-//   addMemberToWorkspace: async function () {},
-//   addChannelToWorkspace: async function () {},
-//   fetchAllWorkspaceByMemberId: async function () {}
-// };
-
-// export default workspaceRepository;
