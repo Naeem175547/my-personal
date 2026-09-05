@@ -39,7 +39,7 @@ __decorate([
     __metadata("design:type", Object)
 ], ChannelEntity.prototype, "messages", void 0);
 __decorate([
-    ManyToOne(() => WorkspaceEntity, (workspace) => workspace.channels),
+    ManyToOne(() => WorkspaceEntity, (workspace) => workspace.channels, { onDelete: 'CASCADE' }),
     JoinColumn({ name: 'workspace_id' }),
     __metadata("design:type", Object)
 ], ChannelEntity.prototype, "workspace", void 0);

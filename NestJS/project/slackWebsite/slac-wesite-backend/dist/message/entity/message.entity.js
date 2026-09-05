@@ -34,17 +34,23 @@ __decorate([
     __metadata("design:type", String)
 ], MessageEntity.prototype, "image", void 0);
 __decorate([
-    ManyToOne(() => UserEntity, (user) => user.messages),
+    ManyToOne(() => UserEntity, (user) => user.messages, {
+        onDelete: 'CASCADE'
+    }),
     JoinColumn({ name: 'user_id' }),
     __metadata("design:type", Object)
 ], MessageEntity.prototype, "user", void 0);
 __decorate([
-    ManyToOne(() => ChannelEntity, (channel) => channel.messages),
+    ManyToOne(() => ChannelEntity, (channel) => channel.messages, {
+        onDelete: 'CASCADE'
+    }),
     JoinColumn({ name: 'channel_id' }),
     __metadata("design:type", Object)
 ], MessageEntity.prototype, "channel", void 0);
 __decorate([
-    ManyToOne(() => WorkspaceEntity, (WorkspaceEntity) => WorkspaceEntity.messages),
+    ManyToOne(() => WorkspaceEntity, (WorkspaceEntity) => WorkspaceEntity.messages, {
+        onDelete: 'CASCADE'
+    }),
     JoinColumn({ name: 'workspace_id' }),
     __metadata("design:type", Object)
 ], MessageEntity.prototype, "workspace", void 0);

@@ -21,11 +21,7 @@ export class ChannelEntity{
     @OneToMany(()=>MessageEntity,(message)=>message.channel)
     messages:Relation<MessageEntity[]>
 
-    @ManyToOne(() => WorkspaceEntity, (workspace) => workspace.channels)
-@JoinColumn({ name: 'workspace_id' })
-workspace: Relation<WorkspaceEntity>;
-
-
-
-
+    @ManyToOne(() => WorkspaceEntity, (workspace) => workspace.channels,{onDelete:'CASCADE'})
+   @JoinColumn({ name: 'workspace_id' })
+   workspace: Relation<WorkspaceEntity>
 }

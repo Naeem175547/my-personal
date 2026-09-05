@@ -842,3 +842,105 @@ And originalError is not guaranteed to exist on every GraphQLError.
 | `forFeature([Entity])`   | Make repository available in that module                         |
 | `autoLoadEntities: true` | Automatically collect entities registered through `forFeature()` |
 if use autoLoadEntities:true then we don't need to registered in entities
+
+--->
+
+Option 1 — Using the relation
+You give TypeORM the User object through the relation property, 
+and TypeORM extracts the user's ID and stores that ID in the FK column.
+  const post = postRepository.create({
+    title: 'My Post',
+    user: user, // User entity object
+  });
+
+await postRepository.save(post);
+
+TypeORM will automatically put that user's ID into the FK column:
+
+posts
+----------------
+id
+title
+userId  ← automatically stored
+
+or
+
+
+const user = await userRepository.findOneBy({ id: 5 });
+
+const post = postRepository.create({
+  title: 'Hello',
+  user: user,   // whole User object here
+});
+
+await postRepository.save(post);
+
+
+
+user means a User entity object,
+ which normally contains the user's primary key (id) along with its other properties.
+ ifUser entity doesn't have an id property, then TypeORM cannot use user.id specifically. 
+ It will use whatever property is defined as the primary key.
+
+ For example:
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  userId: number;
+
+  @Column()
+  name: string;
+}
+
+Here the primary key is:
+userId
+
+It cares about which property has @PrimaryColumn() / @PrimaryGeneratedColumn().
+
+Option 2 — Manually using userId
+
+You can also explicitly define the FK column:
+
+@ManyToOne(() => User, (user) => user.posts)
+@JoinColumn({ name: 'userId' })
+user: User;
+
+@Column()
+userId: number;
+
+Then:
+
+const post = postRepository.create({
+  title: 'My Post',
+  userId: 5,
+});
+
+In a real NestJS API
+Usually, you don't take userId from the frontend for an authenticated post.
+
+Instead:
+const user = req.user; // user obtained from JWT
+const post = this.postRepository.create({
+  title: input.title,
+  user: user,
+});
+
+await this.postRepository.save(post);
+
+So the flow is:
+
+JWT
+ ↓
+identify User
+ ↓
+create Post
+ ↓
+post.user = User
+ ↓
+TypeORM stores user.id in posts.userId
+
+Key point: The FK value has to be provided somehow, but TypeORM can populate the FK from the related User entity for you.
+
+in child relation side or parent relation side we can optain data and if we delacre user object only foreign key side
+You do not have to declare the relation on both sides.
