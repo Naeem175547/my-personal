@@ -1,7 +1,10 @@
-import { Field,  InputType, ObjectType } from "@nestjs/graphql";
+import { Field, InputType, ObjectType } from '@nestjs/graphql';
 
 @ObjectType()
-export class WorkspaceInput {
+export class Workspace {
+  @Field()
+  id: number;
+
   @Field()
   name: string;
 

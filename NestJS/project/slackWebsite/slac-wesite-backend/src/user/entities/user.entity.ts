@@ -6,9 +6,8 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   OneToMany,
-
 } from 'typeorm';
-import type { Relation } from "typeorm";
+import type { Relation } from 'typeorm';
 import { MessageEntity } from '../../message/entity/message.entity.js';
 import { WorkspaceMemberEntity } from '../../workspace/entity/workspace-member.entity.js';
 
@@ -19,6 +18,9 @@ export class UserEntity {
 
   @Column({ unique: true })
   email: string;
+
+  @Column()
+  name: string;
 
   @Column()
   password: string;
@@ -42,6 +44,9 @@ export class UserEntity {
   @OneToMany(() => MessageEntity, (message) => message.user)
   messages: Relation<MessageEntity[]>;
 
-  @OneToMany(()=>WorkspaceMemberEntity,(workspaceMemeber)=>workspaceMemeber.user)
-  workspaceMembers:WorkspaceMemberEntity
+  @OneToMany(
+    () => WorkspaceMemberEntity,
+    (workspaceMemeber) => workspaceMemeber.user,
+  )
+  workspaceMembers: WorkspaceMemberEntity;
 }

@@ -12,6 +12,7 @@ let User = class User {
     username;
     email;
     id;
+    name;
     avatar;
     createdAt;
     updatedAt;
@@ -28,6 +29,10 @@ __decorate([
     Field(() => Int),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", String)
+], User.prototype, "name", void 0);
 __decorate([
     Field(),
     __metadata("design:type", String)

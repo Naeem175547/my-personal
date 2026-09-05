@@ -9,12 +9,13 @@ import { ChannelService } from './channel.service.js';
 import { ChannelResolver } from './channel.resolver.js';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ChannelEntity } from './entity/channel.entity.js';
+import { ChannelRepository } from './channel.repository.js';
 let ChannelModule = class ChannelModule {
 };
 ChannelModule = __decorate([
     Module({
         imports: [TypeOrmModule.forFeature([ChannelEntity])],
-        providers: [ChannelService, ChannelResolver]
+        providers: [ChannelService, ChannelResolver, ChannelRepository],
     })
 ], ChannelModule);
 export { ChannelModule };

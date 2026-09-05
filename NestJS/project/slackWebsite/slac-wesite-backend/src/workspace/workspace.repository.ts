@@ -23,28 +23,10 @@ export class WorkRepository {
 
   // CREATE
   async create(
-    createWorkspaceDto: CreateWorkspaceInput,
+    createWorkspaceDto: CreateWorkspaceInput & { joinCode: string },
   ): Promise<WorkspaceEntity> {
-    try {
-      const workspace = this.workSpaceRepo.create(createWorkspaceDto);
-      return await this.workSpaceRepo.save(workspace);
-    } catch (error: any) {
-      if (error.code === 'ER_DUP_ENTRY') {
-        throw new GraphQLError('Workspace with this name already exists', {
-          extensions: {
-            code: 'DUPLICATE_WORKSPACE_NAME',
-            httpStatus: 400,
-          },
-        });
-      }
-
-      throw new GraphQLError('Failed to create workspace', {
-        extensions: {
-          code: 'WORKSPACE_CREATION_FAILED',
-          httpStatus: 500,
-        },
-      });
-    }
+    const workspace = this.workSpaceRepo.create(createWorkspaceDto);
+    return await this.workSpaceRepo.save(workspace);
   }
 
   // FIND ALL

@@ -7,26 +7,31 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, ObjectType } from "@nestjs/graphql";
-let WorkspaceInput = class WorkspaceInput {
+import { Field, ObjectType } from '@nestjs/graphql';
+let Workspace = class Workspace {
+    id;
     name;
     description;
     joinCode;
 };
 __decorate([
     Field(),
+    __metadata("design:type", Number)
+], Workspace.prototype, "id", void 0);
+__decorate([
+    Field(),
     __metadata("design:type", String)
-], WorkspaceInput.prototype, "name", void 0);
+], Workspace.prototype, "name", void 0);
 __decorate([
     Field({ nullable: true }),
     __metadata("design:type", String)
-], WorkspaceInput.prototype, "description", void 0);
+], Workspace.prototype, "description", void 0);
 __decorate([
     Field({ nullable: true }),
     __metadata("design:type", String)
-], WorkspaceInput.prototype, "joinCode", void 0);
-WorkspaceInput = __decorate([
+], Workspace.prototype, "joinCode", void 0);
+Workspace = __decorate([
     ObjectType()
-], WorkspaceInput);
-export { WorkspaceInput };
+], Workspace);
+export { Workspace };
 //# sourceMappingURL=workspace.type.js.map

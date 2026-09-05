@@ -2,6 +2,7 @@ export declare class User {
     username: string;
     email: string;
     id: number;
+    name: string;
     avatar: string;
     createdAt: Date;
     updatedAt: Date;

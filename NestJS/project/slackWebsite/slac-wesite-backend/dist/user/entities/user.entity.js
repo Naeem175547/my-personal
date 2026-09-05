@@ -13,6 +13,7 @@ import { WorkspaceMemberEntity } from '../../workspace/entity/workspace-member.e
 let UserEntity = class UserEntity {
     id;
     email;
+    name;
     password;
     username;
     avatar;
@@ -32,6 +33,10 @@ __decorate([
     Column({ unique: true }),
     __metadata("design:type", String)
 ], UserEntity.prototype, "email", void 0);
+__decorate([
+    Column(),
+    __metadata("design:type", String)
+], UserEntity.prototype, "name", void 0);
 __decorate([
     Column(),
     __metadata("design:type", String)

@@ -8,6 +8,5 @@ import { UserEntity } from './entities/user.entity.js';
   imports: [TypeOrmModule.forFeature([UserEntity])],
   providers: [UserResolver, UserService],
   exports: [UserService],
-
 })
 export class UserModule {}

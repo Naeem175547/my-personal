@@ -17,36 +17,21 @@ import { GraphQLError } from 'graphql';
 import { WorkspaceEntity } from './entity/workspace.entity.js';
 import { UserService } from '../user/user.service.js';
 import { WorkspaceMemberEntity } from './entity/workspace-member.entity.js';
+import { ChannelEntity } from '../channel/entity/channel.entity.js';
 let WorkRepository = class WorkRepository {
     workSpaceRepo;
     userService;
     workspaceMemberRepository;
-    constructor(workSpaceRepo, userService, workspaceMemberRepository) {
+    channelRepository;
+    constructor(workSpaceRepo, userService, workspaceMemberRepository, channelRepository) {
         this.workSpaceRepo = workSpaceRepo;
         this.userService = userService;
         this.workspaceMemberRepository = workspaceMemberRepository;
+        this.channelRepository = channelRepository;
     }
     async create(createWorkspaceDto) {
-        try {
-            const workspace = this.workSpaceRepo.create(createWorkspaceDto);
-            return await this.workSpaceRepo.save(workspace);
-        }
-        catch (error) {
-            if (error.code === 'ER_DUP_ENTRY') {
-                throw new GraphQLError('Workspace with this name already exists', {
-                    extensions: {
-                        code: 'DUPLICATE_WORKSPACE_NAME',
-                        httpStatus: 400,
-                    },
-                });
-            }
-            throw new GraphQLError('Failed to create workspace', {
-                extensions: {
-                    code: 'WORKSPACE_CREATION_FAILED',
-                    httpStatus: 500,
-                },
-            });
-        }
+        const workspace = this.workSpaceRepo.create(createWorkspaceDto);
+        return await this.workSpaceRepo.save(workspace);
     }
     async findAll() {
         try {
@@ -261,18 +246,86 @@ let WorkRepository = class WorkRepository {
             });
         }
     }
-    async addChannelToWorkspace(workspaceId, channelId) {
+    async addChannelToWorkspace(workspaceId, channelName) {
+        try {
+            const workspace = await this.workSpaceRepo.findOne({
+                where: { id: workspaceId },
+            });
+            if (!workspace) {
+                throw new GraphQLError('Workspace not found', {
+                    extensions: {
+                        code: 'WORKSPACE_NOT_FOUND',
+                        httpStatus: 404,
+                    },
+                });
+            }
+            const existingChannel = await this.channelRepository.findOne({
+                where: {
+                    name: channelName,
+                    workspace: {
+                        id: workspaceId,
+                    },
+                },
+            });
+            if (existingChannel) {
+                throw new GraphQLError('Channel already part of workspace', {
+                    extensions: {
+                        code: 'CHANNEL_ALREADY_EXISTS',
+                        httpStatus: 400,
+                    },
+                });
+            }
+            const channel = this.channelRepository.create({
+                name: channelName,
+                workspace: workspace,
+            });
+            await this.channelRepository.save(channel);
+            return (await this.workSpaceRepo.findOne({
+                where: { id: workspaceId },
+                relations: {
+                    channels: true,
+                },
+            }));
+        }
+        catch (error) {
+            if (error instanceof GraphQLError) {
+                throw error;
+            }
+            throw new GraphQLError('Failed to add channel to workspace', {
+                extensions: {
+                    code: 'ADD_CHANNEL_FAILED',
+                    httpStatus: 500,
+                },
+            });
+        }
     }
     async fetchAllWorkspacesByMemberId(memberId) {
-        return [];
+        try {
+            const workspaces = await this.workSpaceRepo
+                .createQueryBuilder('workspace')
+                .innerJoin('workspace.members', 'member')
+                .where('member.user_id = :memberId', { memberId })
+                .getMany();
+            return workspaces;
+        }
+        catch (error) {
+            throw new GraphQLError('Failed to fetch workspaces for member', {
+                extensions: {
+                    code: 'WORKSPACE_FETCH_FAILED',
+                    httpStatus: 500,
+                },
+            });
+        }
     }
 };
 WorkRepository = __decorate([
     Injectable(),
     __param(0, InjectRepository(WorkspaceEntity)),
     __param(2, InjectRepository(WorkspaceMemberEntity)),
+    __param(3, InjectRepository(ChannelEntity)),
     __metadata("design:paramtypes", [Repository,
         UserService,
+        Repository,
         Repository])
 ], WorkRepository);
 export { WorkRepository };

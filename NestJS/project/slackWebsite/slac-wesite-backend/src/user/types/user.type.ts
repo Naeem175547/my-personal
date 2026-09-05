@@ -12,6 +12,9 @@ export class User {
   id: number;
 
   @Field()
+  name: string;
+
+  @Field()
   avatar: string;
 
   @Field()
@@ -43,4 +46,4 @@ export class UserResponse {
 
   @Field(() => User, { nullable: true })
   data?: User;
-} 
+}

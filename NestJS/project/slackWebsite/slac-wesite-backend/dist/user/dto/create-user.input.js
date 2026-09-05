@@ -11,6 +11,7 @@ import { Field, InputType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength, } from 'class-validator';
 let CreateUserInput = class CreateUserInput {
     email;
+    name;
     username;
     password;
 };
@@ -20,6 +21,12 @@ __decorate([
     IsNotEmpty(),
     __metadata("design:type", String)
 ], CreateUserInput.prototype, "email", void 0);
+__decorate([
+    Field(),
+    IsString(),
+    IsNotEmpty(),
+    __metadata("design:type", String)
+], CreateUserInput.prototype, "name", void 0);
 __decorate([
     Field(),
     IsString(),
