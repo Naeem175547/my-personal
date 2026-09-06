@@ -8,16 +8,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Field, InputType } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
 let UpdateWorkspaceInput = class UpdateWorkspaceInput {
     name;
     description;
 };
 __decorate([
     Field({ nullable: true }),
+    IsOptional(),
+    IsString(),
     __metadata("design:type", String)
 ], UpdateWorkspaceInput.prototype, "name", void 0);
 __decorate([
     Field({ nullable: true }),
+    IsOptional(),
+    IsString(),
     __metadata("design:type", String)
 ], UpdateWorkspaceInput.prototype, "description", void 0);
 UpdateWorkspaceInput = __decorate([
