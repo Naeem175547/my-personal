@@ -9,6 +9,8 @@ user can exists whether workspace exists or not
 but chnannel exists if workspace exists
 
 when we create workspace then we add member(owner/admin) to workspace and also we need to create channel.
+who will create workspace that will be admin for that workspace
+update , delete can be performed by admin only.
 
 
 

@@ -7,26 +7,42 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, InputType } from '@nestjs/graphql';
-import { IsOptional, IsString } from 'class-validator';
-let UpdateWorkspaceInput = class UpdateWorkspaceInput {
-    name;
-    description;
+import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from '../../user/types/user.type.js';
+let Message = class Message {
+    id;
+    body;
+    image;
+    user;
+    createdAt;
+    updatedAt;
 };
 __decorate([
-    Field({ nullable: true }),
-    IsOptional(),
-    IsString(),
+    Field(),
+    __metadata("design:type", Number)
+], Message.prototype, "id", void 0);
+__decorate([
+    Field(),
     __metadata("design:type", String)
-], UpdateWorkspaceInput.prototype, "name", void 0);
+], Message.prototype, "body", void 0);
 __decorate([
     Field({ nullable: true }),
-    IsOptional(),
-    IsString(),
     __metadata("design:type", String)
-], UpdateWorkspaceInput.prototype, "description", void 0);
-UpdateWorkspaceInput = __decorate([
-    InputType()
-], UpdateWorkspaceInput);
-export { UpdateWorkspaceInput };
-//# sourceMappingURL=update.workspace.input.js.map
+], Message.prototype, "image", void 0);
+__decorate([
+    Field(() => User, { nullable: true }),
+    __metadata("design:type", User)
+], Message.prototype, "user", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", Date)
+], Message.prototype, "createdAt", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", Date)
+], Message.prototype, "updatedAt", void 0);
+Message = __decorate([
+    ObjectType()
+], Message);
+export { Message };
+//# sourceMappingURL=message.type.js.map

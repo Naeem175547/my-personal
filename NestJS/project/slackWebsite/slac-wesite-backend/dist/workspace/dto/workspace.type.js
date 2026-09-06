@@ -8,11 +8,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Message } from '../../message/types/message.type.js';
+import { Channel } from '../../channel/types/channel.type.js';
+import { WorkspaceMember } from './workspace.member.type.js';
 let Workspace = class Workspace {
     id;
     name;
     description;
     joinCode;
+    channels;
+    messages;
+    members;
 };
 __decorate([
     Field(),
@@ -30,6 +36,18 @@ __decorate([
     Field({ nullable: true }),
     __metadata("design:type", String)
 ], Workspace.prototype, "joinCode", void 0);
+__decorate([
+    Field(() => [Channel], { nullable: true }),
+    __metadata("design:type", Array)
+], Workspace.prototype, "channels", void 0);
+__decorate([
+    Field(() => [Message], { nullable: true }),
+    __metadata("design:type", Array)
+], Workspace.prototype, "messages", void 0);
+__decorate([
+    Field(() => [WorkspaceMember], { nullable: true }),
+    __metadata("design:type", Array)
+], Workspace.prototype, "members", void 0);
 Workspace = __decorate([
     ObjectType()
 ], Workspace);
