@@ -4,6 +4,8 @@ import { WorkspaceEntity } from './entity/workspace.entity.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkRepository } from './workspace.repository.js';
 import { v4 as uuidv4 } from 'uuid';
+import { channel } from 'diagnostics_channel';
+import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
 
 @Injectable()
 export class WorkspaceService {
@@ -16,8 +18,16 @@ export class WorkspaceService {
   }
 
   isUserMemberOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
-    return workspace.members.some(
-      (member) => member.user.id === userId && member.role === 'member',
+    return workspace.members.some((member) => member.user.id === userId);
+  }
+
+  isChannelAlredyPartOfWorkSpace(
+    worksapce: WorkspaceEntity,
+    channelName: string,
+  ) {
+    return worksapce.channels.some(
+      (channel) =>
+        channel.name.toLocaleLowerCase() === channelName.toLocaleLowerCase(),
     );
   }
 
@@ -104,7 +114,7 @@ export class WorkspaceService {
       });
     }
   }
-  async getWorkspacesUserIsMemberOfServic(userId: number) {
+  async getWorkspacesUserIsMemberOfService(userId: number) {
     try {
       const resonse =
         await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
@@ -114,11 +124,127 @@ export class WorkspaceService {
       throw error;
     }
   }
+  async getWorksapceService(workspaceId: number, userId: number) {
+    try {
+      const workspace = await this.workspaceRepository.findById(workspaceId);
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+      const isMember = this.isUserMemberOfWorkspace(workspace, userId);
+      if (!isMember) {
+        throw new GraphQLError('user is not the member of worksapce', {
+          extensions: {
+            code: 'UNAUHORIZED',
+          },
+        });
+      }
+
+      return workspace;
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      throw new GraphQLError('Failed to fetch workspace', {
+        extensions: {
+          code: 'WORKSPACE_FETCH_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
+  }
+
+  async getWorkspaceByJoinCodeService(joinCode: string, userId: number) {
+    try {
+      const workspace = await this.workspaceRepository.findByJoinCode(joinCode);
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+
+      const isMember = this.isUserMemberOfWorkspace(workspace, userId);
+      if (!isMember) {
+        throw new GraphQLError('user is not member of worksapce');
+      }
+
+      return workspace;
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      throw new GraphQLError('Failed to fetch workspace', {
+        extensions: {
+          code: 'WORKSPACE_FETCH_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
+  }
+  async UpdateWorkspaceService(
+    workspaceId: number,
+    updateWorkspaceInput: UpdateWorkspaceInput,
+    userId: number,
+  ) {
+    try {
+      const workspace = await this.workspaceRepository.findById(workspaceId);
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+      const isAdmin = this.isUserAdminOfWorkspace(workspace, userId);
+      if (!isAdmin) {
+        throw new GraphQLError('User is not an admin of the workspace', {
+          extensions: {
+            code: 'USER_NOT_ADMIN',
+            httpStatus: 403,
+          },
+        });
+      }
+
+      return await this.workspaceRepository.update(
+        workspaceId,
+        updateWorkspaceInput,
+      );
+    } catch (error: any) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new GraphQLError('Workspace with this name already exists', {
+          extensions: {
+            code: 'DUPLICATE_WORKSPACE_NAME',
+            httpStatus: 400,
+          },
+        });
+      }
+
+      throw new GraphQLError('Failed to update workspace', {
+        extensions: {
+          code: 'WORKSPACE_UPDATE_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
+  }
 }
-
-// export const getWorkspaceService = async (workspaceId, userId) {}
-
-// export const getWorkspaceByJoinCodeService = async (joinCode) {}
 
 // export const updateWorkspaceService = async (workspaceId, workspaceData, userId) {}
 

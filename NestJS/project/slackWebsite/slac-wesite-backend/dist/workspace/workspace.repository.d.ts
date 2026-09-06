@@ -14,12 +14,13 @@ export declare class WorkRepository {
         joinCode: string;
     }): Promise<WorkspaceEntity>;
     findAll(): Promise<WorkspaceEntity[]>;
-    findById(id: number): Promise<WorkspaceEntity>;
+    findById(id: number): Promise<WorkspaceEntity | null>;
+    getWorkspaceDetailsById(workspaceId: number): Promise<WorkspaceEntity | null>;
     update(id: number, updateWorkspaceDto: Partial<CreateWorkspaceInput>): Promise<WorkspaceEntity>;
     delete(id: number): Promise<void>;
     deleteMany(ids: number[]): Promise<boolean>;
     findByName(name: string): Promise<WorkspaceEntity>;
-    findByJoinCode(joinCode: string): Promise<WorkspaceEntity>;
+    findByJoinCode(joinCode: string): Promise<WorkspaceEntity | null>;
     addMemberToWorkspace(workspaceId: number, userId: number, role: 'admin' | 'member'): Promise<void>;
     addChannelToWorkspace(workspaceId: number, channelName: string): Promise<WorkspaceEntity>;
     fetchAllWorkspacesByMemberId(memberId: number): Promise<WorkspaceEntity[]>;

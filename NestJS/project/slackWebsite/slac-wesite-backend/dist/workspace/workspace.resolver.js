@@ -34,7 +34,11 @@ let WorkspaceResolver = class WorkspaceResolver {
     }
     getWorkspacesUserIsMemberOf(context) {
         const userId = context.req.user.id;
-        return this.workspaceService.getWorkspacesUserIsMemberOfServic(userId);
+        return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
+    }
+    getWorkSpace(workspaceId, context) {
+        const userId = context.req.user.id;
+        return this.workspaceService.getWorksapceService(workspaceId, userId);
     }
 };
 __decorate([
@@ -60,6 +64,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], WorkspaceResolver.prototype, "getWorkspacesUserIsMemberOf", null);
+__decorate([
+    Query(() => WorkspaceResponse),
+    __param(0, Args('workspaceId')),
+    __param(1, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "getWorkSpace", null);
 WorkspaceResolver = __decorate([
     UseGuards(AuthGuards),
     Resolver(),

@@ -31,6 +31,15 @@ export class WorkspaceResolver {
   @Query(() => WorkspacesResponse)
   getWorkspacesUserIsMemberOf(@Context() context: any) {
     const userId = context.req.user.id;
-    return this.workspaceService.getWorkspacesUserIsMemberOfServic(userId);
+    return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
+  }
+
+  @Query(() => WorkspaceResponse)
+  getWorkSpace(
+    @Args('workspaceId') workspaceId: number,
+    @Context() context: any,
+  ) {
+    const userId = context.req.user.id;
+    return this.workspaceService.getWorksapceService(workspaceId, userId);
   }
 }

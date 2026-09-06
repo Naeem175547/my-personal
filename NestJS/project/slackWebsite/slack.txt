@@ -1462,3 +1462,8 @@ GraphQL serializes it
 JSON response
 
 so in resolver we directly return Promise or value we don't need to use await it will be handled by nestjs/grpahql
+
+-->
+dto,ObjectType, InputType ,Entity
+they can also be used as TypeScript types for type checking, because they are classes.
+but they have different Suppose (you know)

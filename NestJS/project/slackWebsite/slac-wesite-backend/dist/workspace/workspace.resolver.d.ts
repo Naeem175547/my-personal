@@ -6,4 +6,5 @@ export declare class WorkspaceResolver {
     createWorkspace(createWorkspaceInput: CreateWorkspaceInput, context: any): Promise<import("./entity/workspace.entity.js").WorkspaceEntity>;
     deleteWorkspace(workspaceId: number, context: any): Promise<any>;
     getWorkspacesUserIsMemberOf(context: any): Promise<import("./entity/workspace.entity.js").WorkspaceEntity[]>;
+    getWorkSpace(workspaceId: number, context: any): Promise<import("./entity/workspace.entity.js").WorkspaceEntity>;
 }

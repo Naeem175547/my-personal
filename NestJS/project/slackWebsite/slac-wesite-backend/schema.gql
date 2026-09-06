@@ -65,6 +65,7 @@ type Query {
   userByEmail(email: String!): UserResponse!
   userByUsername(username: String!): UserResponse!
   getWorkspacesUserIsMemberOf: WorkspacesResponse!
+  getWorkSpace(workspaceId: Float!): WorkspaceResponse!
 }
 
 type Mutation {

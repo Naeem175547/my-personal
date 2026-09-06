@@ -47,71 +47,40 @@ let WorkRepository = class WorkRepository {
         }
     }
     async findById(id) {
-        try {
-            const workspace = await this.workSpaceRepo.findOne({
-                where: { id },
-                relations: {
-                    channels: true,
-                    members: true,
+        return await this.workSpaceRepo.findOne({
+            where: {
+                id,
+            },
+            relations: {
+                members: {
+                    user: true,
                 },
-            });
-            if (!workspace) {
-                throw new GraphQLError('Workspace not found', {
-                    extensions: {
-                        code: 'WORKSPACE_NOT_FOUND',
-                        httpStatus: 404,
-                    },
-                });
-            }
-            return workspace;
-        }
-        catch (error) {
-            if (error instanceof GraphQLError) {
-                throw error;
-            }
-            throw new GraphQLError('Failed to fetch workspace', {
-                extensions: {
-                    code: 'WORKSPACE_FETCH_FAILED',
-                    httpStatus: 500,
+                messages: true,
+                channels: true,
+            },
+        });
+    }
+    async getWorkspaceDetailsById(workspaceId) {
+        return await this.workSpaceRepo.findOne({
+            where: { id: workspaceId },
+            relations: {
+                members: {
+                    user: true,
                 },
-            });
-        }
+                channels: true,
+                messages: true,
+            },
+        });
     }
     async update(id, updateWorkspaceDto) {
-        try {
-            const workspace = await this.workSpaceRepo.findOne({
-                where: { id },
-            });
-            if (!workspace) {
-                throw new GraphQLError('Workspace not found', {
-                    extensions: {
-                        code: 'WORKSPACE_NOT_FOUND',
-                        httpStatus: 404,
-                    },
-                });
-            }
-            Object.assign(workspace, updateWorkspaceDto);
-            return await this.workSpaceRepo.save(workspace);
+        const workspace = await this.workSpaceRepo.findOne({
+            where: { id },
+        });
+        if (!workspace) {
+            throw new Error('Workspace not found');
         }
-        catch (error) {
-            if (error instanceof GraphQLError) {
-                throw error;
-            }
-            if (error.code === 'ER_DUP_ENTRY') {
-                throw new GraphQLError('Workspace with this name already exists', {
-                    extensions: {
-                        code: 'DUPLICATE_WORKSPACE_NAME',
-                        httpStatus: 400,
-                    },
-                });
-            }
-            throw new GraphQLError('Failed to update workspace', {
-                extensions: {
-                    code: 'WORKSPACE_UPDATE_FAILED',
-                    httpStatus: 500,
-                },
-            });
-        }
+        Object.assign(workspace, updateWorkspaceDto);
+        return await this.workSpaceRepo.save(workspace);
     }
     async delete(id) {
         await this.workSpaceRepo.delete(id);
@@ -150,31 +119,18 @@ let WorkRepository = class WorkRepository {
         }
     }
     async findByJoinCode(joinCode) {
-        try {
-            const workspace = await this.workSpaceRepo.findOne({
-                where: { joinCode },
-            });
-            if (!workspace) {
-                throw new GraphQLError('Workspace not found', {
-                    extensions: {
-                        code: 'WORKSPACE_NOT_FOUND',
-                        httpStatus: 404,
-                    },
-                });
-            }
-            return workspace;
-        }
-        catch (error) {
-            if (error instanceof GraphQLError) {
-                throw error;
-            }
-            throw new GraphQLError('Failed to fetch workspace', {
-                extensions: {
-                    code: 'WORKSPACE_FETCH_FAILED',
-                    httpStatus: 500,
+        return await this.workSpaceRepo.findOne({
+            where: {
+                joinCode: joinCode.toUpperCase(),
+            },
+            relations: {
+                channels: true,
+                members: {
+                    user: true,
                 },
-            });
-        }
+                messages: true,
+            },
+        });
     }
     async addMemberToWorkspace(workspaceId, userId, role) {
         try {
