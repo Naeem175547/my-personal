@@ -1,14 +1,14 @@
-import { Field,  InputType } from "@nestjs/graphql";
+import { Field, InputType } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
 
-    
-InputType()
+@InputType()
 export class CreateWorkspaceInput {
   @Field()
+  @IsString()
   name: string;
 
   @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
   description?: string;
-
-    @Field({ nullable: true })
-    joinCode?: string;
 }

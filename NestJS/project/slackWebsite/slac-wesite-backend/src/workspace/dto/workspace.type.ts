@@ -14,3 +14,15 @@ export class Workspace {
   @Field({ nullable: true })
   joinCode?: string;
 }
+
+@ObjectType()
+export class WorkspacesResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field(() => Workspace, { nullable: true })
+  data?: Workspace;
+}

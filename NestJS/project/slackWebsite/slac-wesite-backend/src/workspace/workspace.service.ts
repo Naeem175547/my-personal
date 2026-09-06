@@ -17,6 +17,8 @@ export class WorkspaceService {
         ...createWorkspaceDto,
         joinCode,
       };
+      console.log('DTO:', createWorkspaceDto);
+      console.log('WORKSPACE DATA:', workspaceData);
       const response = await this.workspaceRepository.create(workspaceData);
       await this.workspaceRepository.addMemberToWorkspace(
         response.id, //workspaceId
@@ -27,8 +29,10 @@ export class WorkspaceService {
         response.id,
         'general',
       ); //default channel
+      console.log('SERVICE RESPONSE:', response);
       return response;
     } catch (error: any) {
+      console.log('CREATE WORKSPACE ERROR:', error);
       if (error.code === 'ER_DUP_ENTRY') {
         throw new GraphQLError('Workspace with the same name already exists', {
           extensions: {

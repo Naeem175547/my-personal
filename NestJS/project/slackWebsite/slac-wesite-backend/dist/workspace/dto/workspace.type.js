@@ -34,4 +34,25 @@ Workspace = __decorate([
     ObjectType()
 ], Workspace);
 export { Workspace };
+let WorkspacesResponse = class WorkspacesResponse {
+    success;
+    message;
+    data;
+};
+__decorate([
+    Field(),
+    __metadata("design:type", Boolean)
+], WorkspacesResponse.prototype, "success", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", String)
+], WorkspacesResponse.prototype, "message", void 0);
+__decorate([
+    Field(() => Workspace, { nullable: true }),
+    __metadata("design:type", Workspace)
+], WorkspacesResponse.prototype, "data", void 0);
+WorkspacesResponse = __decorate([
+    ObjectType()
+], WorkspacesResponse);
+export { WorkspacesResponse };
 //# sourceMappingURL=workspace.type.js.map

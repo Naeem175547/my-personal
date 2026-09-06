@@ -4,3 +4,8 @@ export declare class Workspace {
     description?: string;
     joinCode?: string;
 }
+export declare class WorkspacesResponse {
+    success: boolean;
+    message: string;
+    data?: Workspace;
+}

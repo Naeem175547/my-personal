@@ -6,6 +6,6 @@ export const dbConfig = (configService) => ({
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_DATABASE'),
     synchronize: true,
-    autoLoadEntities: true
+    autoLoadEntities: true,
 });
 //# sourceMappingURL=dbConfig.js.map

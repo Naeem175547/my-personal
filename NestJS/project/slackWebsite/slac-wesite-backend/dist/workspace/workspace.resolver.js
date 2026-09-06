@@ -13,15 +13,16 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthGuards } from '../common/guards/auth.guard.js';
-import { Workspace } from './dto/workspace.type.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
+import { WorkspacesResponse } from './dto/workspace.type.js';
 let WorkspaceResolver = class WorkspaceResolver {
     workspaceService;
     constructor(workspaceService) {
         this.workspaceService = workspaceService;
     }
     createWorkspace(createWorkspaceInput, context) {
+        console.log(createWorkspaceInput);
         const userId = context.req.user.id;
         return this.workspaceService.createWorkspaceService({
             ...createWorkspaceInput,
@@ -30,7 +31,7 @@ let WorkspaceResolver = class WorkspaceResolver {
     }
 };
 __decorate([
-    Mutation(() => Workspace),
+    Mutation(() => WorkspacesResponse),
     __param(0, Args('createWorkspaceInput')),
     __param(1, Context()),
     __metadata("design:type", Function),

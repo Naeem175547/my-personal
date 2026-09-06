@@ -4,7 +4,7 @@ import { ValidationPipe } from '@nestjs/common/pipes/index.js';
 import { ResponseInterceptor } from './common/interceptors/interceptors.interceptor.js';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
-    app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
     app.useGlobalInterceptors(new ResponseInterceptor());
     app.enableCors({
         origin: '*',

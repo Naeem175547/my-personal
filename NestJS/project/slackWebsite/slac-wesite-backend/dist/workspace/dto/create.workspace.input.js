@@ -7,23 +7,25 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, InputType } from "@nestjs/graphql";
-InputType();
-export class CreateWorkspaceInput {
+import { Field, InputType } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
+let CreateWorkspaceInput = class CreateWorkspaceInput {
     name;
     description;
-    joinCode;
-}
+};
 __decorate([
     Field(),
+    IsString(),
     __metadata("design:type", String)
 ], CreateWorkspaceInput.prototype, "name", void 0);
 __decorate([
     Field({ nullable: true }),
+    IsOptional(),
+    IsString(),
     __metadata("design:type", String)
 ], CreateWorkspaceInput.prototype, "description", void 0);
-__decorate([
-    Field({ nullable: true }),
-    __metadata("design:type", String)
-], CreateWorkspaceInput.prototype, "joinCode", void 0);
+CreateWorkspaceInput = __decorate([
+    InputType()
+], CreateWorkspaceInput);
+export { CreateWorkspaceInput };
 //# sourceMappingURL=create.workspace.input.js.map

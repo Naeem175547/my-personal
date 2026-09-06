@@ -1,8 +1,4 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { GraphQLError } from 'graphql';
 import { Observable } from 'rxjs';
@@ -45,7 +41,7 @@ export class AuthGuards implements CanActivate {
 
       return true;
     } catch (err) {
-      return false;//because this will throw jwt token error auto
+      return false; //because this will throw jwt token error auto
     }
   }
 }

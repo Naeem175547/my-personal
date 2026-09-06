@@ -26,8 +26,7 @@ export class ChannelRepository {
   }
 
   async updateChannel(channelId: number, updateData: any): Promise<any> {
-    await this.channelRepository.update(channelId, updateData);
-    return await this.channelRepository.findOne({ where: { id: channelId } });
+    return await this.channelRepository.update(channelId, updateData);
   }
 
   async deleteChannel(channelId: number): Promise<void> {

@@ -31,8 +31,7 @@ let ChannelRepository = class ChannelRepository {
         return await this.channelRepository.findOne({ where: { id: channelId } });
     }
     async updateChannel(channelId, updateData) {
-        await this.channelRepository.update(channelId, updateData);
-        return await this.channelRepository.findOne({ where: { id: channelId } });
+        return await this.channelRepository.update(channelId, updateData);
     }
     async deleteChannel(channelId) {
         await this.channelRepository.delete(channelId);
