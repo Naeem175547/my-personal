@@ -173,7 +173,7 @@ let WorkRepository = class WorkRepository {
                 user: member,
                 role,
             });
-            await this.workspaceMemberRepository.save(workspaceMember);
+            return await this.workspaceMemberRepository.save(workspaceMember);
         }
         catch (error) {
             if (error instanceof GraphQLError) {

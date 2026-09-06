@@ -1,7 +1,10 @@
-import { InputType } from "@nestjs/graphql";
-import { CreateWorkspaceInput } from "./create.workspace.input.js";
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateWorkspaceInput implements Partial<CreateWorkspaceInput> {
+export class UpdateWorkspaceInput {
+  @Field({ nullable: true })
+  name?: string;
 
+  @Field({ nullable: true })
+  description?: string;
 }

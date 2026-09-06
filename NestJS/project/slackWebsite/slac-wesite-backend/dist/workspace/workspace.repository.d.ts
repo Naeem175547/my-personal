@@ -21,7 +21,7 @@ export declare class WorkRepository {
     deleteMany(ids: number[]): Promise<boolean>;
     findByName(name: string): Promise<WorkspaceEntity>;
     findByJoinCode(joinCode: string): Promise<WorkspaceEntity | null>;
-    addMemberToWorkspace(workspaceId: number, userId: number, role: 'admin' | 'member'): Promise<void>;
+    addMemberToWorkspace(workspaceId: number, userId: number, role: 'admin' | 'member'): Promise<WorkspaceMemberEntity>;
     addChannelToWorkspace(workspaceId: number, channelName: string): Promise<WorkspaceEntity>;
     fetchAllWorkspacesByMemberId(memberId: number): Promise<WorkspaceEntity[]>;
 }

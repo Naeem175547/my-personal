@@ -4,6 +4,7 @@ import { AuthGuards } from '../common/guards/auth.guard.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
 import { WorkspaceResponse, WorkspacesResponse } from './dto/workspace.type.js';
+import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
 @UseGuards(AuthGuards)
 @Resolver()
 export class WorkspaceResolver {
@@ -29,7 +30,7 @@ export class WorkspaceResolver {
   }
 
   @Query(() => WorkspacesResponse)
-  getWorkspacesUserIsMemberOf(@Context() context: any) {
+  getWorkspacesOfUserByMember(@Context() context: any) {
     const userId = context.req.user.id;
     return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
   }
@@ -41,5 +42,33 @@ export class WorkspaceResolver {
   ) {
     const userId = context.req.user.id;
     return this.workspaceService.getWorksapceService(workspaceId, userId);
+  }
+
+  @Query(() => WorkspaceResponse)
+  getWorkspaceByJoinCode(
+    @Args('joinCode') joinCode: string,
+    @Context() context: any,
+  ) {
+    const userId = context.req.user.id;
+    return this.workspaceService.getWorkspaceByJoinCodeService(
+      joinCode,
+      userId,
+    );
+  }
+
+  @Mutation(() => WorkspaceResponse)
+  UpdateWorkspace(
+    @Args('workspaceId') workspaceId: number,
+    @Args('updateWorkspaceInput') updateWorkspaceInput: UpdateWorkspaceInput,
+    @Context() context: any,
+  ) {
+    const userId = context.req.user.id;
+    console.log('UPDATE INPUT:', updateWorkspaceInput);
+
+    return this.workspaceService.UpdateWorkspaceService(
+      workspaceId,
+      updateWorkspaceInput,
+      userId,
+    );
   }
 }

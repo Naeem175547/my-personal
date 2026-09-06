@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
-import { UserEntity } from "../../user/entities/user.entity.js";
-import { ChannelEntity } from "../../channel/entity/channel.entity.js";
-import { WorkspaceEntity } from "../../workspace/entity/workspace.entity.js";
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, JoinColumn, } from 'typeorm';
+import { UserEntity } from '../../user/entities/user.entity.js';
+import { ChannelEntity } from '../../channel/entity/channel.entity.js';
+import { WorkspaceEntity } from '../../workspace/entity/workspace.entity.js';
 let MessageEntity = class MessageEntity {
     id;
     body;
@@ -35,21 +35,21 @@ __decorate([
 ], MessageEntity.prototype, "image", void 0);
 __decorate([
     ManyToOne(() => UserEntity, (user) => user.messages, {
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
     }),
     JoinColumn({ name: 'user_id' }),
     __metadata("design:type", Object)
 ], MessageEntity.prototype, "user", void 0);
 __decorate([
     ManyToOne(() => ChannelEntity, (channel) => channel.messages, {
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
     }),
     JoinColumn({ name: 'channel_id' }),
     __metadata("design:type", Object)
 ], MessageEntity.prototype, "channel", void 0);
 __decorate([
     ManyToOne(() => WorkspaceEntity, (WorkspaceEntity) => WorkspaceEntity.messages, {
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
     }),
     JoinColumn({ name: 'workspace_id' }),
     __metadata("design:type", Object)
@@ -63,7 +63,7 @@ __decorate([
     __metadata("design:type", Date)
 ], MessageEntity.prototype, "updatedAt", void 0);
 MessageEntity = __decorate([
-    Entity()
+    Entity({ name: 'messages' })
 ], MessageEntity);
 export { MessageEntity };
 //# sourceMappingURL=message.entity.js.map

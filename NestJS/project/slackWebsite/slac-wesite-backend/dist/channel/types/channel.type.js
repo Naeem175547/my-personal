@@ -7,21 +7,37 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Field, InputType } from '@nestjs/graphql';
-let UpdateWorkspaceInput = class UpdateWorkspaceInput {
+import { Field, ObjectType } from '@nestjs/graphql';
+import { Message } from '../../message/types/message.type.js';
+let Channel = class Channel {
+    id;
     name;
-    description;
+    messages;
+    createdAt;
+    updatedAt;
 };
 __decorate([
-    Field({ nullable: true }),
-    __metadata("design:type", String)
-], UpdateWorkspaceInput.prototype, "name", void 0);
+    Field(),
+    __metadata("design:type", Number)
+], Channel.prototype, "id", void 0);
 __decorate([
-    Field({ nullable: true }),
+    Field(),
     __metadata("design:type", String)
-], UpdateWorkspaceInput.prototype, "description", void 0);
-UpdateWorkspaceInput = __decorate([
-    InputType()
-], UpdateWorkspaceInput);
-export { UpdateWorkspaceInput };
-//# sourceMappingURL=update.workspace.input.js.map
+], Channel.prototype, "name", void 0);
+__decorate([
+    Field(() => [Message], { nullable: true }),
+    __metadata("design:type", Array)
+], Channel.prototype, "messages", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", Date)
+], Channel.prototype, "createdAt", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", Date)
+], Channel.prototype, "updatedAt", void 0);
+Channel = __decorate([
+    ObjectType()
+], Channel);
+export { Channel };
+//# sourceMappingURL=channel.type.js.map

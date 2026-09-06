@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, } from 'typeorm';
 import { UserEntity } from '../../user/entities/user.entity.js';
-import { WorkspaceEntity } from '../../workspace/entity/workspace.entity.js';
+import { WorkspaceEntity } from '../entity/workspace.entity.js';
 let WorkspaceMemberEntity = class WorkspaceMemberEntity {
     id;
     user;

@@ -292,3 +292,98 @@ concurrency = "Don't let multiple workflow runs of the same group interfere with
 --->
 these are the hi dear come after pull request
 he this is my new line
+--->
+Uncommitted changes belong to the working directory, not to a branch.
+
+Suppose you are on main:
+
+main
+ |
+ A---B
+      \
+       working directory
+       file changed
+
+You modify test.txt, but don't commit:
+
+git status
+shows:
+
+modified: test.txt
+
+Now you run:
+
+git switch main-a
+
+If Git can safely carry that modification to main-a, it does.
+So on main-a:
+
+main-a
+ |
+ A---B---C
+
+working directory
+ |
+ └── test.txt modified
+
+test.txt is still modified.
+
+Why?
+
+Because Git didn't create a commit for your modification.
+
+Your modification is physically sitting in your working directory:
+
+        Working Directory
+              ↓
+        test.txt modified
+              ↓
+      ┌───────┴───────┐
+      ↓               ↓
+    main            main-a
+
+The branch doesn't "own" the change yet.
+
+After commit
+If you're on main-a:
+
+git add .
+git commit -m "my changes"
+
+Now:
+
+main-a
+ |
+ A---B---C
+         ↑
+      your changes
+
+The changes are now part of the main-a commit.
+
+Then:
+
+git switch main
+
+You'll see the version from main, because main doesn't contain commit C.
+
+Then:
+
+git switch main-a
+
+You'll see your changes again because main-a contains commit C.
+
+So remember this rule
+UNCOMMITTED
+    ↓
+Working directory/stagin
+    ↓
+Can follow you when switching branches
+
+
+COMMITTED
+    ↓
+Belongs to that branch's history
+    ↓
+Appears/disappears according to the branch you switch to
+
+That's why your earlier git switch main and git switch main-a showed the same modified/deleted files. You had not committed them yet.

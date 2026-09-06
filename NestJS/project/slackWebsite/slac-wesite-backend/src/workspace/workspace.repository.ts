@@ -150,7 +150,7 @@ export class WorkRepository {
     workspaceId: number,
     userId: number,
     role: 'admin' | 'member',
-  ): Promise<void> {
+  ): Promise<WorkspaceMemberEntity> {
     try {
       const workspace = await this.workSpaceRepo.findOne({
         where: { id: workspaceId },
@@ -195,7 +195,7 @@ export class WorkRepository {
         user: member,
         role,
       });
-      await this.workspaceMemberRepository.save(workspaceMember);
+      return await this.workspaceMemberRepository.save(workspaceMember);
     } catch (error) {
       if (error instanceof GraphQLError) {
         throw error;
@@ -268,7 +268,6 @@ export class WorkRepository {
       if (error instanceof GraphQLError) {
         throw error;
       }
-
       throw new GraphQLError('Failed to add channel to workspace', {
         extensions: {
           code: 'ADD_CHANNEL_FAILED',
