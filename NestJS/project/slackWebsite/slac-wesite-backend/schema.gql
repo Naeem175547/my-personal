@@ -40,11 +40,39 @@ type LoginResponse {
   data: LoginData
 }
 
+type Message {
+  id: Float!
+  body: String!
+  image: String
+  user: User
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Channel {
+  id: Float!
+  name: String!
+  messages: [Message!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type WorkspaceMember {
+  id: Float!
+  user: User!
+  role: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Workspace {
   id: Float!
   name: String!
   description: String
   joinCode: String
+  channels: [Channel!]
+  messages: [Message!]
+  members: [WorkspaceMember!]
 }
 
 type WorkspaceResponse {
@@ -64,8 +92,9 @@ type Query {
   user(id: Int!): UserResponse!
   userByEmail(email: String!): UserResponse!
   userByUsername(username: String!): UserResponse!
-  getWorkspacesUserIsMemberOf: WorkspacesResponse!
+  getWorkspacesOfUserByMember: WorkspacesResponse!
   getWorkSpace(workspaceId: Float!): WorkspaceResponse!
+  getWorkspaceByJoinCode(joinCode: String!): WorkspaceResponse!
 }
 
 type Mutation {
@@ -75,6 +104,7 @@ type Mutation {
   signIn(email: String!, password: String!): LoginResponse!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): WorkspaceResponse!
   deleteWorkspace(workspaceId: Float!): WorkspaceResponse!
+  UpdateWorkspace(workspaceId: Float!, updateWorkspaceInput: UpdateWorkspaceInput!): WorkspaceResponse!
 }
 
 input UpdateUserInput {
@@ -93,5 +123,10 @@ input CreateUserInput {
 
 input CreateWorkspaceInput {
   name: String!
+  description: String
+}
+
+input UpdateWorkspaceInput {
+  name: String
   description: String
 }

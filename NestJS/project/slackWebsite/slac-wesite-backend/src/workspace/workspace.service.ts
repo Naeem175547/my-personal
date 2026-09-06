@@ -4,12 +4,15 @@ import { WorkspaceEntity } from './entity/workspace.entity.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkRepository } from './workspace.repository.js';
 import { v4 as uuidv4 } from 'uuid';
-import { channel } from 'diagnostics_channel';
 import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
+import { UserService } from '../user/user.service.js';
 
 @Injectable()
 export class WorkspaceService {
-  constructor(private readonly workspaceRepository: WorkRepository) {}
+  constructor(
+    private readonly workspaceRepository: WorkRepository,
+    private readonly userService: UserService,
+  ) {}
   isUserAdminOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
     const member = workspace.members.find(
       (member) => member.user.id === userId && member.role === 'admin',
@@ -198,7 +201,7 @@ export class WorkspaceService {
     userId: number,
   ) {
     try {
-      const workspace = await this.workspaceRepository.findById(workspaceId);
+      let workspace = await this.workspaceRepository.findById(workspaceId);
 
       if (!workspace) {
         throw new GraphQLError('Workspace not found', {
@@ -217,11 +220,14 @@ export class WorkspaceService {
           },
         });
       }
+      console.log('UPDATE INPUT:', updateWorkspaceInput);
 
-      return await this.workspaceRepository.update(
+      workspace = await this.workspaceRepository.update(
         workspaceId,
         updateWorkspaceInput,
       );
+      console.log(workspace);
+      return workspace;
     } catch (error: any) {
       if (error instanceof GraphQLError) {
         throw error;
@@ -244,10 +250,139 @@ export class WorkspaceService {
       });
     }
   }
+
+  async addMemberToWorkspaceService(
+    workspaceId: number,
+    memberId: number,
+    role: 'admin' | 'member',
+    userId: number,
+  ) {
+    try {
+      // 1. Check workspace
+      const workspace = await this.workspaceRepository.findById(workspaceId);
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+
+      // 2. Check current user is admin
+      // You need the userId of the person performing the action.
+      const isAdmin = this.isUserAdminOfWorkspace(workspace, userId);
+
+      if (!isAdmin) {
+        throw new GraphQLError('User is not an admin of the workspace', {
+          extensions: {
+            code: 'USER_NOT_ADMIN',
+            httpStatus: 403,
+          },
+        });
+      }
+
+      // 3. Check member/user exists
+      const member = await this.userService.findOne(memberId);
+
+      if (!member) {
+        throw new GraphQLError('User not found', {
+          extensions: {
+            code: 'USER_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+
+      // 4. Check user is already a member
+      const isMember = this.isUserMemberOfWorkspace(workspace, memberId);
+
+      if (isMember) {
+        throw new GraphQLError('User is already a member of this workspace', {
+          extensions: {
+            code: 'ALREADY_WORKSPACE_MEMBER',
+            httpStatus: 400,
+          },
+        });
+      }
+
+      // 5. Repository only performs DB operation
+      return await this.workspaceRepository.addMemberToWorkspace(
+        workspaceId,
+        memberId,
+        role,
+      );
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      throw new GraphQLError('Failed to add member to workspace', {
+        extensions: {
+          code: 'ADD_MEMBER_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
+  }
+  async addChannelToWorkspaceService(
+    workspaceId: number,
+    channelName: string,
+    userId: number,
+  ) {
+    try {
+      const workspace =
+        await this.workspaceRepository.getWorkspaceDetailsById(workspaceId);
+
+      if (!workspace) {
+        throw new GraphQLError('Workspace not found', {
+          extensions: {
+            code: 'WORKSPACE_NOT_FOUND',
+            httpStatus: 404,
+          },
+        });
+      }
+
+      const isAdmin = this.isUserAdminOfWorkspace(workspace, userId);
+
+      if (!isAdmin) {
+        throw new GraphQLError('User is not an admin of the workspace', {
+          extensions: {
+            code: 'USER_NOT_ADMIN',
+            httpStatus: 403,
+          },
+        });
+      }
+
+      const isChannelPartOfWorkspace = this.isChannelAlredyPartOfWorkSpace(
+        workspace,
+        channelName,
+      );
+
+      if (isChannelPartOfWorkspace) {
+        throw new GraphQLError('Channel already part of workspace', {
+          extensions: {
+            code: 'CHANNEL_ALREADY_EXISTS',
+            httpStatus: 400,
+          },
+        });
+      }
+      return await this.workspaceRepository.addChannelToWorkspace(
+        workspaceId,
+        channelName,
+      );
+    } catch (error) {
+      if (error instanceof GraphQLError) {
+        throw error;
+      }
+
+      throw new GraphQLError('Failed to add channel to workspace', {
+        extensions: {
+          code: 'ADD_CHANNEL_FAILED',
+          httpStatus: 500,
+        },
+      });
+    }
+  }
 }
-
-// export const updateWorkspaceService = async (workspaceId, workspaceData, userId) {}
-
-// export const addMemberToWorkspaceService = async (workspaceId, memberId, role) {}
-
-// export const addChannelToWorkspaceService = async (workspaceId, channelName) {}

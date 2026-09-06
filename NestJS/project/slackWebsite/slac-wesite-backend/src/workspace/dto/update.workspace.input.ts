@@ -1,7 +1,15 @@
-import { InputType } from "@nestjs/graphql";
-import { CreateWorkspaceInput } from "./create.workspace.input.js";
+import { Field, InputType } from '@nestjs/graphql';
+import { IsOptional, IsString } from 'class-validator';
 
 @InputType()
-export class UpdateWorkspaceInput implements Partial<CreateWorkspaceInput> {
+export class UpdateWorkspaceInput {
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  name?: string;
 
+  @Field({ nullable: true })
+  @IsOptional()
+  @IsString()
+  description?: string;
 }

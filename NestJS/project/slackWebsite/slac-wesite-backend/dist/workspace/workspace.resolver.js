@@ -16,6 +16,7 @@ import { AuthGuards } from '../common/guards/auth.guard.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
 import { WorkspaceResponse, WorkspacesResponse } from './dto/workspace.type.js';
+import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
 let WorkspaceResolver = class WorkspaceResolver {
     workspaceService;
     constructor(workspaceService) {
@@ -32,13 +33,22 @@ let WorkspaceResolver = class WorkspaceResolver {
         const userId = context.req.user.id;
         return this.workspaceService.deleteWorkspaceService(workspaceId, userId);
     }
-    getWorkspacesUserIsMemberOf(context) {
+    getWorkspacesOfUserByMember(context) {
         const userId = context.req.user.id;
         return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
     }
     getWorkSpace(workspaceId, context) {
         const userId = context.req.user.id;
         return this.workspaceService.getWorksapceService(workspaceId, userId);
+    }
+    getWorkspaceByJoinCode(joinCode, context) {
+        const userId = context.req.user.id;
+        return this.workspaceService.getWorkspaceByJoinCodeService(joinCode, userId);
+    }
+    UpdateWorkspace(workspaceId, updateWorkspaceInput, context) {
+        const userId = context.req.user.id;
+        console.log('UPDATE INPUT:', updateWorkspaceInput);
+        return this.workspaceService.UpdateWorkspaceService(workspaceId, updateWorkspaceInput, userId);
     }
 };
 __decorate([
@@ -63,7 +73,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], WorkspaceResolver.prototype, "getWorkspacesUserIsMemberOf", null);
+], WorkspaceResolver.prototype, "getWorkspacesOfUserByMember", null);
 __decorate([
     Query(() => WorkspaceResponse),
     __param(0, Args('workspaceId')),
@@ -72,6 +82,23 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", void 0)
 ], WorkspaceResolver.prototype, "getWorkSpace", null);
+__decorate([
+    Query(() => WorkspaceResponse),
+    __param(0, Args('joinCode')),
+    __param(1, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "getWorkspaceByJoinCode", null);
+__decorate([
+    Mutation(() => WorkspaceResponse),
+    __param(0, Args('workspaceId')),
+    __param(1, Args('updateWorkspaceInput')),
+    __param(2, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, UpdateWorkspaceInput, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "UpdateWorkspace", null);
 WorkspaceResolver = __decorate([
     UseGuards(AuthGuards),
     Resolver(),
