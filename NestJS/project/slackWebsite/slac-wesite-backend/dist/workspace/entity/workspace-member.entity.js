@@ -7,9 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, } from "typeorm";
-import { UserEntity } from "../../user/entities/user.entity.js";
-import { WorkspaceEntity } from "../../workspace/entity/workspace.entity.js";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, } from 'typeorm';
+import { UserEntity } from '../../user/entities/user.entity.js';
+import { WorkspaceEntity } from '../../workspace/entity/workspace.entity.js';
 let WorkspaceMemberEntity = class WorkspaceMemberEntity {
     id;
     user;
@@ -23,20 +23,24 @@ __decorate([
     __metadata("design:type", Number)
 ], WorkspaceMemberEntity.prototype, "id", void 0);
 __decorate([
-    ManyToOne(() => UserEntity, (user) => user.workspaceMembers),
-    JoinColumn({ name: "user_id" }),
+    ManyToOne(() => UserEntity, (user) => user.workspaceMembers, {
+        onDelete: 'CASCADE',
+    }),
+    JoinColumn({ name: 'user_id' }),
     __metadata("design:type", Object)
 ], WorkspaceMemberEntity.prototype, "user", void 0);
 __decorate([
-    ManyToOne(() => WorkspaceEntity, (workspace) => workspace.members),
-    JoinColumn({ name: "workspace_id" }),
+    ManyToOne(() => WorkspaceEntity, (workspace) => workspace.members, {
+        onDelete: 'CASCADE',
+    }),
+    JoinColumn({ name: 'workspace_id' }),
     __metadata("design:type", Object)
 ], WorkspaceMemberEntity.prototype, "workspace", void 0);
 __decorate([
     Column({
-        type: "enum",
-        enum: ["admin", "member"],
-        default: "member",
+        type: 'enum',
+        enum: ['admin', 'member'],
+        default: 'member',
     }),
     __metadata("design:type", String)
 ], WorkspaceMemberEntity.prototype, "role", void 0);
@@ -49,7 +53,7 @@ __decorate([
     __metadata("design:type", Date)
 ], WorkspaceMemberEntity.prototype, "updatedAt", void 0);
 WorkspaceMemberEntity = __decorate([
-    Entity({ name: "workspace_members" })
+    Entity({ name: 'workspace_members' })
 ], WorkspaceMemberEntity);
 export { WorkspaceMemberEntity };
 //# sourceMappingURL=workspace-member.entity.js.map

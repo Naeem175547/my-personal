@@ -5,15 +5,15 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import type { Relation } from "typeorm";
+import type { Relation } from 'typeorm';
 
-import { MessageEntity } from "../../message/entity/message.entity.js";
-import { ChannelEntity } from "../../channel/entity/channel.entity.js";
-import { WorkspaceMemberEntity } from "./workspace-member.entity.js";
+import { MessageEntity } from '../../message/entity/message.entity.js';
+import { ChannelEntity } from '../../channel/entity/channel.entity.js';
+import { WorkspaceMemberEntity } from './workspace-member.entity.js';
 
-@Entity({ name: "workspaces" })
+@Entity({ name: 'workspaces' })
 export class WorkspaceEntity {
   @PrimaryGeneratedColumn()
   id: number;

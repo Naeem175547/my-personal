@@ -23,8 +23,6 @@ let WorkspaceService = class WorkspaceService {
                 ...createWorkspaceDto,
                 joinCode,
             };
-            console.log('DTO:', createWorkspaceDto);
-            console.log('WORKSPACE DATA:', workspaceData);
             const response = await this.workspaceRepository.create(workspaceData);
             await this.workspaceRepository.addMemberToWorkspace(response.id, createWorkspaceDto.ownerId, 'admin');
             await this.workspaceRepository.addChannelToWorkspace(response.id, 'general');
@@ -47,6 +45,54 @@ let WorkspaceService = class WorkspaceService {
                     httpStatus: 500,
                 },
             });
+        }
+    }
+    async deleteWorkspaceService(workspaceId, userId) {
+        try {
+            const workspace = await this.workspaceRepository.findById(workspaceId);
+            if (!workspace) {
+                throw new GraphQLError('Workspace not found', {
+                    extensions: {
+                        code: 'WORKSPACE_NOT_FOUND',
+                        httpStatus: 404,
+                    },
+                });
+            }
+            const allWorkspacesByMemberId = await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
+            const isAdmin = allWorkspacesByMemberId.find((workspace) => workspace.id === workspaceId &&
+                workspace.members.some((member) => member.role === 'admin'));
+            if (!isAdmin) {
+                throw new GraphQLError('User is not an admin of the workspace', {
+                    extensions: {
+                        code: 'USER_NOT_ADMIN',
+                        httpStatus: 403,
+                    },
+                });
+            }
+            const deletedWorkspace = await this.workspaceRepository.delete(workspaceId);
+            return workspace;
+        }
+        catch (error) {
+            if (error instanceof GraphQLError) {
+                throw error;
+            }
+            console.log('DELETE WORKSPACE ERROR:', error);
+            throw new GraphQLError('Failed to delete workspace', {
+                extensions: {
+                    code: 'WORKSPACE_DELETION_FAILED',
+                    httpStatus: 500,
+                },
+            });
+        }
+    }
+    async getWorkspacesUserIsMemberOfServic(userId) {
+        try {
+            const resonse = await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
+            return resonse;
+        }
+        catch (error) {
+            console.log('Get workspaces user is member of service error', error);
+            throw error;
         }
     }
 };

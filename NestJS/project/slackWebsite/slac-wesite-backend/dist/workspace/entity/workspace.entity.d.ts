@@ -1,7 +1,7 @@
-import type { Relation } from "typeorm";
-import { MessageEntity } from "../../message/entity/message.entity.js";
-import { ChannelEntity } from "../../channel/entity/channel.entity.js";
-import { WorkspaceMemberEntity } from "./workspace-member.entity.js";
+import type { Relation } from 'typeorm';
+import { MessageEntity } from '../../message/entity/message.entity.js';
+import { ChannelEntity } from '../../channel/entity/channel.entity.js';
+import { WorkspaceMemberEntity } from './workspace-member.entity.js';
 export declare class WorkspaceEntity {
     id: number;
     name: string;

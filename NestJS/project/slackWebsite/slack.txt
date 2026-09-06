@@ -1,9 +1,14 @@
 
 project rule:
+user and workspace has many to many relatinshp
+workspace has 1 to many with message
+workspace has 1 to maany with channel
+channel has 1 to many with message
+user has one to many with message
 user can exists whether workspace exists or not
 but chnannel exists if workspace exists
 
-
+when we create workspace then we add member(owner/admin) to workspace and also we need to create channel.
 
 
 
@@ -1143,4 +1148,287 @@ const workspaces = await this.workSpaceRepo
   workspace has members(list of member) field as defined in relationship so this will perform innerJoin with workspace.members
   with where conditions
 
+note->
+
+The members do temporarily form one JOIN result, but they do NOT lose their workspace relationship.
+
+Suppose:
+
+Workspace table
+workspace
+----------------
+id | name
+1  | A
+2  | B
+3  | C
+Member table
+member
+---------------------------
+id | workspace_id | user_id
+1  | 1            | 10
+2  | 1            | 20
+3  | 2            | 10
+4  | 2            | 30
+5  | 3            | 40
+
+Each workspace has its own members:
+
+Workspace A → [member 1, member 2]
+Workspace B → [member 3, member 4]
+Workspace C → [member 5]
+
+What does JOIN do?
+When you write:
+
+.innerJoin('workspace.members', 'member')
+SQL creates a JOIN result roughly like:
+
+workspace   member
+---------   ------
+A           member 1
+A           member 2
+B           member 3
+B           member 4
+C           member 5
+
+So yes, you can think of it as one combined intermediate result:
+
+A → member 1
+A → member 2
+B → member 3
+B → member 4
+C → member 5
+
+But notice:
+The relationship is still preserved in every row through the workspace columns.
+
+It doesn't become:
+members = [1,2,3,4,5]
+without knowing which workspace they belong to.
 --->
+innerJoin()
+JOINs the relation, but does NOT return the joined data.
+
+.createQueryBuilder('workspace')
+.innerJoin('workspace.members', 'member')
+.where('member.user_id = :memberId', { memberId })
+.getMany();
+
+Think:
+
+Workspace
+    ↓ JOIN
+Members
+    ↓
+use members for WHERE/filter
+    ↓
+return only Workspace
+
+Result:
+
+[
+  {
+    id: 1,
+    name: 'Workspace A'
+    // members not loaded
+  }
+]
+
+
+innerJoinAndSelect()
+JOINs the relation AND includes the joined data in the result.
+
+.createQueryBuilder('workspace')
+.innerJoinAndSelect('workspace.members', 'member')
+.where('member.user_id = :memberId', { memberId })
+.getMany();
+
+Think:
+
+Workspace
+    ↓ JOIN
+Members
+    ↓
+use members for WHERE/filter
+    ↓
+return Workspace + Members
+
+Result:
+
+[
+  {
+    id: 1,
+    name: 'Workspace A',
+    members: [
+      { user_id: 10 },
+      { user_id: 20 }
+    ]
+  }
+]
+
+--->
+| Method         | Returns                 | Use when                                  |
+| -------------- | ----------------------- | ----------------------------------------- |
+| `getOne()`     | One entity or `null`    | You expect a single row                   |
+| `getMany()`    | Array of entities       | You expect multiple rows                  |
+| `getRawOne()`  | One raw DB object       | You want selected SQL columns             |
+| `getRawMany()` | Array of raw DB objects | You want multiple raw rows                |
+| `getCount()`   | Number                  | You only need the count                   |
+| `getExists()`  | `boolean`               | You only need to know if something exists |
+
+
+--->
+Because they are two different things in TypeORM.
+
+@ManyToOne(() => User)
+@JoinColumn({ name: 'user_id' })
+user: User;
+
+1. user is your entity property
+user: User;
+
+This means:
+In JavaScript/TypeScript, I access the related user through member.user.
+
+Example:
+
+member.user
+member.user.id
+member.user.name
+
+2. @JoinColumn is a TypeORM decorator
+@JoinColumn({ name: 'user_id' })
+
+It tells TypeORM:
+The foreign-key column in the database is called user_id.
+
+So:
+
+TypeScript                  Database
+-----------                 --------
+member.user       ────────> user_id
+     │                         │
+   User entity              FK column
+
+
+
+In your entity
+@ManyToOne(() => UserEntity)
+@JoinColumn({ name: 'user_id' })
+user: Relation<UserEntity>;
+
+You access:
+
+member.user
+
+not:
+member.user_id
+And normally you don't access member.user_id unless you explicitly define user_id as a separate column/property.
+
+user_id is available in the database,
+ but TypeORM does not automatically make every database column a property on your TypeScript entity.
+
+Think of it as two separate layers:
+
+DATABASE                         TYPESCRIPT ENTITY
+
+workspace_members
+┌──────────────┐                ┌────────────────────┐
+│ id           │                │ id                 │
+│ user_id      │ ────────────── │ user               │
+│ workspace_id │                │ workspace           │
+│ role         │                │ role               │
+└──────────────┘  
+              └────────────────────┘
+Simple rule
+user = property you use in TypeScript
+@JoinColumn = tells TypeORM how that property maps to the database FK column.
+
+Why can't you do this?
+member.user_id
+
+Because your TypeScript class does not have a property called user_id.
+
+You only declared:
+
+user: Relation<UserEntity>;
+
+TypeScript only knows about properties you declare on the class.
+
+If you WANT member.user_id
+You can explicitly map it:
+
+@Column({ name: 'user_id' })
+userId: number;
+
+@ManyToOne(() => UserEntity)
+@JoinColumn({ name: 'user_id' })
+user: Relation<UserEntity>;
+
+Now you have:
+
+member.userId       // FK value: 5
+member.user         // UserEntity
+member.user.id      // User's ID: 5
+
+Notice I used userId, not user_id, because that's the normal TypeScript naming style.
+
+Important distinction
+member.userId
+→ directly gets the FK value.
+
+member.user
+→ gets the related UserEntity when the relation is loaded.
+
+member.user.id
+→ gets the user's ID through the relation, but only if user was loaded.
+
+So database column ≠ automatically available TypeScript property. @JoinColumn({ name: 'user_id' }) 
+maps the database column to the user relation; it doesn't declare a user_id property.
+
+--->
+Common TypeORM Find Operators
+import {
+  In,
+  Not,
+  MoreThan,
+  MoreThanOrEqual,
+  LessThan,
+  LessThanOrEqual,
+  Between,
+  Like,
+  ILike,
+  IsNull,
+  IsNotNull,
+} from 'typeorm'
+
+| Operator            | Example                      | SQL meaning             |
+| ------------------- | ---------------------------- | ----------------------- |
+| `In()`              | `id: In([1, 2, 3])`          | `IN (1,2,3)`            |
+| `Not()`             | `id: Not(5)`                 | `!= 5`                  |
+| `MoreThan()`        | `id: MoreThan(5)`            | `> 5`                   |
+| `MoreThanOrEqual()` | `id: MoreThanOrEqual(5)`     | `>= 5`                  |
+| `LessThan()`        | `id: LessThan(5)`            | `< 5`                   |
+| `LessThanOrEqual()` | `id: LessThanOrEqual(5)`     | `<= 5`                  |
+| `Between()`         | `id: Between(5, 10)`         | `BETWEEN 5 AND 10`      |
+| `Like()`            | `name: Like('%test%')`       | `LIKE '%test%'`         |
+| `ILike()`           | `name: ILike('%test%')`      | case-insensitive `LIKE` |
+| `IsNull()`          | `description: IsNull()`      | `IS NULL`               |
+| `IsNotNull()`       | `description: Not(IsNull())` | `IS NOT NULL`           |
+
+example:1
+await repo.find({
+  where: {
+    id: In([1, 2, 3]),
+  },
+});
+
+example:2
+await this.workSpaceRepo.delete({
+  id: In([1, 2, 3]),
+}); 
+
+example:3
+await this.workSpaceRepo.delete({
+  id: MoreThan(10),
+});

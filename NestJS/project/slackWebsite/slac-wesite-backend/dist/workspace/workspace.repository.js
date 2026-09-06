@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { GraphQLError } from 'graphql';
 import { WorkspaceEntity } from './entity/workspace.entity.js';
 import { UserService } from '../user/user.service.js';
@@ -50,6 +50,10 @@ let WorkRepository = class WorkRepository {
         try {
             const workspace = await this.workSpaceRepo.findOne({
                 where: { id },
+                relations: {
+                    channels: true,
+                    members: true,
+                },
             });
             if (!workspace) {
                 throw new GraphQLError('Workspace not found', {
@@ -110,32 +114,13 @@ let WorkRepository = class WorkRepository {
         }
     }
     async delete(id) {
-        try {
-            const workspace = await this.workSpaceRepo.findOne({
-                where: { id },
-            });
-            if (!workspace) {
-                throw new GraphQLError('Workspace not found', {
-                    extensions: {
-                        code: 'WORKSPACE_NOT_FOUND',
-                        httpStatus: 404,
-                    },
-                });
-            }
-            const result = await this.workSpaceRepo.delete(id);
-            return workspace;
-        }
-        catch (error) {
-            if (error instanceof GraphQLError) {
-                throw error;
-            }
-            throw new GraphQLError('Failed to delete workspace', {
-                extensions: {
-                    code: 'WORKSPACE_DELETE_FAILED',
-                    httpStatus: 500,
-                },
-            });
-        }
+        await this.workSpaceRepo.delete(id);
+    }
+    async deleteMany(ids) {
+        const response = await this.workSpaceRepo.delete({
+            id: In(ids),
+        });
+        return response.affected !== 0;
     }
     async findByName(name) {
         try {
@@ -303,7 +288,7 @@ let WorkRepository = class WorkRepository {
         try {
             const workspaces = await this.workSpaceRepo
                 .createQueryBuilder('workspace')
-                .innerJoin('workspace.members', 'member')
+                .innerJoinAndSelect('workspace.members', 'member')
                 .where('member.user_id = :memberId', { memberId })
                 .getMany();
             return workspaces;

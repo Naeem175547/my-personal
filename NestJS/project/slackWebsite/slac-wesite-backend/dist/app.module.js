@@ -29,16 +29,10 @@ AppModule = __decorate([
             GraphQLModule.forRoot({
                 driver: ApolloDriver,
                 autoSchemaFile: 'schema.gql',
-                context: ({ req, res }) => ({ req, res }),
-                formatError: (error) => {
-                    return {
-                        message: error.message,
-                        code: error.extensions?.code,
-                        statusCode: error.extensions?.statusCode,
-                        orginalError: error.extensions?.originalError,
-                        path: error.path,
-                    };
-                },
+                context: ({ req, res }) => ({
+                    req,
+                    res,
+                }),
             }),
             TypeOrmModule.forRootAsync({
                 imports: [ConfigModule],

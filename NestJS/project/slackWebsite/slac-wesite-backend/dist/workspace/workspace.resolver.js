@@ -22,12 +22,15 @@ let WorkspaceResolver = class WorkspaceResolver {
         this.workspaceService = workspaceService;
     }
     createWorkspace(createWorkspaceInput, context) {
-        console.log(createWorkspaceInput);
         const userId = context.req.user.id;
         return this.workspaceService.createWorkspaceService({
             ...createWorkspaceInput,
             ownerId: userId,
         });
+    }
+    deleteWorkspace(workspaceId, context) {
+        const userId = context.req.user.id;
+        return this.workspaceService.deleteWorkspaceService(workspaceId, userId);
     }
 };
 __decorate([
@@ -38,6 +41,14 @@ __decorate([
     __metadata("design:paramtypes", [CreateWorkspaceInput, Object]),
     __metadata("design:returntype", void 0)
 ], WorkspaceResolver.prototype, "createWorkspace", null);
+__decorate([
+    Mutation(() => WorkspacesResponse),
+    __param(0, Args('workspaceId')),
+    __param(1, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "deleteWorkspace", null);
 WorkspaceResolver = __decorate([
     UseGuards(AuthGuards),
     Resolver(),

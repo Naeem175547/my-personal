@@ -7,4 +7,6 @@ export declare class WorkspaceService {
     createWorkspaceService(createWorkspaceDto: CreateWorkspaceInput & {
         ownerId: number;
     }): Promise<WorkspaceEntity>;
+    deleteWorkspaceService(workspaceId: number, userId: number): Promise<any>;
+    getWorkspacesUserIsMemberOfServic(userId: number): Promise<WorkspaceEntity[]>;
 }

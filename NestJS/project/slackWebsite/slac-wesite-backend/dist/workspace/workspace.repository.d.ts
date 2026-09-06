@@ -16,7 +16,8 @@ export declare class WorkRepository {
     findAll(): Promise<WorkspaceEntity[]>;
     findById(id: number): Promise<WorkspaceEntity>;
     update(id: number, updateWorkspaceDto: Partial<CreateWorkspaceInput>): Promise<WorkspaceEntity>;
-    delete(id: number): Promise<WorkspaceEntity>;
+    delete(id: number): Promise<void>;
+    deleteMany(ids: number[]): Promise<boolean>;
     findByName(name: string): Promise<WorkspaceEntity>;
     findByJoinCode(joinCode: string): Promise<WorkspaceEntity>;
     addMemberToWorkspace(workspaceId: number, userId: number, role: 'admin' | 'member'): Promise<void>;

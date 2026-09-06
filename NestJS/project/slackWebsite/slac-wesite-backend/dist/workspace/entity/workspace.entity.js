@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, } from "typeorm";
-import { MessageEntity } from "../../message/entity/message.entity.js";
-import { ChannelEntity } from "../../channel/entity/channel.entity.js";
-import { WorkspaceMemberEntity } from "./workspace-member.entity.js";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, } from 'typeorm';
+import { MessageEntity } from '../../message/entity/message.entity.js';
+import { ChannelEntity } from '../../channel/entity/channel.entity.js';
+import { WorkspaceMemberEntity } from './workspace-member.entity.js';
 let WorkspaceEntity = class WorkspaceEntity {
     id;
     name;
@@ -59,7 +59,7 @@ __decorate([
     __metadata("design:type", Date)
 ], WorkspaceEntity.prototype, "updatedAt", void 0);
 WorkspaceEntity = __decorate([
-    Entity({ name: "workspaces" })
+    Entity({ name: 'workspaces' })
 ], WorkspaceEntity);
 export { WorkspaceEntity };
 //# sourceMappingURL=workspace.entity.js.map

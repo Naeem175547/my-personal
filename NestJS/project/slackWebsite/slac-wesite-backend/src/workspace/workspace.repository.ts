@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { GraphQLError } from 'graphql';
 
 import { WorkspaceEntity } from './entity/workspace.entity.js';
@@ -48,6 +48,10 @@ export class WorkRepository {
     try {
       const workspace = await this.workSpaceRepo.findOne({
         where: { id },
+        relations: {
+          channels: true,
+          members: true,
+        },
       });
 
       if (!workspace) {
@@ -120,35 +124,14 @@ export class WorkRepository {
   }
 
   // DELETE
-  async delete(id: number): Promise<WorkspaceEntity> {
-    try {
-      const workspace = await this.workSpaceRepo.findOne({
-        where: { id },
-      });
-
-      if (!workspace) {
-        throw new GraphQLError('Workspace not found', {
-          extensions: {
-            code: 'WORKSPACE_NOT_FOUND',
-            httpStatus: 404,
-          },
-        });
-      }
-
-      const result = await this.workSpaceRepo.delete(id);
-      return workspace;
-    } catch (error) {
-      if (error instanceof GraphQLError) {
-        throw error;
-      }
-
-      throw new GraphQLError('Failed to delete workspace', {
-        extensions: {
-          code: 'WORKSPACE_DELETE_FAILED',
-          httpStatus: 500,
-        },
-      });
-    }
+  async delete(id: number): Promise<void> {
+    await this.workSpaceRepo.delete(id);
+  }
+  async deleteMany(ids: number[]) {
+    const response = await this.workSpaceRepo.delete({
+      id: In(ids),
+    });
+    return response.affected !== 0;
   }
 
   // FIND BY NAME
@@ -352,7 +335,7 @@ export class WorkRepository {
     try {
       const workspaces = await this.workSpaceRepo
         .createQueryBuilder('workspace')
-        .innerJoin('workspace.members', 'member')
+        .innerJoinAndSelect('workspace.members', 'member')
         .where('member.user_id = :memberId', { memberId })
         .getMany();
 

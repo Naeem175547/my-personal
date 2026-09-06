@@ -6,32 +6,36 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-import type { Relation } from "typeorm";
+import type { Relation } from 'typeorm';
 
-import { UserEntity } from "../../user/entities/user.entity.js";
-import { WorkspaceEntity } from "../../workspace/entity/workspace.entity.js";
+import { UserEntity } from '../../user/entities/user.entity.js';
+import { WorkspaceEntity } from '../../workspace/entity/workspace.entity.js';
 
-@Entity({ name: "workspace_members" })
+@Entity({ name: 'workspace_members' })
 export class WorkspaceMemberEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.workspaceMembers)
-  @JoinColumn({ name: "user_id" })
+  @ManyToOne(() => UserEntity, (user) => user.workspaceMembers, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
   user: Relation<UserEntity>;
 
-  @ManyToOne(() => WorkspaceEntity, (workspace) => workspace.members)
-  @JoinColumn({ name: "workspace_id" })
+  @ManyToOne(() => WorkspaceEntity, (workspace) => workspace.members, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'workspace_id' })
   workspace: Relation<WorkspaceEntity>;
 
   @Column({
-    type: "enum",
-    enum: ["admin", "member"],
-    default: "member",
+    type: 'enum',
+    enum: ['admin', 'member'],
+    default: 'member',
   })
-  role: "admin" | "member";
+  role: 'admin' | 'member';
 
   @CreateDateColumn()
   createdAt: Date;
