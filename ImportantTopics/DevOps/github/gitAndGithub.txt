@@ -1,3 +1,1241 @@
+Git & GitHub — Complete Reconstructed Notes
+=========================================================
+GIT & GITHUB — PERMANENT REFERENCE
+=========================================================
+
+GIT
+=========================================================
+
+Git = Distributed Version Control System.
+
+It tracks changes in your project and lets you:
+→ create versions
+→ work with branches
+→ compare changes
+→ merge work
+→ collaborate with others
+→ restore previous versions
+
+
+=========================================================
+1. GIT REPOSITORY
+=========================================================
+
+Repository = project + Git's history/data.
+
+Initialize Git in an existing project:
+
+git init
+→ Creates a `.git` directory.
+→ Turns the current folder into a Git repository.
+→ Use once when starting Git for a project.
+
+Check status:
+
+git status
+→ Shows current branch and the state of files.
+→ Most useful command for checking what is happening.
+
+
+=========================================================
+2. THREE IMPORTANT AREAS
+=========================================================
+
+Working Directory
+→ Files you are currently editing.
+
+Staging Area
+→ Changes selected for the next commit.
+
+Repository
+→ Committed Git history.
+
+Flow:
+
+Working Directory
+       ↓ git add
+Staging Area
+       ↓ git commit
+Repository
+
+
+=========================================================
+3. GIT ADD / STAGE
+=========================================================
+
+git add file.js
+→ Stages one file.
+
+git add .
+→ Stages changes from the current directory.
+
+git add -A
+→ Stages all changes in the repository.
+
+git stage file.js
+→ Same purpose as `git add file.js`.
+→ `git stage` is an alternative spelling for staging.
+
+Important:
+→ New files must be staged before they can be committed.
+→ `git add` does NOT mean "save permanently".
+→ It only prepares changes for the next commit.
+
+
+=========================================================
+4. COMMIT
+=========================================================
+
+git commit -m "message"
+→ Creates a commit containing staged changes.
+→ Use after staging.
+
+Example:
+
+git add .
+git commit -m "add login"
+
+Meaning:
+
+git add
+→ Select changes.
+
+git commit
+→ Record the selected changes in Git history.
+
+git commit -a -m "message"
+→ Automatically stages modified/deleted TRACKED files and commits them.
+→ Does NOT include untracked/new files.
+
+Important difference:
+
+git commit -m "..."
+→ Commit whatever is already staged.
+
+git commit -a -m "..."
+→ Stage tracked modifications/deletions + commit.
+
+
+=========================================================
+5. GIT LOG
+=========================================================
+
+git log
+→ Shows commit history.
+
+git log --oneline
+→ Shows commit history in compact one-line format.
+→ Shows history of the current branch (`HEAD`).
+
+git log main --oneline
+→ Shows history of the `main` branch specifically.
+
+git log origin/main --oneline
+→ Shows history of your local `origin/main` remote-tracking reference.
+
+Difference:
+
+git log --oneline
+→ Current branch.
+
+git log main --oneline
+→ Specifically `main`.
+
+
+=========================================================
+6. BRANCHES
+=========================================================
+
+Branch = separate line of development.
+
+Main idea:
+
+main
+   ↓
+   A → B
+
+Create branch:
+
+git branch feature
+→ Creates `feature`.
+→ Does NOT switch to it.
+
+Create + switch:
+
+git switch -c feature
+→ Creates `feature` and switches to it.
+
+Switch:
+
+git switch main
+→ Switches to `main`.
+
+List branches:
+
+git branch
+→ Shows local branches.
+
+git branch -a
+→ Shows local branches + remote-tracking branches.
+
+Example:
+
+* main
+  feature
+  remotes/origin/main
+  remotes/origin/feature
+
+
+=========================================================
+7. BRANCH SWITCHING WITH UNCOMMITTED CHANGES
+=========================================================
+
+You do NOT always need to commit before switching branches.
+
+If your uncommitted changes do not conflict with the target branch:
+→ Git may allow the switch.
+→ The changes can remain in your working directory.
+
+If switching would overwrite your changes:
+→ Git blocks the switch.
+
+You can then:
+
+git commit
+→ Permanently record the work.
+
+OR
+
+git stash
+→ Temporarily store unfinished work.
+
+
+=========================================================
+8. GIT STASH
+=========================================================
+
+git stash
+→ Temporarily saves uncommitted changes.
+→ Makes the working directory clean.
+→ Does not create a normal commit.
+
+Typical use:
+
+git stash
+git switch main
+
+Later:
+
+git stash pop
+→ Restores the latest stash.
+→ Removes that stash from the stash list.
+
+git stash apply
+→ Restores the stash.
+→ Keeps the stash.
+
+git stash list
+→ Shows stashes.
+
+git stash apply stash@{0}
+→ Applies a specific stash.
+
+git stash drop
+→ Deletes a stash.
+
+git stash clear
+→ Deletes all stashes.
+
+Difference:
+
+stash pop
+→ restore + remove stash
+
+stash apply
+→ restore + keep stash
+
+
+=========================================================
+9. GIT DIFF
+=========================================================
+
+git diff
+→ Shows UNSTAGED changes.
+→ Compares Working Directory with the index/staging state.
+
+Example:
+You modify `index.js`
+but do not run `git add`.
+
+git diff
+→ Shows that modification.
+
+After:
+
+git add index.js
+
+git diff
+→ That staged change no longer appears here.
+
+git diff --staged
+→ Shows STAGED changes.
+→ Compares Staging Area with the last commit.
+
+Same command:
+
+git diff --cached
+
+git diff HEAD
+→ Shows all changes after the last commit:
+   staged + unstaged changes.
+
+git diff main feature
+→ Compares the final states of two branches.
+
+git diff commit1 commit2
+→ Compares two commits.
+
+git diff -- index.js
+→ Shows differences only for `index.js`.
+
+git diff --stat
+→ Shows a summary of changed files and line counts.
+
+
+Important:
+
+git diff
+→ unstaged changes
+
+git diff --staged
+→ staged changes
+
+git diff HEAD
+→ staged + unstaged changes
+
+
+Diff symbols:
+
+- line
+→ removed/old line
+
++ line
+→ added/new line
+
+
+=========================================================
+10. REMOTE
+=========================================================
+
+Remote = another Git repository, usually on GitHub/GitLab/etc.
+
+When you clone a repository, Git normally names the remote:
+
+origin
+
+Example:
+
+origin
+→ remote repository name.
+
+It is just a name/alias pointing to the remote URL.
+
+Check remotes:
+
+git remote -v
+→ Shows remote names and URLs.
+
+Add remote:
+
+git remote add origin <URL>
+→ Connects your local repository to the remote.
+
+Remove remote:
+
+git remote remove origin
+→ Removes that remote configuration.
+
+
+=========================================================
+11. origin/main
+=========================================================
+
+`origin/main` is LOCAL.
+
+It is a remote-tracking reference stored in your local repository.
+
+It represents:
+→ the last fetched state of the remote repository's `main` branch.
+
+Example:
+
+Remote GitHub:
+main → C
+
+Local:
+main        → B
+origin/main → B
+
+Run:
+
+git fetch
+
+Now:
+
+main        → B
+origin/main → C
+
+So:
+
+main
+→ your local branch
+
+origin/main
+→ your local record/reference of remote `main`
+
+`origin/main` is NOT the actual remote repository.
+
+
+=========================================================
+12. FETCH
+=========================================================
+
+git fetch
+→ Downloads new data from the remote.
+→ Updates remote-tracking references such as `origin/main`.
+→ Does NOT merge the changes into your current branch.
+
+Example:
+
+Before:
+
+local main        → B
+origin/main       → B
+remote main       → C
+
+After:
+
+git fetch
+
+local main        → B
+origin/main       → C
+remote main       → C
+
+Your local `main` remains unchanged.
+
+
+=========================================================
+13. PULL
+=========================================================
+
+git pull
+→ Fetches remote changes and integrates them into the current branch.
+
+Basic mental model:
+
+git pull
+   ↓
+git fetch
+   ↓
+git merge
+
+Example while on `main`:
+
+git pull
+
+roughly means:
+
+git fetch
+git merge origin/main
+
+Difference:
+
+git fetch
+→ Download/update remote-tracking reference only.
+
+git pull
+→ Download + integrate into current branch.
+
+
+=========================================================
+14. MERGE
+=========================================================
+
+git merge feature
+→ Merges `feature` into the branch you are currently on.
+
+Example:
+
+Currently on:
+
+main
+
+Run:
+
+git merge feature
+
+Meaning:
+
+feature
+   ↓
+main
+
+The command's target is always the CURRENT branch.
+
+Example:
+
+git switch main
+git merge feature
+
+→ Bring `feature` changes into `main`.
+
+
+=========================================================
+15. FAST-FORWARD MERGE
+=========================================================
+
+If the current branch has no unique commits and simply needs to move forward:
+
+main:
+A → B
+
+feature:
+A → B → C
+
+git switch main
+git merge feature
+
+Result:
+
+main:
+A → B → C
+
+No separate merge commit is required.
+
+This is called a fast-forward merge.
+
+
+=========================================================
+16. MERGE CONFLICT
+=========================================================
+
+Conflict happens when Git cannot automatically combine changes.
+
+Common example:
+
+main changes the same part of `index.js`
+feature also changes that same part.
+
+git merge feature
+→ Git reports a conflict.
+
+Conflict markers may appear:
+
+<<<<<<< HEAD
+current branch code
+=======
+incoming branch code
+>>>>>>> feature
+
+You manually edit the file and decide which final code should remain.
+
+Then:
+
+git add index.js
+→ Marks the conflict as resolved.
+
+git commit
+→ Completes the merge if Git requires a merge commit.
+
+Abort an unfinished merge:
+
+git merge --abort
+→ Returns to the state before the merge started.
+
+
+=========================================================
+17. PUSH
+=========================================================
+
+git push
+→ Uploads local commits to a remote repository.
+
+git push origin main
+→ Push local `main` commits to remote `main`.
+
+First push of a new branch:
+
+git push -u origin feature
+
+`-u`
+→ Sets the upstream/tracking relationship.
+
+After that, from the branch:
+
+git push
+→ Git knows which remote branch to push to.
+
+Flow:
+
+Local branch
+    ↓
+git push
+    ↓
+Remote repository
+
+
+=========================================================
+18. CLONE
+=========================================================
+
+git clone <URL>
+→ Downloads a remote repository and creates a local Git repository.
+
+Example:
+
+git clone https://github.com/user/project.git
+
+Clone normally:
+→ downloads project files
+→ downloads Git history
+→ creates `origin` remote
+→ checks out the default branch.
+
+
+=========================================================
+19. GIT CONFIG
+=========================================================
+
+Git configuration can exist at different levels:
+
+--local
+→ current repository only.
+
+--global
+→ your user account.
+
+--system
+→ entire machine/system.
+
+Set username:
+
+git config --global user.name "Name"
+
+Set email:
+
+git config --global user.email "email@example.com"
+
+View config:
+
+git config --global --list
+
+Remove a setting:
+
+git config --global --unset user.name
+
+For current repository only:
+
+git config --local --unset user.name
+
+`unset`
+→ removes that specific configuration value.
+
+
+=========================================================
+20. GIT RESTORE
+=========================================================
+
+git restore file.js
+→ Discards unstaged changes in the working directory for that file.
+→ Returns the file to the version from the index/staging state.
+
+Be careful:
+→ This can permanently discard local changes.
+
+Unstage:
+
+git restore --staged file.js
+→ Removes the file from staging.
+→ Keeps your actual working changes.
+
+
+=========================================================
+21. REMOTE-TRACKING BRANCHES
+=========================================================
+
+Remote-tracking branch examples:
+
+origin/main
+origin/feature
+
+They are local references showing the last fetched state of corresponding remote branches.
+
+See them:
+
+git branch -a
+
+Remember:
+
+main
+→ local branch
+
+origin/main
+→ local remote-tracking reference
+
+
+=========================================================
+22. LOCAL BRANCH vs REMOTE BRANCH
+=========================================================
+
+Example:
+
+Local:
+
+main
+
+Remote tracking:
+
+origin/main
+
+Actual remote repository:
+
+GitHub repository's main branch
+
+Flow:
+
+GitHub main
+    ↓ fetch
+origin/main
+    ↓ merge
+local main
+
+Push works in the opposite direction:
+
+local main
+    ↓ push
+GitHub main
+
+
+=========================================================
+23. PULL REQUEST (PR)
+=========================================================
+
+Pull Request is a GitHub feature.
+
+It is NOT the same as `git pull`.
+
+A PR requests that changes from one remote branch be reviewed and merged into another branch.
+
+Typical workflow:
+
+git switch -c feature
+git add .
+git commit -m "add feature"
+git push -u origin feature
+
+Then on GitHub:
+
+feature
+   ↓
+Pull Request
+   ↓
+main
+   ↓
+review
+   ↓
+merge
+
+PR provides:
+→ code review
+→ comments/discussion
+→ checks/tests
+→ controlled merge
+
+
+Difference:
+
+git pull
+→ remote → local
+
+Pull Request
+→ request to merge one remote branch into another.
+
+
+=========================================================
+24. COLLABORATOR
+=========================================================
+
+If you are a collaborator on a repository:
+→ You have permission to contribute to it.
+
+Typical workflow is still:
+
+feature branch
+   ↓
+push
+   ↓
+Pull Request
+   ↓
+main
+
+Being a collaborator does NOT mean you must always merge directly into `main`.
+
+A PR gives:
+→ review
+→ discussion
+→ CI checks
+→ safer integration.
+
+
+=========================================================
+25. GITHUB REPOSITORY vs PROFILE README
+=========================================================
+
+Repository README:
+
+repository/
+└── README.md
+
+→ Appears on that repository's GitHub page.
+
+Profile README:
+
+username/username
+└── README.md
+
+→ Can appear on your GitHub profile.
+
+The repository README does not automatically become your profile README.
+
+
+=========================================================
+26. GITHUB ACTIONS
+=========================================================
+
+GitHub Actions
+→ GitHub's CI/CD automation system.
+
+Workflow files normally live in:
+
+.github/workflows/
+
+Example:
+
+.github/
+└── workflows/
+    └── firstWorkflow.yml
+
+
+Basic workflow:
+
+name: firstWorkflow
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Greetings
+        run: echo "hello from xyz"
+
+
+Meaning:
+
+name:
+→ Workflow name.
+
+on:
+→ Defines when it runs.
+
+push:
+→ Trigger on a push.
+
+branches: [main]
+→ Trigger only when the push is to `main`.
+
+Equivalent syntax:
+
+branches: [main]
+
+and:
+
+branches:
+  - main
+
+Both create a YAML list.
+
+jobs:
+→ Defines jobs.
+
+demo:
+→ Job ID/name.
+
+runs-on:
+→ Machine/environment used to run the job.
+
+steps:
+→ Individual tasks in the job.
+
+- name:
+→ Name of one step.
+
+run:
+→ Executes a shell command on the GitHub runner.
+
+For:
+
+run: echo "hello from xyz"
+
+The output appears in:
+
+GitHub
+→ Actions
+→ Workflow Run
+→ Job
+→ Step
+
+Typical flow:
+
+git push origin main
+        ↓
+GitHub detects push
+        ↓
+Workflow starts
+        ↓
+Ubuntu runner
+        ↓
+run command
+        ↓
+Output shown in Actions
+
+
+=========================================================
+27. YAML LIST SYNTAX
+=========================================================
+
+Inline list:
+
+branches: [a, b, main]
+
+Block list:
+
+branches:
+  - a
+  - b
+  - main
+
+Both mean the same thing.
+
+Do NOT mix them incorrectly:
+
+branches: [a, b]
+  - main
+
+Use one syntax or the other.
+
+
+=========================================================
+28. IMPORTANT DAILY GIT WORKFLOW
+=========================================================
+
+Starting a project:
+
+git init
+
+Check state:
+
+git status
+
+Stage:
+
+git add .
+
+Commit:
+
+git commit -m "initial commit"
+
+Connect GitHub:
+
+git remote add origin <URL>
+
+Push:
+
+git push -u origin main
+
+
+For feature work:
+
+git switch -c feature
+git add .
+git commit -m "add feature"
+git push -u origin feature
+
+Then:
+→ create Pull Request on GitHub
+→ review
+→ merge into main
+
+
+=========================================================
+29. GET LATEST CODE
+=========================================================
+
+Option 1 — inspect first:
+
+git fetch
+git log origin/main --oneline
+git diff main origin/main
+
+Then integrate:
+
+git merge origin/main
+
+
+Option 2 — do it together:
+
+git pull
+
+
+Useful mental model:
+
+fetch
+→ "Tell me what changed remotely."
+
+diff
+→ "Show me the differences."
+
+merge
+→ "Bring those changes into my branch."
+
+pull
+→ "Fetch + integrate."
+
+
+=========================================================
+30. IMPORTANT DIFFERENCES
+=========================================================
+
+git add
+→ Working Directory → Staging Area
+
+git commit
+→ Staging Area → Repository history
+
+git push
+→ Local commits → Remote repository
+
+git fetch
+→ Remote repository → local remote-tracking references
+
+git merge
+→ Combine histories/changes into current branch
+
+git pull
+→ fetch + integrate
+
+git stash
+→ Temporarily store unfinished local changes
+
+git diff
+→ Show unstaged differences
+
+git diff --staged
+→ Show staged differences
+
+Pull Request
+→ GitHub review/merge request; not a Git command.
+
+
+=========================================================
+31. COMPLETE MENTAL MODEL
+=========================================================
+
+                    GITHUB / REMOTE
+                         ↑
+                       push
+                         |
+                    Local Branch
+                    `main`
+                         ↑
+                       merge
+                         |
+                  origin/main
+                         ↑
+                       fetch
+                         |
+                    Remote GitHub
+
+
+Inside local repository:
+
+Working Directory
+       ↓ git add
+Staging Area
+       ↓ git commit
+Local Repository
+
+
+For feature development:
+
+main
+  ↓
+git switch -c feature
+  ↓
+feature work
+  ↓
+git add
+  ↓
+git commit
+  ↓
+git push
+  ↓
+GitHub feature branch
+  ↓
+Pull Request
+  ↓
+main
+
+
+=========================================================
+32. COMMAND CHEAT SHEET
+=========================================================
+
+git init
+→ Initialize repository.
+
+git status
+→ Check current state.
+
+git add .
+→ Stage changes.
+
+git stage .
+→ Same staging operation.
+
+git commit -m "message"
+→ Commit staged changes.
+
+git commit -a -m "message"
+→ Stage tracked modifications/deletions + commit.
+
+git log --oneline
+→ Compact history of current branch.
+
+git branch
+→ Local branches.
+
+git branch -a
+→ Local + remote-tracking branches.
+
+git switch main
+→ Switch branch.
+
+git switch -c feature
+→ Create + switch branch.
+
+git merge feature
+→ Merge feature into current branch.
+
+git merge --abort
+→ Cancel unfinished merge.
+
+git fetch
+→ Update remote-tracking refs.
+
+git pull
+→ Fetch + integrate.
+
+git push
+→ Upload commits.
+
+git push -u origin feature
+→ Push branch + set upstream.
+
+git remote -v
+→ Show remotes.
+
+git clone <URL>
+→ Copy remote repository locally.
+
+git diff
+→ Unstaged changes.
+
+git diff --staged
+→ Staged changes.
+
+git diff HEAD
+→ All changes since last commit.
+
+git stash
+→ Temporarily save uncommitted work.
+
+git stash pop
+→ Restore + remove latest stash.
+
+git stash apply
+→ Restore + keep stash.
+
+git stash list
+→ List stashes.
+
+git restore --staged file
+→ Unstage file.
+
+git restore file
+→ Discard unstaged changes.
+
+git config --global --list
+→ Show global Git configuration.
+
+git config --global --unset user.name
+→ Remove global username configuration.
+
+
+=========================================================
+33. MOST IMPORTANT MEMORY MAP
+=========================================================
+
+LOCAL:
+
+Working Directory
+      ↓ git add
+Staging Area
+      ↓ git commit
+Repository
+      ↓ git push
+Remote/GitHub
+
+
+REMOTE INFORMATION:
+
+GitHub remote
+      ↓ git fetch
+origin/main
+      ↓ git merge
+main
+
+
+QUICK COMMAND MEANINGS:
+
+add       → prepare
+commit    → record
+push      → upload
+fetch     → download remote information
+merge     → combine
+pull      → fetch + merge
+stash     → temporarily hide unfinished work
+diff      → compare
+switch    → move between branches
+clone     → copy repository
+PR        → request/review a remote branch merge
+
+
+=========================================================
+
 name: Schedule job ok
 
 on:
