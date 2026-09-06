@@ -47,10 +47,16 @@ type Workspace {
   joinCode: String
 }
 
-type WorkspacesResponse {
+type WorkspaceResponse {
   success: Boolean!
   message: String!
   data: Workspace
+}
+
+type WorkspacesResponse {
+  success: Boolean!
+  message: String!
+  data: [Workspace!]
 }
 
 type Query {
@@ -58,6 +64,7 @@ type Query {
   user(id: Int!): UserResponse!
   userByEmail(email: String!): UserResponse!
   userByUsername(username: String!): UserResponse!
+  getWorkspacesUserIsMemberOf: WorkspacesResponse!
 }
 
 type Mutation {
@@ -65,8 +72,8 @@ type Mutation {
   removeUser(id: Int!): UserResponse!
   signUp(createUserInput: CreateUserInput!): UserResponse!
   signIn(email: String!, password: String!): LoginResponse!
-  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): WorkspacesResponse!
-  deleteWorkspace(workspaceId: Float!): WorkspacesResponse!
+  createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): WorkspaceResponse!
+  deleteWorkspace(workspaceId: Float!): WorkspaceResponse!
 }
 
 input UpdateUserInput {

@@ -1432,3 +1432,33 @@ example:3
 await this.workSpaceRepo.delete({
   id: MoreThan(10),
 });
+
+
+
+---->
+GraphQL waits for the Promise
+GraphQL execution understands that a resolver can return a Promise.
+
+Conceptually, it does something like:
+
+const result = resolver();
+
+if (result instanceof Promise) {
+  const data = await result;
+}
+
+You don't manually have to do this.
+
+Eventually:
+
+Promise<WorkspaceEntity[]>
+          ↓
+       resolved
+          ↓
+WorkspaceEntity[]
+          ↓
+GraphQL serializes it
+          ↓
+JSON response
+
+so in resolver we directly return Promise or value we don't need to use await it will be handled by nestjs/grpahql

@@ -4,8 +4,13 @@ export declare class Workspace {
     description?: string;
     joinCode?: string;
 }
-export declare class WorkspacesResponse {
+export declare class WorkspaceResponse {
     success: boolean;
     message: string;
     data?: Workspace;
+}
+export declare class WorkspacesResponse {
+    success: boolean;
+    message: string;
+    data?: Workspace[];
 }

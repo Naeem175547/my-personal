@@ -34,6 +34,27 @@ Workspace = __decorate([
     ObjectType()
 ], Workspace);
 export { Workspace };
+let WorkspaceResponse = class WorkspaceResponse {
+    success;
+    message;
+    data;
+};
+__decorate([
+    Field(),
+    __metadata("design:type", Boolean)
+], WorkspaceResponse.prototype, "success", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", String)
+], WorkspaceResponse.prototype, "message", void 0);
+__decorate([
+    Field(() => Workspace, { nullable: true }),
+    __metadata("design:type", Workspace)
+], WorkspaceResponse.prototype, "data", void 0);
+WorkspaceResponse = __decorate([
+    ObjectType()
+], WorkspaceResponse);
+export { WorkspaceResponse };
 let WorkspacesResponse = class WorkspacesResponse {
     success;
     message;
@@ -48,8 +69,8 @@ __decorate([
     __metadata("design:type", String)
 ], WorkspacesResponse.prototype, "message", void 0);
 __decorate([
-    Field(() => Workspace, { nullable: true }),
-    __metadata("design:type", Workspace)
+    Field(() => [Workspace], { nullable: true }),
+    __metadata("design:type", Array)
 ], WorkspacesResponse.prototype, "data", void 0);
 WorkspacesResponse = __decorate([
     ObjectType()

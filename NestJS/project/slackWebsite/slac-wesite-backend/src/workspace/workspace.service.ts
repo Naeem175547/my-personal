@@ -8,6 +8,19 @@ import { v4 as uuidv4 } from 'uuid';
 @Injectable()
 export class WorkspaceService {
   constructor(private readonly workspaceRepository: WorkRepository) {}
+  isUserAdminOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
+    const member = workspace.members.find(
+      (member) => member.user.id === userId && member.role === 'admin',
+    );
+    return !!member;
+  }
+
+  isUserMemberOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
+    return workspace.members.some(
+      (member) => member.user.id === userId && member.role === 'member',
+    );
+  }
+
   async createWorkspaceService(
     createWorkspaceDto: CreateWorkspaceInput & { ownerId: number },
   ): Promise<WorkspaceEntity> {
@@ -63,13 +76,8 @@ export class WorkspaceService {
           },
         });
       }
-      const allWorkspacesByMemberId =
-        await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
-      const isAdmin = allWorkspacesByMemberId.find(
-        (workspace) =>
-          workspace.id === workspaceId &&
-          workspace.members.some((member) => member.role === 'admin'),
-      );
+
+      const isAdmin = this.isUserAdminOfWorkspace(workspace, userId);
       if (!isAdmin) {
         throw new GraphQLError('User is not an admin of the workspace', {
           extensions: {
@@ -107,3 +115,13 @@ export class WorkspaceService {
     }
   }
 }
+
+// export const getWorkspaceService = async (workspaceId, userId) {}
+
+// export const getWorkspaceByJoinCodeService = async (joinCode) {}
+
+// export const updateWorkspaceService = async (workspaceId, workspaceData, userId) {}
+
+// export const addMemberToWorkspaceService = async (workspaceId, memberId, role) {}
+
+// export const addChannelToWorkspaceService = async (workspaceId, channelName) {}

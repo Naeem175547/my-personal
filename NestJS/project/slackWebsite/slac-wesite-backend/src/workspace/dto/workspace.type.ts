@@ -16,7 +16,7 @@ export class Workspace {
 }
 
 @ObjectType()
-export class WorkspacesResponse {
+export class WorkspaceResponse {
   @Field()
   success: boolean;
 
@@ -25,4 +25,16 @@ export class WorkspacesResponse {
 
   @Field(() => Workspace, { nullable: true })
   data?: Workspace;
+}
+
+@ObjectType()
+export class WorkspacesResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field(() => [Workspace], { nullable: true })
+  data?: Workspace[];
 }

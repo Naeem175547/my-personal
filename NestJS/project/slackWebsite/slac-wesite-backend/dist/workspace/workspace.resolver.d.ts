@@ -5,4 +5,5 @@ export declare class WorkspaceResolver {
     constructor(workspaceService: WorkspaceService);
     createWorkspace(createWorkspaceInput: CreateWorkspaceInput, context: any): Promise<import("./entity/workspace.entity.js").WorkspaceEntity>;
     deleteWorkspace(workspaceId: number, context: any): Promise<any>;
+    getWorkspacesUserIsMemberOf(context: any): Promise<import("./entity/workspace.entity.js").WorkspaceEntity[]>;
 }

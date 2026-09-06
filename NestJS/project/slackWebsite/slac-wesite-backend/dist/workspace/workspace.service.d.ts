@@ -4,6 +4,8 @@ import { WorkRepository } from './workspace.repository.js';
 export declare class WorkspaceService {
     private readonly workspaceRepository;
     constructor(workspaceRepository: WorkRepository);
+    isUserAdminOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean;
+    isUserMemberOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean;
     createWorkspaceService(createWorkspaceDto: CreateWorkspaceInput & {
         ownerId: number;
     }): Promise<WorkspaceEntity>;

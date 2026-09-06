@@ -16,6 +16,13 @@ let WorkspaceService = class WorkspaceService {
     constructor(workspaceRepository) {
         this.workspaceRepository = workspaceRepository;
     }
+    isUserAdminOfWorkspace(workspace, userId) {
+        const member = workspace.members.find((member) => member.user.id === userId && member.role === 'admin');
+        return !!member;
+    }
+    isUserMemberOfWorkspace(workspace, userId) {
+        return workspace.members.some((member) => member.user.id === userId && member.role === 'member');
+    }
     async createWorkspaceService(createWorkspaceDto) {
         try {
             const joinCode = uuidv4().substring(0, 6).toUpperCase();
@@ -58,9 +65,7 @@ let WorkspaceService = class WorkspaceService {
                     },
                 });
             }
-            const allWorkspacesByMemberId = await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
-            const isAdmin = allWorkspacesByMemberId.find((workspace) => workspace.id === workspaceId &&
-                workspace.members.some((member) => member.role === 'admin'));
+            const isAdmin = this.isUserAdminOfWorkspace(workspace, userId);
             if (!isAdmin) {
                 throw new GraphQLError('User is not an admin of the workspace', {
                     extensions: {
