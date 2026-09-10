@@ -40,4 +40,25 @@ WorkspaceMember = __decorate([
     ObjectType()
 ], WorkspaceMember);
 export { WorkspaceMember };
+let WorkspaceMemberResponse = class WorkspaceMemberResponse {
+    success;
+    message;
+    data;
+};
+__decorate([
+    Field(),
+    __metadata("design:type", Boolean)
+], WorkspaceMemberResponse.prototype, "success", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", String)
+], WorkspaceMemberResponse.prototype, "message", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", WorkspaceMember)
+], WorkspaceMemberResponse.prototype, "data", void 0);
+WorkspaceMemberResponse = __decorate([
+    ObjectType()
+], WorkspaceMemberResponse);
+export { WorkspaceMemberResponse };
 //# sourceMappingURL=workspace.member.type.js.map

@@ -36,6 +36,21 @@ let ChannelRepository = class ChannelRepository {
     async deleteChannel(channelId) {
         await this.channelRepository.delete(channelId);
     }
+    async getChannelWithAllDetails(channelId) {
+        return await this.channelRepository.findOne({
+            where: {
+                id: channelId,
+            },
+            relations: {
+                workspace: {
+                    members: {
+                        user: true,
+                    },
+                },
+                messages: true,
+            },
+        });
+    }
 };
 ChannelRepository = __decorate([
     Injectable(),

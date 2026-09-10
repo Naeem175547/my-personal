@@ -9301,3 +9301,84 @@ FOR YOUR CASE
 Since your NestJS application actually uses it at runtime:
 npm install @nestjs/microservices
 ✅ Put it in "dependencies"
+
+
+-->
+Node mailer
+Nodemailer configuration in NestJS, a clean setup is to keep it inside your MailModule.
+
+1. Install Nodemailer
+npm install nodemailer
+npm install -D @types/nodemailer
+2. mail.service.ts
+
+import { Injectable } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
+
+@Injectable()
+export class MailService {
+  private transporter = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: Number(process.env.MAIL_PORT),
+    secure: false,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD,
+    },
+  });
+
+  async sendMail(to: string, subject: string, body: string) {
+    return await this.transporter.sendMail({
+      from: process.env.MAIL_FROM,
+      to,
+      subject,
+      body,
+    });
+  }
+}
+3. .env
+
+For example, with an SMTP provider:
+
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USER=your-email@example.com
+MAIL_PASSWORD=your-password
+MAIL_FROM=your-email@example.com
+
+Don't hard-code the password in mail.service.ts; keep it in environment variables.
+
+same as node js;directly configure.
+
+| Attribute  | Meaning                                                     | Example                             |
+| ---------- | ----------------------------------------------------------- | ----------------------------------- |
+| **host**   | SMTP server address where Nodemailer connects to send email | `smtp.gmail.com`                    |
+| **port**   | Network port used to connect to the SMTP server             | `587`                               |
+| **secure** | Whether to use a secure TLS connection immediately          | `false` for `587`, `true` for `465` |
+| **auth**   | Credentials used to authenticate with the SMTP server       | `{ user, pass }`                    |
+
+host   → WHERE to connect
+port   → WHICH port to connect to
+secure → HOW to establish the secure connection
+auth   → WHO is allowed to send
+
+nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'your@gmail.com',
+    pass: 'your-app-password',
+  },
+});
+
+These values come from the SMTP email provider you want Nodemailer to use. If you're using Gmail, here's what each one means:
+| `.env` variable | Gmail value                      | Where it comes from            |
+| --------------- | -------------------------------- | ------------------------------ |
+| `MAIL_HOST`     | `smtp.gmail.com`                 | Gmail SMTP server              |
+| `MAIL_PORT`     | `587`                            | Gmail SMTP port                |
+| `MAIL_USER`     | `yourgmail@gmail.com`            | Your Gmail address             |
+| `MAIL_PASS`     | `your 16-character App Password` | Google Account → App Passwords |
+
+--->
+

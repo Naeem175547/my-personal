@@ -1,6 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { User } from '../../user/types/user.type.js';
-import { Workspace, WorkspaceResponse } from './workspace.type.js';
 
 @ObjectType()
 export class WorkspaceMember {
@@ -18,4 +17,16 @@ export class WorkspaceMember {
 
   @Field()
   updatedAt: Date;
+}
+
+@ObjectType()
+export class WorkspaceMemberResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field()
+  data: WorkspaceMember;
 }

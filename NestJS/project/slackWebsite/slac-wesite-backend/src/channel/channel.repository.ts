@@ -32,4 +32,20 @@ export class ChannelRepository {
   async deleteChannel(channelId: number): Promise<void> {
     await this.channelRepository.delete(channelId);
   }
+
+  async getChannelWithAllDetails(channelId: number) {
+    return await this.channelRepository.findOne({
+      where: {
+        id: channelId,
+      },
+      relations: {
+        workspace: {
+          members: {
+            user: true,
+          },
+        },
+        messages: true,
+      },
+    });
+  }
 }

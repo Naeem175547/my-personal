@@ -9,4 +9,5 @@ export declare class ChannelRepository {
     getChannelById(channelId: number): Promise<any>;
     updateChannel(channelId: number, updateData: any): Promise<any>;
     deleteChannel(channelId: number): Promise<void>;
+    getChannelWithAllDetails(channelId: number): Promise<ChannelEntity | null>;
 }
