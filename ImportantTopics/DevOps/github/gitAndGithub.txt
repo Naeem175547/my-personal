@@ -1,9 +1,5 @@
 Git & GitHub — Complete Reconstructed Notes
-=========================================================
-GIT & GITHUB — PERMANENT REFERENCE
-=========================================================
 
-GIT
 =========================================================
 
 Git = Distributed Version Control System.
@@ -15,12 +11,9 @@ It tracks changes in your project and lets you:
 → merge work
 → collaborate with others
 → restore previous versions
-
-
 =========================================================
 1. GIT REPOSITORY
 =========================================================
-
 Repository = project + Git's history/data.
 
 Initialize Git in an existing project:
@@ -35,8 +28,6 @@ Check status:
 git status
 → Shows current branch and the state of files.
 → Most useful command for checking what is happening.
-
-
 =========================================================
 2. THREE IMPORTANT AREAS
 =========================================================
@@ -57,7 +48,6 @@ Working Directory
 Staging Area
        ↓ git commit
 Repository
-
 
 =========================================================
 3. GIT ADD / STAGE
@@ -80,7 +70,6 @@ Important:
 → New files must be staged before they can be committed.
 → `git add` does NOT mean "save permanently".
 → It only prepares changes for the next commit.
-
 
 =========================================================
 4. COMMIT
@@ -114,8 +103,6 @@ git commit -m "..."
 
 git commit -a -m "..."
 → Stage tracked modifications/deletions + commit.
-
-
 =========================================================
 5. GIT LOG
 =========================================================
@@ -134,8 +121,6 @@ git log origin/main --oneline
 → Shows history of your local `origin/main` remote-tracking reference.
 
 Difference:
-
-git log --oneline
 → Current branch.
 
 git log main --oneline
@@ -145,7 +130,6 @@ git log main --oneline
 =========================================================
 6. BRANCHES
 =========================================================
-
 Branch = separate line of development.
 
 Main idea:
@@ -215,7 +199,7 @@ git stash
 =========================================================
 
 git stash
-→ Temporarily saves uncommitted changes.
+→ Temporarily saves uncommitted /staged changes.
 → Makes the working directory clean.
 → Does not create a normal commit.
 
@@ -261,7 +245,7 @@ stash apply
 
 git diff
 → Shows UNSTAGED changes.
-→ Compares Working Directory with the index/staging state.
+→ Compares Working Directory with the last commit.
 
 Example:
 You modify `index.js`
@@ -271,7 +255,6 @@ git diff
 → Shows that modification.
 
 After:
-
 git add index.js
 
 git diff
@@ -282,7 +265,6 @@ git diff --staged
 → Compares Staging Area with the last commit.
 
 Same command:
-
 git diff --cached
 
 git diff HEAD
@@ -322,22 +304,17 @@ Diff symbols:
 + line
 → added/new line
 
-
 =========================================================
 10. REMOTE
 =========================================================
-
 Remote = another Git repository, usually on GitHub/GitLab/etc.
-
 When you clone a repository, Git normally names the remote:
-
 origin
 
 Example:
 
 origin
 → remote repository name.
-
 It is just a name/alias pointing to the remote URL.
 
 Check remotes:
@@ -347,23 +324,18 @@ git remote -v
 
 Add remote:
 
-git remote add origin <URL>
+git remote add origin(any name) <URL>
 → Connects your local repository to the remote.
 
 Remove remote:
-
 git remote remove origin
 → Removes that remote configuration.
-
 
 =========================================================
 11. origin/main
 =========================================================
-
 `origin/main` is LOCAL.
-
 It is a remote-tracking reference stored in your local repository.
-
 It represents:
 → the last fetched state of the remote repository's `main` branch.
 
@@ -377,7 +349,6 @@ main        → B
 origin/main → B
 
 Run:
-
 git fetch
 
 Now:
@@ -386,7 +357,6 @@ main        → B
 origin/main → C
 
 So:
-
 main
 → your local branch
 
@@ -395,6 +365,25 @@ origin/main
 
 `origin/main` is NOT the actual remote repository.
 
+origin/main = local reference to the remote main branch.
+
+After:
+git fetch
+
+You can use origin/main to:
+- git log origin/main
+- git diff main origin/main
+- git merge origin/main
+- git rebase origin/main
+- git reset --hard origin/main
+- git switch -c new-branch origin/main
+
+
+
+Important:
+git fetch       → updates origin/main
+origin/main     → does NOT directly change your working branch
+git merge       → brings origin/main changes into your branch
 
 =========================================================
 12. FETCH
@@ -423,11 +412,10 @@ remote main       → C
 
 Your local `main` remains unchanged.
 
-
+branch can be any but from branch
 =========================================================
 13. PULL
 =========================================================
-
 git pull
 → Fetches remote changes and integrates them into the current branch.
 
@@ -442,7 +430,6 @@ git merge
 Example while on `main`:
 
 git pull
-
 roughly means:
 
 git fetch
@@ -455,23 +442,18 @@ git fetch
 
 git pull
 → Download + integrate into current branch.
-
-
 =========================================================
 14. MERGE
 =========================================================
-
 git merge feature
 → Merges `feature` into the branch you are currently on.
 
 Example:
-
 Currently on:
 
 main
 
 Run:
-
 git merge feature
 
 Meaning:
@@ -488,13 +470,10 @@ git switch main
 git merge feature
 
 → Bring `feature` changes into `main`.
-
-
 =========================================================
 15. FAST-FORWARD MERGE
 =========================================================
-
-If the current branch has no unique commits and simply needs to move forward:
+If the current branch has no unique commits (no conflict)and simply needs to move forward:
 
 main:
 A → B
@@ -511,18 +490,15 @@ main:
 A → B → C
 
 No separate merge commit is required.
-
 This is called a fast-forward merge.
-
 
 =========================================================
 16. MERGE CONFLICT
 =========================================================
-
 Conflict happens when Git cannot automatically combine changes.
+no need to add and commit
 
 Common example:
-
 main changes the same part of `index.js`
 feature also changes that same part.
 
@@ -536,7 +512,6 @@ current branch code
 =======
 incoming branch code
 >>>>>>> feature
-
 You manually edit the file and decide which final code should remain.
 
 Then:
@@ -550,9 +525,10 @@ git commit
 Abort an unfinished merge:
 
 git merge --abort
-→ Returns to the state before the merge started.
 
-
+→ Cancels the current merge
+→ Returns your working tree and branch to the state before the merge started
+→ Use it when you have merge conflicts and want to cancel the merge
 =========================================================
 17. PUSH
 =========================================================
@@ -564,12 +540,10 @@ git push origin main
 → Push local `main` commits to remote `main`.
 
 First push of a new branch:
-
 git push -u origin feature
 
 `-u`
 → Sets the upstream/tracking relationship.
-
 After that, from the branch:
 
 git push
@@ -601,11 +575,10 @@ Clone normally:
 → creates `origin` remote
 → checks out the default branch.
 
-
+from which branch we commit that branch comes in clone
 =========================================================
 19. GIT CONFIG
 =========================================================
-
 Git configuration can exist at different levels:
 
 --local
@@ -618,47 +591,116 @@ Git configuration can exist at different levels:
 → entire machine/system.
 
 Set username:
-
 git config --global user.name "Name"
 
 Set email:
-
 git config --global user.email "email@example.com"
 
 View config:
-
 git config --global --list
 
 Remove a setting:
-
 git config --global --unset user.name
 
 For current repository only:
-
 git config --local --unset user.name
 
 `unset`
 → removes that specific configuration value.
 
-
 =========================================================
 20. GIT RESTORE
 =========================================================
-
+UNSTAGED → Working Directory
+---------------------------------------------------------
 git restore file.js
-→ Discards unstaged changes in the working directory for that file.
-→ Returns the file to the version from the index/staging state.
+→ Discards unstaged changes.
+→ Restores file from STAGING (index).
 
-Be careful:
-→ This can permanently discard local changes.
-
-Unstage:
-
+STAGED → Unstage
+---------------------------------------------------------
 git restore --staged file.js
-→ Removes the file from staging.
-→ Keeps your actual working changes.
+→ Removes file from staging.
+→ Keeps the working-directory changes.
+
+STAGED + WORKING → Discard Everything
+---------------------------------------------------------
+git restore --staged file.js
+git restore file.js
+→ First: unstage
+→ Second: discard working changes
+
+COMMITTED → Restore from a specific commit
+---------------------------------------------------------
+git restore --source=<commit> file.js
+→ Gets the file version from that commit.
+→ By default, puts it in the working directory.
+
+Example:
+git restore --source=HEAD~1 file.js
+→ Restores file.js from the previous commit.
+IMPORTANT
+---------------------------------------------------------
+git restore = changes files
+git reset    = mainly moves HEAD / changes staging
+git revert   = creates a NEW commit that undoes an old commit
 
 
+-->Git reset
+. GIT RESET
+=========================================================
+git reset file.js //same as git resotre --staged file.name
+→ Unstages the file.
+→ Keeps working changes.
+
+git reset
+→ Unstages all staged files.
+→ Keeps working changes.
+
+git reset --soft HEAD~1
+→ Removes the last commit.
+→ Keeps changes STAGED.
+
+git reset --mixed HEAD~1
+→ Removes the last commit.
+→ Keeps changes in WORKING DIRECTORY.
+→ Default reset mode.
+
+git reset --hard HEAD~1
+→ Removes the last commit.
+→ Removes the changes from working directory too.
+→ ⚠️ Can permanently discard changes.
+
+
+EASY TO REMEMBER:
+---------------------------------------------------------
+--soft   → commit removed → STAGED
+--mixed  → commit removed → UNSTAGED
+--hard   → commit removed → CHANGES DELETED
+
+
+. GIT REVERT
+=========================================================
+git revert <commit>
+→ Undoes the changes of an old commit.
+→ Creates a NEW commit.
+→ Does NOT delete or rewrite commit history.
+
+Example:
+git revert a1b2c3d
+
+A → B → C
+        ↓ revert C
+A → B → C → D
+
+D = new commit that undoes C.
+
+IMPORTANT:
+it revert removes/undoes the changes made by that commit, but it does not remove the commit itself from history.
+git reset  → moves/removes commits from history
+git revert → keeps history and creates a new undo commit
+
+Use revert for commits already pushed/shared with others.
 =========================================================
 21. REMOTE-TRACKING BRANCHES
 =========================================================

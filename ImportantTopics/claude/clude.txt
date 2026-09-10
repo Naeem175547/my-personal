@@ -1601,3 +1601,1503 @@ software task and clearly tell Claude:
     6. How the result should be verified
 
 ----->
+# WEEK 2 — CLAUDE CODE
+
+## WEEK 2 GOAL
+By the end of this week, you should be comfortable using Claude Code 
+as a real development tool inside a production repository.
+
+Claude Code
+    ↓
+CLI
+    ↓
+Sessions
+    ↓
+Commands
+    ↓
+Permissions
+    ↓
+File Operations
+    ↓
+Repository Exploration
+    ↓
+Production Workflow
+
+# WEEK 2 PLAN
+Day 1 → Claude Code + CLI fundamentals
+Day 2 → Sessions and conversation management
+Day 3 → Commands and command workflow
+Day 4 → Permissions and safety
+Day 5 → File operations
+Day 6 → Repository exploration
+Day 7 → Real project workflow + challenge
+
+# DAY 1 — CLAUDE CODE + CLI FUNDAMENTALS
+What is Claude Code?
+Claude Code is Claude's coding-focused command-line environment.
+Instead of only chatting with Claude:
+
+Browser
+  ↓
+Prompt
+  ↓
+Response
+
+you can work directly inside your project:
+
+Terminal
+   ↓
+Claude Code
+   ↓
+Your repository
+   ↓
+Files / Git / Commands / Tests
+
+The important difference is that Claude Code can work with the
+actual development environment through its available tools.
+
+# 2. Start Claude Code
+From your project directory:
+
+cd my-project
+
+Then start Claude Code:
+claude
+
+
+Conceptually:
+
+```text
+Terminal
+   ↓
+cd project
+   ↓
+claude
+   ↓
+Claude Code session
+```
+# 3. Why the Project Directory Matters
+Suppose your project is:
+my-chat-app/
+├── src/
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+Run:
+cd my-chat-app
+claude
+```Now Claude Code starts in the project context.
+
+You should normally start Claude Code from the repository you
+actually want to work on.
+---
+# 4. First Task
+Start Claude Code and ask:
+
+```text
+Inspect this repository.
+Do not modify anything.
+
+Give me a short overview of:
+- project type
+- framework
+- package manager
+- main directories
+- entry points
+- test setup
+```
+
+The important part:
+```text
+DO NOT MODIFY ANYTHING.
+```
+You are practicing investigation first.
+---
+# 5. CLI Mindset
+Claude Code is not just:
+
+Chat with AI
+Think:
+
+Claude Code
+    =
+AI + terminal-based development workflow
+
+It can help you:
+
+```text
+Explore
+Read
+Search
+Edit
+Create
+Run commands
+Test
+Debug
+Review
+```
+But you should control what it is allowed to do.
+
+---
+# DAY 1 EXERCISE 1
+Create a small project:
+
+```bash
+mkdir claude-week2
+cd claude-week2
+```
+Initialize Git:
+git init
+
+Create:
+
+src/
+README.md
+package.json
+
+Then start:
+claude
+
+Ask:
+
+```text
+Inspect this repository.
+
+Do not modify anything.
+
+Tell me:
+1. What files exist?
+2. What appears to be the project purpose?
+3. What information is missing?
+```
+# DAY 1 EXERCISE 2
+Inside an existing project, ask:
+```text
+Explore this repository without modifying anything.
+
+Start from the root.
+
+Identify:
+- package manager
+- framework
+- source directory
+- configuration files
+- test setup
+- build scripts
+
+Keep the response brief.
+# DAY 1 CHALLENGE
+Ask Claude Code:
+```text
+Do a read-only repository inspection.
+Do not edit, create, delete, install, or execute anything.
+
+Return:
+1. Project type
+2. Technology stack
+3. Entry point
+4. Important directories
+5. Configuration files
+6. Test setup
+7. Build command
+8. Three things I should understand before modifying this project
+
+# DAY 1 CHECKLIST
+
+* [ ] Know what Claude Code is
+* [ ] Know how to start Claude Code
+* [ ] Understand why you should start from the project directory
+* [ ] Can request read-only inspection
+* [ ] Can distinguish CLI workflow from normal chat
+
+# DAY 2 — SESSIONS
+# ============================================================
+## 1. What is a Session?
+A session is a working interaction with Claude Code.
+Conceptually:
+Session
+│
+├── Your requests
+├── Claude's responses
+├── Files inspected
+├── Commands
+├── Changes
+└── Task history
+Sessions are useful because development tasks often require
+multiple steps.
+
+Example:
+
+Session
+ ↓
+Inspect authentication
+ ↓
+Analyze problem
+ ↓
+Implement fix
+ ↓
+Run tests
+ ↓
+Review changes
+```
+# 2. Don't Mix Unrelated Tasks
+Bad workflow:
+
+```text
+Authentication
+ ↓
+React UI
+ ↓
+Database migration
+ ↓
+Docker
+ ↓
+RabbitMQ
+ ↓
+Authentication again
+```
+
+Better:
+
+```text
+Session 1 → Authentication
+Session 2 → React UI
+Session 3 → Database migration
+Session 4 → Docker
+```
+Keep the task focused.
+and this will also take less token because as long context in session as much more token it consums
+---
+
+# 3. Continuing Work(VVM)
+When continuing a task, give Claude a concise current objective.
+Example:
+```text
+Continue working on the authentication issue.
+First inspect the current state.
+Do not assume previous changes are correct.
+```
+This reinforces verification.
+---
+# 4. Session Exercise
+Start Claude Code.
+Ask:
+```text
+Inspect the authentication module.
+Do not modify anything.
+```
+Then:
+```text
+Now identify the likely source of the authentication problem.
+Still do not modify anything.
+```
+
+Then:
+```text
+Create a short implementation plan.
+Do not implement it.
+```
+You have now practiced a multi-step session:
+
+```text
+Inspect
+ ↓
+Analyze
+ ↓
+Plan
+```
+
+---
+
+# 5. Session Discipline
+For production work:
+
+```text
+One meaningful objective
+        ↓
+One focused session
+        ↓
+Clear progress
+        ↓
+Verification
+```
+
+# DAY 2 CHALLENGE
+Take this task:
+
+```text
+Add Redis caching to UserService.
+```
+Use a session to perform:
+
+```text
+Step 1 → Inspect
+Step 2 → Analyze
+Step 3 → Plan
+Step 4 → Wait
+```
+Do not implement.
+---
+
+# DAY 2 CHECKLIST
+
+* [ ] Understand sessions
+* [ ] Know why task focus matters
+* [ ] Can perform multi-step work in one session
+* [ ] Can separate unrelated tasks
+* [ ] Can use a session for investigation → analysis → planning
+
+
+1. Start a completely new session
+Inside Claude Code, use:
+/clear
+
+This clears the current conversation context and starts fresh.
+
+2. Resume an old session
+Exit Claude Code:
+exit
+
+Then run:
+claude --resume
+
+It will let you select a previous session.
+
+You can also see/use a specific session:
+claude --resume <session-id>
+
+# ============================================================
+# DAY 3 — COMMANDS
+# ============================================================
+## 1. Claude Code Commands
+
+Claude Code provides commands that control or inspect the Claude
+Code environment.
+
+You will learn the important commands progressively rather than
+memorizing every command.
+
+Start by checking the available help:
+```text
+/help
+```
+
+This is one of the most important habits:
+
+```text
+Don't memorize everything.
+Know how to discover what is available.
+```
+# 2. Help
+Use:
+/help
+to explore available commands and capabilities.
+
+Exercise:
+Open /help.
+
+Identify commands related to:
+- sessions
+- configuration
+- permissions
+- tools
+
+# 3. Exit
+To leave the current Claude Code session, use:
+/exit
+
+You should know how to cleanly leave a session rather than
+simply closing the terminal every time.
+
+---
+
+# 4. Other Command Categories
+During this week, pay attention to commands related to:
+
+```text
+Session management
+Configuration
+Permissions
+Context
+Tools
+Information
+```
+
+The exact command set can change with Claude Code versions, so
+use:
+
+/help
+as the authoritative reference for your installed version.
+
+# 5. Command Exercise
+Inside Claude Code:
+/help
+Then ask Claude:
+
+Explain the most important commands available in this
+installation.
+
+Group them into:
+
+1. Session
+2. Configuration
+3. Permissions
+4. Information
+
+Keep each explanation to one line.
+
+# DAY 3 CHALLENGE
+Create your own cheat sheet containing only commands you have
+actually verified in your Claude Code installation.
+
+Structure:
+command purpose
+
+ 1. Session
+  - /exit: Ends the current interactive session.
+           Use this when you have finished your coding task and want to return
+           to your standard terminal prompt.
+
+  - /login: Authenticates or switches your Claude account.
+            Use this when you first install the tool or need to switch from a
+             personal to a work account.
+           
+  - /clear: Resets the conversation history in the current session.
+            Use this when you are switching to a completely different feature or
+            bug and don't want the previous conversation to confuse the AI.
+  - /compact: Summarizes previous context to optimize token usage.
+             In a long conversation, the "context window" (the amount of text the AI can
+            remember) fills up with every message and code snippet you exchange. When this
+  happens:
+  1. Token Usage Increases: Each new message costs more and takes longer to
+     process.
+  2. "Noise" Increases: The AI might start getting confused by old, irrelevant
+     details from the beginning of the session.
+
+  When you run /compact, Claude takes the entire conversation history and
+  rewrites it into a concise summary. It keeps the important decisions, the
+  current state of the code, and the goals you've established, but deletes the
+  "fluff" (the trial-and-error steps, typos, and repeated explanations).
+
+  When should you use it?
+
+  - The "Lag" feeling: If you notice the AI taking longer than usual to start
+    responding.
+  - Context Limit Warnings: If the system warns you that the conversation is
+    getting too long.
+  - Topic Shift: If you've spent two hours fixing one bug and are now moving to
+    a completely different part of the project, but don't want to /clear the
+    whole session because you still need some of the high-level context.
+   The Trade-off:
+  The only downside is that you lose the "exact" wording of the early parts of
+  the chat. If you need to go back and see exactly what a specific error message
+  looked like from 50 messages ago, that detail might be summarized rather than
+  preserved word-for-word.
+
+
+
+  2. Configuration
+  - /config: Adjusts general settings like theme and default model.
+  - /fast: Toggles fast-output mode for compatible models.
+  - update-config: Modifies settings.json to set environment variables and
+    hooks.
+
+  3. Permissions
+  - settings.json: Defines tool allowlists to reduce manual approval prompts.
+  - fewer-permission-prompts: Analyzes history to automatically suggest
+    permission allowlists.
+
+  4. Information
+  - /help: Lists all available commands, skills, and usage tips.
+  - /tasks: Displays the current task list and overall project progress.
+  - claude --version: Verifies the installed version of the CLI tool.
+
+# ============================================================
+# DAY 4 — PERMISSIONS AND SAFETY
+## 1. Why Permissions Matter
+Claude Code may be able to perform actions that affect your
+development environment.
+
+Examples:
+
+```text
+Read files
+Edit files
+Create files
+Delete files
+Run commands
+Install packages
+Run tests
+Use tools
+```
+Therefore:
+
+Capability
+    +
+Permission
+    =
+Controlled automation
+
+# 2. Read vs Write vs Execute
+
+Think of operations in three broad categories:
+
+```text
+READ
+ ↓
+Inspect files
+Search code
+Read configuration
+
+WRITE
+ ↓
+Create files
+Edit files
+Delete files
+
+EXECUTE
+ ↓
+Run commands
+Run tests
+Install packages
+Build application
+
+The risk generally increases as Claude gets more ability to
+change or execute things.
+
+# 3. Permission Discipline
+For an unfamiliar repository:
+
+
+Start
+ ↓
+Read-only investigation
+ ↓
+Understand architecture
+ ↓
+Review plan
+ ↓
+Allow modifications
+ ↓
+Verify changes
+Don't immediately give broad freedom.
+
+# 4. Dangerous Operations
+Be especially careful with:
+
+```bash
+rm
+rm -rf
+git reset
+git clean
+database migrations
+database deletion
+package installation
+production commands
+deployment commands
+```
+Claude should not blindly execute destructive operations.
+# 5. Permission Exercise
+
+Tell Claude:
+
+```text
+Inspect this repository.
+Do not modify files.
+Do not install dependencies.
+Do not run destructive commands.
+Do not change Git state.
+
+Only investigate and report your findings.
+```
+observe how it behaves.
+
+# 6. Permission Challenge
+Ask Claude:
+```text
+I want to add a database migration.
+Before running any command:
+
+1. Explain what the migration will change.
+2. Identify affected tables.
+3. Identify possible data-loss risks.
+4. Tell me which commands you would need.
+5. Wait for approval before executing anything.
+```
+This is a production-oriented habit.
+
+# 7. Golden Safety Rule
+Never treat:
+Claude says "I can do it"
+
+as equivalent to:
+The operation is safe.
+
+You remain responsible for:
+
+Code
+Database
+Credentials
+Git history
+Infrastructure
+Production systems
+
+
+# DAY 4 CHECKLIST
+
+* [ ] Understand permissions
+* [ ] Understand read/write/execute
+* [ ] Know why permissions matter
+* [ ] Can request read-only work
+* [ ] Recognize destructive commands
+* [ ] Can require approval before risky actions
+
+# ============================================================
+# DAY 5 — FILE OPERATIONS
+# ============================================================
+## 1. File Operations
+Claude Code can work with project files.
+Typical operations include:
+Read
+Search
+Create
+Edit
+Delete
+
+# 2. Reading Files
+Example request:
+
+Read src/auth/auth.service.ts.
+Do not modify it.
+Explain its responsibilities.
+
+# 3. Searching Files
+Example:
+Find all references to JwtService in this repository.
+Do not modify anything.
+This is more efficient than manually opening every file.
+
+# 4. Editing Files
+Do not start with:
+```text
+Rewrite the entire authentication system.
+```
+Instead:
+Modify only the authentication service.
+Make the smallest change required to fix the bug.
+Do not modify unrelated files.
+
+# 5. Creating Files
+Example:
+Create a test file for UserService.
+First inspect the existing test structure.
+Follow the existing conventions.
+
+# 6. Deleting Files.
+Deletion should be explicit.
+
+Example:
+Identify unused authentication files.
+Do not delete anything.
+Show me the files you believe are safe to remove and explain why.
+`
+Only after review:
+
+```text
+Delete the files we identified.
+Do not delete anything else.
+
+# 7. Minimal Changes
+For production development, prefer:
+
+Small change
+   ↓
+Test
+   ↓
+Review
+   ↓
+Next change
+
+rather than:
+
+Huge rewrite
+   ↓
+100 changed files
+   ↓
+Unknown problems
+
+# DAY 5 EXERCISE 1
+
+Ask Claude:
+Find the User entity and UserService.
+Do not modify anything.
+Explain:
+- where they are located
+- their responsibilities
+- how they are related
+
+# DAY 5 EXERCISE 2
+Ask:
+Find every place where UserService is imported.
+Do not modify anything.
+
+Return:
+- file path
+- reason for the import
+
+# DAY 5 EXERCISE 3
+Ask:
+Create a unit test for UserService.
+Before creating it:
+
+1. Inspect existing tests.
+2. Identify the testing framework.
+3. Identify existing conventions.
+4. Explain where the new test should go.
+
+Do not create the file yet.
+
+Then review Claude's plan.
+
+# DAY 5 CHALLENGE
+Use your actual NestJS project.
+Ask Claude:
+
+```text
+I want to modify UserService.
+
+First:
+
+1. Locate UserService.
+2. Find all callers.
+3. Find related tests.
+4. Find the User entity.
+5. Find related repository/database code.
+6. Explain the dependency chain.
+
+Do not modify anything.
+```
+
+This prepares you for repository exploration.
+
+---
+
+# DAY 5 CHECKLIST
+
+* [ ] Can ask Claude to read files
+* [ ] Can search repository files
+* [ ] Understand file creation
+* [ ] Understand file editing
+* [ ] Understand safe deletion workflow
+* [ ] Understand minimal changes
+* [ ] Can trace dependencies before editing
+
+# ============================================================
+# DAY 6 — REPOSITORY EXPLORATION
+# ============================================================
+
+This is one of the most important Claude Code skills.
+
+Your goal is to learn:
+
+```text
+Don't immediately edit.
+
+Explore first.
+```
+
+---
+
+# 1. Start From the Root
+
+Ask:
+
+```text
+Explore this repository from the root.
+
+Do not modify anything.
+
+Identify the overall architecture.
+```
+
+---
+
+# 2. Identify Project Structure
+
+For your NestJS project, Claude should be able to identify
+things such as:
+
+```text
+src/
+├── auth/
+├── users/
+├── posts/
+├── common/
+├── database/
+├── graphql/
+└── main.ts
+```
+
+The exact structure depends on the project.
+
+---
+
+# 3. Find Entry Points
+
+Ask:
+
+```text
+Identify the application entry point.
+
+Explain how the application starts.
+```
+
+For NestJS, this will commonly involve:
+
+```text
+main.ts
+```
+
+but Claude should verify the actual repository instead of
+assuming.
+
+---
+
+# 4. Find Configuration
+
+Ask:
+
+```text
+Find configuration files.
+
+Explain:
+- environment configuration
+- database configuration
+- GraphQL configuration
+- Redis configuration
+- authentication configuration
+```
+
+---
+
+# 5. Trace a Feature
+
+Suppose you want to understand login.
+
+Don't ask:
+
+```text
+Explain login.
+```
+
+Instead:
+
+```text
+Trace the login flow from the GraphQL mutation to the database.
+
+Identify:
+
+1. Resolver
+2. Service
+3. Repository/database access
+4. Password verification
+5. JWT generation
+6. Response
+
+Do not modify anything.
+```
+
+Now Claude is exploring the actual architecture.
+
+---
+
+# 6. Dependency Exploration
+
+Ask:
+
+```text
+Trace all dependencies involved in UserService.
+
+Start with UserService and move outward.
+
+Do not modify anything.
+
+Return a concise dependency map.
+```
+
+You may get something conceptually like:
+
+```text
+GraphQL Resolver
+       ↓
+UserService
+       ↓
+UserRepository
+       ↓
+TypeORM
+       ↓
+MySQL
+```
+
+---
+
+# 7. Find Related Tests
+
+Ask:
+
+```text
+Find all tests related to authentication.
+
+Explain what behavior each test verifies.
+```
+
+---
+
+# 8. Find Configuration Dependencies
+
+Ask:
+
+```text
+Trace how JWT configuration reaches the authentication service.
+
+Do not modify anything.
+```
+
+This teaches you to understand data/configuration flow.
+
+---
+
+# DAY 6 EXERCISE 1 — PROJECT MAP
+
+Ask Claude:
+
+```text
+Create a concise architecture map of this repository.
+
+Do not modify anything.
+
+Include:
+
+- entry point
+- modules
+- database
+- authentication
+- GraphQL
+- Redis
+- external integrations
+- tests
+
+Only include things actually present in the repository.
+```
+
+---
+
+# DAY 6 EXERCISE 2 — TRACE AUTHENTICATION
+
+Ask:
+
+```text
+Trace the complete login flow.
+
+Start from the GraphQL operation.
+
+Follow the request through:
+
+Resolver
+→ Service
+→ Database
+→ Password verification
+→ JWT
+→ Response
+
+Do not modify anything.
+
+Mention actual file paths.
+```
+
+---
+
+# DAY 6 EXERCISE 3 — TRACE DATABASE
+
+Ask:
+
+```text
+Trace how a User is loaded from the database.
+
+Identify:
+
+1. Resolver/controller
+2. Service
+3. Repository
+4. Entity
+5. ORM
+6. Database configuration
+
+Do not modify anything.
+```
+
+---
+
+# DAY 6 CHALLENGE — UNKNOWN BUG
+
+Give Claude this:
+
+```text
+There is a bug in the authentication system.
+
+I don't know where the problem is.
+
+Do not modify anything.
+
+Investigate systematically.
+
+Start from the authentication entry point.
+
+Trace:
+- request
+- resolver
+- guard
+- service
+- database
+- JWT
+- response
+
+For each stage:
+- identify relevant files
+- explain what happens
+- identify suspicious behavior
+
+Do not guess when evidence is missing.
+```
+
+This is your first serious repository-exploration exercise.
+
+---
+
+# DAY 6 CHECKLIST
+
+* [ ] Can explore a repository from the root
+* [ ] Can identify architecture
+* [ ] Can find entry points
+* [ ] Can find configuration
+* [ ] Can trace feature flow
+* [ ] Can trace dependencies
+* [ ] Can trace database flow
+* [ ] Can trace authentication flow
+* [ ] Can find relevant tests
+* [ ] Can investigate without modifying code
+
+---
+
+# ============================================================
+
+# DAY 7 — REAL PRODUCTION WORKFLOW
+
+# ============================================================
+
+Now combine everything.
+
+Your workflow should become:
+
+```text
+START
+  ↓
+Open repository
+  ↓
+Start Claude Code
+  ↓
+Inspect
+  ↓
+Explore
+  ↓
+Understand
+  ↓
+Plan
+  ↓
+Review plan
+  ↓
+Implement
+  ↓
+Test
+  ↓
+Inspect changes
+  ↓
+Verify
+```
+
+---
+
+# DAY 7 PROJECT
+
+Use your actual NestJS project.
+
+Choose one real feature.
+
+Recommended:
+
+```text
+Authentication
+```
+
+or:
+
+```text
+Redis caching
+```
+
+or:
+
+```text
+RabbitMQ notification
+```
+
+---
+
+# STEP 1 — INITIAL EXPLORATION
+
+Ask:
+
+```text
+Explore this repository.
+
+Do not modify anything.
+
+Create a concise map of the project architecture.
+
+Identify the modules relevant to my selected feature.
+```
+
+---
+
+# STEP 2 — FEATURE EXPLORATION
+
+Ask:
+
+```text
+Now trace the complete flow of [FEATURE].
+
+Do not modify anything.
+
+Identify:
+- entry point
+- relevant modules
+- services
+- database access
+- external dependencies
+- tests
+- configuration
+```
+
+---
+
+# STEP 3 — PROBLEM DEFINITION
+
+Tell Claude the actual requirement.
+
+Example:
+
+```text
+I want to add Redis caching to user lookup.
+
+Requirements:
+
+- cache user lookup by ID
+- TTL should be 60 seconds
+- invalidate cache after user update
+- application should continue working if Redis is unavailable
+```
+
+---
+
+# STEP 4 — PLAN
+
+Ask:
+
+```text
+Before modifying anything:
+
+Create an implementation plan.
+
+Include:
+
+1. Files to modify
+2. Files to create
+3. Dependencies
+4. Data flow
+5. Error handling
+6. Cache invalidation
+7. Tests
+8. Risks
+
+Do not implement yet.
+```
+
+---
+
+# STEP 5 — REVIEW
+
+You review the plan.
+
+Ask yourself:
+
+```text
+Is the architecture correct?
+
+Are unrelated files being changed?
+
+Is the failure behavior acceptable?
+
+Is cache invalidation correct?
+
+Are security concerns addressed?
+
+Are tests included?
+```
+
+---
+
+# STEP 6 — IMPLEMENT
+
+Only after you understand the plan:
+
+```text
+Implement the approved plan.
+
+Rules:
+
+- Make the smallest necessary changes.
+- Do not modify unrelated modules.
+- Follow existing project conventions.
+- Do not introduce unnecessary dependencies.
+- Add or update tests.
+```
+
+---
+
+# STEP 7 — VERIFY
+
+After implementation:
+
+```text
+Verify the implementation.
+
+Run the relevant tests.
+
+Check:
+- TypeScript
+- lint
+- tests
+- build
+- git diff
+
+Look for:
+- unintended changes
+- missing error handling
+- broken existing behavior
+- missing tests
+
+Report failures honestly.
+```
+
+---
+
+# STEP 8 — REVIEW THE DIFF
+
+Ask:
+
+```text
+Review the current git diff.
+
+Identify:
+
+1. Intended changes
+2. Unintended changes
+3. Potential bugs
+4. Security concerns
+5. Missing tests
+6. Unnecessary complexity
+
+Do not modify anything.
+```
+
+---
+
+# DAY 7 FINAL CHALLENGE
+
+Complete this workflow on a real feature:
+
+```text
+Repository exploration
+        ↓
+Feature exploration
+        ↓
+Requirement
+        ↓
+Implementation plan
+        ↓
+Human review
+        ↓
+Implementation
+        ↓
+Testing
+        ↓
+Git diff review
+        ↓
+Final verification
+```
+
+Do not skip the exploration stage.
+
+Do not allow Claude to make large unrelated changes.
+
+Do not consider the task complete simply because Claude says
+it is complete.
+
+---
+
+# ============================================================
+
+# WEEK 2 — FINAL CLAUDE CODE MENTAL MODEL
+
+# ============================================================
+
+Remember:
+
+```text
+CLAUDE CODE
+     ↓
+PROJECT
+     ↓
+EXPLORE
+     ↓
+UNDERSTAND
+     ↓
+PLAN
+     ↓
+CONTROL PERMISSIONS
+     ↓
+MODIFY
+     ↓
+TEST
+     ↓
+REVIEW
+     ↓
+VERIFY
+```
+
+Your most important skills this week are not memorizing CLI
+commands.
+
+They are:
+
+```text
+1. Starting Claude Code correctly
+2. Managing focused sessions
+3. Discovering commands
+4. Controlling permissions
+5. Handling files safely
+6. Exploring an unfamiliar repository
+7. Tracing real application flows
+8. Preventing unnecessary modifications
+9. Reviewing changes
+10. Verifying the result
+```
+
+---
+
+# WEEK 2 — MASTER CHECKLIST
+
+## CLI
+
+* [ ] Can start Claude Code from a repository
+* [ ] Understand Claude Code's CLI workflow
+* [ ] Can use help to discover available commands
+
+## Sessions
+
+* [ ] Understand sessions
+* [ ] Can maintain a focused development task
+* [ ] Can separate unrelated work
+
+## Commands
+
+* [ ] Know how to access command help
+* [ ] Know how to exit a session
+* [ ] Can discover commands instead of memorizing everything
+
+## Permissions
+
+* [ ] Understand read/write/execute
+* [ ] Can request read-only investigation
+* [ ] Recognize destructive operations
+* [ ] Know when human approval is important
+
+## File Operations
+
+* [ ] Read files
+* [ ] Search files
+* [ ] Create files
+* [ ] Modify files
+* [ ] Safely handle deletion
+* [ ] Prefer minimal changes
+
+## Repository Exploration
+
+* [ ] Map repository structure
+* [ ] Find entry points
+* [ ] Find configuration
+* [ ] Trace features
+* [ ] Trace dependencies
+* [ ] Trace database flow
+* [ ] Trace authentication flow
+* [ ] Find relevant tests
+
+## Production Workflow
+
+* [ ] Explore before modifying
+* [ ] Plan before implementing
+* [ ] Review before large changes
+* [ ] Test after implementation
+* [ ] Inspect git diff
+* [ ] Verify final result
+
+````
+
+# WEEK 2 GOLDEN RULE
+
+```text
+DO NOT USE CLAUDE CODE AS:
+
+"Give it a task and let it change everything."
+
+USE CLAUDE CODE AS:
+
+"An engineering agent working inside a controlled repository,
+where I decide the objective, review important decisions,
+control risky operations, and verify the final result."
+````
+
+# END OF WEEK 2
+
+At this point you should be comfortable with:
+
+```text
+Week 1
+Claude fundamentals
+Prompt engineering
+Context
+Instructions
+Tokens
+        ↓
+Week 2
+Claude Code
+CLI
+Sessions
+Commands
+Permissions
+File operations
+Repository exploration
+```
+
+Next week can move into **Claude Code's deeper agent workflow**, where you start learning how to use it efficiently for actual production development rather than just basic interaction.

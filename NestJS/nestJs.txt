@@ -9371,3 +9371,14 @@ nodemailer.createTransport({
     pass: 'your-app-password',
   },
 });
+
+These values come from the SMTP email provider you want Nodemailer to use. If you're using Gmail, here's what each one means:
+| `.env` variable | Gmail value                      | Where it comes from            |
+| --------------- | -------------------------------- | ------------------------------ |
+| `MAIL_HOST`     | `smtp.gmail.com`                 | Gmail SMTP server              |
+| `MAIL_PORT`     | `587`                            | Gmail SMTP port                |
+| `MAIL_USER`     | `yourgmail@gmail.com`            | Your Gmail address             |
+| `MAIL_PASS`     | `your 16-character App Password` | Google Account → App Passwords |
+
+--->
+

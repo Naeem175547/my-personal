@@ -1190,7 +1190,8 @@ bootstrap();
 
 
 when we use monolithic and want to use same things or double configuration then we use 
-connectMicroservice()(as studied in microservices)
+connectMicroservice()(as studied in microservices) for consumer or receipent.
+or in monolithic we can use jsut promise for async tasks. no need rabbitmq
 
 note-> for in monolithic(in modules)
 Option 1 — Separate queue
@@ -1210,7 +1211,7 @@ queue: 'mail_queue'
 and
 queue: 'notification_queue'
 
-main_queue and notification_queue will be seprate modules and will have seprate configuration
+main_queue and notification_queue will be seprate modules and will have seprate configuration for producer
 
 
 
