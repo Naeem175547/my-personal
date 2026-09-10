@@ -12,6 +12,8 @@ import { AuthModule } from './auth/auth.module.js';
 import { MessageModule } from './message/message.module.js';
 import { ChannelModule } from './channel/channel.module.js';
 import { WorkspaceModule } from './workspace/workspace.module.js';
+import { MailModule } from './mail/mail.module.js';
+import { RabbitmqModule } from './rabbitmq/rabbitmq.module.js';
 
 @Module({
   imports: [
@@ -46,6 +48,8 @@ import { WorkspaceModule } from './workspace/workspace.module.js';
     MessageModule,
     ChannelModule,
     WorkspaceModule,
+    MailModule,
+    RabbitmqModule,
   ],
 
   controllers: [AppController],

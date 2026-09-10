@@ -348,7 +348,6 @@ Package:
 @nestjs/microservices
 
 Transport:
-
 Transport.RMQ
 ============================================================
 29. NESTJS RABBITMQ MICROservice
@@ -489,8 +488,6 @@ this.client.emit(
     'user.created',
     user
 );
-
-
 ============================================================
 34. RABBITMQ MICROSERVICES
 ============================================================
@@ -504,7 +501,6 @@ this.client.emit(
     User Service    Email Service
         ↓                 ↓
       MySQL          Email Provider
-
 
 User Service:
 
@@ -520,7 +516,6 @@ RabbitMQ
 Receive event
      ↓
 Send email
-
 ============================================================
 35. COMPETING CONSUMERS
 ============================================================
@@ -650,7 +645,6 @@ ACK
 +
 Idempotent Consumer
 
-
 is very important.
 ============================================================
 41. MESSAGE ORDER
@@ -669,14 +663,13 @@ in distributed systems.
 ============================================================
 RPC means:
 Remote Procedure Call.
-Service A:
 
+Service A:
 "Give me User 10"
 
 
 RabbitMQ
     ↓
-
 
 Service B:
 
@@ -837,11 +830,10 @@ BullMQ:
 
 Main purpose:
 Background Job Queue
-
+microservice communicate
 
 Uses:
 Redis
-
 
 Good for:
 
@@ -850,7 +842,6 @@ Good for:
 - Scheduled jobs
 - Retry
 - Job processing
-
 
 ============================================================
 50. WHEN TO USE WHAT?
@@ -1005,91 +996,6 @@ send()
   ↓
 @MessagePattern()
 
-
-============================================================
-55. LEARNING ORDER
-============================================================
-
-
-PHASE 1 — QUEUE BASICS
-
-✓ Why queues
-✓ Jobs
-✓ Producer
-✓ Consumer
-✓ Queue
-✓ Message
-
-
-PHASE 2 — RABBITMQ CORE
-
-✓ Broker
-✓ Connection
-✓ Channel
-✓ Exchange
-✓ Binding
-✓ Routing Key
-✓ Direct Exchange
-✓ Fanout Exchange
-✓ Topic Exchange
-
-
-PHASE 3 — NESTJS
-
-✓ @nestjs/microservices
-✓ Transport.RMQ
-✓ ClientProxy
-✓ emit()
-✓ send()
-✓ @EventPattern()
-✓ @MessagePattern()
-
-
-PHASE 4 — RELIABILITY
-
-✓ ACK
-✓ NACK
-✓ Prefetch
-✓ Durable Queue
-✓ Persistent Message
-✓ Retry
-✓ DLX
-✓ DLQ
-
-
-PHASE 5 — SCALING
-
-✓ Multiple consumers
-✓ Competing consumers
-✓ Horizontal scaling
-✓ Load distribution
-✓ Consumer failure
-
-
-PHASE 6 — DISTRIBUTED SYSTEMS
-
-✓ Idempotency
-✓ At-least-once delivery
-✓ Message ordering
-✓ RPC
-✓ Correlation ID
-✓ Trace ID
-
-
-PHASE 7 — ADVANCED
-
-✓ Outbox Pattern
-✓ Saga Pattern
-✓ Distributed transactions
-✓ Publisher confirms
-✓ Failure recovery
-✓ Monitoring
-✓ Security
-✓ TLS
-✓ High availability
-✓ RabbitMQ clustering
-
-
 ============================================================
 56. FINAL ARCHITECTURE
 ============================================================
@@ -1124,3 +1030,291 @@ PHASE 7 — ADVANCED
 
 
 ============================================================
+
+--->
+For your setup, remember:
+
+RabbitMQ
+├── 5672   → application connection
+└── 15672  → management UI
+
+Redis
+└── 6379   → Redis connection
+
+So when we configure RabbitMQ, we'll use:
+RABBITMQ_URL=amqp://localhost:5672
+And 15672 is specifically RabbitMQ's management dashboard port.
+use guest and guest as username and password for RabbitMQ dashboard credentials
+
+--->
+now code configuration this will be same for module /Microservices
+
+Put this: at producer side
+
+import { Module } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitMqService } from './rabbitmq.service.js';
+
+@Module({
+  imports: [
+    ClientsModule.register([
+      {
+        name: 'RABBITMQ_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://localhost:5672'],
+          queue: 'mail_queue',
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+    ]),
+  ],
+
+  providers: [RabbitMqService],
+  exports: [RabbitMqService],
+})
+export class RabbitmqModule {}
+
+Understand the important part
+
+name->will be used to inject client
+
+transport: Transport.RMQ
+means:
+NestJS should use RabbitMQ transport.
+
+urls: ['amqp://localhost:5672']
+means:
+Connect to the RabbitMQ server running 
+
+queue: 'app_queue'//just name
+means:
+We'll use a RabbitMQ queue named app_queue for our mail messages. 
+
+queueOptions: {
+  durable: true,
+}
+durable: true,
+means RabbitMQ should keep the queue even if RabbitMQ itself restarts.
+
+the code I gave you is the RabbitMQ client/producer configuration.
+
+But there's an important distinction:
+Producer side
+This part:
+
+ClientsModule.register([
+  {
+    name: 'RABBITMQ_SERVICE',
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'mail_queue',
+      queueOptions: {
+        durable: true,
+      },
+    },
+  },
+])
+
+creates a RabbitMQ client that your NestJS services can use to publish messages.
+So yes, the ClientsModule.register() configuration belongs to the producer/client side.
+
+UserService
+    ↓
+RabbitMqService
+    ↓
+RabbitMQ
+Consumer side
+
+The consumer is separate:
+The consumer needs its own NestJS microservice configuration, typically in main.ts:
+when microservices
+
+import { NestFactory } from '@nestjs/core';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'mail_queue',
+        queueOptions: {
+          durable: true,
+        },
+      },
+    },
+  );
+
+  await app.listen();
+}
+
+bootstrap();
+
+
+@EventPattern('send_mail')
+async handleMail(@Payload() data: any) {
+  await this.mailService.sendMail(
+    data.to,
+    data.subject,
+    data.body,
+  );
+}
+
+in monolithic->
+use double configuration for consumer
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'mail_queue',
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
+  await app.listen(3000);
+}
+bootstrap();
+
+
+
+when we use monolithic and want to use same things or double configuration then we use 
+connectMicroservice()(as studied in microservices)
+
+note-> for in monolithic(in modules)
+Option 1 — Separate queue
+If notification processing is different from email processing:
+
+RabbitMQ
+│
+├── mail_queue
+│     └── Email producer
+│
+└── notification_queue
+      └── Notification producer
+
+Your RabbitMQ configuration would have both:
+queue: 'mail_queue'
+
+and
+queue: 'notification_queue'
+
+main_queue and notification_queue will be seprate modules and will have seprate configuration
+
+
+
+for consumer:
+at main.ts
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'mail_queue',
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'notification_queue',
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
+
+  await app.listen(3000);
+}
+bootstrap();
+
+
+
+
+Option 2 — Same queue
+If you're just starting, you can also use one queue:
+
+RabbitMQ
+│
+└── app_queue
+      ├── send_mail
+      ├── send_notification
+      └── user_created
+
+for consumer
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: ['amqp://localhost:5672'],
+      queue: 'app_queue',
+      queueOptions: {
+        durable: true,
+      },
+    },
+  });
+
+  await app.startAllMicroservices();
+
+  await app.listen(3000);
+}
+bootstrap();
+
+
+
+The event pattern distinguishes the messages:
+
+this.rabbitMqProducer.emit('send_mail', data);
+this.rabbitMqProducer.emit('send_notification', data);
+
+best things is that use producer in rabbitmq module and consumer in that module for which we want to handle consume
+
+note->
+ In NestJS, when you use RabbitMQ's @EventPattern() / @MessagePattern(), the consumer handler is normally placed inside a class decorated with @Controller().
+
+@Controller()
+export class RabbitMqConsumer {
+
+  @EventPattern('send_mail')
+  async handleMail(@Payload() data: any) {
+    // consume message
+  }
+
+}
+
+--->
+emit() vs send()
+
+
+emit('send_mail', data)
+
+→ event/message goes to RabbitMQ queue
+→ Consumer handles it
+→ No response is expected.
+
+send('validate_user', data)
+
+→ message goes to RabbitMQ queue
+→ Consumer processes it
+→ Consumer can return a response.

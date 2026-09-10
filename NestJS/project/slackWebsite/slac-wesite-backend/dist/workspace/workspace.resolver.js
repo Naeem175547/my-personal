@@ -17,6 +17,7 @@ import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
 import { WorkspaceResponse, WorkspacesResponse } from './dto/workspace.type.js';
 import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
+import { WorkspaceMemberResponse, } from './dto/workspace.member.type.js';
 let WorkspaceResolver = class WorkspaceResolver {
     workspaceService;
     constructor(workspaceService) {
@@ -35,7 +36,7 @@ let WorkspaceResolver = class WorkspaceResolver {
     }
     getWorkspacesOfUserByMember(context) {
         const userId = context.req.user.id;
-        return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
+        return this.workspaceService.getAllWorkspacesByMemberId(userId);
     }
     getWorkSpace(workspaceId, context) {
         const userId = context.req.user.id;
@@ -49,6 +50,14 @@ let WorkspaceResolver = class WorkspaceResolver {
         const userId = context.req.user.id;
         console.log('UPDATE INPUT:', updateWorkspaceInput);
         return this.workspaceService.UpdateWorkspaceService(workspaceId, updateWorkspaceInput, userId);
+    }
+    addMemberToWorkspace(context, workspaceId, memberId) {
+        const userId = context.req.user.id;
+        return this.workspaceService.addMemberToWorkspaceService(workspaceId, memberId, userId);
+    }
+    addChannelToWorkspace(context, workspaceId, channelName) {
+        const userId = context.req.user.id;
+        return this.workspaceService.addChannelToWorkspaceService(workspaceId, channelName, userId);
     }
 };
 __decorate([
@@ -99,6 +108,24 @@ __decorate([
     __metadata("design:paramtypes", [Number, UpdateWorkspaceInput, Object]),
     __metadata("design:returntype", void 0)
 ], WorkspaceResolver.prototype, "UpdateWorkspace", null);
+__decorate([
+    Mutation(() => WorkspaceMemberResponse),
+    __param(0, Context()),
+    __param(1, Args('workspaceId')),
+    __param(2, Args('memberId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, Number]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "addMemberToWorkspace", null);
+__decorate([
+    Mutation(() => WorkspaceResponse),
+    __param(0, Context()),
+    __param(1, Args('workspaceId')),
+    __param(2, Args('channelName')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, String]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "addChannelToWorkspace", null);
 WorkspaceResolver = __decorate([
     UseGuards(AuthGuards),
     Resolver(),

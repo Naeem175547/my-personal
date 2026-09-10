@@ -6,3 +6,8 @@ export declare class WorkspaceMember {
     createdAt: Date;
     updatedAt: Date;
 }
+export declare class WorkspaceMemberResponse {
+    success: boolean;
+    message: string;
+    data: WorkspaceMember;
+}

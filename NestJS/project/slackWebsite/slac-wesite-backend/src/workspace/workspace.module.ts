@@ -8,6 +8,7 @@ import { UserModule } from '../user/user.module.js';
 import { WorkRepository } from './workspace.repository.js';
 import { ChannelModule } from '../channel/channel.module.js';
 import { ChannelEntity } from '../channel/entity/channel.entity.js';
+import { RabbitmqModule } from '../rabbitmq/rabbitmq.module.js';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ChannelEntity } from '../channel/entity/channel.entity.js';
     ]),
     UserModule,
     ChannelModule,
+    RabbitmqModule,
   ],
   providers: [WorkspaceService, WorkspaceResolver, WorkRepository],
 })

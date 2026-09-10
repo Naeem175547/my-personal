@@ -12,12 +12,15 @@ import { GraphQLError } from 'graphql/error/index.js';
 import { WorkRepository } from './workspace.repository.js';
 import { v4 as uuidv4 } from 'uuid';
 import { UserService } from '../user/user.service.js';
+import { RabbitMqProducer } from '../rabbitmq/rabbitmq.producer.js';
 let WorkspaceService = class WorkspaceService {
     workspaceRepository;
     userService;
-    constructor(workspaceRepository, userService) {
+    rabbitmqproducer;
+    constructor(workspaceRepository, userService, rabbitmqproducer) {
         this.workspaceRepository = workspaceRepository;
         this.userService = userService;
+        this.rabbitmqproducer = rabbitmqproducer;
     }
     isUserAdminOfWorkspace(workspace, userId) {
         const member = workspace.members.find((member) => member.user.id === userId && member.role === 'admin');
@@ -96,7 +99,7 @@ let WorkspaceService = class WorkspaceService {
             });
         }
     }
-    async getWorkspacesUserIsMemberOfService(userId) {
+    async getAllWorkspacesByMemberId(userId) {
         try {
             const resonse = await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
             return resonse;
@@ -213,7 +216,7 @@ let WorkspaceService = class WorkspaceService {
             });
         }
     }
-    async addMemberToWorkspaceService(workspaceId, memberId, role, userId) {
+    async addMemberToWorkspaceService(workspaceId, memberId, userId) {
         try {
             const workspace = await this.workspaceRepository.findById(workspaceId);
             if (!workspace) {
@@ -251,7 +254,10 @@ let WorkspaceService = class WorkspaceService {
                     },
                 });
             }
-            return await this.workspaceRepository.addMemberToWorkspace(workspaceId, memberId, role);
+            const result = await this.workspaceRepository.addMemberToWorkspace(workspaceId, memberId, 'admin');
+            console.log(member.email);
+            this.rabbitmqproducer.sendMail(member.email, 'added to workSpace', 'congratulation you have been successfully added to workspace');
+            return result;
         }
         catch (error) {
             if (error instanceof GraphQLError) {
@@ -312,7 +318,8 @@ let WorkspaceService = class WorkspaceService {
 WorkspaceService = __decorate([
     Injectable(),
     __metadata("design:paramtypes", [WorkRepository,
-        UserService])
+        UserService,
+        RabbitMqProducer])
 ], WorkspaceService);
 export { WorkspaceService };
 //# sourceMappingURL=workspace.service.js.map

@@ -5,6 +5,10 @@ import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
 import { WorkspaceResponse, WorkspacesResponse } from './dto/workspace.type.js';
 import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
+import {
+  WorkspaceMember,
+  WorkspaceMemberResponse,
+} from './dto/workspace.member.type.js';
 @UseGuards(AuthGuards)
 @Resolver()
 export class WorkspaceResolver {
@@ -32,7 +36,7 @@ export class WorkspaceResolver {
   @Query(() => WorkspacesResponse)
   getWorkspacesOfUserByMember(@Context() context: any) {
     const userId = context.req.user.id;
-    return this.workspaceService.getWorkspacesUserIsMemberOfService(userId);
+    return this.workspaceService.getAllWorkspacesByMemberId(userId);
   }
 
   @Query(() => WorkspaceResponse)
@@ -68,6 +72,34 @@ export class WorkspaceResolver {
     return this.workspaceService.UpdateWorkspaceService(
       workspaceId,
       updateWorkspaceInput,
+      userId,
+    );
+  }
+
+  @Mutation(() => WorkspaceMemberResponse)
+  addMemberToWorkspace(
+    @Context() context: any,
+    @Args('workspaceId') workspaceId: number,
+    @Args('memberId') memberId: number,
+  ) {
+    const userId = context.req.user.id;
+    return this.workspaceService.addMemberToWorkspaceService(
+      workspaceId,
+      memberId,
+      userId,
+    );
+  }
+
+  @Mutation(() => WorkspaceResponse)
+  addChannelToWorkspace(
+    @Context() context: any,
+    @Args('workspaceId') workspaceId: number,
+    @Args('channelName') channelName: string,
+  ) {
+    const userId = context.req.user.id;
+    return this.workspaceService.addChannelToWorkspaceService(
+      workspaceId,
+      channelName,
       userId,
     );
   }

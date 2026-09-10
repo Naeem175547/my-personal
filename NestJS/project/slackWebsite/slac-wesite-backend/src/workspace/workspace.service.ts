@@ -6,12 +6,14 @@ import { WorkRepository } from './workspace.repository.js';
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateWorkspaceInput } from './dto/update.workspace.input.js';
 import { UserService } from '../user/user.service.js';
+import { RabbitMqProducer } from '../rabbitmq/rabbitmq.producer.js';
 
 @Injectable()
 export class WorkspaceService {
   constructor(
     private readonly workspaceRepository: WorkRepository,
     private readonly userService: UserService,
+    private readonly rabbitmqproducer: RabbitMqProducer,
   ) {}
   isUserAdminOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
     const member = workspace.members.find(
@@ -52,7 +54,7 @@ export class WorkspaceService {
       );
       await this.workspaceRepository.addChannelToWorkspace(
         response.id,
-        'general',
+        'general', //workspaceId
       ); //default channel
       console.log('SERVICE RESPONSE:', response);
       return response;
@@ -117,7 +119,7 @@ export class WorkspaceService {
       });
     }
   }
-  async getWorkspacesUserIsMemberOfService(userId: number) {
+  async getAllWorkspacesByMemberId(userId: number) {
     try {
       const resonse =
         await this.workspaceRepository.fetchAllWorkspacesByMemberId(userId);
@@ -254,7 +256,6 @@ export class WorkspaceService {
   async addMemberToWorkspaceService(
     workspaceId: number,
     memberId: number,
-    role: 'admin' | 'member',
     userId: number,
   ) {
     try {
@@ -308,11 +309,19 @@ export class WorkspaceService {
       }
 
       // 5. Repository only performs DB operation
-      return await this.workspaceRepository.addMemberToWorkspace(
+      const result = await this.workspaceRepository.addMemberToWorkspace(
         workspaceId,
         memberId,
-        role,
+        'admin',
       );
+      console.log(member.email);
+      this.rabbitmqproducer.sendMail(
+        member.email,
+        'added to workSpace',
+        'congratulation you have been successfully added to workspace',
+      );
+
+      return result;
     } catch (error) {
       if (error instanceof GraphQLError) {
         throw error;
