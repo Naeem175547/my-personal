@@ -116,6 +116,7 @@ type Query {
   getWorkspacesOfUserByMember: WorkspacesResponse!
   getWorkSpace(workspaceId: Float!): WorkspaceResponse!
   getWorkspaceByJoinCode(joinCode: String!): WorkspaceResponse!
+  isUserMemberOfWorkspace(workspaceId: Float!): User!
 }
 
 type Mutation {

@@ -30,6 +30,7 @@ WorkspaceModule = __decorate([
             RabbitmqModule,
         ],
         providers: [WorkspaceService, WorkspaceResolver, WorkRepository],
+        exports: [WorkspaceService],
     })
 ], WorkspaceModule);
 export { WorkspaceModule };

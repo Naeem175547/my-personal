@@ -14,6 +14,7 @@ import { ChannelModule } from './channel/channel.module.js';
 import { WorkspaceModule } from './workspace/workspace.module.js';
 import { MailModule } from './mail/mail.module.js';
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module.js';
+import { MemberModule } from './member/member.module.js';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { RabbitmqModule } from './rabbitmq/rabbitmq.module.js';
     WorkspaceModule,
     MailModule,
     RabbitmqModule,
+    MemberModule,
   ],
 
   controllers: [AppController],

@@ -40,7 +40,7 @@ port: 3306             → default MySQL port
 username: 'root'       → MySQL username
 password: 'password'   → your MySQL password
 database: 'myapp'      → database name
-autoLoadEntities       → automatically load NestJS entities
+autoLoadEntities       → automatically load NestJS entities (used when we Register entities in deffrent module)
 synchronize: true      → automatically sync entities with DB
 
 
@@ -242,15 +242,27 @@ this.userRepository.findOne({
 this.userRepository.save(user);
 this.userRepository.delete(id);
 
-| Method      | Async? | Description                                                      | Example                       |
-| ----------- | :----: | ---------------------------------------------------------------- | ----------------------------- |
-| `find()`    |    ✅   | Retrieves **multiple records** from the table.                   | `await repo.find()`           |
-| `findOne()` |    ✅   | Retrieves **one record** based on conditions.                    | `await repo.findOne(...)`     |
-| `save()`    |    ✅   | **Creates or updates** an entity in the database.                | `await repo.save(user)`       |
-| `insert()`  |    ✅   | Directly **inserts new record(s)** into the database.            | `await repo.insert(data)`     |
-| `update()`  |    ✅   | **Updates existing record(s)** without first loading the entity. | `await repo.update(id, data)` |
-| `delete()`  |    ✅   | **Deletes record(s)** based on a condition or ID.                | `await repo.delete(id)`       |
-| `remove()`  |    ✅   | Deletes an **entity object** from the database.                  | `await repo.remove(user)`     |
+| Method           | Async? | Purpose                                                     | Example                                             |
+| ---------------- | :----: | ----------------------------------------------------------- | --------------------------------------------------- |
+| `find()`         |    ✅   | Retrieves **multiple records**                              | `await repo.find()`                                 |
+| `findOne()`      |    ✅   | Retrieves **one record** based on conditions                | `await repo.findOne({ where: { id } })`             |
+| `findOneBy()`    |    ✅   | Retrieves one record using a simple condition               | `await repo.findOneBy({ id })`                      |
+| `findBy()`       |    ✅   | Retrieves multiple records using conditions                 | `await repo.findBy({ status: 'active' })`           |
+| `findAndCount()` |    ✅   | Retrieves records **and total count**                       | `await repo.findAndCount()`                         |
+| `count()`        |    ✅   | Returns number of matching records                          | `await repo.count({ where: { status: 'active' } })` |
+| `exists()`       |    ✅   | Checks whether matching record exists                       | `await repo.exists({ where: { email } })`           |
+| `save()`         |    ✅   | **Creates or updates** an entity                            | `await repo.save(user)`                             |
+| `insert()`       |    ✅   | Directly inserts new record(s)                              | `await repo.insert(data)`                           |
+| `update()`       |    ✅   | Updates record(s) without loading entity first              | `await repo.update(id, data)`                       |
+| `preload()`      |    ✅   | Loads entity + merges new data; useful before `save()`      | `await repo.preload({ id, name })`                  |
+| `delete()`       |    ✅   | Deletes record(s) by condition/ID                           | `await repo.delete(id)`                             |
+| `remove()`       |    ✅   | Deletes an **entity object**                                | `await repo.remove(user)`                           |
+| `softDelete()`   |    ✅   | Soft-deletes record(s)                                      | `await repo.softDelete(id)`                         |
+| `restore()`      |    ✅   | Restores a soft-deleted record                              | `await repo.restore(id)`                            |
+| `recover()`      |    ✅   | Recovers a soft-deleted entity                              | `await repo.recover(user)`                          |
+| `clear()`        |    ✅   | Deletes **all records** from the table                      | `await repo.clear()`                                |
+| `create()`       |    ❌   | Creates an entity object **in memory**; does not save to DB | `const user = repo.create(data)`                    |
+| `merge()`        |    ❌   | Merges data into an existing entity **in memory**           | `repo.merge(user, data)`                            |
 
  when we return directly we no need to use async
  create is only for creating entities it is not async operations
@@ -285,7 +297,6 @@ await repo.remove(user);
 Deletes an entity object that you already have.
 
 Important
-
 All these repository database methods return Promises, so you can either:
 
 const users = await repo.find();
@@ -306,7 +317,6 @@ notes->
 
 
 6. Relations ⭐⭐⭐
-
 This is the most important part for you.
 
 1. @OneToOne
@@ -826,6 +836,7 @@ postId | categoryId
 | `OneToMany` + `ManyToOne` | User → Posts       | `Post`         |
 | `ManyToMany`              | Posts ↔ Categories | Junction table |
 
+just remember junction table means separate table.
 The most important rule
 One User
    ↓
@@ -904,11 +915,14 @@ Usually you'll use @JoinColumn to specify the actual FK column:
 user: User;
 
 This produces conceptually:
-
 posts
 ----------------
 id
 user_id  ───────→ users.id
+
+but this is not available in typeorm only available in db 
+but the field which we define with relationship is available.
+
 9. Complete User/Post example
 // user.entity.ts
 
@@ -1096,7 +1110,6 @@ So you'll repeatedly use:
 and for categories:
 
 @ManyToMany()
-
 @OneToOne() is less important for the basic blog, but User → Profile is a good example to practice it.
 
 
@@ -1210,7 +1223,6 @@ Update User  → UpdateUserDto
 Create Comment → CreateCommentDto
 
 Think of DTO as:
-
 "What data is allowed/expected for THIS request?"
 
 So DTOs are usually different for different operations, even when they work with the same entity.
@@ -1221,7 +1233,6 @@ For Update → usually optional fields using PartialType().
 
 
 8. QueryBuilder
-
 Learn this after basic repositories:
 
 createQueryBuilder()
@@ -1478,7 +1489,6 @@ departmentId
 totalUsers
 
 So:
-
 .getRawMany()
 
 is appropriate.
@@ -1589,7 +1599,6 @@ Page 3 → skip 20
 Page 4 → skip 30
 
 10. Pagination + total count
-
 Very commonly you want:
 
 users
@@ -1664,11 +1673,9 @@ TAKE 10
 getMany
 
 12. What you should remember
-
 Don't try to memorize the entire QueryBuilder API.
 
 Remember these:
-
 .createQueryBuilder('user')
 
 Start query.
@@ -1680,6 +1687,9 @@ Start query.
 Filter.
 
 .leftJoin()
+.rightJoin()
+.innerJoin()
+.fullJoin()
 .leftJoinAndSelect()
 
 Join tables/relationships.
@@ -1715,11 +1725,11 @@ You don't need QueryBuilder for every query.
 Use Repository methods for simple CRUD; switch to QueryBuilder when the query becomes complex.
 
 
+
 9. Transactions
 later:first in mysql ->transection rollback commit
 
 You already learned the concept.
-
 Now learn how to implement transactions using TypeORM.
 
 Then → GraphQL
@@ -2003,11 +2013,9 @@ repository.find({
 });
 
 This means:
-
 WHERE age = 20 OR age = 30
 
 4. select
-
 Choose which columns you want:
 
 repository.find({
@@ -2018,7 +2026,6 @@ repository.find({
   },
 });
 5. relations
-
 Load related entities:
 
 repository.find({
@@ -2081,168 +2088,6 @@ const users = await userRepository.find({
 });
 
 ---->
-TYPEORM REPOSITORY METHODS — RETURN VALUES
-============================================
-
-// 1. find()
-// Gets multiple users
-const users = await this.userRepo.find();
-
-// Actually returns:
-[
-    {
-        id: 1,
-        username: "ali",
-        password: "$2b$10$abc...",
-        role: "USER"
-    },
-    {
-        id: 2,
-        username: "naeem",
-        password: "$2b$10$xyz...",
-        role: "ADMIN"
-    }
-]
-
-// Return → User[]
-
-
-// 2. findOne()
-// Gets one user
-const user = await this.userRepo.findOne({
-    where: { id: 1 }
-});
-
-// Actually returns:
-{
-    id: 1,
-    username: "ali",
-    password: "$2b$10$abc...",
-    role: "USER"
-}
-
-// If user doesn't exist:
-null
-
-// Return → User | null
-
-
-// 3. create()
-// Creates entity object but DOES NOT save it
-const user = this.userRepo.create({
-    username: "ahmed",
-    password: "1234",
-    role: UserRole.USER
-});
-
-// Actually returns:
-{
-    username: "ahmed",
-    password: "1234",
-    role: "USER"
-}
-
-// Return → User
-// Database → NOT changed
-
-
-// 4. save()
-// Saves a new entity OR updates an existing entity
-const savedUser = await this.userRepo.save(user);
-
-// Actually returns:
-{
-    id: 4,
-    username: "ahmed",
-    password: "1234",
-    role: "USER"
-}
-
-// Return → Saved User
-// Database → Changed
-
-
-// 5. insert()
-// Directly inserts into database
-const result = await this.userRepo.insert({
-    username: "sameer",
-    password: "1234",
-    role: UserRole.USER
-});
-
-// Actually returns:
-{
-    identifiers: [
-        { id: 5 }
-    ],
-    generatedMaps: [
-        { id: 5 }
-    ],
-    raw: {
-        affectedRows: 1,
-        insertId: 5
-    }
-}
-
-// Return → InsertResult
-// Does NOT return the complete inserted User
-
-
-// 6. update()
-// Updates an existing row
-const result = await this.userRepo.update(
-    { id: 2 },
-    { username: "newNaeem" }
-);
-
-// Actually returns:
-{
-    affected: 1,
-    generatedMaps: [],
-    raw: {
-        affectedRows: 1
-    }
-}
-
-// Return → UpdateResult
-// affected: 1 → one row updated
-// affected: 0 → no row found/updated
-
-
-// 7. delete()
-// Deletes an existing row
-const result = await this.userRepo.delete({
-    id: 3
-});
-
-// Actually returns:
-{
-    affected: 1,
-    raw: {
-        affectedRows: 1
-    }
-}
-
-// Return → DeleteResult
-
-// affected: 1 → one row deleted
-// affected: 0 → no row found
-
-
-================================================
-
-QUICK REMEMBER:
-
-find()       → Array of Users
-findOne()    → One User / null
-create()     → Entity object (NOT saved)
-save()       → Saved User
-insert()     → InsertResult
-update()     → UpdateResult
-delete()     → DeleteResult
-
-
---->
 | Code             | Meaning                             |
 | ---------------- | ----------------------------------- |
 | `delete(id)`     | Delete by **primary key**           |
@@ -2279,6 +2124,8 @@ const users = await this.userRepository
   .getMany();
 
 3. Raw SQL through TypeORM
+. DataSource()
+.InjectManager()
 
 |                               | `repo.query()`               | `dataSource.query()`   |
 | ----------------------------- | ---------------------------- | ---------------------- |
@@ -2355,7 +2202,8 @@ dataSource.createQueryRunner() → Transactions
 For your current raw-SQL learning, the main thing is:
 DataSource gives NestJS a way to send SQL directly to MySQL and receive the result.
 notes->
-You do not need @Entity() just to execute raw SQL against those tables which already exists or or create table using sql.
+You do not need @Entity() just to execute raw SQL against those tables which already exists 
+ or create table using sql.
 
 
 import { Injectable } from '@nestjs/common';
@@ -2514,8 +2362,6 @@ export class UserService {
     ...
   }
 
-
-
   // =========================
   // 8. DELETE
   // =========================
@@ -2636,6 +2482,8 @@ export class UserService {
   // 15. TRANSACTION
   // =========================
 
+   QueryRunner can also execute raw SQL, but it gives you more control over the transaction.
+
   async transactionExample() {
     const queryRunner =
       this.dataSource.createQueryRunner();
@@ -2668,6 +2516,8 @@ export class UserService {
     }
   }
 }
+
+
 
 --->
 dataSource
@@ -2710,6 +2560,45 @@ repository → works with one specific entity
 Manager → works with many entities; you provide the entity in each operation.
 Repository → works with one specific entity; methods like find, findOneBy, etc. can take conditions to select particular rows.
 
+-->
+one another way in nest js
+1. Inject
+
+constructor(
+  @InjectEntityManager()
+  private readonly manager: EntityManager,
+) {}
+
+2. Raw SQL — manager.query()
+
+const users = await this.manager.query(
+  'SELECT * FROM users WHERE id = ?',
+  [userId],
+);
+
+3. Transaction — manager.transaction()
+
+await this.manager.transaction(async (manager) => {
+  await manager.save(userData);      // → users table
+  await manager.save(workspaceData); // → workspaces table
+
+   await manager.query(
+    'INSERT INTO workspaces (name) VALUES (?)',
+    ['Ambak'],
+  );
+});
+
+manager.save() determines the table from the entity/object automatically.
+
+In short:
+
+@InjectEntityManager()
+        ↓
+    EntityManager
+        ↓
+ ┌──────┴────────┐
+query()      transaction()
+Raw SQL       Atomic operations
 
 
 --->

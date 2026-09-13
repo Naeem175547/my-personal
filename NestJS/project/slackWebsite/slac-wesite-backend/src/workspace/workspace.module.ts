@@ -22,5 +22,6 @@ import { RabbitmqModule } from '../rabbitmq/rabbitmq.module.js';
     RabbitmqModule,
   ],
   providers: [WorkspaceService, WorkspaceResolver, WorkRepository],
+  exports: [WorkspaceService],
 })
 export class WorkspaceModule {}
