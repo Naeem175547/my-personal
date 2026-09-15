@@ -31,6 +31,15 @@ export class UserEntity {
   @Column({ nullable: true })
   avatar: string;
 
+  @OneToMany(() => MessageEntity, (message) => message.user)
+  messages: MessageEntity[];
+
+  @OneToMany(
+    () => WorkspaceMemberEntity,
+    (workspaceMember) => workspaceMember.user,
+  )
+  workspaceMembers: Relation<WorkspaceMemberEntity>[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -41,12 +50,4 @@ export class UserEntity {
   generateAvatar() {
     this.avatar = `https://robohash.org/${this.username}`;
   }
-  @OneToMany(() => MessageEntity, (message) => message.user)
-  messages: Relation<MessageEntity[]>;
-
-  @OneToMany(
-    () => WorkspaceMemberEntity,
-    (workspaceMemeber) => workspaceMemeber.user,
-  )
-  workspaceMembers: WorkspaceMemberEntity;
 }

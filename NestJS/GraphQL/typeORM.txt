@@ -40,7 +40,7 @@ port: 3306             → default MySQL port
 username: 'root'       → MySQL username
 password: 'password'   → your MySQL password
 database: 'myapp'      → database name
-autoLoadEntities       → automatically load NestJS entities
+autoLoadEntities       → automatically load NestJS entities (used when we Register entities in deffrent module)
 synchronize: true      → automatically sync entities with DB
 
 
@@ -242,15 +242,27 @@ this.userRepository.findOne({
 this.userRepository.save(user);
 this.userRepository.delete(id);
 
-| Method      | Async? | Description                                                      | Example                       |
-| ----------- | :----: | ---------------------------------------------------------------- | ----------------------------- |
-| `find()`    |    ✅   | Retrieves **multiple records** from the table.                   | `await repo.find()`           |
-| `findOne()` |    ✅   | Retrieves **one record** based on conditions.                    | `await repo.findOne(...)`     |
-| `save()`    |    ✅   | **Creates or updates** an entity in the database.                | `await repo.save(user)`       |
-| `insert()`  |    ✅   | Directly **inserts new record(s)** into the database.            | `await repo.insert(data)`     |
-| `update()`  |    ✅   | **Updates existing record(s)** without first loading the entity. | `await repo.update(id, data)` |
-| `delete()`  |    ✅   | **Deletes record(s)** based on a condition or ID.                | `await repo.delete(id)`       |
-| `remove()`  |    ✅   | Deletes an **entity object** from the database.                  | `await repo.remove(user)`     |
+| Method           | Async? | Purpose                                                     | Example                                             |
+| ---------------- | :----: | ----------------------------------------------------------- | --------------------------------------------------- |
+| `find()`         |    ✅   | Retrieves **multiple records**                              | `await repo.find()`                                 |
+| `findOne()`      |    ✅   | Retrieves **one record** based on conditions                | `await repo.findOne({ where: { id } })`             |
+| `findOneBy()`    |    ✅   | Retrieves one record using a simple condition               | `await repo.findOneBy({ id })`                      |
+| `findBy()`       |    ✅   | Retrieves multiple records using conditions                 | `await repo.findBy({ status: 'active' })`           |
+| `findAndCount()` |    ✅   | Retrieves records **and total count**                       | `await repo.findAndCount()`                         |
+| `count()`        |    ✅   | Returns number of matching records                          | `await repo.count({ where: { status: 'active' } })` |
+| `exists()`       |    ✅   | Checks whether matching record exists                       | `await repo.exists({ where: { email } })`           |
+| `save()`         |    ✅   | **Creates or updates** an entity                            | `await repo.save(user)`                             |
+| `insert()`       |    ✅   | Directly inserts new record(s)                              | `await repo.insert(data)`                           |
+| `update()`       |    ✅   | Updates record(s) without loading entity first              | `await repo.update(id, data)`                       |
+| `preload()`      |    ✅   | Loads entity + merges new data; useful before `save()`      | `await repo.preload({ id, name })`                  |
+| `delete()`       |    ✅   | Deletes record(s) by condition/ID                           | `await repo.delete(id)`                             |
+| `remove()`       |    ✅   | Deletes an **entity object**                                | `await repo.remove(user)`                           |
+| `softDelete()`   |    ✅   | Soft-deletes record(s)                                      | `await repo.softDelete(id)`                         |
+| `restore()`      |    ✅   | Restores a soft-deleted record                              | `await repo.restore(id)`                            |
+| `recover()`      |    ✅   | Recovers a soft-deleted entity                              | `await repo.recover(user)`                          |
+| `clear()`        |    ✅   | Deletes **all records** from the table                      | `await repo.clear()`                                |
+| `create()`       |    ❌   | Creates an entity object **in memory**; does not save to DB | `const user = repo.create(data)`                    |
+| `merge()`        |    ❌   | Merges data into an existing entity **in memory**           | `repo.merge(user, data)`                            |
 
  when we return directly we no need to use async
  create is only for creating entities it is not async operations
@@ -285,7 +297,6 @@ await repo.remove(user);
 Deletes an entity object that you already have.
 
 Important
-
 All these repository database methods return Promises, so you can either:
 
 const users = await repo.find();
@@ -306,7 +317,6 @@ notes->
 
 
 6. Relations ⭐⭐⭐
-
 This is the most important part for you.
 
 1. @OneToOne
@@ -826,6 +836,7 @@ postId | categoryId
 | `OneToMany` + `ManyToOne` | User → Posts       | `Post`         |
 | `ManyToMany`              | Posts ↔ Categories | Junction table |
 
+just remember junction table means separate table.
 The most important rule
 One User
    ↓
@@ -904,11 +915,14 @@ Usually you'll use @JoinColumn to specify the actual FK column:
 user: User;
 
 This produces conceptually:
-
 posts
 ----------------
 id
 user_id  ───────→ users.id
+
+but this is not available in typeorm only available in db 
+but the field which we define with relationship is available.
+
 9. Complete User/Post example
 // user.entity.ts
 
@@ -1096,7 +1110,6 @@ So you'll repeatedly use:
 and for categories:
 
 @ManyToMany()
-
 @OneToOne() is less important for the basic blog, but User → Profile is a good example to practice it.
 
 
@@ -1210,7 +1223,6 @@ Update User  → UpdateUserDto
 Create Comment → CreateCommentDto
 
 Think of DTO as:
-
 "What data is allowed/expected for THIS request?"
 
 So DTOs are usually different for different operations, even when they work with the same entity.
@@ -1221,7 +1233,6 @@ For Update → usually optional fields using PartialType().
 
 
 8. QueryBuilder
-
 Learn this after basic repositories:
 
 createQueryBuilder()
@@ -1478,7 +1489,6 @@ departmentId
 totalUsers
 
 So:
-
 .getRawMany()
 
 is appropriate.
@@ -1589,7 +1599,6 @@ Page 3 → skip 20
 Page 4 → skip 30
 
 10. Pagination + total count
-
 Very commonly you want:
 
 users
@@ -1664,11 +1673,9 @@ TAKE 10
 getMany
 
 12. What you should remember
-
 Don't try to memorize the entire QueryBuilder API.
 
 Remember these:
-
 .createQueryBuilder('user')
 
 Start query.
@@ -1680,6 +1687,9 @@ Start query.
 Filter.
 
 .leftJoin()
+.rightJoin()
+.innerJoin()
+.fullJoin()
 .leftJoinAndSelect()
 
 Join tables/relationships.
@@ -1715,11 +1725,11 @@ You don't need QueryBuilder for every query.
 Use Repository methods for simple CRUD; switch to QueryBuilder when the query becomes complex.
 
 
+
 9. Transactions
 later:first in mysql ->transection rollback commit
 
 You already learned the concept.
-
 Now learn how to implement transactions using TypeORM.
 
 Then → GraphQL
@@ -2003,11 +2013,9 @@ repository.find({
 });
 
 This means:
-
 WHERE age = 20 OR age = 30
 
 4. select
-
 Choose which columns you want:
 
 repository.find({
@@ -2018,7 +2026,6 @@ repository.find({
   },
 });
 5. relations
-
 Load related entities:
 
 repository.find({
@@ -2081,168 +2088,6 @@ const users = await userRepository.find({
 });
 
 ---->
-TYPEORM REPOSITORY METHODS — RETURN VALUES
-============================================
-
-// 1. find()
-// Gets multiple users
-const users = await this.userRepo.find();
-
-// Actually returns:
-[
-    {
-        id: 1,
-        username: "ali",
-        password: "$2b$10$abc...",
-        role: "USER"
-    },
-    {
-        id: 2,
-        username: "naeem",
-        password: "$2b$10$xyz...",
-        role: "ADMIN"
-    }
-]
-
-// Return → User[]
-
-
-// 2. findOne()
-// Gets one user
-const user = await this.userRepo.findOne({
-    where: { id: 1 }
-});
-
-// Actually returns:
-{
-    id: 1,
-    username: "ali",
-    password: "$2b$10$abc...",
-    role: "USER"
-}
-
-// If user doesn't exist:
-null
-
-// Return → User | null
-
-
-// 3. create()
-// Creates entity object but DOES NOT save it
-const user = this.userRepo.create({
-    username: "ahmed",
-    password: "1234",
-    role: UserRole.USER
-});
-
-// Actually returns:
-{
-    username: "ahmed",
-    password: "1234",
-    role: "USER"
-}
-
-// Return → User
-// Database → NOT changed
-
-
-// 4. save()
-// Saves a new entity OR updates an existing entity
-const savedUser = await this.userRepo.save(user);
-
-// Actually returns:
-{
-    id: 4,
-    username: "ahmed",
-    password: "1234",
-    role: "USER"
-}
-
-// Return → Saved User
-// Database → Changed
-
-
-// 5. insert()
-// Directly inserts into database
-const result = await this.userRepo.insert({
-    username: "sameer",
-    password: "1234",
-    role: UserRole.USER
-});
-
-// Actually returns:
-{
-    identifiers: [
-        { id: 5 }
-    ],
-    generatedMaps: [
-        { id: 5 }
-    ],
-    raw: {
-        affectedRows: 1,
-        insertId: 5
-    }
-}
-
-// Return → InsertResult
-// Does NOT return the complete inserted User
-
-
-// 6. update()
-// Updates an existing row
-const result = await this.userRepo.update(
-    { id: 2 },
-    { username: "newNaeem" }
-);
-
-// Actually returns:
-{
-    affected: 1,
-    generatedMaps: [],
-    raw: {
-        affectedRows: 1
-    }
-}
-
-// Return → UpdateResult
-// affected: 1 → one row updated
-// affected: 0 → no row found/updated
-
-
-// 7. delete()
-// Deletes an existing row
-const result = await this.userRepo.delete({
-    id: 3
-});
-
-// Actually returns:
-{
-    affected: 1,
-    raw: {
-        affectedRows: 1
-    }
-}
-
-// Return → DeleteResult
-
-// affected: 1 → one row deleted
-// affected: 0 → no row found
-
-
-================================================
-
-QUICK REMEMBER:
-
-find()       → Array of Users
-findOne()    → One User / null
-create()     → Entity object (NOT saved)
-save()       → Saved User
-insert()     → InsertResult
-update()     → UpdateResult
-delete()     → DeleteResult
-
-
---->
 | Code             | Meaning                             |
 | ---------------- | ----------------------------------- |
 | `delete(id)`     | Delete by **primary key**           |
@@ -2279,6 +2124,8 @@ const users = await this.userRepository
   .getMany();
 
 3. Raw SQL through TypeORM
+. DataSource()
+.InjectManager()
 
 |                               | `repo.query()`               | `dataSource.query()`   |
 | ----------------------------- | ---------------------------- | ---------------------- |
@@ -2355,7 +2202,8 @@ dataSource.createQueryRunner() → Transactions
 For your current raw-SQL learning, the main thing is:
 DataSource gives NestJS a way to send SQL directly to MySQL and receive the result.
 notes->
-You do not need @Entity() just to execute raw SQL against those tables which already exists or or create table using sql.
+You do not need @Entity() just to execute raw SQL against those tables which already exists 
+ or create table using sql.
 
 
 import { Injectable } from '@nestjs/common';
@@ -2514,8 +2362,6 @@ export class UserService {
     ...
   }
 
-
-
   // =========================
   // 8. DELETE
   // =========================
@@ -2636,6 +2482,8 @@ export class UserService {
   // 15. TRANSACTION
   // =========================
 
+   QueryRunner can also execute raw SQL, but it gives you more control over the transaction.
+
   async transactionExample() {
     const queryRunner =
       this.dataSource.createQueryRunner();
@@ -2669,6 +2517,8 @@ export class UserService {
   }
 }
 
+
+
 --->
 dataSource
    │
@@ -2693,10 +2543,7 @@ dataSource.getRepository(User) → Repository<User>//User is Entity
 Used for operations specifically related to one entity:
 
 
-
 const userRepo = dataSource.getRepository(User);
-
-
 userRepo.find()
 userRepo.findOneBy({ id: 1 })
 userRepo.save(user)
@@ -2710,6 +2557,46 @@ repository → works with one specific entity
 Manager → works with many entities; you provide the entity in each operation.
 Repository → works with one specific entity; methods like find, findOneBy, etc. can take conditions to select particular rows.
 
+note-> DataSource needs configuration if not given in root if given then no need to create for same db;
+-->
+one another way in nest js
+1. Inject
+
+constructor(
+  @InjectEntityManager()
+  private readonly manager: EntityManager,
+) {}
+
+2. Raw SQL — manager.query()
+
+const users = await this.manager.query(
+  'SELECT * FROM users WHERE id = ?',
+  [userId],
+);
+
+3. Transaction — manager.transaction()
+
+await this.manager.transaction(async (manager) => {
+  await manager.save(userData);      // → users table
+  await manager.save(workspaceData); // → workspaces table
+
+   await manager.query(
+    'INSERT INTO workspaces (name) VALUES (?)',
+    ['Ambak'],
+  );
+});
+
+manager.save() determines the table from the entity/object automatically.
+
+In short:
+
+@InjectEntityManager()
+        ↓
+    EntityManager
+        ↓
+ ┌──────┴────────┐
+query()      transaction()
+Raw SQL       Atomic operations
 
 
 --->
@@ -2746,6 +2633,8 @@ dataSource
    ├── query()              → raw SQL
    ├── createQueryRunner()  → transactions
    └── migrations           → database schema changes
+   └── getReposit()
+   └── manager
 but Remember(in mind)
 2. DataSource configuration for migrations
 Create:
@@ -3028,6 +2917,26 @@ Database changes
 For production, migrations are generally preferred because database changes are explicit,
  reviewable, and version-controlled.
 
+ it is just craeting and addding column in table ,
+ we can do it directly in db 
+ but we have to specify it in entities otherwise we will not be able to Access it.
+
+ but:
+ The database column and entity are separate things.
+If the column exists in DB but you don't add it to the entity, the column still exists and raw SQL can access it:
+
+But TypeORM's User entity won't know about phone.
+
+So:
+
+Database column exists
+        ↓
+Entity defines the column
+        ↓
+TypeORM can use it through User
+
+Production best practice: change the DB through a migration, and update the entity to match.
+
 15. Your complete DataSource setup
 src/data-source.ts
 import { DataSource } from 'typeorm';
@@ -3119,10 +3028,9 @@ undo change
 Since you already know SQL, you don't need to learn more SQL for migrations. Your main new knowledge 
 is how TypeORM manages and executes those migration files through the DataSource configuration and QueryRunner.
 
-
+raw query can be perfomred using repo dataSource manager queryRunner
 ---->
 The important distinction is that there are two different contexts.
-
 1. Normal NestJS application
 
 You use:
@@ -3419,6 +3327,8 @@ This way, when you add a new entity file, you only need to add it to that module
 Bottom line: keep forRoot for the connection-wide entity list,
  keep forFeature in each module that needs repository injection — 
 
+ or use autoLoadEntities:true no need to put globally.
+
 
 --->
 @Column({
@@ -3478,5 +3388,573 @@ ORDER BY created_date
 
 The name of the index is:
 idx_created_date
+--->
+| Registration             | Purpose                                                          |
+| ------------------------ | ---------------------------------------------------------------- |
+| `forRoot()`              | Connect TypeORM + know entities                                  |
+| `forFeature([Entity])`   | Make repository available in that module                         |
+| `autoLoadEntities: true` | Automatically collect entities registered through `forFeature()` |
+if use autoLoadEntities:true then we don't need to registered entities in entities field insdie forRoot()
+
+
+-->
+Option 1 — Using the relation
+You give TypeORM the User object through the relation property, 
+and TypeORM extracts the user's ID and stores that ID in the FK column.
+  const post = postRepository.create({
+    title: 'My Post',
+    user: user, // User entity object
+  });
+
+await postRepository.save(post);
+TypeORM will automatically put that user's ID into the FK column:
+
+posts
+----------------
+id
+title
+userId  ← automatically stored
+
+or
+const user = await userRepository.findOneBy({ id: 5 });
+
+const post = postRepository.create({
+  title: 'Hello',
+  user: user,   // whole User object here
+});
+
+await postRepository.save(post);
+
+
+user means a User entity object,
+ which normally contains the user's primary key (id) along with its other properties.
+ if User entity doesn't have an id property, then TypeORM cannot use user.id specifically. 
+ It will use whatever property is defined as the primary key.
+
+ For example:
+
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn()
+  userId: number;
+
+  @Column()
+  name: string;
+}
+
+Here the primary key is:
+userId
+It cares about which property has @PrimaryColumn() / @PrimaryGeneratedColumn().
+
+Option 2 — Manually using userId
+You can also explicitly define the FK column:
+
+@ManyToOne(() => User, (user) => user.posts)
+@JoinColumn({ name: 'userId' })
+user: User;
+
+@Column()
+userId: number;
+
+Then:
+
+const post = postRepository.create({
+  title: 'My Post',
+  userId: 5,
+});
+
+In a real NestJS API
+Usually, you don't take userId from the frontend for an authenticated post.
+
+Instead:
+const user = req.user; // user obtained from JWT
+const post = this.postRepository.create({
+  title: input.title,
+  user: user,
+});
+
+await this.postRepository.save(post);
+
+So the flow is:
+
+JWT
+ ↓
+identify User
+ ↓
+create Post
+ ↓
+post.user = User
+ ↓
+TypeORM stores user.id in posts.userId
+
+Key point: The FK value has to be provided somehow,
+ but TypeORM can populate the FK from the related User entity for you.
+
+note->
+we delacre user(parent) object only foreign key (child)side.
+we do not have to assign  on both sides.
+in child relation side we can optain parent data by relations or parent relation side we can optain child data by relations field.
+relatinshp attribute auto included in these respective object so we can apply filter according to that.
+but if we want to retrieve  data of that then we should use relations;
+
+-->
+Find a channel whose name is channelName AND whose workspace's id equals workspaceId.
+
+where: {
+  name: channelName,
+  workspace: {
+    id: workspaceId,
+  },
+}
+
+here workspace is workspace entity data as defined in relatinshp
+Think of it as SQL:
+
+SELECT *
+FROM channel
+WHERE name = 'general'
+AND workspace_id = 5;
+
+
+why this works
+This part:
+
+@ManyToOne(
+  () => WorkspaceEntity,
+  (workspace) => workspace.channels,
+  { onDelete: 'CASCADE' },
+)
+@JoinColumn({ name: 'workspace_id' })
+workspace: Relation<WorkspaceEntity>;
+
+means the channels table will have:
+
+channels
+--------------------------------
+id
+name
+createdAt
+updatedAt
+workspace_id   ← FK
+
+So this query:
+
+const existingChannel = await this.channelRepository.findOne({
+  where: {
+    name: channelName,
+    workspace: {
+      id: workspaceId,
+    },
+  },
+});
+
+means:
+Find a channel with this name where its workspace has this ID.
+
+Why { id: workspaceId } works
+
+Your workspace property is:
+workspace: Relation<WorkspaceEntity>;
+
+So conceptually:
+channel.workspace
+is a WorkspaceEntity.
+
+And a WorkspaceEntity has:
+workspace.id
+
+Therefore:
+
+workspace: {
+  id: workspaceId,
+}
+
+is saying:
+
+channel.workspace.id === workspaceId
+One important improvement
+
+
+
+notes->
+In TypeORM, true is commonly used when you want to say "yes, include/load this relation",
+ not "filter by this relation."
+1. relations: { workspace: true }
+Used when loading related data:
+
+const channel = await this.channelRepository.findOne({
+  where: { id: 1 },
+  relations: {
+    workspace: true,
+  },
+});
+
+Meaning:
+Find channel 1 and also load its workspace.
+Without it, depending on your relation configuration, you may get:
+
+channel.id
+channel.name
+channel.workspace // not loaded
+
+With:
+
+relations: {
+  workspace: true,
+}
+
+you get:
+
+channel.workspace.id
+channel.workspace.name
+
+2. where → use actual values
+
+For filtering:
+
+where: {
+  workspace: {
+    id: workspaceId,
+  },
+}
+
+Meaning:
+Find channels whose workspace ID equals workspaceId.
+
+Not:
+workspace: true ❌
+Easy rule
+true → LOAD the relation
+value → FILTER by the relation
+
+Examples:
+
+// LOAD
+relations: {
+  workspace: true,
+}
+// FILTER
+where: {
+  workspace: {
+    id: 5,
+  },
+}
+
+So true is about loading/including a relation, while id: workspaceId is about searching/filtering by that relation.
+so because of relationship entity data  is auto including both side and can apply filter but for  laoding/returing we need to say relations:{name:true}
 
 --->
+const users = await this.userRepository.find({
+  select: {
+    id: true,
+    name: true,
+    email: true,
+  },
+});
+true  → include column
+omit  → don't include column
+
+and
+const user = await this.userRepository
+  .createQueryBuilder('user')
+  .select(['user.id', 'user.name', 'user.email'])
+  .where('user.id = :id', { id })
+  .getOne();
+
+
+--->
+const workspaces = await this.workSpaceRepo
+  .createQueryBuilder('workspace')
+  .innerJoin('workspace.members', 'member')
+  .where('member.user_id = :memberId', { memberId })
+  .getMany();
+
+  there is one to many relatinshp bw workspace and workspaceMember
+  workspace has members(list of member) field as defined in relationship so this will perform innerJoin with workspace.members
+  with where conditions
+
+note->
+The members do temporarily form one JOIN result, but they do NOT lose their workspace relationship.
+
+Suppose:
+
+Workspace table
+workspace
+----------------
+id | name
+1  | A
+2  | B
+3  | C
+Member table
+member
+---------------------------
+id | workspace_id | user_id
+1  | 1            | 10
+2  | 1            | 20
+3  | 2            | 10
+4  | 2            | 30
+5  | 3            | 40
+
+Each workspace has its own members:
+
+Workspace A → [member 1, member 2]
+Workspace B → [member 3, member 4]
+Workspace C → [member 5]
+
+What does JOIN do?
+When you write:
+
+.innerJoin('workspace.members', 'member')
+SQL creates a JOIN result roughly like:
+
+workspace   member
+---------   ------
+A           member 1
+A           member 2
+B           member 3
+B           member 4
+C           member 5
+
+So yes, you can think of it as one combined intermediate result:
+
+A → member 1
+A → member 2
+B → member 3
+B → member 4
+C → member 5
+
+But notice:
+The relationship is still preserved in every row through the workspace columns.
+
+It doesn't become:
+members = [1,2,3,4,5]
+without knowing which workspace they belong to.
+--->
+innerJoin()
+JOINs the relation, but does NOT return the joined data.
+
+.createQueryBuilder('workspace')
+.innerJoin('workspace.members', 'member')
+.where('member.user_id = :memberId', { memberId })
+.getMany();
+
+Think:
+
+Workspace
+    ↓ JOIN
+Members
+    ↓
+use members for WHERE/filter
+    ↓
+return only Workspace
+
+Result:
+
+[
+  {
+    id: 1,
+    name: 'Workspace A'
+    // members not loaded
+  }
+]
+
+
+innerJoinAndSelect()
+JOINs the relation AND includes the joined data in the result.
+
+.createQueryBuilder('workspace')
+.innerJoinAndSelect('workspace.members', 'member')
+.where('member.user_id = :memberId', { memberId })
+.getMany();
+
+Think:
+
+Workspace
+    ↓ JOIN
+Members
+    ↓
+use members for WHERE/filter
+    ↓
+return Workspace + Members
+
+Result:
+
+[
+  {
+    id: 1,
+    name: 'Workspace A',
+    members: [
+      { user_id: 10 },
+      { user_id: 20 }
+    ]
+  }
+]
+
+--->
+| Method         | Returns                 | Use when                                  |
+| -------------- | ----------------------- | ----------------------------------------- |
+| `getOne()`     | One entity or `null`    | You expect a single row                   |
+| `getMany()`    | Array of entities       | You expect multiple rows                  |
+| `getRawOne()`  | One raw DB object       | You want selected SQL columns             |
+| `getRawMany()` | Array of raw DB objects | You want multiple raw rows                |
+| `getCount()`   | Number                  | You only need the count                   |
+| `getExists()`  | `boolean`               | You only need to know if something exists |
+
+
+--->
+Because they are two different things in TypeORM.
+
+@ManyToOne(() => User)
+@JoinColumn({ name: 'user_id' })
+user: User;
+
+1. user is your entity property
+user: User;
+
+This means:
+In JavaScript/TypeScript, I access the related user through member.user.
+
+Example:
+
+member.user
+member.user.id
+member.user.name
+
+2. @JoinColumn is a TypeORM decorator
+@JoinColumn({ name: 'user_id' })
+
+It tells TypeORM:
+The foreign-key column in the database is called user_id.
+
+So:
+
+TypeScript                  Database
+-----------                 --------
+member.user       ────────> user_id
+     │                         │
+   User entity              FK column
+
+
+
+In your entity
+@ManyToOne(() => UserEntity)
+@JoinColumn({ name: 'user_id' })
+user: Relation<UserEntity>;
+
+You access:
+
+member.user
+
+not:
+member.user_id
+And normally you don't access member.user_id unless you explicitly define user_id as a separate column/property in entity;
+
+user_id is available in the database,
+ but TypeORM does not automatically make every database column a property on your TypeScript entity.
+
+Think of it as two separate layers:
+
+DATABASE                         TYPESCRIPT ENTITY
+
+workspace_members
+┌──────────────┐                ┌────────────────────┐
+│ id           │                │ id                 │
+│ user_id      │ ────────────── │ user               │
+│ workspace_id │                │ workspace           │
+│ role         │                │ role               │
+└──────────────┘  
+              └────────────────────┘
+Simple rule
+user = property you use in TypeScript
+@JoinColumn = tells TypeORM how that property maps to the database FK column.
+
+Why can't you do this?
+member.user_id
+
+Because your TypeScript class does not have a property called user_id.
+
+You only declared:
+
+user: Relation<UserEntity>;
+
+TypeScript only knows about properties you declare in entitity.
+
+If you WANT member.user_id
+You can explicitly map it:
+
+@Column({ name: 'user_id' })
+userId: number;
+
+@ManyToOne(() => UserEntity)
+@JoinColumn({ name: 'user_id' })
+user: Relation<UserEntity>;
+
+Now you have:
+
+member.userId       // FK value: 5
+member.user         // UserEntity
+member.user.id      // User's ID: 5
+
+Notice I used userId, not user_id, because that's the normal TypeScript naming style.
+
+Important distinction
+member.userId
+→ directly gets the FK value.
+
+member.user
+→ gets the related UserEntity when the relation is loaded.
+
+member.user.id
+→ gets the user's ID through the relation, but only if user was loaded.
+
+So database column ≠ automatically available TypeScript property. @JoinColumn({ name: 'user_id' }) 
+maps the database column to the user relation; it doesn't declare a user_id property.
+
+--->
+Common TypeORM Find Operators
+import {
+  In,
+  Not,
+  MoreThan,
+  MoreThanOrEqual,
+  LessThan,
+  LessThanOrEqual,
+  Between,
+  Like,
+  ILike,
+  IsNull,
+  IsNotNull,
+} from 'typeorm'
+
+| Operator            | Example                      | SQL meaning             |
+| ------------------- | ---------------------------- | ----------------------- |
+| `In()`              | `id: In([1, 2, 3])`          | `IN (1,2,3)`            |
+| `Not()`             | `id: Not(5)`                 | `!= 5`                  |
+| `MoreThan()`        | `id: MoreThan(5)`            | `> 5`                   |
+| `MoreThanOrEqual()` | `id: MoreThanOrEqual(5)`     | `>= 5`                  |
+| `LessThan()`        | `id: LessThan(5)`            | `< 5`                   |
+| `LessThanOrEqual()` | `id: LessThanOrEqual(5)`     | `<= 5`                  |
+| `Between()`         | `id: Between(5, 10)`         | `BETWEEN 5 AND 10`      |
+| `Like()`            | `name: Like('%test%')`       | `LIKE '%test%'`         |
+| `ILike()`           | `name: ILike('%test%')`      | case-insensitive `LIKE` |
+| `IsNull()`          | `description: IsNull()`      | `IS NULL`               |
+| `IsNotNull()`       | `description: Not(IsNull())` | `IS NOT NULL`           |
+
+example:1
+await repo.find({
+  where: {
+    id: In([1, 2, 3]),
+  },
+});
+
+example:2
+await this.workSpaceRepo.delete({
+  id: In([1, 2, 3]),
+}); 
+
+example:3
+await this.workSpaceRepo.delete({
+  id: MoreThan(10),
+});
+
+

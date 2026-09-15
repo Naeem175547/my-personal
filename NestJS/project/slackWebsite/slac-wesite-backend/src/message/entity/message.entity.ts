@@ -25,7 +25,7 @@ export class MessageEntity {
   image: string;
 
   @ManyToOne(() => UserEntity, (user) => user.messages, {
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
   })
   @JoinColumn({ name: 'user_id' })
   user: Relation<UserEntity>;

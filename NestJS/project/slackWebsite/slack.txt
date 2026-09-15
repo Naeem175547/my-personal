@@ -976,7 +976,7 @@ in child relation side we can optain parent data by relations or parent relation
 relatinshp attribute auto included in these respective object so we can apply filter according to that.
 but if we want to retrieve that then we should use relations;
 
-example:
+
 --->
 Find a channel whose name is channelName AND whose workspace's id equals workspaceId.
 
@@ -1470,3 +1470,5 @@ so in resolver we directly return Promise or value we don't need to use await it
 dto,ObjectType, InputType ,Entity
 they can also be used as TypeScript types for type checking, because they are classes.
 but they have different Suppose (you know)
+
+---->

@@ -733,6 +733,7 @@ commands
 permissions
 file operations
 repository exploration
+
 Week 3
 CLAUDE.md
 project instructions
@@ -2396,32 +2397,18 @@ This prepares you for repository exploration.
 # ============================================================
 # DAY 6 — REPOSITORY EXPLORATION
 # ============================================================
-
 This is one of the most important Claude Code skills.
-
 Your goal is to learn:
 
 ```text
 Don't immediately edit.
-
 Explore first.
-```
-
----
-
 # 1. Start From the Root
-
 Ask:
-
 ```text
 Explore this repository from the root.
-
 Do not modify anything.
-
 Identify the overall architecture.
-```
-
----
 
 # 2. Identify Project Structure
 
@@ -2440,35 +2427,20 @@ src/
 ```
 
 The exact structure depends on the project.
-
----
-
 # 3. Find Entry Points
-
 Ask:
-
-```text
 Identify the application entry point.
-
 Explain how the application starts.
-```
 
 For NestJS, this will commonly involve:
 
-```text
 main.ts
-```
-
 but Claude should verify the actual repository instead of
 assuming.
 
----
-
 # 4. Find Configuration
-
 Ask:
 
-```text
 Find configuration files.
 
 Explain:
@@ -2479,25 +2451,16 @@ Explain:
 - authentication configuration
 ```
 
----
-
 # 5. Trace a Feature
-
 Suppose you want to understand login.
-
-Don't ask:
-
-```text
+don't ask:
 Explain login.
-```
+instead:
 
-Instead:
 
-```text
 Trace the login flow from the GraphQL mutation to the database.
 
 Identify:
-
 1. Resolver
 2. Service
 3. Repository/database access
@@ -2506,23 +2469,17 @@ Identify:
 6. Response
 
 Do not modify anything.
-```
 
 Now Claude is exploring the actual architecture.
 
----
 
 # 6. Dependency Exploration
 
 Ask:
-
 ```text
 Trace all dependencies involved in UserService.
-
 Start with UserService and move outward.
-
 Do not modify anything.
-
 Return a concise dependency map.
 ```
 
@@ -2543,33 +2500,23 @@ MySQL
 ---
 
 # 7. Find Related Tests
-
 Ask:
 
 ```text
 Find all tests related to authentication.
-
 Explain what behavior each test verifies.
 ```
-
----
-
 # 8. Find Configuration Dependencies
-
 Ask:
-
 ```text
 Trace how JWT configuration reaches the authentication service.
-
 Do not modify anything.
 ```
-
 This teaches you to understand data/configuration flow.
 
 ---
 
 # DAY 6 EXERCISE 1 — PROJECT MAP
-
 Ask Claude:
 
 ```text
@@ -2589,19 +2536,11 @@ Include:
 - tests
 
 Only include things actually present in the repository.
-```
-
----
 
 # DAY 6 EXERCISE 2 — TRACE AUTHENTICATION
-
-Ask:
-
 ```text
 Trace the complete login flow.
-
 Start from the GraphQL operation.
-
 Follow the request through:
 
 Resolver
@@ -2616,12 +2555,9 @@ Do not modify anything.
 Mention actual file paths.
 ```
 
----
 
 # DAY 6 EXERCISE 3 — TRACE DATABASE
-
 Ask:
-
 ```text
 Trace how a User is loaded from the database.
 
@@ -2636,22 +2572,15 @@ Identify:
 
 Do not modify anything.
 ```
-
----
-
 # DAY 6 CHALLENGE — UNKNOWN BUG
 
 Give Claude this:
 
 ```text
 There is a bug in the authentication system.
-
 I don't know where the problem is.
-
 Do not modify anything.
-
 Investigate systematically.
-
 Start from the authentication entry point.
 
 Trace:
@@ -2670,9 +2599,7 @@ For each stage:
 
 Do not guess when evidence is missing.
 ```
-
 This is your first serious repository-exploration exercise.
-
 ---
 
 # DAY 6 CHECKLIST
@@ -2688,16 +2615,11 @@ This is your first serious repository-exploration exercise.
 * [ ] Can find relevant tests
 * [ ] Can investigate without modifying code
 
----
-
 # ============================================================
-
 # DAY 7 — REAL PRODUCTION WORKFLOW
-
 # ============================================================
 
 Now combine everything.
-
 Your workflow should become:
 
 ```text
@@ -2726,16 +2648,12 @@ Inspect changes
 Verify
 ```
 
----
 
 # DAY 7 PROJECT
-
 Use your actual NestJS project.
-
 Choose one real feature.
 
 Recommended:
-
 ```text
 Authentication
 ```
@@ -2760,16 +2678,11 @@ Ask:
 
 ```text
 Explore this repository.
-
 Do not modify anything.
-
 Create a concise map of the project architecture.
-
 Identify the modules relevant to my selected feature.
 ```
-
 ---
-
 # STEP 2 — FEATURE EXPLORATION
 
 Ask:
@@ -2792,7 +2705,6 @@ Identify:
 ---
 
 # STEP 3 — PROBLEM DEFINITION
-
 Tell Claude the actual requirement.
 
 Example:
@@ -2807,16 +2719,10 @@ Requirements:
 - invalidate cache after user update
 - application should continue working if Redis is unavailable
 ```
-
----
-
 # STEP 4 — PLAN
-
 Ask:
-
 ```text
 Before modifying anything:
-
 Create an implementation plan.
 
 Include:
@@ -2831,34 +2737,23 @@ Include:
 8. Risks
 
 Do not implement yet.
-```
-
----
+``
 
 # STEP 5 — REVIEW
-
 You review the plan.
 
 Ask yourself:
 
 ```text
 Is the architecture correct?
-
 Are unrelated files being changed?
-
 Is the failure behavior acceptable?
-
 Is cache invalidation correct?
-
 Are security concerns addressed?
-
 Are tests included?
 ```
 
----
-
 # STEP 6 — IMPLEMENT
-
 Only after you understand the plan:
 
 ```text
@@ -2872,16 +2767,11 @@ Rules:
 - Do not introduce unnecessary dependencies.
 - Add or update tests.
 ```
-
----
-
 # STEP 7 — VERIFY
-
 After implementation:
 
 ```text
 Verify the implementation.
-
 Run the relevant tests.
 
 Check:
@@ -2900,10 +2790,7 @@ Look for:
 Report failures honestly.
 ```
 
----
-
 # STEP 8 — REVIEW THE DIFF
-
 Ask:
 
 ```text
@@ -2920,11 +2807,7 @@ Identify:
 
 Do not modify anything.
 ```
-
----
-
 # DAY 7 FINAL CHALLENGE
-
 Complete this workflow on a real feature:
 
 ```text
@@ -2948,13 +2831,9 @@ Final verification
 ```
 
 Do not skip the exploration stage.
-
 Do not allow Claude to make large unrelated changes.
-
 Do not consider the task complete simply because Claude says
 it is complete.
-
----
 
 # ============================================================
 
@@ -3003,9 +2882,6 @@ They are:
 9. Reviewing changes
 10. Verifying the result
 ```
-
----
-
 # WEEK 2 — MASTER CHECKLIST
 
 ## CLI
@@ -3062,7 +2938,6 @@ They are:
 * [ ] Inspect git diff
 * [ ] Verify final result
 
-````
 
 # WEEK 2 GOLDEN RULE
 
@@ -3080,24 +2955,6 @@ control risky operations, and verify the final result."
 
 # END OF WEEK 2
 
-At this point you should be comfortable with:
-
-```text
-Week 1
-Claude fundamentals
-Prompt engineering
-Context
-Instructions
-Tokens
-        ↓
-Week 2
-Claude Code
-CLI
-Sessions
-Commands
-Permissions
-File operations
-Repository exploration
-```
-
 Next week can move into **Claude Code's deeper agent workflow**, where you start learning how to use it efficiently for actual production development rather than just basic interaction.
+
+--->

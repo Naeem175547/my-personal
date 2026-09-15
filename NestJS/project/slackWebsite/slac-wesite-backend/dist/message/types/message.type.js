@@ -45,4 +45,25 @@ Message = __decorate([
     ObjectType()
 ], Message);
 export { Message };
+let MessageResponse = class MessageResponse {
+    success;
+    message;
+    data;
+};
+__decorate([
+    Field(),
+    __metadata("design:type", Boolean)
+], MessageResponse.prototype, "success", void 0);
+__decorate([
+    Field(),
+    __metadata("design:type", String)
+], MessageResponse.prototype, "message", void 0);
+__decorate([
+    Field(() => [Message]),
+    __metadata("design:type", Array)
+], MessageResponse.prototype, "data", void 0);
+MessageResponse = __decorate([
+    ObjectType()
+], MessageResponse);
+export { MessageResponse };
 //# sourceMappingURL=message.type.js.map

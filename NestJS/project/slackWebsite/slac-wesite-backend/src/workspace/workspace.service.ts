@@ -15,6 +15,7 @@ export class WorkspaceService {
     private readonly userService: UserService,
     private readonly rabbitmqproducer: RabbitMqProducer,
   ) {}
+
   isUserAdminOfWorkspace(workspace: WorkspaceEntity, userId: number): boolean {
     const member = workspace.members.find(
       (member) => member.user.id === userId && member.role === 'admin',
@@ -312,7 +313,7 @@ export class WorkspaceService {
       const result = await this.workspaceRepository.addMemberToWorkspace(
         workspaceId,
         memberId,
-        'admin',
+        'member',
       );
       console.log(member.email);
       this.rabbitmqproducer.sendMail(

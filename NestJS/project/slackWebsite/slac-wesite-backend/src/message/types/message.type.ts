@@ -22,3 +22,15 @@ export class Message {
   @Field()
   updatedAt: Date;
 }
+
+@ObjectType()
+export class MessageResponse {
+  @Field()
+  success: boolean;
+
+  @Field()
+  message: string;
+
+  @Field(() => [Message])
+  data: Message[];
+}

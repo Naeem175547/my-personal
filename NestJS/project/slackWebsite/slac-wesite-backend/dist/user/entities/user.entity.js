@@ -17,13 +17,13 @@ let UserEntity = class UserEntity {
     password;
     username;
     avatar;
+    messages;
+    workspaceMembers;
     createdAt;
     updatedAt;
     generateAvatar() {
         this.avatar = `https://robohash.org/${this.username}`;
     }
-    messages;
-    workspaceMembers;
 };
 __decorate([
     PrimaryGeneratedColumn(),
@@ -50,6 +50,14 @@ __decorate([
     __metadata("design:type", String)
 ], UserEntity.prototype, "avatar", void 0);
 __decorate([
+    OneToMany(() => MessageEntity, (message) => message.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "messages", void 0);
+__decorate([
+    OneToMany(() => WorkspaceMemberEntity, (workspaceMember) => workspaceMember.user),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "workspaceMembers", void 0);
+__decorate([
     CreateDateColumn(),
     __metadata("design:type", Date)
 ], UserEntity.prototype, "createdAt", void 0);
@@ -63,14 +71,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UserEntity.prototype, "generateAvatar", null);
-__decorate([
-    OneToMany(() => MessageEntity, (message) => message.user),
-    __metadata("design:type", Object)
-], UserEntity.prototype, "messages", void 0);
-__decorate([
-    OneToMany(() => WorkspaceMemberEntity, (workspaceMemeber) => workspaceMemeber.user),
-    __metadata("design:type", WorkspaceMemberEntity)
-], UserEntity.prototype, "workspaceMembers", void 0);
 UserEntity = __decorate([
     Entity({ name: 'users' })
 ], UserEntity);

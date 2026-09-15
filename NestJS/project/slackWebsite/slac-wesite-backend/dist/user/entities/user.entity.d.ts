@@ -8,9 +8,9 @@ export declare class UserEntity {
     password: string;
     username: string;
     avatar: string;
+    messages: MessageEntity[];
+    workspaceMembers: Relation<WorkspaceMemberEntity>[];
     createdAt: Date;
     updatedAt: Date;
     generateAvatar(): void;
-    messages: Relation<MessageEntity[]>;
-    workspaceMembers: WorkspaceMemberEntity;
 }
