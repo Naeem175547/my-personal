@@ -35,7 +35,7 @@ __decorate([
 ], MessageEntity.prototype, "image", void 0);
 __decorate([
     ManyToOne(() => UserEntity, (user) => user.messages, {
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
     }),
     JoinColumn({ name: 'user_id' }),
     __metadata("design:type", Object)

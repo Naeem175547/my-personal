@@ -7,3 +7,8 @@ export declare class Message {
     createdAt: Date;
     updatedAt: Date;
 }
+export declare class MessageResponse {
+    success: boolean;
+    message: string;
+    data: Message[];
+}

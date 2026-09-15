@@ -49,6 +49,12 @@ type Message {
   updatedAt: DateTime!
 }
 
+type MessageResponse {
+  success: Boolean!
+  message: String!
+  data: [Message!]!
+}
+
 type WorkspaceMember {
   id: Float!
   user: User!
@@ -112,11 +118,18 @@ type Query {
   user(id: Int!): UserResponse!
   userByEmail(email: String!): UserResponse!
   userByUsername(username: String!): UserResponse!
+  getPaginatedMessage(messageParams: MessageParams!, page: Int, limit: Int): MessageResponse!
   getChannelById(channelId: Float!): FullChannelResponse!
   getWorkspacesOfUserByMember: WorkspacesResponse!
   getWorkSpace(workspaceId: Float!): WorkspaceResponse!
   getWorkspaceByJoinCode(joinCode: String!): WorkspaceResponse!
   isUserMemberOfWorkspace(workspaceId: Float!): User!
+}
+
+input MessageParams {
+  channelId: Int!
+  workspaceId: Int!
+  userId: Int!
 }
 
 type Mutation {

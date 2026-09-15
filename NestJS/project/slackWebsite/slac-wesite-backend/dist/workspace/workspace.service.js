@@ -254,7 +254,7 @@ let WorkspaceService = class WorkspaceService {
                     },
                 });
             }
-            const result = await this.workspaceRepository.addMemberToWorkspace(workspaceId, memberId, 'admin');
+            const result = await this.workspaceRepository.addMemberToWorkspace(workspaceId, memberId, 'member');
             console.log(member.email);
             this.rabbitmqproducer.sendMail(member.email, 'added to workSpace', 'congratulation you have been successfully added to workspace');
             return result;

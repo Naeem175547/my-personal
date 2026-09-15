@@ -15,7 +15,13 @@ let ChannelModule = class ChannelModule {
 ChannelModule = __decorate([
     Module({
         imports: [TypeOrmModule.forFeature([ChannelEntity])],
-        providers: [ChannelService, ChannelResolver, ChannelRepository],
+        providers: [
+            ChannelService,
+            ChannelResolver,
+            ChannelRepository,
+            ChannelRepository,
+        ],
+        exports: [ChannelRepository],
     })
 ], ChannelModule);
 export { ChannelModule };

@@ -7,6 +7,12 @@ import { ChannelRepository } from './channel.repository.js';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ChannelEntity])],
-  providers: [ChannelService, ChannelResolver, ChannelRepository],
+  providers: [
+    ChannelService,
+    ChannelResolver,
+    ChannelRepository,
+    ChannelRepository,
+  ],
+  exports: [ChannelRepository],
 })
 export class ChannelModule {}

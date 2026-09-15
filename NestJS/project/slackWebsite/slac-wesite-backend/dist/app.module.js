@@ -20,6 +20,7 @@ import { WorkspaceModule } from './workspace/workspace.module.js';
 import { MailModule } from './mail/mail.module.js';
 import { RabbitmqModule } from './rabbitmq/rabbitmq.module.js';
 import { MemberModule } from './member/member.module.js';
+import { WebsocketGateway } from './websocket/websocket.gateway.js';
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -52,7 +53,7 @@ AppModule = __decorate([
             MemberModule,
         ],
         controllers: [AppController],
-        providers: [AppService],
+        providers: [AppService, WebsocketGateway],
     })
 ], AppModule);
 export { AppModule };
