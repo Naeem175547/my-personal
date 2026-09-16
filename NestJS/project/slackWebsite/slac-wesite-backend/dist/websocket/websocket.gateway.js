@@ -14,6 +14,8 @@ import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSo
 import { Server, Socket } from 'socket.io';
 import { JOIN_CHANNEL, LEAVE_CHANNEL, NEW_MESSAGE_EVENT, NEW_MESSAGE_RECEIVED_EVENT, } from './utils/eventConstant.js';
 import { MessageService } from '../message/message.service.js';
+import { UseGuards } from '@nestjs/common';
+import { WsJwtGuard } from '../common/guards/websocket.guard.js';
 let WebsocketGateway = class WebsocketGateway {
     messageService;
     constructor(messageService) {
@@ -98,6 +100,7 @@ __decorate([
 ], WebsocketGateway.prototype, "handleMessage", null);
 WebsocketGateway = __decorate([
     WebSocketGateway(),
+    UseGuards(WsJwtGuard),
     __metadata("design:paramtypes", [MessageService])
 ], WebsocketGateway);
 export { WebsocketGateway };

@@ -11,8 +11,8 @@ import { ChannelRepository } from './channel.repository.js';
     ChannelService,
     ChannelResolver,
     ChannelRepository,
-    ChannelRepository,
+    ChannelService,
   ],
-  exports: [ChannelRepository],
+  exports: [ChannelRepository, ChannelService],
 })
 export class ChannelModule {}

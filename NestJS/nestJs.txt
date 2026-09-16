@@ -7973,7 +7973,7 @@ Important properties/methods:
 | `client.broadcast.emit()` | Send to everyone except this client |
 | `client.rooms`            | Rooms this client belongs to        |
 | `client.disconnect()`     | Disconnect client                   |
-| 'client.to(room).emit()   | send to a room except sender
+| 'client.to(room).emit()   | send to a room except sender        |
 
 
 server — entire WebSocket server
@@ -7989,6 +7989,26 @@ Important methods:
 | `server.to(room).emit()` | Send to a room               |
 | `server.sockets`         | Access connected sockets     |
 | `server.sockets.sockets` | Map of all connected clients |
+
+@SubscribeMessage(NEW_MESSAGE_EVENT)
+async handleMessage(
+  @ConnectedSocket() socket: Socket,
+  @MessageBody() data: {
+    channelId: number;
+    message: string;
+  },
+) {
+    const roomId = data.channelId.toString();
+  console.log('ROOM ID:', roomId);
+  const sockets = await this.server.in(roomId).fetchSockets();
+  console.log(
+    'CLIENTS IN ROOM:',
+    sockets.map((client) => client.id),
+  );
+  this.server
+    .to(roomId)
+    .emit(NEW_MESSAGE_RECEIVED_EVENT, data.message);
+}
 
 ---->now frontend for websockets
 . Install Socket.IO client
@@ -8208,6 +8228,49 @@ now JWT Based Room
 | WhatsApp-like chat  | ✅ Yes             | ✅ Yes        |
 | Public chat room    | ❌ Not necessarily | ✅ Yes        |
 
+
+
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
+import { JwtService } from '@nestjs/jwt';
+import { Socket } from 'socket.io';
+
+@Injectable()
+export class WsJwtGuard implements CanActivate {
+  constructor(private readonly jwtService: JwtService) {}
+
+  canActivate(context: ExecutionContext): boolean {
+    const socket = context.switchToWs().getClient<Socket>();
+    const token = socket.handshake.auth?.token;
+
+    if (!token) {
+      throw new WsException('Authentication token is required');
+    }
+
+    try {
+      const payload = this.jwtService.verify(token);
+
+      // Store authenticated user on socket
+      socket.data.user = {
+        id: payload.sub,
+        email: payload.email,
+      };
+
+      return true;
+    } catch (error) {
+      throw new WsException('Invalid or expired token');
+    }
+  }
+}
+
+in frontend:
+const token = localStorage.getItem('token');
+
+const socket = io('http://localhost:3002', {
+  auth: {
+    token: token,
+  },
+});
 
 
 ------------------------>
@@ -9509,3 +9572,4 @@ ValidationPipe
 │
 └── transform
        → convert input to DTO types
+       

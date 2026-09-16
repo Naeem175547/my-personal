@@ -19,9 +19,9 @@ ChannelModule = __decorate([
             ChannelService,
             ChannelResolver,
             ChannelRepository,
-            ChannelRepository,
+            ChannelService,
         ],
-        exports: [ChannelRepository],
+        exports: [ChannelRepository, ChannelService],
     })
 ], ChannelModule);
 export { ChannelModule };

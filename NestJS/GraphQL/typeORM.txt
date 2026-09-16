@@ -3958,3 +3958,11 @@ await this.workSpaceRepo.delete({
 });
 
 
+--->
+| Option                               | Recommendation                        |
+| ------------------------------------ | ------------------------------------- |
+| `user: user` (full UserEntity)       | ✅ **Best / type-safe**                |
+| `user: { id: userId }`               | ❌ Gives your current TypeScript error |
+| `user: { id: userId } as UserEntity` | ⚠️ Avoid — hides the type problem     |
+| Change entity just for this          | ❌ Not necessary                       |
+

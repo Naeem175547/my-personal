@@ -16,8 +16,11 @@ import {
 } from './utils/eventConstant.js';
 
 import { MessageService } from '../message/message.service.js';
+import { UseGuards } from '@nestjs/common';
+import { WsJwtGuard } from '../common/guards/websocket.guard.js';
 
 @WebSocketGateway()
+@UseGuards(WsJwtGuard)
 export class WebsocketGateway {
   constructor(private readonly messageService: MessageService) {}
 
