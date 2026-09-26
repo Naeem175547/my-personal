@@ -34,8 +34,8 @@ let AuthResolver = class AuthResolver {
             throw new GraphQLError('user with this email not found', {
                 extensions: {
                     code: 'NOT_FOUND_EXCEPTION',
-                    statuscode: 404
-                }
+                    statuscode: 404,
+                },
             });
         }
         const isPassMatched = await bcrypt.compare(password, user.password);
@@ -43,8 +43,8 @@ let AuthResolver = class AuthResolver {
             throw new GraphQLError('password is not valid', {
                 extensions: {
                     code: 'INVALID_PASSWORD',
-                    statuscode: 401
-                }
+                    statuscode: 401,
+                },
             });
         }
         const jwtToken = await this.authService.generateJwtToken(user);
@@ -71,7 +71,8 @@ __decorate([
 ], AuthResolver.prototype, "signIn", null);
 AuthResolver = __decorate([
     Resolver(),
-    __metadata("design:paramtypes", [UserService, AuthService])
+    __metadata("design:paramtypes", [UserService,
+        AuthService])
 ], AuthResolver);
 export { AuthResolver };
 //# sourceMappingURL=auth.resolver.js.map
