@@ -165,6 +165,8 @@ Container → Created and managed by Docker
 
 Useful Commands:
 
+docker build -t name:version .
+
 docker images
 → List images
 
@@ -378,7 +380,6 @@ FROM node:20
 or
 FROM node:latest
 WORKDIR /app
-
 RUN npm install
 COPY . .
 CMD ["npm", "start"]
@@ -752,7 +753,7 @@ docker run
 
 --rm
 → Automatically delete the container when it stops.
-if we don't give then container will not stop
+if we don't give then container will not delete.
 
 -v "/mnt/d/alpha course/Coding/ImportantTopics/Docker/Docker:/app"
 → Mount your computer's folder into the container.
@@ -1009,10 +1010,10 @@ Important:
 → One Compose file can manage multiple services together.
 
 note->
-Yes. .yml and .yaml are the same YAML file format.
+ .yml and .yaml are the same YAML file format.
 nano docker-compose.yml opens the docker-compose.yml file in the Nano terminal
  text editor.
-Use it to view or edit the Kafka Docker configuration:
+Use it to view or edit  Docker configuration:
 nano docker-compose.yml
 Then save with Ctrl + O, press Enter, and exit with Ctrl + X.
 
