@@ -17,8 +17,6 @@ Post images
 
 Think of S3 as cloud storage for your application.
 
-
-
 2. Why not store images inside NestJS?
 
 Suppose your project is:
@@ -168,8 +166,8 @@ User
 S3 URL
   ↓
 Image
-Private bucket/object
 
+Private bucket/object
 The object cannot simply be accessed by anyone.
 
 Your backend can generate a temporary presigned URL.
@@ -838,7 +836,7 @@ This is useful for a GitHub-like application where repositories may contain larg
 | ----------------------------- | --------------------- | -------------------------------------- |
 | `.txt`                        | Text                  | `transformToString()`                  |
 | `.json`                       | JSON object           | `transformToString()` → `JSON.parse()` |
-| `.js`, `.ts`, `.html`, `.css` | Source code/text      | `transformToString()`                  |
+| `.js`, `.ts`, `.html`, `.css` | Source code/text      | `transformToString()`|
 | `.jpg`, `.png`, `.webp`       | Image                 | Presigned URL or bytes                 |
 | `.pdf`                        | PDF                   | Presigned URL or bytes                 |
 | `.mp4`                        | Video                 | Presigned URL/stream                   |
@@ -956,3 +954,6 @@ file.pdf   → URL
 
 So you don't always get a URL. You choose whether your 
 backend returns the object's data or a presigned URL, depending on the file and what your frontend needs.
+
+
+--->

@@ -4790,3 +4790,76 @@ But:
 e.currentTarget
    ↓
 <form>
+
+--->
+shadcn/ui — Short Notes
+shadcn/ui = collection of reusable React UI components.
+Built mainly with Tailwind CSS + Radix UI.
+It is not a traditional component library; components are copied into your project, so you can modify them.
+Common components:
+Button
+Input
+Card
+Dialog
+Dropdown Menu
+Select
+Table
+Tabs
+Toast
+Uses TypeScript and Tailwind CSS.
+Install/add components using the shadcn CLI.
+Basic commands
+npx shadcn@latest init
+npx shadcn@latest add button
+npx shadcn@latest add card
+npx shadcn@latest add dialog
+Example
+import { Button } from "@/components/ui/button";
+
+export default function App() {
+  return <Button>Click Me</Button>;
+}
+Why use shadcn?
+
+Ready-made UI + full control + customizable + accessible components.
+
+Remember:
+shadcn/ui = React components + Tailwind + Radix + copy into your project + customize
+
+--->
+React Icons — Short Notes
+
+Install:
+npm i react-icons
+
+Import:
+
+import { FaGithub } from "react-icons/fa";
+
+Use:
+
+<FaGithub size={24} />
+Common icon packs
+fa → Font Awesome
+md → Material Design
+io → Ionicons
+bi → Bootstrap Icons
+hi → Heroicons
+lu → Lucide
+
+Example
+import { FaGithub } from "react-icons/fa";
+import { FiSearch } from "react-icons/fi";
+
+function App() {
+  return (
+    <div>
+      <FaGithub size={30} />
+      <FiSearch size={24} />
+    </div>
+  );
+}
+
+export default App;
+
+Find icons: use the React Icons website, choose an icon, then copy its import name.
