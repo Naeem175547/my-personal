@@ -4863,3 +4863,73 @@ function App() {
 export default App;
 
 Find icons: use the React Icons website, choose an icon, then copy its import name.
+
+--->
+onClick={() => navigate(-1)}
+
+-1 means go back one step in the browser's history.
+
+For example:
+
+Page A → Page B → Page C
+                  ↑
+              You are here
+
+If you click:
+
+navigate(-1)
+
+you go:
+
+Page A → Page B
+              ↑
+Common values
+navigate(-1) // Go back 1 page
+navigate(-2) // Go back 2 pages
+navigate(1)  // Go forward 1 page
+navigate(2)  // Go forward 2 pages
+
+It is based on browser history, not directly on the URL.
+
+navigate(-1)
+
+means:
+
+Go one step backward in the browser's history stack.
+
+The history contains URLs/routes, so the result is a previous URL.
+
+Example:
+
+Browser History
+
+1. /auth/signin
+2. /auth/signup
+3. /dashboard   ← current
+navigate(-1)
+
+→ goes to /auth/signup.
+
+So remember:
+navigate(-1) → Browser history → previous URL ✅
+
+note->
+If there is no forward history, then:
+
+navigate(1)
+
+has nothing to navigate to, so effectively nothing happens.
+
+Example:
+
+/auth/signin → /auth/signup → /dashboard
+                              ↑
+                           current
+
+There is nothing after /dashboard in the browser history.
+
+So:
+
+navigate(1)
+
+➡️ stays on /dashboard.

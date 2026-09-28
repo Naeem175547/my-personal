@@ -1,8 +1,8 @@
-import { signIn } from "@/graphql/mutation/auth";
+import { signUp } from "@/graphql/mutation/auth";
 import { useMutation } from "@apollo/client/react";
 
 export const useSignUp = () => {
-  const [mutate, { data, error, loading }] = useMutation(signIn, {
+  const [mutate, { data, error, loading }] = useMutation(signUp, {
     onCompleted: (data) => {
       console.log("successfully signUp", data);
     },
