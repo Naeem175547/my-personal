@@ -2,7 +2,7 @@ import { signIn } from "@/graphql/mutation/auth";
 import { useMutation } from "@apollo/client/react";
 
 export const useSignIn = () => {
-  const [mutate, { error, loading }] = useMutation(signIn, {
+  const [mutate, { error, loading, data }] = useMutation(signIn, {
     onCompleted: (data) => {
       console.log("Successfully signed in", data);
     },
@@ -11,8 +11,9 @@ export const useSignIn = () => {
       console.error("Failed to sign in", error);
     },
   });
+
   return {
-    signUpMutate: mutate,
+    signInMutation: mutate,
     error,
     loading,
   };

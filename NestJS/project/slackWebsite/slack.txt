@@ -1471,4 +1471,3 @@ dto,ObjectType, InputType ,Entity
 they can also be used as TypeScript types for type checking, because they are classes.
 but they have different Suppose (you know)
 
----->
