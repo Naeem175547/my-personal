@@ -1,33 +1,17 @@
 import './App.css';
-import { Route, Routes } from 'react-router-dom';
-import Auth from './pages/Auth/auth';
-import { SigninCard } from './components/organisms/Auth/signInCard';
-import NotFound from './pages/notFound/notFound';
-import { SignupContainer } from './components/organisms/Auth/SignupContainer';
+import { Toaster } from './components/ui/toast';
+import AppContextProvider from './context/AppContextProvider';
+import AppRoutes from './Routes';
+import { Modals } from './components/organisms/model/model';
 
 function App() {
   return (
     <>
-      <h2>Homepage</h2>
-      <Routes>
-        <Route
-          path="/auth/signup"
-          element={
-            <Auth>
-              <SignupContainer />
-            </Auth>
-          }
-        />
-        <Route
-          path="/auth/signin"
-          element={
-            <Auth>
-              <SigninCard />
-            </Auth>
-          }
-        />
-        <Route path="/*" element={<NotFound />} />
-      </Routes>
+      <AppContextProvider>
+        <AppRoutes />
+        <Modals />
+      </AppContextProvider>
+      <Toaster />
     </>
   );
 }
