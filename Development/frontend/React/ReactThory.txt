@@ -357,7 +357,7 @@ react can render array directly
 ⚛️ Important Notes: Array & Object in React
 🧩 ARRAY in React
 🔹 1. Used to Render Lists
-{fruits.map((item, index) => (//use () not {} in side call 
+{fruits.map((item, index) => (
   <li key={index}>{item}</li>
 ))}
 
@@ -2269,6 +2269,7 @@ function App() {
       <Home />
     </Suspense>
   );
+
 }
 
 👉 fallback = what user sees while loading
@@ -3717,7 +3718,6 @@ import axios from "axios";
 ═══════════════════════════════════════════════════════════════
 1️⃣ GET Request
 ═══════════════════════════════════════════════════════════════
-
 async function getUsers() {
   try {
     const response = await axios.get(
@@ -3813,7 +3813,6 @@ await axios.get(
 );
 
 URL Generated
-
 /users?page=1&limit=10
 
 ═══════════════════════════════════════════════════════════════
@@ -3844,7 +3843,6 @@ await axios.get("/profile", {
 ═══════════════════════════════════════════════════════════════
 🔟 Response Object
 ═══════════════════════════════════════════════════════════════
-
 const response = await axios.get("/users");
 
 response.data
@@ -3889,7 +3887,6 @@ try {
 ═══════════════════════════════════════════════════════════════
 
 const api = axios.create({
-
   baseURL: "https://api.example.com"
 
 });
@@ -3899,7 +3896,6 @@ Now
 api.get("/users");
 
 Instead of
-
 axios.get("https://api.example.com/users");
 
 ═══════════════════════════════════════════════════════════════
@@ -3927,6 +3923,13 @@ const api = axios.create({
 
 });
 
+Request
+   ↓
+Wait
+   ↓
+5 seconds
+   ↓
+No response → timeout error
 ═══════════════════════════════════════════════════════════════
 1️⃣5️⃣ Axios Interceptors
 ═══════════════════════════════════════════════════════════════
@@ -3938,12 +3941,13 @@ api.interceptors.request.use(
 (config)=>{
 
    console.log("Request Sent");
-
    return config;
 
 }
 
 );
+
+
 
 ───────────────────────────────────────────────────────────────
 
@@ -4137,41 +4141,7 @@ is received.
 → Sends cookies and authentication information in cross-origin
 requests.
 
-═══════════════════════════════════════════════════════════════
-🎯 Most Used
-═══════════════════════════════════════════════════════════════
-
-axios.get(url)
-
-axios.post(url,data)
-
-axios.put(url,data)
-
-axios.patch(url,data)
-
-axios.delete(url)
-
-axios.create()
-
-headers
-
-params
-
-Authorization
-
-Interceptors
-
-try...catch
-
-response.data
-
-await
-
-Promise.all()
-
-═══════════════════════════════════════════════════════════════
-
-═══════════════════════════════════════════════════════════════
+═════════════════════════════════════════════════════════════
             🚀 TanStack React Query (useQuery) ONE SHOT
 ═══════════════════════════════════════════════════════════════
 
@@ -4790,6 +4760,7 @@ But:
 e.currentTarget
    ↓
 <form>
+<<<<<<< HEAD
 
 --->
 shadcn/ui — Short Notes
@@ -5048,3 +5019,5 @@ export default function combineContext(...providers) {
     }, children);
   };
 }
+=======
+>>>>>>> b61a8481 (notes)
