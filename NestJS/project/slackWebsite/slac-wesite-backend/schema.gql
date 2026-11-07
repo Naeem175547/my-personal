@@ -10,6 +10,9 @@ type User {
   avatar: String!
   createdAt: DateTime!
   updatedAt: DateTime!
+  isVarified: Boolean!
+  token: String!
+  tokenExpiryDate: DateTime!
 }
 
 """
@@ -49,6 +52,12 @@ type Message {
   updatedAt: DateTime!
 }
 
+type PresignedUrlResponse {
+  success: Boolean!
+  message: String!
+  data: String!
+}
+
 type MessageResponse {
   success: Boolean!
   message: String!
@@ -77,6 +86,8 @@ type Workspace {
   channels: [Channel!]
   messages: [Message!]
   members: [WorkspaceMember!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type WorkspaceResponse {
@@ -118,31 +129,35 @@ type Query {
   user(id: Int!): UserResponse!
   userByEmail(email: String!): UserResponse!
   userByUsername(username: String!): UserResponse!
+  getPresignedUrl: PresignedUrlResponse!
   getPaginatedMessage(messageParams: MessageParams!, page: Int, limit: Int): MessageResponse!
-  getChannelById(channelId: Float!): FullChannelResponse!
+  getChannelById(channelId: Int!): FullChannelResponse!
   fetchWorkspaces: WorkspacesResponse!
   getWorkspacesOfUserByMember: WorkspacesResponse!
-  getWorkSpace(workspaceId: Float!): WorkspaceResponse!
+  getWorkSpace(workspaceId: Int!): WorkspaceResponse!
   getWorkspaceByJoinCode(joinCode: String!): WorkspaceResponse!
   isUserMemberOfWorkspace(workspaceId: Float!): User!
 }
 
 input MessageParams {
   channelId: Int!
-  workspaceId: Int!
-  userId: Int!
+  workspaceId: Int
+  userId: Int
 }
 
 type Mutation {
   updateUser(id: Int!, updateUserInput: UpdateUserInput!): UserResponse!
   removeUser(id: Int!): UserResponse!
   signUp(createUserInput: CreateUserInput!): UserResponse!
+  verifyToken(token: String!): Boolean!
   signIn(email: String!, password: String!): LoginResponse!
   createWorkspace(createWorkspaceInput: CreateWorkspaceInput!): WorkspaceResponse!
-  deleteWorkspace(workspaceId: Float!): WorkspaceResponse!
-  UpdateWorkspace(workspaceId: Float!, updateWorkspaceInput: UpdateWorkspaceInput!): WorkspaceResponse!
-  addMemberToWorkspace(workspaceId: Float!, memberId: Float!): WorkspaceMemberResponse!
-  addChannelToWorkspace(workspaceId: Float!, channelName: String!): WorkspaceResponse!
+  deleteWorkspace(workspaceId: Int!): WorkspaceResponse!
+  UpdateWorkspace(workspaceId: Int!, updateWorkspaceInput: UpdateWorkspaceInput!): WorkspaceResponse!
+  addMemberToWorkspace(workspaceId: Int!, memberId: Int!): WorkspaceMemberResponse!
+  addChannelToWorkspace(workspaceId: Int!, channelName: String!): WorkspaceResponse!
+  resetJoinCodeController(workspaceId: Int!): WorkspaceResponse!
+  joinWorkspace(workspaceId: Int!, joinCode: String!): WorkspaceMemberResponse!
 }
 
 input UpdateUserInput {
@@ -167,4 +182,5 @@ input CreateWorkspaceInput {
 input UpdateWorkspaceInput {
   name: String
   description: String
+  joinCode: String
 }

@@ -11,7 +11,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
 import { AuthGuards } from '../common/guards/auth.guard.js';
 import { CreateWorkspaceInput } from './dto/create.workspace.input.js';
 import { WorkspaceService } from './workspace.service.js';
@@ -51,7 +51,6 @@ let WorkspaceResolver = class WorkspaceResolver {
     }
     UpdateWorkspace(workspaceId, updateWorkspaceInput, context) {
         const userId = context.req.user.id;
-        console.log('UPDATE INPUT:', updateWorkspaceInput);
         return this.workspaceService.UpdateWorkspaceService(workspaceId, updateWorkspaceInput, userId);
     }
     addMemberToWorkspace(context, workspaceId, memberId) {
@@ -61,6 +60,14 @@ let WorkspaceResolver = class WorkspaceResolver {
     addChannelToWorkspace(context, workspaceId, channelName) {
         const userId = context.req.user.id;
         return this.workspaceService.addChannelToWorkspaceService(workspaceId, channelName, userId);
+    }
+    resetJoinCodeController(workspaceId, context) {
+        const userId = context.req.user.id;
+        return this.workspaceService.resetWorkspaceJoinCodeService(workspaceId, userId);
+    }
+    joinWorkspace(workspaceId, joinCode, context) {
+        const userId = context.req.user.id;
+        return this.workspaceService.joinWorkspaceService(workspaceId, joinCode, userId);
     }
 };
 __decorate([
@@ -79,7 +86,7 @@ __decorate([
 ], WorkspaceResolver.prototype, "fetchWorkspaces", null);
 __decorate([
     Mutation(() => WorkspaceResponse),
-    __param(0, Args('workspaceId')),
+    __param(0, Args('workspaceId', { type: () => Int })),
     __param(1, Context()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
@@ -94,7 +101,7 @@ __decorate([
 ], WorkspaceResolver.prototype, "getWorkspacesOfUserByMember", null);
 __decorate([
     Query(() => WorkspaceResponse),
-    __param(0, Args('workspaceId')),
+    __param(0, Args('workspaceId', { type: () => Int })),
     __param(1, Context()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
@@ -110,7 +117,7 @@ __decorate([
 ], WorkspaceResolver.prototype, "getWorkspaceByJoinCode", null);
 __decorate([
     Mutation(() => WorkspaceResponse),
-    __param(0, Args('workspaceId')),
+    __param(0, Args('workspaceId', { type: () => Int })),
     __param(1, Args('updateWorkspaceInput')),
     __param(2, Context()),
     __metadata("design:type", Function),
@@ -120,8 +127,8 @@ __decorate([
 __decorate([
     Mutation(() => WorkspaceMemberResponse),
     __param(0, Context()),
-    __param(1, Args('workspaceId')),
-    __param(2, Args('memberId')),
+    __param(1, Args('workspaceId', { type: () => Int })),
+    __param(2, Args('memberId', { type: () => Int })),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Number, Number]),
     __metadata("design:returntype", void 0)
@@ -129,15 +136,32 @@ __decorate([
 __decorate([
     Mutation(() => WorkspaceResponse),
     __param(0, Context()),
-    __param(1, Args('workspaceId')),
+    __param(1, Args('workspaceId', { type: () => Int })),
     __param(2, Args('channelName')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Number, String]),
     __metadata("design:returntype", void 0)
 ], WorkspaceResolver.prototype, "addChannelToWorkspace", null);
+__decorate([
+    Mutation(() => WorkspaceResponse),
+    __param(0, Args('workspaceId', { type: () => Int })),
+    __param(1, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "resetJoinCodeController", null);
+__decorate([
+    Mutation(() => WorkspaceMemberResponse),
+    __param(0, Args('workspaceId', { type: () => Int })),
+    __param(1, Args('joinCode')),
+    __param(2, Context()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String, Object]),
+    __metadata("design:returntype", void 0)
+], WorkspaceResolver.prototype, "joinWorkspace", null);
 WorkspaceResolver = __decorate([
-    UseGuards(AuthGuards),
     Resolver(),
+    UseGuards(AuthGuards),
     __metadata("design:paramtypes", [WorkspaceService])
 ], WorkspaceResolver);
 export { WorkspaceResolver };

@@ -25,6 +25,18 @@ const FETCH_WORKSPACE_BY_ID = gql`
         joinCode
         createdAt
         updatedAt
+        channels {
+          id
+          name
+        }
+        members {
+          role
+          user {
+            id
+            name
+            avatar
+          }
+        }
       }
     }
   }
