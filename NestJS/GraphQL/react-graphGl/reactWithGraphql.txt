@@ -1442,3 +1442,50 @@ navigate(`/edit-post/${postId}`, {
                 from: window.location.pathname
             }
         });
+
+--->
+await addChannelToWorkspaceMutation({
+  variables: {
+    workspaceId: Number(currentWorkspace.id),
+    channelName,
+  },
+  refetchQueries: [
+    {
+      query: FETCH_WORKSPACE_BY_ID,
+      variables: {
+        workspaceId: Number(currentWorkspace.id),
+      },
+    },
+  ],
+  awaitRefetchQueries: true, ->it means wait until refetchQueries finished
+});
+
+console.log("Everything finished!");
+
+
+---->
+ import { useApolloClient } from "@apollo/client/react";
+import { GET_CHANNELS_by_USER_ID } from "@/graphqlApi/channel/query";
+
+export function useGetChannelById() {
+    const client = useApolloClient();
+
+    const getChannelById = async (channelId) => {
+        try {
+            const { data } = await client.query({
+                query: GET_CHANNELS_by_USER_ID,
+                variables: { channelId },
+                fetchPolicy: "network-only",
+            });
+
+            return data;
+        } catch (error) {
+            console.error("Error fetching channel:", error);
+            throw error;
+        }
+    };
+
+    return { getChannelById };
+}
+
+---->
