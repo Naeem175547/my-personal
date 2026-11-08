@@ -1667,3 +1667,209 @@ Belongs to that branch's history
 Appears/disappears according to the branch you switch to
 
 That's why your earlier git switch main and git switch main-a showed the same modified/deleted files. You had not committed them yet.
+
+--->
+-->
+| #  | Topic                          | What you'll learn                             |
+| -- | ------------------------------ | --------------------------------------------- |
+| 1  | **Remote-tracking branches** ⭐ | `branch` vs `origin/branch`                   |
+| 2  | **Fetch vs Pull**              | What Git actually does internally             |
+| 3  | **Merge vs Rebase** ⭐          | Two different ways to combine branches        |
+| 4  | **`git reset`**                | Undo commits/changes safely                   |
+| 5  | **`git revert`**               | Undo a commit without rewriting history       |
+| 6  | **Stash advanced usage**       | Temporarily save work                         |
+| 7  | **Cherry-pick** ⭐              | Take one specific commit from another branch  |
+| 8  | **Merge conflicts**            | Resolve conflicts correctly                   |
+| 9  | **Interactive rebase**         | Clean/squash/edit commits                     |
+| 10 | **Detached HEAD**              | Understand Git's HEAD state                   |
+| 11 | **Reflog** ⭐                   | Recover accidentally deleted commits/branches |
+| 12 | **Branch tracking/upstream**   | `-u`, tracking relationships                  |
+| 13 | **Tags & releases**            | Versioning production code                    |
+| 14 | **Git workflows**              | Feature → release → main production flow      |
+
+
+-->
+| Expression | Meaning                       |
+| ---------- | ----------------------------- |
+| `HEAD`     | Current commit                |
+| `HEAD~1`   | Parent of current commit      |
+| `HEAD~2`   | Grandparent of current commit |
+| `HEAD@{1}` | Previous position of HEAD     |
+| `HEAD@{2}` | Position before that          |
+
+
+1. HEAD
+HEAD means your current position — normally the current commit.
+
+git diff HEAD
+
+By itself, this is usually not useful because you're comparing the working tree against the current commit.
+
+2. HEAD~1
+HEAD~1
+
+means:
+
+The parent of the current commit.
+
+Example:
+
+A → B → C
+        ↑
+       HEAD
+
+Then:
+
+HEAD     = C
+HEAD~1   = B
+HEAD~2   = A
+
+So:
+
+git diff HEAD~1 HEAD
+
+means:
+
+Show the changes introduced by the latest commit.
+
+3. HEAD@{1}
+This is different.
+
+HEAD@{1}
+
+means:
+
+Where HEAD was previously, according to Git's reflog.
+
+Example:
+
+Before pull:
+
+A → B → C
+        ↑
+       HEAD
+
+You run:
+
+git pull origin cashback-panel
+
+After pull:
+
+A → B → C → D → E
+                  ↑
+                 HEAD
+
+Now:
+
+HEAD      = E
+HEAD@{1}  = C
+
+So:
+git diff HEAD@{1} HEAD
+
+shows everything that changed because of the pull, including changes from D and E.
+
+--->
+git reflog is one of the most useful Git recovery tools.
+Think of it as:
+
+Git's history of where HEAD and branch references have been.
+
+Even if you accidentally move away from a commit, reflog can often help you find it again.
+
+Example
+
+Suppose you have:
+
+A → B → C → D
+          ↑
+       important work
+
+Then accidentally you do:
+
+git reset --hard HEAD~2
+
+Now your branch looks like:
+
+A → B
+    ↑
+   HEAD
+
+It looks like C and D disappeared.
+
+But Git's reflog may show:
+
+git reflog
+abc123 HEAD@{0}: reset: moving to HEAD~2
+def456 HEAD@{1}: commit: final cashback changes
+789abc HEAD@{2}: commit: add cashback resolver
+
+So you can identify the old commit:
+def456
+
+and recover it.
+
+Recover it
+Create a branch pointing to that commit:
+
+git switch -c recover-cashback def456
+
+Now:
+
+A → B → C → D
+          ↑
+    recover-cashback
+
+Your work is back. ✅
+
+reflog vs log
+This distinction is important:
+
+git log
+
+shows the commit history reachable from your current branch.
+
+git reflog
+
+shows where your local HEAD/branches have moved, including commits that may no longer be reachable from the current branch.
+
+That's why reflog is often called the Git recovery tool.
+
+One important limitation: reflog is local, not a permanent backup, and unreachable objects can eventually be garbage-collected. 
+So if you discover an important lost commit, recover it promptly.
+
+--->
+2 cases — short
+
+Case 1: Remote exists, local doesn't
+
+git fetch origin
+git switch -c cashback-panel --track origin/cashback-panel
+
+Creates:
+cashback-panel → origin/cashback-panel
+
+note->
+git switch -c cashback-panel  ->this will create new branch form current local head.
+
+
+
+Case 2: Both local and remote already exist
+
+git fetch origin
+git switch cashback-panel
+git pull
+
+Updates your local branch from:
+
+origin/cashback-panel → cashback-panel
+
+Remember:
+origin/cashback-panel = remote-tracking branch
+cashback-panel = your local branch.
+
+note->
+| Command                        | Meaning                                                                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `git switch cashback-panel`    | **Switch to existing branch**. If matching `origin/cashback-panel` exists, Git can create local tracking branch automatically from origin/cashback-panel. |
+| `git switch -c cashback-panel` | **Create a new local branch** from your current `HEAD`, then switch to it.                                                     |
