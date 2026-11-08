@@ -4138,3 +4138,571 @@ Subscription → receive messages instantly
 is the better architecture.
 
 
+------>
+Remember this simple definition
+
+GraphQL Fragment = a reusable group of fields.
+And remember this syntax:
+fragment NAME on TYPE {
+  fields
+}
+
+Use it with:
+
+...NAME
+
+So your code:
+fragment ReportingPeriodFields on ReportingOverviewPeriod {
+   ...
+}
+
+means:
+Create a reusable group of ReportingOverviewPeriod fields called ReportingPeriodFields.
+
+And:
+
+...ReportingPeriodFields
+
+means:
+Use that group of fields here.
+Next, the important thing to learn is why on ReportingOverviewPeriod is required and where ReportingOverviewPeriod actually comes from in your backend/schema. That will make your current code much easier to understand.
+and use dataSoucr and respository and queryBuilder in project in anytime but dataSouce required seprate configuration
+--->
+const {data,error,laoding}=useQuery(GET_CLAIM_LEAD_REQUESTS, {
+  variables: {
+    input: buildApiInput({}, 1, 'self')
+  },
+
+  onCompleted: (data) => {
+    setRows(data.get_claim_lead_requests.list || []);
+  },
+
+  onError: (err) => {
+    console.error(err);
+    toast.error('Failed to fetch claim requests');
+  }
+});
+
+we can use like this
+onCompleted
+Runs when the query succeeds.
+
+onError-Runs when the query fails.
+
+--->
+1. What is client?
+First, you create an Apollo Client:
+
+const client = new ApolloClient({
+  link: httpLink,
+  cache: new InMemoryCache(),
+});
+
+Now client gives you methods such as:
+
+client.query()
+client.mutate()
+
+Think:
+
+Apollo Client
+     │
+     ├── query()   → GET/FETCH data
+     │
+     └── mutate()  → CREATE/UPDATE/DELETE data
+
+2. client.query()
+Use it when you want to fetch data from GraphQL.
+
+Basic syntax:
+
+const response = await client.query({
+  query: GET_USERS,
+});
+
+Example GraphQL query
+const GET_USERS = gql`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+    }
+  }
+`;
+
+Then:
+
+const response = await client.query({
+  query: GET_USERS,
+});
+
+console.log(response);
+
+Apollo returns something like:
+
+{
+  data: {
+    users: [
+      {
+        id: 1,
+        name: "Naeem",
+        email: "naeem@gmail.com"
+      }
+    ]
+  }
+}
+
+So normally:
+
+const response = await client.query({
+  query: GET_USERS,
+});
+const users = response.data.users;
+
+
+3. Query with variables
+
+Suppose your GraphQL query needs an ID:
+
+const GET_USER = gql`
+  query GetUser($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      email
+    }
+  }
+`;
+
+You send the variable using variables:
+
+const response = await client.query({
+  query: GET_USER,
+  variables: {
+    id: 10,
+  },
+});
+
+Remember:
+
+client.query({
+    query:       GraphQL query
+    variables:   data required by query
+})
+
+4. Your GET_LEAD_LIST example
+Your code:
+
+const resp = await clientInsurance.query({
+  query: GET_LEAD_LIST,
+  variables: {
+    filters: {
+      page: activePage,
+      per_page: PER_PAGE,
+      search: debouncedSearch,
+      sort_by: "created_date",
+      sort_order: sortOrder,
+    },
+  },
+});
+
+GraphQL receives something conceptually like:
+
+Query:
+GET_LEAD_LIST
+
+Variables:
+{
+   filters: {
+      page: 1,
+      per_page: 10,
+      search: "abc"
+   }
+}
+
+Then response:
+resp.data.get_lead_list
+
+
+5. client.mutate()
+Now mutations.
+Use client.mutate() when you want to change data.
+
+Usually:
+CREATE
+UPDATE
+DELETE
+
+Basic syntax:
+const response = await client.mutate({
+  mutation: CREATE_USER,
+});
+
+Example:
+
+const CREATE_USER = gql`
+  mutation CreateUser($name: String!, $email: String!) {
+    createUser(name: $name, email: $email) {
+      id
+      name
+      email
+    }
+  }
+`;
+
+Call it:
+
+const response = await client.mutate({
+  mutation: CREATE_USER,
+  variables: {
+    name: "Naeem",
+    email: "naeem@gmail.com",
+  },
+});
+
+Response:
+
+{
+  data: {
+    createUser: {
+      id: 1,
+      name: "Naeem",
+      email: "naeem@gmail.com"
+    }
+  }
+}
+
+6. Query vs Mutation
+
+This is the most important thing:
+
+Query
+const response = await client.query({
+  query: GET_USERS,
+  variables: {
+    page: 1,
+  },
+});
+
+Used for:
+
+GET / READ
+Mutation
+const response = await client.mutate({
+  mutation: CREATE_USER,
+  variables: {
+    name: "Naeem",
+  },
+});
+
+Used for:
+
+CREATE / UPDATE / DELETE
+
+7. Headers using context
+
+Your project has:
+
+clientInsurance.query({
+  query,
+  variables,
+  context: {
+    headers,
+  },
+});
+
+You can directly do:
+
+const response = await client.query({
+  query: GET_USERS,
+  variables: {
+    page: 1,
+  },
+  context: {
+    headers: {
+      Authorization: "Bearer token",
+    },
+  },
+});
+
+For mutation:
+
+const response = await client.mutate({
+  mutation: CREATE_USER,
+  variables: {
+    name: "Naeem",
+  },
+  context: {
+    headers: {
+      Authorization: "Bearer token",
+    },
+  },
+});
+
+So:
+
+query       → GraphQL operation
+variables   → values sent to operation
+context     → request-related information, such as headers
+
+8. Error handling
+Because these are promises, use try/catch.
+
+Query
+try {
+  const response = await client.query({
+    query: GET_USERS,
+  });
+
+  console.log(response.data);
+} catch (error) {
+  console.log(error);
+}
+
+Mutation
+try {
+  const response = await client.mutate({
+    mutation: CREATE_USER,
+    variables: {
+      name: "Naeem",
+    },
+  });
+
+  console.log(response.data);
+} catch (error) {
+  console.log(error);
+}
+
+
+9. Your helper function
+Now your original function becomes very easy to understand:
+
+export function executeGraphQLQueryInsurance(
+  query,
+  variables = {},
+  headers = {}
+) {
+  return clientInsurance.query({
+    query,
+    variables,
+    ...(Object.keys(headers).length
+      ? {
+          context: {
+            headers,
+          },
+        }
+      : {}),
+  });
+}
+
+It is simply a wrapper around client.query().
+
+Instead of writing:
+
+clientInsurance.query({
+  query: GET_LEAD_LIST,
+  variables: {
+    filters: {...},
+  },
+});
+
+they created:
+
+executeGraphQLQueryInsurance(
+  GET_LEAD_LIST,
+  {
+    filters: {...},
+  }
+);
+
+The helper eventually calls:
+
+executeGraphQLQueryInsurance()
+             ↓
+clientInsurance.query()
+             ↓
+GraphQL server
+             ↓
+response
+
+10. The syntax you should memorize
+client.query()
+const response = await client.query({
+  query: SOME_QUERY,
+  variables: {
+    // variables
+  },
+  context: {
+    headers: {
+      // headers
+    },
+  },
+});
+
+client.mutate()
+const response = await client.mutate({
+  mutation: SOME_MUTATION,
+  variables: {
+    // variables
+  },
+  context: {
+    headers: {
+      // headers
+    },
+  },
+});
+
+And the core difference is simply:
+
+client.query()
+      ↓
+READ data
+
+client.mutate()
+      ↓
+CHANGE data
+
+That's the foundation. The next important topic after this is how Apollo 
+Client handles the response and cache after client.query() / client.mutate().
+
+| `useQuery`                        | `client.query`                       |
+| --------------------------------- | ------------------------------------ |
+| React hook                        | Apollo Client method                 |
+| Automatically runs                | You manually call it                 |
+| Gives `loading`, `data`, `error`  | You handle them yourself             |
+| Good for component-based fetching | Good for manually triggered fetching |
+
+| `useMutation`                    | `client.mutate`                        |
+| -------------------------------- | -------------------------------------- |
+| React hook                       | Apollo Client method                   |
+| Doesn't execute immediately      | You manually call it                   |
+| Returns a mutation function      | You directly call `client.mutate()`    |
+| Gives `loading`, `data`, `error` | You handle response/error yourself     |
+| Good for React components        | Good for manually triggered operations |
+
+note->
+f you use client.query() and client.mutate() directly,
+ you do NOT need to wrap your entire React app with ApolloProvider
+
+ --->
+ Different Apollo Client
+        ≠
+Different Database
+
+More accurately:
+
+Different Apollo Client
+        ↓
+Usually different API/server configuration
+        ↓
+That API MAY use a different database
+
+--->
+
+|
+
+cache: true here means Apollo Client is allowed to use its cache when executing the query.
+But there is an important point: in Apollo Client, cache is normally not a standard client.query() option. What you usually want is fetchPolicy.
+
+For example:
+
+return clientInsurance.query({
+  query,
+  variables,
+  fetchPolicy: "cache-first",
+});
+What cache-first means
+Query requested
+      ↓
+Is data already in Apollo cache?
+   ↙           ↘
+ YES            NO
+  ↓              ↓
+Use cache     Call GraphQL API
+                 ↓
+            Store in cache
+
+important fetchPolicy `fetchPolicy`    | Meaning                                 |
+| ---------------- | --------------------------------------- |
+| `"cache-first"`  | Use cache if available; otherwise API   |
+| `"network-only"` | Always call API; don't use cached data  |
+| `"no-cache"`     | Call API and don't save result in cache |
+| `"cache-only"`   | Only use cache; never call API          |
+
+
+--->
+In Apollo Client, client tells useQuery which Apollo Client instance should execute this query.
+
+const { data, loading, error, refetch } = useQuery(GET_LEAD_LIST, {
+  client: insuranceClient,
+  variables: { filters },
+  fetchPolicy: 'cache-and-network',
+});
+
+What is insuranceClient?
+Usually you have an Apollo Client configured somewhere:
+
+const insuranceClient = new ApolloClient({
+  uri: 'http://localhost:5001/insurance/graphql',
+  cache: new InMemoryCache(),
+});
+
+Then:
+
+useQuery(GET_LEAD_LIST, {
+  client: insuranceClient
+});
+
+means:
+"Run GET_LEAD_LIST using the insuranceClient configuration."
+That configuration can contain things like:
+
+API/GraphQL URL
+authentication headers/token
+cache
+Apollo links
+error handling
+Why specify client?
+
+You can have multiple Apollo clients in one React application.
+
+For example:
+
+React App
+   |
+   ├── insuranceClient → Insurance API
+   |
+   ├── sangamClient    → Sangam API
+   |
+   └── authClient      → Auth API
+
+Then:
+
+useQuery(GET_LEAD_LIST, {
+  client: insuranceClient
+});
+
+uses the Insurance API.
+
+While:
+
+useQuery(GET_USER_LIST, {
+  client: sangamClient
+});
+
+uses the Sangam API.
+If you have only one Apollo Client, you normally don't need to specify client because Apollo uses the default client from ApolloProvider.
+if you pass the Apollo Client directly to useQuery, you don't need ApolloProvider for that query.
+
+--->
+// Query — runs automatically
+const { data } = useQuery(GET_LEADS);
+
+// Lazy Query — you trigger it manually
+const [getLeads, { data }] = useLazyQuery(GET_LEADS);
+
+getLeads();
+
+----
+useApolloClient()

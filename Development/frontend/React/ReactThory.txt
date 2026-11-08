@@ -4760,7 +4760,6 @@ But:
 e.currentTarget
    ↓
 <form>
-<<<<<<< HEAD
 
 --->
 shadcn/ui — Short Notes
@@ -5019,5 +5018,4665 @@ export default function combineContext(...providers) {
     }, children);
   };
 }
-=======
->>>>>>> b61a8481 (notes)
+
+
+---->
+--->
+React Hook Form, the main reason we use it is to make form handling easier and more efficient in React.
+Without React Hook Form
+Normally, you have to manage every input with useState:
+
+const [name, setName] = useState("");
+const [email, setEmail] = useState("");
+
+<input
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+/>
+
+<input
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
+
+or use FormDate()
+
+For a large form, this becomes repetitive.
+
+With React Hook Form
+npm i react-hook-form
+
+import { useForm } from "react-hook-form";
+
+function Form() {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}> //onSubmit just simple callback
+      <input {...register("name")} />
+      <input {...register("email")} />
+
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
+Now React Hook Form handles things like:
+
+Input values
+Form submission
+Validation
+Error messages
+Tracking which fields changed
+Resetting forms
+Large/complex forms
+
+The important idea
+Think of it like:
+
+Normal React
+    ↓
+useState for each input
+    ↓
+You manually manage the form
+
+vs.
+
+React Hook Form
+    ↓
+useForm()
+    ↓
+register()
+    ↓
+React Hook Form manages the form
+
+Why "Hook"?
+Because React Hook Form provides React hooks such as:
+useForm()
+It's not a special React feature called "form hook"; React Hook Form is a library that uses React Hooks.
+
+
+##@hookform/devtools, it is a debugging tool for React Hook Form.
+
+1. Install it
+npm install -D @hookform/devtools
+
+2. Import it
+import { DevTool } from "@hookform/devtools";
+3. Connect it to your useForm()
+const { control, register, handleSubmit } = useForm();
+
+Then:
+
+<DevTool control={control} />
+
+Complete example:
+
+import { useForm } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
+
+function MyForm() {
+  const { register, control, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
+  return (
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input {...register("name")} />
+
+        <input {...register("email")} />
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <DevTool control={control} />
+    </>
+  );
+}
+What does it show?
+When you run the React application, DevTool gives you a panel where you can inspect things like:
+
+Form State
+├── values
+├── errors
+├── dirtyFields
+├── touchedFields
+├── isDirty
+├── isValid
+├── isSubmitting
+└── ...
+
+For example, if you type:
+
+name: Mohammad
+email: abc@gmail.com
+
+DevTool lets you see the current React Hook Form state without adding lots of console.log() statements.
+
+##
+1. useForm
+The main hook that creates and manages your form.
+
+const { register, handleSubmit } = useForm();
+You get most React Hook Form property from useForm().
+
+2. register
+Connects an HTML input to React Hook Form.
+
+<input {...register("name")} />
+<input
+  {...register("email", {
+    required: "Email is required",
+    pattern: {
+      value: /^\S+@\S+$/i,
+      message: "Invalid email"
+    }
+  })}
+/>
+
+Now RHF knows about the name field and its value.
+now we don't need to give name separately.
+
+3. handleSubmit
+
+Handles form submission.
+<form onSubmit={handleSubmit(onSubmit)}>
+It validates the form first, then calls onSubmit(callback) if valid.
+
+note->
+const { register, handleSubmit } = useForm();
+
+const onSubmit = (data) => {
+  console.log(data);
+};
+
+<form onSubmit={handleSubmit(onSubmit)}>
+
+If your inputs are:
+name  = "Naeem"
+email = "abc@gmail.com"
+
+Then:
+onSubmit(data)
+
+receives:date
+
+{
+  name: "Naeem",
+  email: "abc@gmail.com"
+}
+
+4. formState
+Contains the current state/status of the form.
+const { formState } = useForm();
+
+Common things inside it:
+errors,
+    isDirty,
+    isValid,
+    isSubmitting,
+    isSubmitted,
+    isSubmitSuccessful,
+    isLoading,
+    isValidating,
+    touchedFields,
+    dirtyFields,
+    validatingFields,
+    submitCount
+
+| Property             | Meaning                                                      | When                  |
+| -------------------- | ------------------------------------------------------------ | --------------------- |
+| `errors`             | Validation errors                                            | Before & after submit |
+| `isDirty`            | User changed any field                                       | Before submit         |
+| `dirtyFields`        | Which fields were changed                                    | Before submit         |
+| `touchedFields`      | Which fields user interacted with                            | Before submit         |
+| `isValid`            | Entire form is valid                                         | Before submit         |
+| `isSubmitting`       | Form is currently being submitted                            | During submit         |
+| `isSubmitted`        | Form has been submitted at least once                        | After submit          |
+| `isSubmitSuccessful` | Last submission was successful                               | After submit          |
+| `submitCount`        | Number of submit attempts                                    | After submit          |
+| `isLoading`          | Async `defaultValues` are still loading (fetching using API) | Before submit         |
+| `isValidating`       | Validation is currently running                              | Before/during submit  |
+| `validatingFields`   | Fields currently being validated                             | Before/during submit  |
+
+is->true or false
+
+5. errors
+Contains validation errors.
+Usually accessed as:
+
+const {
+  formState: { errors }
+} = useForm();
+
+this means:
+const result = useForm();
+const register = result.register;
+const errors = result.formState.errors;
+
+
+if error then error field will be here with message
+otherwise
+suppose you have email validation error 
+Then:
+errors.email
+gives information about the email error.
+error.email.message this will contain validation error
+
+useCase:
+<input
+  {...register("email", {
+    required: "Email is required"
+  })}
+/>
+
+{errors.email && (
+  <p>{errors.email.message}</p>
+)}
+
+now for this field it will show error message
+do this for fields.
+
+note->
+if you write formState: error, then error is a new local variable name.
+
+For example:
+const {
+  formState: error
+} = useForm();
+
+means:
+
+const result = useForm();
+const error = result.formState;
+this is not error just name of formState
+
+So error contains the whole formState object, not just errors.
+it is renaming;
+
+6. watch
+Reads a field's value and updates when it changes(cause rerender).
+const name = watch("name");
+
+If the user changes name, name gets the new value.
+Useful when one field depends on another.
+
+7. setValue
+
+Manually changes a field's value.
+setValue("name", "Naeem");
+
+Useful when you receive data from an API or want to change a field programmatically.
+
+If you mean setValue() options in React Hook Form, the syntax is:
+setValue("name", "Imran", {
+  shouldValidate: true,
+  shouldDirty: true,
+  shouldTouch: true
+});
+
+because it changes fields data directly so we have to say true for these field.
+shouldValidate → check the value
+shouldDirty    → mark as changed
+shouldTouch    → mark as interacted
+
+8. getValues
+Gets the current value without changing it. it does not cause rerender
+getValues() - give all data
+
+const name = getValues("name");
+
+Difference:
+
+watch()      → observes changes (cause rerender)
+getValues()  → gets current value(no rerender)
+setValue()   → changes value
+
+9. reset
+
+Resets the form.
+reset();
+
+<button type="button" onClick={() => reset()}>
+  Reset
+</button>
+
+You can also reset with values:
+
+reset({
+  name: "Naeem",
+  email: "test@gmail.com"
+});
+now only these value change otherwise will become empty
+
+Very useful when editing existing data from an API.
+
+
+10. trigger
+
+Manually runs validation.
+trigger() this will validate full form
+
+await trigger("email");
+Useful when you want to validate a field/form without submitting the entire form.
+
+11. setError
+Manually creates an error.
+
+setError("email", {
+  type: "server",
+  message: "Email already exists"
+});
+
+Very useful for API/server errors.
+
+12. clearErrors
+
+Removes errors manually.
+clearErrors("email");
+
+You can also clear all errors:
+clearErrors();
+
+13. Controller
+Used when a third-party/custom component doesn't work directly with register.
+
+Example components:
+
+MUI Select
+React Select
+Date Picker
+Custom Input
+
+Basic idea:
+
+<Controller
+  name="country"
+  control={control}
+  render={({ field }) => (
+    <Select {...field} />
+  )}
+/>
+14. useController
+
+Similar to Controller, but gives you the field logic inside your own component.
+
+const { field, fieldState } = useController({
+  name: "email",
+  control
+});
+
+Think:
+
+Controller       → component
+useController    → hook
+
+15. useFormContext
+Allows a deeply nested component to access the form without passing control, register, etc. through props.
+
+const { register } = useFormContext();
+Usually used with FormProvider.
+
+16. FormProvider
+
+Provides the form methods to child components.
+
+<FormProvider {...methods}>
+  <MyInput />
+</FormProvider>
+
+Then inside MyInput:
+
+const { register } = useFormContext();
+
+Think:
+
+FormProvider
+     ↓
+Child Component
+     ↓
+useFormContext()
+
+17. useFieldArray
+
+Used for dynamic/repeating fields.
+
+For example:
+
+Users
+ ├── Name
+ ├── Name
+ └── Name
+
+Or:
+
+Products
+ ├── Product 1
+ ├── Product 2
+ └── Product 3
+
+It provides functions such as:
+
+append
+remove
+update
+replace
+
+18. useWatch
+Like watch, but as a separate hook.
+
+const name = useWatch({
+  control,
+  name: "name"
+});
+
+Main difference:
+
+watch()     → form method
+useWatch()  → dedicated hook
+
+useWatch is particularly useful for watching values inside separate components.
+
+19. Validation
+Rules used to decide whether input is valid.
+
+For example:
+
+<input
+  {...register("email", {
+    required: "Email is required",
+    pattern: {
+      value: /^\S+@\S+$/i,
+      message: "Invalid email"
+    }
+  })}
+/>
+
+Common validation rules:
+
+required
+minLength
+maxLength
+min
+max
+pattern
+validate
+valueAsNumber:true
+
+
+validate->
+validate: () is used when you want to write your own custom validation logic.
+
+Example:
+<input
+  {...register("username", {
+    validate: (value) => value !== "admin" || "Username cannot be admin"
+  })}
+/>
+
+Here:
+
+validate: (value) => ...
+value = what the user entered
+fun Return true → validation passes
+Return a string → validation fails, and that string becomes the error message
+
+multiple Validation:
+<input
+  {...register("username", {
+    validate: {
+      notAdmin: (value) =>
+        value !== "admin" || "Username cannot be admin",
+
+      minLength: (value) =>
+        value.length >= 5 || "Minimum 5 characters",
+
+      noSpace: (value) =>
+        !value.includes(" ") || "Spaces are not allowed"
+    }
+  })}
+/>
+
+
+valueAsNumber:true->
+<input
+  type="number"
+  {...register("age", {
+    valueAsNumber: true
+  })}
+/>
+ now this will provide number as number if we don't use valueAsNumber then it give in string.
+
+You can also use schema libraries such as Zod or Yup.
+
+20. @hookform/devtools
+A debugging tool for React Hook Form.
+<DevTool control={control} />
+
+It lets you inspect:
+
+values
+errors
+dirtyFields
+touchedFields
+formState
+
+Think of it as DevTools for your form state.
+
+
+21.
+default value
+const { register } = useForm({
+  defaultValues: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    age: 0,
+    country: "India"
+  }
+});
+
+we can also use with api(like fetch/axiou) and show default value (as we do at the time of update)
+
+const { register } = useForm({
+  defaultValues: async () => {
+    const response = await fetch("https://api.example.com/user/1");
+
+    const data = await response.json();
+
+    return {
+      name:data.name,
+      email:data.name,
+      age:data.age
+    } }
+});
+
+
+but can also use reset.
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+
+function UserForm() {
+  const {
+    register,
+    handleSubmit,
+    reset
+  } = useForm();
+
+  useEffect(() => {
+    fetch("https://api.example.com/user/1")
+      .then((res) => res.json())
+      .then((data) => {
+        reset({
+          name: data.name,
+          email: data.email,
+          age: data.age
+        });
+      });
+  }, [reset]);
+
+  return (
+    <form>
+      <input {...register("name")} />
+      <input {...register("email")} />
+      <input {...register("age")} />
+
+      <button>Submit</button>
+    </form>
+  );
+}
+
+
+note->we can use fun inside these place because what matter is property should be obj/or whatever require. 
+so fun return obj or any type of value which is needed;
+
+22.
+nested keys in defaultValues in React Hook Form, you can create objects inside objects.
+
+const { register } = useForm({
+  defaultValues: {
+    name: "Ali",
+  
+    address: {
+      city: "Delhi",
+      pincode: 110001
+    }
+  }
+});
+
+Then access the nested fields using dot notation:
+
+<input {...register("name")} />
+
+<input {...register("address.city")} />
+
+<input {...register("address.pincode")} />
+
+The submitted data will be:
+
+{
+  name: "Ali",
+  email: "ali@gmail.com",
+  address: {
+    city: "Delhi",
+    pincode: 110001
+  }
+}
+
+So:
+register("address.city")
+
+means:
+Go inside address → give the city key.
+
+errors.address?.city?.message for accesssing error message
+This is useful when your API response itself has nested objects.
+23.
+ nested arrays in React Hook Form, the error structure follows the array indexes.
+
+Example:
+
+const {
+  register,
+  formState: { errors }
+} = useForm({
+  defaultValues: {
+    name:["imran","shaya"],
+    users: [
+      {
+        name: "",
+        email: ""
+      },
+      {
+        name: "",
+        email: ""
+      }
+    ]
+  }
+});
+
+Register:
+
+<input {...register("name.0")} />
+
+<input
+  {...register("users.0.name", {
+    required: "Name is required"
+  })}
+/>
+
+<input
+  {...register("users.0.email", {
+    required: "Email is required"
+  })}
+
+<input
+  {...register("users.1.name", {
+    required: "Name is required"
+  })}
+/>
+
+Error structure
+
+If users[0].name has an error:
+errors.users[0].name.message
+
+If users[1].name has an error:
+errors.users[1].name.message
+
+
+
+24.
+<input
+  type="date"
+  {...register("date", {
+    valueAsDate: true
+  })}
+/>
+valueAsDate: true converts the input value into a JavaScript Date object instead of a string.
+
+Without it:
+"2026-09-08" // string
+
+With it
+new Date("2026-09-08") // Date object
+
+
+25. radio and checklist we have to give same name in regiser.
+26. we can register select also
+27.
+OTP handling using React Hook Form, a common pattern is to treat the OTP as one field.
+
+const {
+  register,
+  handleSubmit,
+  setValue,
+  formState: { errors }
+} = useForm();
+
+const onSubmit = (data) => {
+  console.log(data.otp);
+};
+OTP input
+<input
+  type="text"
+  maxLength={6}
+  {...register("otp", {
+    required: "OTP is required",
+    minLength: {
+      value: 6,
+      message: "OTP must be 6 digits"
+    },
+    pattern: {
+      value: /^[0-9]+$/,
+      message: "OTP must contain only numbers"
+    }
+  })}
+/>
+
+{errors.otp && <p>{errors.otp.message}</p>}
+
+Using setValue()
+Suppose OTP comes from some programmatic action:
+
+setValue("otp", "123456", {
+  shouldValidate: true,
+  shouldDirty: true,
+  shouldTouch: true
+});
+
+Then React Hook Form knows:
+
+otp = "123456"
+      ↓
+validate it
+      ↓
+mark dirty
+      ↓
+mark touched
+
+6 separate OTP boxes(learn it seprately)
+
+If your UI has:
+
+[1] [2] [3] [4] [5] [6]
+
+you can keep one form value:
+
+otp = "123456"
+
+and use setValue("otp", ...) whenever a box changes.
+
+For a real OTP component, useRef is also commonly used to automatically move focus:
+
+Box 1 → Box 2 → Box 3 → Box 4 → Box 5 → Box 6
+
+So the typical combination is:
+
+React Hook Form → stores/validates OTP
+setValue() → updates OTP programmatically
+useRef() → manages focus between OTP boxes
+
+27.disabled
+regular html disabled for input
+1. Disable an individual input
+<input
+  {...register("name")}
+  disabled
+/>
+
+The user cannot type into it.
+
+You can also conditionally disable it:
+
+<input
+  {...register("name")}
+  disabled={isSubmitting}
+/>
+
+2. Disable the whole form
+React Hook Form supports disabled in useForm():
+
+const {
+  register,
+  handleSubmit
+} = useForm({
+  disabled: true
+});
+
+Then registered inputs are disabled.
+
+You can also use:
+
+const {
+  register,
+  formState: { disabled }
+} = useForm({
+  disabled: true
+});
+
+Important
+A disabled input is generally not included in the submitted form data.
+
+disabled = true
+      ↓
+User cannot edit
+      ↓
+Field is disabled
+      ↓
+Not submitted as normal form value
+
+If you want the user to see the value but not edit it while still submitting it, readOnly is often better:
+
+<input
+  {...register("name")}
+  readOnly
+/>
+
+most important tasks:
+
+<input {..register('password'),{
+  disable:watch('username')==""
+}}>
+
+<input {..register('submit'),{
+  disable==(!isValid)
+}}>
+
+
+
+28.
+nReact Hook Form:
+
+<form onSubmit={handleSubmit(onSubmit, onError)}>
+
+handleSubmit() accepts two functions:
+
+handleSubmit(onSubmit, onError)
+onSubmit
+
+Runs when all validation passes.
+
+const onSubmit = (data) => {
+  console.log("Success:", data);
+};
+onError
+
+Runs when validation fails.
+
+const onError = (errors) => {
+  console.log("Errors:", errors);
+};
+
+Complete example
+const {
+  register,
+  handleSubmit
+} = useForm();
+
+const onSubmit = (data) => {
+  console.log("Valid data:", data);
+};
+
+const onError = (errors) => {
+  console.log("Validation errors:", errors);
+};
+
+return (
+  <form onSubmit={handleSubmit(onSubmit, onError)}>
+    <input
+      {...register("name", {
+        required: "Name is required"
+      })}
+    />
+
+    <button type="submit">Submit</button>
+  </form>
+);
+
+Flow
+Click Submit
+     ↓
+handleSubmit()
+     ↓
+   Validate
+   /       \
+PASS       FAIL
+ ↓           ↓
+onSubmit   onError
+ ↓           ↓
+data       errors
+
+So simply remember:
+
+handleSubmit(onSubmit, onError)
+                 ↑       ↑
+              success   failure
+
+
+29.In React Hook Form, mode decides when validation should happen.
+
+const { register } = useForm({
+  mode: "onChange"
+});
+
+| Mode        | Validation happens                 |
+| ----------- | ---------------------------------- |
+| `onSubmit`  | When user submits the form   (default)      |
+| `onBlur`    | When user leaves the input         |
+| `onChange`  | Every time input value changes     |
+| `onTouched` | First `blur`, then on every change |
+| `all`       | On both `blur` and `change`        |
+
+30.
+The most important ones to learn first
+useForm
+   ↓
+register
+   ↓
+handleSubmit
+   ↓
+formState / errors
+   ↓
+watch
+   ↓
+setValue / getValues
+   ↓
+reset
+   ↓
+trigger / setError
+   ↓
+Controller
+   ↓
+useFieldArray
+
+These are the ones you'll encounter most often in real React projects.
+
+--->
+Yup and Joi
+| Yup                 | Joi                 |
+| ------------------- | ------------------- |
+| `yup.string()`      | `Joi.string()`      |
+| `yup.number()`      | `Joi.number()`      |
+| `.required()`       | `.required()`       |
+| `.min()`            | `.min()`            |
+| `.max()`            | `.max()`            |
+| `.email()`          | `.email()`          |
+| `.oneOf()`          | `.valid()`          |
+| `.test()`           | `.custom()`         |
+| `yup.object()`      | `Joi.object()`      |
+| `schema.validate()` | `schema.validate()` |
+
+
+So the concept is almost the same:
+
+Data
+ ↓
+Schema
+ ↓
+Validation
+ ↓
+Valid OR Errors
+
+The main difference you'll commonly see is where they're used: Yup is very popular with React forms 
+/ React Hook Form, while Joi is very common for backend/API validation, especially in Node.js/nestJs.
+
+YUP 
+
+1. What is Yup?
+----------------
+Yup is a JavaScript validation library.
+Example:
+const schema = yup.object({
+  name: yup.string().required(),
+  email: yup.string().email().required()
+});
+
+Purpose:
+Input data → Yup rules → Valid / Errors
+
+2. Installation
+---------------
+npm install yup
+
+Import:
+import * as yup from "yup";
+
+
+3. yup.object()
+---------------
+Used to create a schema for an object.
+
+const schema = yup.object({
+  name: yup.string(),
+  age: yup.number()
+});
+
+4. yup.string()
+---------------
+Used to validate strings.
+
+yup.string()
+
+Common methods:
+.required()
+.min(3)
+.max(20)
+.email()
+.url()
+.matches()
+
+5. yup.number()
+---------------
+Used to validate numbers.
+
+yup.number()
+
+Common methods:
+.required()
+.min(18)
+.max(100)
+.integer()
+.positive()
+.negative()
+
+6. yup.boolean()
+----------------
+Used for true/false.
+
+yup.boolean()
+yup.boolean().required()
+
+7. yup.array()
+--------------
+Used for arrays.
+yup.array()
+
+Example:
+yup.array().required()
+
+Array of strings:
+yup.array().of(yup.string())
+
+
+8. yup.date()
+-------------
+Used for dates.
+
+yup.date()
+
+Example:
+yup.date().required()
+
+
+9. required()
+-------------
+Field cannot be empty.
+name: yup.string().required("Name is required")
+
+
+10. min() / max()
+-----------------
+Minimum / maximum value.
+
+name: yup.string().min(3)
+name: yup.string().max(20)
+
+age: yup.number().min(18)
+age: yup.number().max(60)
+
+
+11. email()
+-----------
+Checks email format.
+
+email: yup.string()
+  .email("Invalid email")
+  .required("Email is required")
+
+
+12. matches()
+-------------
+Used for custom patterns / regex.
+
+phone: yup.string()
+  .matches(/^[0-9]{10}$/, "Invalid phone number")
+
+
+13. Validation Schema
+---------------------
+A complete set of validation rules.
+
+const schema = yup.object({
+  name: yup.string().required(),
+  email: yup.string().email().required(),
+  age: yup.number().min(18).required()
+});
+
+
+14. validate()
+--------------
+Checks the complete data.
+
+const data = {
+  name: "Naeem",
+  email: "test@gmail.com",
+  age: 25
+};
+
+await schema.validate(data);
+
+
+15. validateSync()
+------------------
+Synchronous validation.
+
+const result = schema.validateSync(data);
+
+16. Errors
+----------
+If validation fails, Yup throws a ValidationError.
+
+try {
+  await schema.validate(data);
+} catch (error) {
+  console.log(error.message);
+}
+
+17. abortEarly
+--------------
+By default, Yup may stop at the first error.
+
+abortEarly: false
+
+Example:
+await schema.validate(data, {
+  abortEarly: false
+});
+
+Now you can get multiple validation errors.
+
+18. ValidationError
+-------------------
+Yup provides error information.
+
+error.message
+error.path
+error.errors
+
+Example:
+error.path
+// "email"
+
+error.message
+// "Invalid email"
+
+
+19. default()
+------------
+Sets a default value.
+
+const schema = yup.object({
+  name: yup.string().default("Guest")
+});
+
+
+20. nullable()
+--------------
+Allows null.
+yup.string().nullable()
+
+
+21. optional()
+--------------
+Field is not required.
+yup.string().optional()
+
+
+22. defined()
+--------------
+Value cannot be undefined.
+yup.string().defined()
+
+
+23. typeError()
+----------------
+Custom message when the type is wrong.
+
+age: yup.number()
+  .typeError("Age must be a number")
+
+
+24. transform()
+---------------
+Changes data before validation.
+age: yup.number()
+  .transform((value) => Number(value))
+
+
+25. oneOf()
+-----------
+Value must match one of the allowed values.
+
+role: yup.string()
+  .oneOf(["admin", "user"])
+
+
+26. notOneOf()
+-------------
+Value cannot be one of the values.
+
+role: yup.string()
+  .notOneOf(["blocked"])
+
+
+27. confirm password
+--------------------
+Very common real-world validation.
+
+password: yup.string().required(),
+confirmPassword: yup.string()
+  .oneOf([yup.ref("password")], "Passwords must match")
+  .required()
+
+
+28. yup.ref()
+-------------
+References another field.
+password: yup.string(),
+
+confirmPassword: yup.string()
+  .oneOf([yup.ref("password")])
+
+
+29. when()
+----------
+Conditional validation.
+
+"Apply a validation rule depending on another field's value."
+
+Think of it like an if/else.
+
+IF condition is true
+    → use then()
+ELSE
+    → use otherwise()
+Example:
+
+age: yup.number(),
+
+license: yup.string().when("age", {
+  is: (age) => age >= 18,//Condition
+  then: (schema) => schema.required(),
+  otherwise: (schema) => schema.notRequired()
+})
+
+
+30. test()
+----------
+Create your own validation rule.
+
+username: yup.string().test(
+  "no-admin",
+  "Admin is not allowed",
+  (value) => value !== "admin"
+)
+
+
+.test(
+  "no-admin",        // Rule name
+  "Admin is not allowed", // Error message
+  (value) => value !== "admin" // Validation function
+)
+
+true  → valid
+false → invalid
+
+31. Custom test with multiple fields
+------------------------------------
+test() can access other values.
+
+.test("check", "Invalid", function(value) {
+  // this.parent contains other fields
+})
+
+
+when()  → "Depending on something, change the rule."
+test()  → "I have my own rule; check it."
+
+
+
+32. Nested Objects
+------------------
+Yup supports nested objects.
+
+const schema = yup.object({
+  user: yup.object({
+    name: yup.string().required(),
+    email: yup.string().email().required()
+  })
+});
+
+
+33. Arrays of Objects
+---------------------
+Very common with forms.
+
+const schema = yup.object({
+  users: yup.array().of(
+    yup.object({
+      name: yup.string().required(),
+      age: yup.number().required()
+    })
+  )
+});
+
+
+34. Array min/max
+-----------------
+users: yup.array()
+  .min(1)
+  .max(5)
+
+
+35. unique array values
+-----------------------
+Can use test().
+
+const schema = yup.array()
+  .test(
+    "unique",
+    "Values must be unique",
+    (value) => new Set(value).size === value.length
+  );
+
+
+36. Async validation
+--------------------
+test() can perform async validation.
+
+.test("checkUsername", "Username exists", async (value) => {
+  const exists = await checkUsername(value);
+  return !exists;
+})
+
+
+37. cast()
+----------
+Converts data according to the schema.
+
+const schema = yup.object({
+  age: yup.number()
+});
+
+schema.cast({
+  age: "25"
+});
+
+// age becomes 25
+
+
+38. strict()
+------------
+Prevents Yup from transforming/casting values.
+schema.strict()
+
+
+39. strip()
+-----------
+Removes a field from the result.
+
+password: yup.string().strip()
+
+
+40. pick()
+----------
+Select specific fields from a schema.
+
+const newSchema = schema.pick(["name", "email"])
+
+
+41. omit()
+----------
+Remove specific fields from a schema.
+
+const newSchema = schema.omit(["password"])
+
+
+42. concat()
+------------
+Combines schemas.
+
+const schema1 = yup.object({
+  name: yup.string()
+});
+
+const schema2 = yup.object({
+  age: yup.number()
+});
+
+const finalSchema = schema1.concat(schema2);
+
+
+43. describe()
+--------------
+See schema information.
+const info = schema.describe();
+
+
+44. Reach nested schema
+-----------------------
+Used to access a nested schema.
+yup.reach(schema, "user.email")
+
+
+45. Yup + React Hook Form
+------------------------
+Very common combination.
+
+npm install yup @hookform/resolvers
+
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object({
+  name: yup.string().required("Name required"),
+  email: yup.string()
+    .email("Invalid email")
+    .required("Email required")
+});
+
+const {
+  register,
+  handleSubmit,
+  formState: { errors }
+} = useForm({
+  resolver: yupResolver(schema)
+});
+
+
+46. Yup + Form
+--------------
+Basic idea:
+
+HTML Form
+    ↓
+React Hook Form / Form library
+    ↓
+Yup Resolver
+    ↓
+Yup Schema
+    ↓
+Validation
+    ↓
+errors
+
+
+47. Real-world schema
+---------------------
+
+const schema = yup.object({
+  name: yup.string()
+    .required("Name is required")
+    .min(3, "Minimum 3 characters"),
+
+  email: yup.string()
+    .required("Email is required")
+    .email("Invalid email"),
+
+  age: yup.number()
+    .typeError("Age must be a number")
+    .required("Age is required")
+    .min(18, "Must be 18+"),
+
+  password: yup.string()
+    .required("Password is required")
+    .min(8, "Minimum 8 characters"),
+
+  confirmPassword: yup.string()
+    .oneOf(
+      [yup.ref("password")],
+      "Passwords do not match"
+    )
+    .required("Confirm password is required")
+});
+
+
+
+
+
+BEGINNER
+1. What is Yup
+2. Installation
+3. yup.object()
+4. yup.string()
+5. yup.number()
+6. yup.boolean()
+7. yup.array()
+8. yup.date()
+9. required()
+10. min() / max()
+11. email()
+
+INTERMEDIATE
+12. matches()
+13. validate()
+14. validateSync()
+15. errors
+16. abortEarly
+17. nullable()
+18. optional()
+19. defined()
+20. typeError()
+21. oneOf()
+22. yup.ref()
+23. confirm password
+24. nested objects
+25. arrays of objects
+
+ADVANCED
+26. when()
+27. test()
+28. async validation
+29. transform()
+30. cast()
+31. strict()
+32. strip()
+33. pick()
+34. omit()
+35. concat()
+36. describe()
+37. reach()
+38. Yup + React Hook Form
+39. Real-world form validation
+
+
+--->
+What is React Select?
+React Select is a React library used to create advanced dropdown/select inputs.
+
+Normal HTML:
+
+<select>
+  <option value="india">India</option>
+  <option value="usa">USA</option>
+</select>
+
+1. What is React Select?
+------------------------
+React Select is a React library for advanced dropdowns.
+
+It provides:
+- Search
+- Single select
+- Multi select
+- Clear option
+- Disabled options
+- Async/API options
+- Custom styling
+- Custom components
+
+
+2. Installation
+----------------
+npm install react-select
+
+Import:
+
+import Select from "react-select";
+
+
+3. Basic Select
+---------------
+const options = [
+  { value: "india", label: "India" },
+  { value: "usa", label: "USA" }
+];
+
+<Select options={options} />
+
+
+4. options
+----------
+Defines what appears in the dropdown.
+
+const options = [
+  { value: 1, label: "Naeem" },
+  { value: 2, label: "Imran" }
+];
+
+label → shown to user
+value → actual value
+
+
+5. onChange
+-----------
+Runs when user selects an option.
+
+<Select
+  options={options}
+  onChange={(option) => {
+    console.log(option);
+  }}
+/>
+
+If user selects India:
+
+{
+  value: "india",
+  label: "India"
+}
+
+
+6. value
+--------
+Controls the selected option.
+
+const [selected, setSelected] = useState(null);
+
+<Select
+  options={options}
+  value={selected}
+  onChange={setSelected}
+/>
+
+selected will be loaded to that option which has been selected.
+
+
+7. Single Select
+----------------
+Default behavior.
+
+<Select
+  options={options}
+/>
+
+Only one option can be selected.
+
+
+8. Multi Select
+---------------
+Use:
+
+isMulti
+
+<Select
+  options={options}
+  isMulti
+/>
+
+Now user can select:
+
+[
+  { value: "india", label: "India" },
+  { value: "usa", label: "USA" }
+]
+
+
+9. Default Value
+----------------
+Use:
+
+defaultValue
+
+<Select
+  options={options}
+  defaultValue={options[0]}
+/>
+
+First option will be selected initially.
+
+
+10. Placeholder
+---------------
+Shows text before selection.
+
+<Select
+  options={options}
+  placeholder="Select country"
+/>
+
+
+11. isClearable
+---------------
+Allows user to remove selected value.
+
+<Select
+  options={options}
+  isClearable
+/>
+
+
+12. isSearchable
+----------------
+Allows searching options.
+
+<Select
+  options={options}
+  isSearchable
+/>
+
+Search is enabled by default in many cases.
+
+
+13. isDisabled
+--------------
+Disables the complete dropdown.
+
+<Select
+  options={options}
+  isDisabled
+/>
+
+
+14. isLoading
+-------------
+Shows loading state.
+
+<Select
+  options={options}
+  isLoading
+/>
+
+
+15. isOptionDisabled
+--------------------
+Disable specific options.
+
+const options = [
+  { value: "india", label: "India" },
+  { value: "usa", label: "USA", disabled: true }
+];
+
+<Select
+  options={options}
+  isOptionDisabled={(option) => option.disabled}
+/>
+
+
+16. getOptionLabel
+------------------
+Controls what text is displayed.
+
+const options = [
+  {
+    id: 1,
+    name: "Naeem"
+  }
+];
+
+<Select
+  options={options}
+  getOptionLabel={(option) => option.name}
+/>
+
+
+17. getOptionValue
+------------------
+Controls what is treated as the option value.
+
+<Select
+  options={options}
+  getOptionValue={(option) => String(option.id)}
+/>
+
+
+18. Custom Option Object
+-----------------------
+Your option doesn't have to contain only
+value and label.
+
+const options = [
+  {
+    id: 1,
+    name: "Naeem",
+    email: "naeem@gmail.com"
+  }
+];
+
+Then:
+
+getOptionLabel={(option) => option.name}
+
+getOptionValue={(option) => String(option.id)}
+
+
+19. onInputChange
+-----------------
+Runs when the user types in the search box.
+
+<Select
+  options={options}
+  onInputChange={(value) => {
+    console.log(value);
+  }}
+/>
+
+
+20. filterOption
+----------------
+Controls which options appear during search.
+
+<Select
+  options={options}
+  filterOption={(option, inputValue) =>
+    option.label
+      .toLowerCase()
+      .includes(inputValue.toLowerCase())
+  }
+/>
+
+
+21. name
+--------
+Useful when integrating with forms.
+
+<Select
+  name="country"
+  options={options}
+/>
+
+
+22. React Hook Form
+-------------------
+React Select is not a normal HTML input,
+so with React Hook Form you commonly use Controller.
+
+Example:
+
+<Controller
+  name="country"
+  control={control}
+  render={({ field }) => (
+    <Select
+      {...field}
+      options={options}
+    />
+  )}
+/>
+
+
+23. React Hook Form + Multi Select
+----------------------------------
+For multi select:
+
+<Controller
+  name="countries"
+  control={control}
+  render={({ field }) => (
+    <Select
+      {...field}
+      options={options}
+      isMulti
+    />
+  )}
+/>
+
+field.value becomes an array of selected options.
+
+
+24. Yup + React Select
+----------------------
+React Select can be combined with:
+
+React Select
+     ↓
+React Hook Form
+     ↓
+Yup
+     ↓
+Validation
+
+
+25. Required Select
+-------------------
+Yup:
+
+const schema = yup.object({
+  country: yup
+    .object()
+    .required("Country is required")
+});
+
+Important:
+React Select usually gives an object:
+
+{
+  value: "india",
+  label: "India"
+}
+
+
+26. Required Multi Select
+-------------------------
+const schema = yup.object({
+  countries: yup
+    .array()
+    .min(1, "Select at least one country")
+});
+
+
+27. Async Select
+----------------
+Used when options come from an API.
+
+Import:
+
+import AsyncSelect from "react-select/async";
+
+
+28. loadOptions
+---------------
+Used to fetch options.
+
+const loadOptions = async (inputValue) => {
+
+  const response = await fetch(
+    `/api/users?search=${inputValue}`
+  );
+
+  const data = await response.json();
+
+  return data.map(user => ({
+    value: user.id,
+    label: user.name
+  }));
+};
+
+
+29. AsyncSelect
+---------------
+<AsyncSelect
+  loadOptions={loadOptions}
+/>
+
+Flow:
+
+User types
+    ↓
+loadOptions()
+    ↓
+API
+    ↓
+Options returned
+    ↓
+Dropdown
+
+
+30. cacheOptions
+----------------
+Caches loaded options.
+
+<AsyncSelect
+  cacheOptions
+  loadOptions={loadOptions}
+/>
+
+
+31. defaultOptions
+------------------
+Loads initial options.
+
+<AsyncSelect
+  defaultOptions
+  loadOptions={loadOptions}
+/>
+
+
+32. Async Multi Select
+---------------------
+<AsyncSelect
+  isMulti
+  loadOptions={loadOptions}
+/>
+
+
+33. Creatable Select
+--------------------
+Allows user to create a new option.
+
+import CreatableSelect from "react-select/creatable";
+
+<CreatableSelect
+  options={options}
+/>
+
+
+34. onCreateOption
+------------------
+Runs when user creates a new option.
+
+<CreatableSelect
+  options={options}
+  onCreateOption={(inputValue) => {
+    console.log(inputValue);
+  }}
+/>
+
+
+35. Async Creatable
+-------------------
+Can combine API loading + creating options.
+
+AsyncCreatableSelect
+
+
+36. Custom Styling
+------------------
+React Select supports styles prop.
+
+<Select
+  options={options}
+  styles={{
+    control: (base) => ({
+      ...base,
+      borderRadius: "10px"
+    })
+  }}
+/>
+
+
+37. Custom Components
+---------------------
+You can replace internal components.
+
+Example:
+
+components={{
+  Option: CustomOption
+}}
+
+Useful when you want completely
+custom dropdown UI.
+
+
+38. Custom Option
+-----------------
+Example idea:
+
+const CustomOption = (props) => {
+  return (
+    <div>
+      {props.data.label}
+    </div>
+  );
+};
+
+<Select
+  options={options}
+  components={{
+    Option: CustomOption
+  }}
+/>
+
+
+39. isOptionSelected
+--------------------
+Controls whether an option is considered selected.
+Useful for advanced selection logic.
+
+isOptionSelected={(option, selectedOptions) => {
+  // custom logic
+}}
+
+
+40. closeMenuOnSelect
+---------------------
+Controls whether dropdown closes after selection.
+
+<Select
+  isMulti
+  closeMenuOnSelect={false}
+/>
+
+Useful for multi-select.
+
+
+41. hideSelectedOptions
+-----------------------
+Controls whether selected options remain
+visible in dropdown.
+
+<Select
+  isMulti
+  hideSelectedOptions={false}
+/>
+
+
+42. menuPlacement
+-----------------
+Controls dropdown position.
+
+<Select
+  menuPlacement="top"
+/>
+
+Possible:
+- top
+- bottom
+- auto
+
+
+43. menuPortalTarget
+--------------------
+Useful when dropdown gets hidden behind
+modal/dialog elements.
+
+Example:
+
+menuPortalTarget={document.body}
+
+
+44. isRtl
+---------
+Supports right-to-left layouts.
+
+<Select
+  options={options}
+  isRtl
+/>
+
+
+45. isClearable + isSearchable
+------------------------------
+Common production configuration:
+
+<Select
+  options={options}
+  isSearchable
+  isClearable
+/>
+
+
+46. Controlled Select
+---------------------
+React controls the selected value.
+
+const [value, setValue] = useState(null);
+
+<Select
+  value={value}
+  onChange={setValue}
+  options={options}
+/>
+
+
+47. Uncontrolled Select
+-----------------------
+React Select manages its own internal state.
+
+<Select
+  defaultValue={options[0]}
+  options={options}
+/>
+
+
+48. API Dropdown Pattern
+------------------------
+Common real-world flow:
+
+User types
+    ↓
+React Select
+    ↓
+API request
+    ↓
+Backend
+    ↓
+Database
+    ↓
+Users returned
+    ↓
+Map data
+    ↓
+React Select options
+
+
+49. API Data Conversion
+-----------------------
+Backend might return:
+
+[
+  {
+    id: 1,
+    name: "Naeem"
+  },
+  {
+    id: 2,
+    name: "Imran"
+  }
+]
+
+React Select needs:
+
+[
+  {
+    value: 1,
+    label: "Naeem"
+  },
+  {
+    value: 2,
+    label: "Imran"
+  }
+]
+
+So:
+
+data.map(user => ({
+  value: user.id,
+  label: user.name
+}))
+
+
+50. Production Pattern
+----------------------
+React Select
+    +
+React Hook Form
+    +
+Yup
+    +
+API
+
+Example:
+
+User selects country
+        ↓
+React Select
+        ↓
+React Hook Form
+        ↓
+Yup validation
+        ↓
+Submit
+        ↓
+Backend API
+
+
+51. Important Props To Remember
+-------------------------------
+options
+value
+defaultValue
+onChange
+isMulti
+isSearchable
+isClearable
+isDisabled
+isLoading
+placeholder
+isOptionDisabled
+getOptionLabel
+getOptionValue
+onInputChange
+filterOption
+styles
+components
+closeMenuOnSelect
+menuPlacement
+menuPortalTarget
+
+
+--->
+FORMSY
+=============================
+1. What is Formsy?
+------------------
+Formsy is a React form library.
+
+It helps manage:
+- Form values
+- Validation
+- Errors
+- Submit
+- Form state
+
+2. Installation
+----------------
+npm install formsy-react
+
+3. Import Formsy
+----------------
+import Formsy from "formsy-react";
+
+
+4. Basic Form
+-------------
+<Formsy onValidSubmit={handleSubmit}>
+  <input name="name" />
+  <button type="submit">Submit</button>
+</Formsy>
+
+
+5. Form Field
+-------------
+A field needs a name.
+<input name="name" />
+"name" identifies the field.
+
+
+6. Form Values
+--------------
+Formsy collects values from its fields.
+
+Example:
+
+<input name="name" />
+<input name="email" />
+
+Submit result:
+
+{
+  name: "Naeem",
+  email: "test@gmail.com"
+}
+
+
+7. onValidSubmit
+----------------
+Runs when the complete form is valid.
+
+<Formsy onValidSubmit={(values) => {
+  console.log(values);
+}} />
+
+
+8. onInvalidSubmit
+------------------
+Runs when validation fails.
+
+<Formsy
+  onValidSubmit={handleSubmit}
+  onInvalidSubmit={(values) => {
+    console.log(values);
+  }}
+/>
+
+
+9. Validation
+-------------
+Formsy supports validation rules.
+
+Example:
+
+<Input
+  name="name"
+  validations="isWords"
+  validationError="Only words allowed"
+/>
+
+
+10. required
+------------
+Makes a field required.
+
+<Input
+  name="name"
+  validations="isExisty"
+  validationError="Name is required"
+/>
+
+
+11. validationError
+-------------------
+Message shown when validation fails.
+validationError="Invalid name"
+
+12. Multiple Validations
+------------------------
+Multiple rules can be combined.
+validations="isExisty,isEmail"
+
+13. isEmail
+-----------
+Checks email format.
+validations="isEmail"
+
+
+14. isNumeric
+-------------
+Checks numeric value.
+
+validations="isNumeric"
+
+
+15. Custom Validation
+---------------------
+Create your own validation logic.
+
+Formsy.addValidationRule(
+  "isStrong",
+  (values, value) => {
+    return value.length >= 8;
+  }
+);
+
+
+16. Using Custom Rule
+---------------------
+<Input
+  name="password"
+  validations="isStrong"
+  validationError="Password too short"
+/>
+
+
+17. withFormsy
+--------------
+Important advanced concept.
+Formsy provides:
+
+withFormsy()
+It connects your custom React component
+to Formsy's form system.
+
+18. Custom Input
+----------------
+Example:
+
+const MyInput = (props) => {
+  return (
+    <input
+      value={props.value || ""}
+      onChange={(e) =>
+        props.setValue(e.target.value)
+      }
+    />
+  );
+};
+
+export default Formsy.withFormsy(MyInput);
+
+the component is still called MyInput, but Formsy.withFormsy() returns a new wrapped component.
+
+
+use:
+<Formsy>
+  <MyInput name="username" />
+</Formsy>
+19. props.value
+---------------
+Contains the current field value.
+props.value
+
+
+20. props.setValue()
+--------------------
+Changes the Formsy field value.
+props.setValue("Naeem");
+
+
+21. props.getValue()
+--------------------
+Gets the current value.
+
+props.getValue()
+
+
+22. props.setValid()
+--------------------
+Manually marks a field as valid.
+
+
+23. props.setInvalid()
+----------------------
+Manually marks a field as invalid.
+
+
+24. props.errorMessage
+----------------------
+Contains the validation error message.
+
+Example:
+
+{props.errorMessage && (
+  <span>{props.errorMessage}</span>
+)}
+
+
+25. props.showError
+-------------------
+Tells whether the error should be displayed.
+
+
+26. props.isValid
+-----------------
+Tells whether the field is valid.
+
+
+27. props.isPristine
+--------------------
+Tells whether the field has not been changed.
+
+
+28. props.isRequired
+--------------------
+Tells whether the field is required.
+
+
+29. reset()
+----------
+Resets the form.
+formRef.current.reset();
+
+
+30. resetValue()
+----------------
+Resets a field's value.
+Used for custom Formsy inputs.
+
+
+31. getCurrentValues()
+----------------------
+Gets all current form values.
+formRef.current.getCurrentValues();
+
+
+32. getModel()
+-------------
+Gets the current form model/values.
+
+
+33. setValue()
+-------------
+Sets a field value programmatically.
+
+formRef.current.setValue(
+  "name",
+  "Naeem"
+);
+
+
+34. isValid()
+-------------
+Checks whether the form is valid.
+
+formRef.current.isValid();
+
+
+35. isValidValue()
+------------------
+Checks whether a particular value
+passes validation.
+
+
+36. isSubmitting
+----------------
+Tracks whether the form is currently submitting.
+
+
+37. disableForm()
+-----------------
+Can disable form submission/interaction
+when needed.
+
+
+38. Form Reference
+-----------------
+Use ref to access Formsy methods.
+const formRef = useRef();
+<Formsy ref={formRef}>
+  ...
+</Formsy>
+
+
+39. Initial Values
+-----------------
+Set initial field values using
+the field's value/default configuration
+depending on the input component.
+
+
+40. Dynamic Validation
+---------------------
+Validation can depend on other field values.
+
+Example idea:
+
+password
+confirmPassword
+
+Confirm password must equal password.
+
+
+41. Conditional Validation
+--------------------------
+Validation rules can change based on
+other form values.
+
+
+42. Checkbox
+------------
+Formsy can work with checkbox inputs
+through compatible/custom inputs.
+
+
+43. Radio
+---------
+Formsy can work with radio inputs
+through compatible/custom inputs.
+
+
+44. Select
+----------
+Formsy can work with select components
+and custom select components.
+
+
+45. React Select + Formsy
+------------------------
+For React Select, create a Formsy-compatible
+custom component using withFormsy.
+
+Flow:
+
+React Select
+     ↓
+Custom Formsy component
+     ↓
+setValue()
+     ↓
+Formsy
+
+
+46. Formsy + API
+----------------
+Common production flow:
+
+User fills form
+      ↓
+Formsy validation
+      ↓
+onValidSubmit()
+      ↓
+API request
+      ↓
+Success / Error
+
+
+47. Formsy + Yup
+----------------
+Can combine Formsy with external validation
+logic when required, although Formsy has
+its own validation system.
+
+
+48. Async Validation
+--------------------
+Useful for things like:
+
+Username
+    ↓
+API
+    ↓
+Does username exist?
+    ↓
+Valid / Invalid
+
+
+49. Server Errors
+-----------------
+API can return errors after submission.
+Example:
+
+Email already exists.
+
+You can use Formsy's field validation
+methods to display the error.
+
+50. Complex Forms
+-----------------
+Formsy can be used with:
+
+- Custom inputs
+- Selects
+- Checkboxes
+- Radio buttons
+- Dynamic fields
+- API validation
+- Conditional validation
+
+
+51. Production Architecture
+---------------------------
+
+<Formsy>
+   ↓
+Custom / Normal Inputs
+   ↓
+Validation
+   ↓
+onValidSubmit
+   ↓
+API
+   ↓
+Success / Server Error
+
+
+52. Most Important Formsy Concepts
+----------------------------------
+
+BEGINNER:
+1. Formsy
+2. name
+3. value
+4. onValidSubmit
+5. onInvalidSubmit
+6. validation
+7. validationError
+
+INTERMEDIATE:
+8. Custom validation
+9. withFormsy
+10. props.value
+11. setValue()
+12. getValue()
+13. errorMessage
+14. showError
+15. isValid
+16. isPristine
+17. reset
+18. getCurrentValues
+
+ADVANCED:
+19. Form refs
+20. Programmatic setValue
+21. Conditional validation
+22. Async validation
+23. Server errors
+24. React Select + Formsy
+25. Complex custom inputs
+26. Formsy + API
+
+
+--->
+Redux
+
+| Package            | Purpose                          |
+| ------------------ | -------------------------------- |
+| `redux`            | Core state management            |
+| `react-redux`      | Connects Redux with React        |
+| `@reduxjs/toolkit` | Modern/easier way to write Redux |
+
+
+| `useReducer`                  | Redux                                 |
+| ----------------------------- | ------------------------------------- |
+| React feature                 | Separate library                      |
+| Usually local/component state | Usually global application state      |
+| `useReducer()`                | Redux store                           |
+| `dispatch()`                  | `dispatch()`                          |
+| No `react-redux` needed       | `react-redux` connects Redux to React |
+
+
+they provide the state props lifting.
+
+The confusing part is that both use reducer + dispatch, 
+because Redux's design was heavily inspired by the reducer pattern.
+but:
+useReducer by itself does not solve prop drilling.
+we use prof drilling or Context for this.
+
+useReducer
+   ↓
+Manages state
+   ↓
+But state belongs to that component
+   ↓
+Other components need props / Context
+
+So you can use:
+useReducer + Context API
+        ↓
+Shared state
+        ↓
+Avoid prop drilling
+
+Redux gives you this architecture directly:
+
+Redux Store
+    ↓
+Any component
+    ↓
+useSelector / useDispatch
+
+
+now:
+redux
+Redux is used to manage **global/shared state** in a React application.
+
+Without Redux
+Component A → props → Component B → props → Component C
+                    ↓
+               Prop drilling
+
+
+With Redux
+Component A ──┐
+Component B ──┼──→ Redux Store
+Component C ──┘        ↓
+                   Shared State
+
+
+### Why use Redux?
+
+* **Centralized state** → data stored in one place.
+* **Share data** → many components can access the same state.
+* **Avoid prop drilling** → no need to pass data through many components.
+* **Predictable updates** → state changes through `dispatch → action → reducer`.
+* **Easy debugging** → Redux DevTools can show state changes.
+
+**Example global data:**
+Redux Store
+├── user
+├── cart
+├── products
+├── permissions
+└── notifications
+
+
+1. Redux Store
+2. Actions
+3. Reducers
+4. Dispatch
+5. Redux Flow
+6. createStore              ← understand old/core Redux
+7. Provider
+8. useSelector
+9. useDispatch
+
+──── Then your team's actual approach ────
+
+10. Redux Toolkit
+11. configureStore
+12. createSlice
+13. Payload
+14. Extra Reducers
+15. createAsyncThunk
+16. API calls
+17. Middleware
+18. Redux DevTools
+
+
+1. Redux Store
+The Redux Store is the central place that manages your application's global state.
+Think of it as a central storage manager.
+
+Redux Store
+│
+├── user
+│   ├── name
+│   └── email
+│
+├── cart
+│   ├── items
+│   └── total
+│
+└── products
+    ├── list
+    └── loading
+
+Simple example
+First, 
+
+const initialValue = {
+  user: {
+    name: "Naeem"
+  },
+  cart: {
+    items: []
+  }
+};
+
+
+function counterReducer(state==initialValue, action) {
+  if (action.type === "INCREMENT") {
+    return {
+      count: state.count + 1
+    };
+  }
+
+  return state;
+}
+
+so reducer fun state initial value of state and action
+action auto come form dispatch
+we can access this state value using useSelelor()
+
+
+Then the Redux Store is created using a reducer:
+const store = createStore(rootReducer);
+
+2. Actions
+An Action is a plain JavaScript object that tells Redux what happened.
+Example:
+
+const action = {
+  type: "INCREMENT"
+};
+
+Here:
+
+type: "INCREMENT"
+       ↓
+tells Redux what happened
+Example with data
+
+Suppose we want to add a product to the cart:
+
+const action = {
+  type: "ADD_TO_CART",
+  payload: {
+    id: 1,
+    name: "Laptop",
+    price: 50000
+  }
+};
+
+Here:
+
+Action
+├── type
+│   └── "ADD_TO_CART"
+│
+└── payload
+    ├── id
+    ├── name
+    └── price
+
+Important
+An action does not directly change the state.
+
+Action
+   ↓
+"ADD_TO_CART happened"
+   ↓
+Reducer
+   ↓
+changes State
+
+So remember:
+
+Action = What happened?
+Reducer = What should happen to the state?
+
+
+3. Reducers
+A Reducer is a function that decides how the state should change when an action is dispatched.
+
+Think:
+
+Action
+  ↓
+"What happened?"
+  ↓
+Reducer
+  ↓
+"What should the new state be?" what reducer return it become value
+  ↓
+New State
+
+Simple example
+Current state:
+{
+  count: 0
+}
+
+Action:
+
+{
+  type: "INCREMENT"
+}
+
+Reducer:
+
+function counterReducer(state, action) {
+  if (action.type === "INCREMENT") {
+    return {
+      count: state.count + 1
+    };
+  }
+
+  return state;
+}
+
+What happens?
+State
+{ count: 0 }
+     ↓
+Action
+{ type: "INCREMENT" }
+     ↓
+Reducer
+     ↓
+New State
+{ count: 1 }
+Important rule
+
+A reducer normally:
+takes:
+    state + action
+
+returns:
+    new state
+
+So:
+function reducer(state, action) {
+  // decide what the new state should be
+  return newState;
+}
+
+Remember:
+
+Action  → What happened?
+Reducer → How should state change?
+State   → Current data
+
+4. Dispatch
+Dispatch is used to send an action to Redux.
+
+store.dispatch({
+  type: "INCREMENT"
+});
+
+Flow:
+
+dispatch(action)
+      ↓
+    Reducer
+      ↓
+  New State
+
+Example:
+
+store.dispatch({
+  type: "INCREMENT"
+});
+
+Reducer receives:
+function counterReducer(state, action) {
+  if (action.type === "INCREMENT") {
+    return {
+      count: state.count + 1
+    };
+  }
+
+  return state;
+}
+
+
+5. Redux Flow
+This is how all the Redux parts connect together:
+
+Component
+   │
+   │ dispatch(action)
+   ↓
+Action
+   │
+   ↓
+Reducer
+   │
+   ↓
+New State
+   │
+   ↓
+Redux Store
+   │
+   ↓
+Component gets updated state
+
+Example
+store.dispatch({
+  type: "INCREMENT"
+});
+
+Then:
+
+dispatch()
+   ↓
+{ type: "INCREMENT" }
+   ↓
+Reducer
+   ↓
+count: 0 → 1
+   ↓
+Store updated
+   ↓
+Component re-renders
+Remember
+Action   → What happened?
+Dispatch → Send action
+Reducer  → Calculate new state
+Store    → Holds the state
+
+6. createStore
+createStore() is a Redux function used to create the Redux Store.
+
+Example
+import { createStore } from "redux";
+const store = createStore(counterReducer);
+
+Here:
+
+counterReducer
+      ↓
+createStore()
+      ↓
+   Redux Store
+
+Now store has Redux methods:
+
+store.dispatch(...)
+store.getState()
+store.subscribe(...)
+
+Complete example
+function counterReducer(state = { count: 0 }, action) {
+  if (action.type === "INCREMENT") {
+    return {
+      count: state.count + 1
+    };
+  }
+
+  return state;
+}
+
+const store = createStore(counterReducer);
+
+Get current state:
+store.getState();
+
+Result:
+{ count: 0 }
+
+Change state:
+store.dispatch({
+  type: "INCREMENT"
+});
+
+Now:
+store.getState();
+
+Result:
+{ count: 1 }
+
+One important point
+createStore()
+     ↓
+creates
+     ↓
+Store
+     ↓
+manages
+     ↓
+State
+
+createStore(reducer) = create a Redux Store and tell it which reducer manages the state.
+
+Note: createStore is the older core Redux API. 
+Since you   want to learn without Redux Toolkit,
+ we'll use it for understanding the fundamentals.
+
+7. Provider
+Provider connects your Redux Store to your React application.
+First create the store:
+const store = createStore(counterReducer);
+
+Then wrap your React app:
+import { Provider } from "react-redux";
+
+<Provider store={store}>
+  <App />
+</Provider>
+
+Think of it like:
+
+Redux Store
+    │
+    │ give access
+    ↓
+Provider
+    │
+    ↓
+React App
+    │
+    ├── Component A
+    ├── Component B
+    └── Component C
+
+Now components inside <Provider> can use:
+
+useSelector()
+useDispatch()
+Most important
+<Provider store={store}>
+  <App />
+</Provider>
+
+store={store} means:
+"Give this Redux Store to all React components inside App."
+
+So:
+Store = holds/manages state
+Provider = makes Store available to React components
+
+8. useSelector
+useSelector() is used inside a React component to read data from the Redux Store.
+Example:
+import { useSelector } from "react-redux";
+
+function Counter() {
+  const count = useSelector((state) => state.count);
+  return <h1>{count}</h1>;
+}
+
+Flow:
+
+Redux Store
+    │
+    │ state
+    ↓
+useSelector()
+    ↓
+React Component
+
+If store state is:
+
+{
+  count: 10
+}
+
+then:
+
+const count = useSelector((state) => state.count);
+
+gives:
+count = 10
+
+Remember
+useSelector  → READ data from Redux Store
+useDispatch  → SEND action to Redux Store
+
+
+9. useDispatch
+useDispatch() gives you the Redux dispatch function inside a React component.
+
+import { useDispatch } from "react-redux";
+
+function Counter() {
+  const dispatch = useDispatch();
+
+  const increment = () => {
+    dispatch({
+      type: "INCREMENT"
+    });
+  };
+
+  return <button onClick={increment}>+</button>;
+}
+
+Flow
+Component
+   │
+   │ useDispatch()
+   ↓
+dispatch()
+   │
+   ↓
+Action
+   │
+   ↓
+Reducer
+   │
+   ↓
+New State
+
+useSelector vs useDispatch
+useSelector()
+     ↓
+READ state
+
+useDispatch()
+     ↓
+SEND action
+
+For example:
+const count = useSelector(state => state.count); // READ
+
+dispatch({ type: "INCREMENT" });                 // SEND
+
+Remember: useDispatch() is how a React component tells Redux: “Something happened.”
+
+note->
+1. store.dispatch(action)
+   → Core Redux
+   → Directly uses the Redux Store
+
+   store.dispatch({
+     type: "INCREMENT"
+   });
+
+   If you want to use store.dispatch() from another file, you need to export the store.
+   props drilling may be required so use useDispatch()
+
+
+2. useDispatch()
+   → React-Redux
+   → Used inside React components
+   → Gives you the dispatch function
+
+   const dispatch = useDispatch();
+   dispatch({
+     type: "INCREMENT"
+   });
+
+
+  Example:
+  let's make a realistic Redux example with user, cart, and products.
+
+1. State
+const initialState = {
+  user: {
+    name: "Naeem",
+    email: "naeem@gmail.com"
+  },
+
+  cart: {
+    items: [],
+    total: 0
+  },
+
+  products: {
+    list: [],
+    loading: false
+  }
+};
+
+2. Reducer
+function appReducer(state = initialState, action) {
+  switch (action.type) {
+
+    case "SET_USER":
+      return {
+        ...state,
+        user: action.payload
+      };
+
+    case "ADD_TO_CART":
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          items: [...state.cart.items, action.payload]
+        }
+      };
+
+    case "SET_PRODUCTS":
+      return {
+        ...state,
+        products: {
+          ...state.products,
+          list: action.payload,
+          loading: false
+        }
+      };
+
+    case "SET_LOADING":
+      return {
+        ...state,
+        products: {
+          ...state.products,
+          loading: action.payload
+        }
+      };
+
+    default:
+      return state;
+  }
+}
+
+3. Create Store
+import { createStore } from "redux";
+
+const store = createStore(appReducer);
+
+export default store;
+
+4. Dispatch actions
+store.dispatch({
+  type: "SET_USER",
+  payload: {
+    name: "Naeem",
+    email: "naeem@gmail.com"
+  }
+});
+
+Add product to cart:
+
+store.dispatch({
+  type: "ADD_TO_CART",
+  payload: {
+    id: 1,
+    name: "Laptop",
+    price: 50000
+  }
+});
+
+Set products:
+
+store.dispatch({
+  type: "SET_PRODUCTS",
+  payload: [
+    { id: 1, name: "Laptop" },
+    { id: 2, name: "Phone" }
+  ]
+});
+
+--->
+Redux Toolkit (RTK)
+Redux Toolkit is the modern, recommended way to write Redux. It reduces the amount of code you need to write.
+
+1. Core Redux vs Redux Toolkit
+2. Example
+
+In Core Redux, you write the action and reducer separately.
+
+// Action
+const increment = {
+  type: "INCREMENT"
+};
+
+// Reducer
+function reducer(state = { count: 0 }, action) {
+  if (action.type === "INCREMENT") {
+    return { count: state.count + 1 };
+  }
+
+  return state;
+}
+
+In Redux Toolkit, createSlice() puts the initial state and reducer logic together:
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+
+  initialState: {
+    count: 0
+  },
+
+  reducers: {
+    increment: (state) => {
+      state.count += 1;
+    }
+  }
+});
+
+export const { increment } = counterSlice.actions;
+export default counterSlice.reducer;
+
+RTK automatically creates the increment action for you. It also uses Immer internally, allowing you to write state.count += 1 while keeping Redux state updates immutable.
+
+3. Redux Toolkit flow
+createSlice() — define state and reducers
+configureStore() — create the store
+Provider — connect React
+
+useDispatch() and useSelector()
+
+Remember: Redux Toolkit is not a replacement for Redux concepts. It is a simpler way to implement the same concepts you have already learned.
+
+
+##configureStore() in Redux Toolkit
+configureStore() is used to create a Redux Store. It is the modern replacement for createStore().
+
+1. Syntax
+import { configureStore } from "@reduxjs/toolkit";
+
+const store = configureStore({
+  reducer: {
+    counter: counterReducer
+  }
+});
+
+export default store;
+
+Here:
+configureStore() creates the Redux Store.
+reducer contains the reducers that manage your state.
+counter is the name under which the counter state is stored.
+counterReducer is the function that manages the counter state.
+
+2. Example with two reducers
+Suppose your application has a user and a shopping cart.
+
+import { configureStore } from "@reduxjs/toolkit";
+
+import userReducer from "./userSlice";
+import cartReducer from "./cartSlice";
+
+const store = configureStore({
+  reducer: {
+    user: userReducer,
+    cart: cartReducer
+  }
+});
+
+export default store;
+Your Redux state will have this structure:
+
+{
+  user: {
+    name: "Naeem"
+  },
+  cart: {
+    items: []
+  }
+}
+
+You can access these values in React using useSelector():
+
+const user = useSelector((state) => state.user);
+const cart = useSelector((state) => state.cart);
+
+Important: The names you give reducers in configureStore() determine how you access their state.
+For example, reducer: { user: userReducer } means you access it through state.user, not state.userReducer.
+
+3.
+| Core Redux                   | Redux Toolkit                  |
+|------------------------------|--------------------------------|
+| createStore()                | configureStore()               |
+| combineReducers()            | Automatically combines reducers |
+| Manual middleware setup      | Default middleware included    |
+| Manual DevTools setup        | DevTools enabled by default     |
+
+4. Complete flow
+userSlice.js       cartSlice.js
+     |                  |
+     v                  v
+ userReducer        cartReducer
+     |                  |
+     +--------+---------+
+              |
+              v
+       configureStore()
+              |
+              v
+         Redux Store
+              |
+              v
+           Provider
+              |
+              v
+         React App
+              |
+       +------+------+
+       |             |
+       v             v
+  useSelector    useDispatch
+  (read state)   (send actions)
+
+
+###
+createSlice() in Redux Toolkit
+createSlice() is used to create actions and reducers together. You don't need to write separate action types or action creators.
+
+1. Syntax
+import { createSlice } from "@reduxjs/toolkit";
+
+const counterSlice = createSlice({
+  name: "counter",
+
+  initialState: {
+    count: 0
+  },
+
+  reducers: {
+    increment: (state) => {
+      state.count += 1;
+    },
+
+    decrement: (state) => {
+      state.count -= 1;
+    }
+  }
+});
+
+export const { increment, decrement } = counterSlice.actions;
+export default counterSlice.reducer;
+
+2. Understand each property
+createSlice()
+    |
+    |-- name
+    |     Name of the slice
+    |
+    |-- initialState
+    |     Starting state
+    |
+    |-- reducers
+    |     Functions that update state
+    |
+    |-- actions
+    |     Automatically generated
+    |
+    |-- reducer
+          Exported to configureStore()
+
+3. What does createSlice() generate?
+From the example, Redux Toolkit automatically creates two action creators:
+
+increment()
+decrement()
+
+Calling increment() produces:
+
+{
+  type: "counter/increment"
+}
+
+You can dispatch it inside a React component:
+const dispatch = useDispatch();
+dispatch(increment());
+
+4. Connect the slice to the store
+// store.js
+
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./counterSlice";
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer
+  }
+});
+
+Read its state in React:
+
+const count = useSelector(
+  (state) => state.counter.count
+);
+
+5. Complete flow
+createSlice()
+     |
+     |-- initialState
+     |-- reducers
+     |
+     v
+Generated actions + reducer
+     |
+     v
+configureStore()
+     |
+     v
+Redux Store
+     |
+     v
+dispatch(increment())
+     |
+     v
+Reducer updates count
+     |
+     v
+useSelector() reads updated count
+
+Important: Although state.count += 1 looks like a direct mutation, Redux Toolkit uses Immer internally to produce an immutable state update.
+
+
+###
+Payload in Redux Toolkit
+Payload is the data we send with an action.
+For example, when adding a product to a cart, we need to send the product's details.
+
+1. Example using createSlice()
+import { createSlice } from "@reduxjs/toolkit";
+
+const cartSlice = createSlice({
+  name: "cart",
+
+  initialState: {
+    items: []
+  },
+
+  reducers: {
+    addToCart: (state, action) => {
+      state.items.push(action.payload);
+    }
+  }
+});
+
+export const { addToCart } = cartSlice.actions;
+export default cartSlice.reducer;
+
+Here, action.payload contains the product we want to add.
+
+2. How to send a payload
+const dispatch = useDispatch();
+
+dispatch(
+  addToCart({
+    id: 1,
+    name: "Laptop",
+    price: 50000
+  })
+);
+
+Redux Toolkit automatically creates this action:
+
+{
+  type: "cart/addToCart",
+  payload: {
+    id: 1,
+    name: "Laptop",
+    price: 50000
+  }
+}
+
+3. How the payload reaches the reducer
+STEP 1 — DISPATCH
+dispatch(addToCart(product))
+
+STEP 2 — ACTION
+{ type: "cart/addToCart", payload: product }
+
+STEP 3 — REDUCER
+state.items.push(action.payload)
+
+STEP 4 — UPDATED STATE
+items: [{ id: 1, name: "Laptop", price: 50000 }]
+
+4. Example with a simple number
+
+A payload can also be a number, string, array or other value.
+
+const counterSlice = createSlice({
+  name: "counter",
+
+  initialState: {
+    count: 0
+  },
+
+  reducers: {
+    incrementByAmount: (state, action) => {
+      state.count += action.payload;
+    }
+  }
+});
+
+Dispatch:
+dispatch(incrementByAmount(5));
+The reducer receives action.payload = 5, so count changes from 0 to 5.
+
+5. Action vs Payload
+Action
+   |
+   |-- type
+   |     What should happen?
+   |
+   |-- payload
+         What data is needed?
+
+Remember: dispatch(addToCart(product)) sends the product as the payload, and the reducer accesses it using action.payload.
+
+###
+extraReducers in Redux Toolkit
+extraReducers allows a slice to handle actions created outside that slice.
+
+It is commonly used with createAsyncThunk() to handle API calls.
+
+1. reducers vs extraReducers
+reducers
+   |
+   |-- Defines actions inside the slice
+   |-- Automatically generates action creators
+
+extraReducers
+   |
+   |-- Handles actions defined outside the slice
+   |-- Does not generate action creators
+   |-- Commonly handles API loading, success and failure
+2. Example
+Suppose we are fetching users from an API.
+First, imagine we have an asynchronous action called fetchUsers, created using createAsyncThunk().
+
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchUsers = createAsyncThunk(
+  "users/fetchUsers",
+  async () => {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return response.json();
+  }
+);
+
+Now create the slice:
+
+const userSlice = createSlice({
+  name: "users",
+
+  initialState: {
+    users: [],
+    loading: false,
+    error: null
+  },
+
+  reducers: {},
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  }
+});
+
+export default userSlice.reducer;
+
+3. Understand builder.addCase()
+builder.addCase() tells Redux Toolkit which reducer function should run when a particular action is dispatched.
+
+builder.addCase(fetchUsers.fulfilled, (state, action) => {
+  state.users = action.payload;
+});
+
+Here:
+fetchUsers.fulfilled is the action being handled.
+
+state is the current slice state.
+action.payload contains the users returned by the API.
+
+4. Three API states
+pending
+API request started
+
+loading = true
+
+fulfilled
+API request succeeded
+users = action.payload
+
+rejected
+API request failed
+
+error = action.error.message
+
+5. Complete flow
+dispatch(fetchUsers())
+        |
+        v
+fetchUsers.pending
+        |
+        v
+loading = true
+        |
+        v
+     API Call
+        |
+   +----+----+
+   |         |
+ Success   Failure
+   |         |
+   v         v
+fulfilled  rejected
+   |         |
+   v         v
+Save users  Save error
+   |         |
+   +----+----+
+        |
+        v
+loading = false
+
+Remember: extraReducers is not limited to API calls. It can handle any action defined outside the slice.
+
+###
+createAsyncThunk() is used to handle asynchronous operations, such as fetching data from an API.
+
+It automatically generates three action types:
+
+pending   → API request started
+fulfilled → API request successful
+rejected  → API request failed
+
+1. Syntax
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
+export const fetchUsers = createAsyncThunk(
+  "users/fetchUsers",
+  async () => {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return await response.json();
+  }
+);
+
+Here, "users/fetchUsers" is the action type prefix. The asynchronous function performs the API request and returns the data.
+
+2. How to dispatch it
+Inside a React component:
+
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchUsers } from "./userSlice";
+
+function Users() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  return <h1>Users</h1>;
+}
+
+When dispatch(fetchUsers()) runs, Redux Toolkit automatically dispatches the appropriate lifecycle actions.
+
+3. Handling the result
+We use extraReducers to handle these actions.
+
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchUsers } from "./userThunks";
+
+const userSlice = createSlice({
+  name: "users",
+
+  initialState: {
+    users: [],
+    loading: false,
+    error: null
+  },
+
+  reducers: {},
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  }
+});
+
+export default userSlice.reducer;
+
+4. Passing parameters to createAsyncThunk()
+Suppose you want to fetch a specific user using their ID.
+
+export const fetchUserById = createAsyncThunk(
+  "users/fetchById",
+  async (userId) => {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user");
+    }
+
+    return response.json();
+  }
+);
+
+Dispatch it with an argument:
+dispatch(fetchUserById(5));
+Here, userId receives 5. When the request succeeds, the returned user becomes action.payload in the fulfilled reducer.
+
+5. Complete flow
+
+dispatch(fetchUsers())
+pending
+loading = true
+API request
+
+fulfilled
+Save API data in action.payload
+
+rejected
+Save error message
+
+Important: createAsyncThunk() performs the asynchronous operation and generates lifecycle actions.
+ extraReducers handles those actions to update the Redux state.
+
+
+
+###
+API Calls in Redux Toolkit
+Let's build a complete example that fetches users from an API and displays them in React.
+We will use createAsyncThunk(), createSlice(), configureStore(), useDispatch() and useSelector() together.
+
+1. Folder structure
+src/
+ ├── redux/
+ │    ├── store.js
+ │    └── userSlice.js
+ ├── App.jsx
+ └── main.jsx
+
+2. Create the API call — userSlice.js
+import {
+  createSlice,
+  createAsyncThunk
+} from "@reduxjs/toolkit";
+
+// API call
+export const fetchUsers = createAsyncThunk(
+  "users/fetchUsers",
+  async () => {
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch users");
+    }
+
+    return response.json();
+  }
+);
+
+// Slice
+const userSlice = createSlice({
+  name: "users",
+
+  initialState: {
+    users: [],
+    loading: false,
+    error: null
+  },
+
+  reducers: {},
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
+  }
+});
+export default userSlice.reducer;
+
+3. Create the store — store.js
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice";
+
+export const store = configureStore({
+  reducer: {
+    users: userReducer
+  }
+});
+
+The users key determines how we access this slice through useSelector().
+
+4. Connect Redux to React — main.jsx
+import React from "react";
+import { createRoot } from "react-dom/client";
+import { Provider } from "react-redux";
+
+import App from "./App";
+import { store } from "./redux/store";
+
+createRoot(document.getElementById("root")).render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
+5. Fetch and display users — App.jsx
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUsers } from "./redux/userSlice";
+
+function App() {
+  const dispatch = useDispatch();
+
+  const { users, loading, error } = useSelector(
+    (state) => state.users
+  );
+
+  useEffect(() => {
+    dispatch(fetchUsers());
+  }, [dispatch]);
+
+  if (loading) return <p>Loading...</p>;
+
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div>
+      <h1>Users</h1>
+
+      {users.map((user) => (
+        <p key={user.id}>{user.name}</p>
+      ))}
+    </div>
+  );
+}
+export default App;
+
+
+###
+Middleware in Redux Toolkit
+
+Middleware is a function that runs between dispatching an action and the reducer receiving it.
+
+It is commonly used for logging, asynchronous operations and error reporting.
+
+1. How middleware works
+React Component
+      |
+      v
+dispatch(action)
+      |
+      v
+  Middleware
+      |
+      v
+   Reducer
+      |
+      v
+ Redux Store
+      |
+      v
+ Updated State
+
+2. Example: Logging middleware
+Suppose you want to log every action dispatched in your application.
+
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log("Action:", action);
+  const result = next(action);
+  console.log("Updated State:", store.getState());
+  return result;
+};
+
+Understand the three parameters:
+store  → Access to dispatch() and getState()
+
+next   → Pass the action to the next middleware
+         or reducer
+
+action → The dispatched action
+
+next(action) is important because it allows the action to continue through Redux.
+
+3. Add middleware using configureStore()
+// store.js
+
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./counterSlice";
+
+const loggerMiddleware = (store) => (next) => (action) => {
+  console.log("Action:", action);
+  const result = next(action);
+  console.log("State:", store.getState());
+  return result;
+};
+
+export const store = configureStore({
+  reducer: {
+    counter: counterReducer
+  },
+
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(loggerMiddleware)
+});
+
+getDefaultMiddleware() keeps Redux Toolkit's default middleware, including Redux Thunk.
+
+.concat(loggerMiddleware) adds our custom middleware.
+
+4. What happens when you dispatch an action?
+dispatch(increment());
+
+Assume the initial count is 0.
+
+CONSOLE OUTPUT
+
+BEFORE REDUCER
+
+Action: {
+  type: "counter/increment"
+}
+
+AFTER REDUCER
+
+State: {
+  counter: {
+    count: 1
+  }
+}
+5. Redux Thunk middleware
+
+Redux Toolkit already includes Thunk middleware by default.
+It allows you to dispatch functions for asynchronous operations instead of only plain action objects.
+
+For example:
+dispatch(fetchUsers());
+
+When fetchUsers is created using createAsyncThunk(), Thunk middleware executes its asynchronous logic and dispatches its lifecycle actions.
+
+6. Important difference
+Reducer
+   |
+   |-- Updates Redux state
+   |-- Should not perform API calls
+   |-- Should not contain side effects
+
+Middleware
+   |
+   |-- Runs during action dispatch
+   |-- Can handle asynchronous operations
+   |-- Can log actions
+   |-- Can perform side effects
+
+Remember: Middleware intercepts actions during dispatch. Use next(action) to pass an action onward, and getDefaultMiddleware() when adding custom middleware so you retain Redux Toolkit's defaults.
+
+###
+18. Redux DevTools
+Redux DevTools is a browser extension used to debug Redux.
+
+It helps you:
+See dispatched actions.
+Check previous and updated state.
+Inspect action payloads.
+Track API actions (pending, fulfilled, rejected).
+Replay previous state changes.
+
+Example:
+dispatch(increment());
+
+DevTools shows:
+Action: counter/increment
+
+Previous State: { count: 0 }
+Next State:     { count: 1 }
+
+Setup: Redux Toolkit enables DevTools by default.
+
+const store = configureStore({
+  reducer: {
+    counter: counterReducer
+  }
+});
+
+Install the Redux DevTools browser extension and open the Redux tab in Developer Tools.
+
+---->
+location in React Router
+
+location tells us which URL the user is currently visiting.
+
+1. Simple example
+import { useLocation } from "react-router-dom";
+
+function Home() {
+  const location = useLocation();
+
+  console.log(location.pathname);
+
+  return <h1>Home Page</h1>;
+}
+
+If your browser URL is http://localhost:3000/dashboard, the output is:
+
+"/dashboard"
+
+If you navigate to /leads, it becomes:
+
+"/leads"
+
+2. What is location in <Routes>?
+const location = useLocation();
+
+return (
+  <Routes location={location}>
+    <Route path="/dashboard" element={<Dashboard />} />
+    <Route path="/leads" element={<Leads />} />
+  </Routes>
+);
+
+React Router uses the supplied location to decide which page to display.
+
+Example
+Browser URL: /leads
+
+<Routes location={location}>
+
+Rendered
+Leads Page
+
+3. The important part
+You can also pass a different location:
+
+<Routes location={{ pathname: "/dashboard" }}>
+  <Route path="/dashboard" element={<Dashboard />} />
+  <Route path="/leads" element={<Leads />} />
+</Routes>
+
+Even if your browser URL is /leads, React Router will display the Dashboard because you explicitly supplied /dashboard.
+
+Remember:
+useLocation() gets the current URL.
+
+location on <Routes> specifies which URL to match.
+
+If you omit it, <Routes> automatically uses the current URL.
+
+-->
+Ways to Get the Previous Page in React Router
+1. Using useLocation() with state
+Pass the previous page's URL when navigating.
+
+2. Using useRef() + useLocation()
+Automatically track the previous URL during navigation.
+
+3. Using sessionStorage
+Store the previous URL so it survives a page refresh within the same tab.
+
+4. Using React Context
+Track the previous URL globally so multiple components can access it.
+
+5. Using document.referrer
+
+Get the URL of the page that linked to the current document, when available.
+ It does not reliably track navigation within a React single-page application.
+
+ --->
+ 1. index — Default child route
+index means render this route when the parent URL is visited without any additional path.
+
+Example:
+
+<Route path="/insurance">
+  <Route index element={<Navigate to="dashboard" />} />
+  <Route path="dashboard" element={<Dashboard />} />
+</Route>
+
+When you visit /insurance, React Router automatically redirects you to /insurance/dashboard.
+
+2. replace — Replace browser history
+Normally, navigation adds a new entry to browser history.
+
+Without replace
+
+/insurance
+    ↓ redirect
+/insurance/dashboard
+    ↓ Back button
+/insurance
+    ↓ redirects again
+
+With replace
+
+/insurance
+    ↓ redirect 
+/insurance/dashboard
+    ↓ Back button
+Previous page
+ <routes index replace>
+
+ replace changes the URL and replaces the current entry in browser history. It does not automatically take you back.
+Example
+
+Suppose you navigate:
+
+/login → /insurance → /insurance/dashboard
+
+When /insurance redirects to /insurance/dashboard:
+
+Without replace
+Browser history
+
+/login
+/insurance
+/insurance/dashboard
+
+Pressing Back returns to /insurance, which redirects you again.
+
+With replace
+Browser history
+
+/login
+/insurance/dashboard
+
+Pressing Back returns directly to /login.
+
+--->
+<Navigate to=path/>
+
+this is component from react-route-dom for navigating.
+
+---->
+In Motion for React, AnimatePresence is used mainly for exit animations—when a component is removed from the React tree, Motion keeps it around long enough to play its exit animation.
+
+Think of it like:
+
+Normal React
+
+Page A
+  ↓
+removed immediately
+  ↓
+Page B
+
+
+With AnimatePresence
+
+Page A
+  ↓
+exit animation
+  ↓
+removed
+  ↓
+Page B enters
+
+Basic example
+import { AnimatePresence, motion } from "motion/react";
+
+<AnimatePresence>
+  {show && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      Hello
+    </motion.div>
+  )}
+</AnimatePresence>
+
+When show changes from true to false:
+
+show = true
+   ↓
+element exists
+
+show = false
+   ↓
+AnimatePresence detects removal
+   ↓
+exit={{ opacity: 0 }}
+   ↓
+animation finishes
+   ↓
+element removed
+
+The important requirement is that children have a unique key, because Motion uses the key to track which component entered or left.
+
+
+---->
+Use AbortController to cancel the previous API request whenever the user types a new search query.
+React example
+import { useEffect, useState } from "react";
+
+function Search() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+
+    const fetchResults = async () => {
+      try {
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`,
+          { signal: controller.signal }
+        );
+
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        if (error.name === "AbortError") {
+          return; // Previous request was cancelled
+        }
+
+        console.error("Search failed:", error);
+      }
+    };
+
+    fetchResults();
+
+    return () => {
+      controller.abort();
+    };
+  }, [query]);
+
+  return (
+    <div>
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+      />
+
+      {results.map((item) => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+    </div>
+  );
+}
+
+export default Search;
+
+How does it work?
+Suppose the user types r, re, and react quickly.
+1. r starts API request 1.
+2. re is typed, so React runs the previous effect's cleanup and aborts request 1.
+3. react is typed, so request 2 is aborted and request 3 starts.
+4. Only the latest request should update the results.
+Important concepts
+- AbortController creates a controller that can cancel a request.
+- signal: controller.signal connects the controller to fetch().
+- controller.abort() cancels the previous request.
+- useEffect cleanup runs before the effect executes again when query changes, and when the component unmounts.
+- AbortError is handled separately so normal cancellations aren't treated as errors.
+
+---->
+Debouncing delays an API call until the user stops typing for a specified time, such as 500 ms. It prevents unnecessary API requests on every keystroke.
+React example using useEffect
+import { useEffect, useState } from "react";
+
+function Search() {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    // Wait 500ms after the user stops typing
+    const timer = setTimeout(async () => {
+      if (!query.trim()) {
+        setResults([]);
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}`
+        );
+
+        const data = await response.json();
+        setResults(data);
+      } catch (error) {
+        console.error("Search failed:", error);
+      }
+    }, 500);
+
+    // Clear the previous timer when query changes
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  return (
+    <div>
+      <input
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search..."
+      />
+
+      {results.map((item) => (
+        <div key={item.id}>{item.name}</div>
+      ))}
+    </div>
+  );
+}
+
+export default Search;
+
+
+How does it work?

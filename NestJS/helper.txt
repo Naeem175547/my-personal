@@ -1,0 +1,392 @@
+// gateway/src/gateway.module.ts
+
+import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import { GatewayController } from './gateway.controller';
+import { GatewayService } from './gateway.service';
+
+@Module({
+  imports: [HttpModule],
+  controllers: [GatewayController],
+  providers: [GatewayService],
+})
+export class GatewayModule {}
+
+// gateway/src/gateway.controller.ts
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+} from '@nestjs/common';
+
+import { GatewayService } from './gateway.service';
+
+@Controller()
+export class GatewayController {
+  constructor(private readonly gatewayService: GatewayService) {}
+
+  @Get('users')
+  getUsers() {
+    return this.gatewayService.getUsers();
+  }
+
+  @Get('users/:id')
+  getUser(@Param('id') id: string) {
+    return this.gatewayService.getUser(id);
+  }
+
+  @Post('loans')
+  createLoan(@Body() body: any) {
+    return this.gatewayService.createLoan(body);
+  }
+}
+
+// gateway/src/gateway.service.ts
+
+import { Injectable } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+
+@Injectable()
+export class GatewayService {
+  constructor(private readonly http: HttpService) {}
+  async getUsers() {
+    const response = await firstValueFrom(
+      this.http.get('http://localhost:3001/users'),
+    );
+
+    return response.data;
+  }
+
+  async getUser(id: string) {
+    const response = await firstValueFrom(
+      this.http.get(`http://localhost:3001/users/${id}`),
+    );
+
+    return response.data;
+  }
+
+  async createLoan(body: any) {
+    const response = await firstValueFrom(
+      this.http.post('http://localhost:3002/loans', body),
+    );
+
+    return response.data;
+  }
+}
+
+so this way it will call diffretn services:
+                    ┌─────────────────┐
+                    │    FRONTEND     │
+                    └────────┬────────┘
+                             │
+                             │ :3000
+                             ▼
+                    ┌─────────────────┐
+                    │   API GATEWAY   │
+                    │                 │
+                    │ /users          │
+                    │ /loans          │
+                    └───────┬─────────┘
+                            │
+                 ┌──────────┴──────────┐
+                 │                     │
+                 │ :3001               │ :3002
+                 ▼                     ▼
+        ┌─────────────────┐   ┌─────────────────┐
+        │  USER SERVICE   │   │  LOAN SERVICE   │
+        │                 │   │                 │
+        │ GET /users      │   │ POST /loans     │
+        └─────────────────┘   └─────────────────┘
+
+Load Balancing
+
+// gateway/src/gateway.service.ts
+
+import {
+  Injectable,
+  ServiceUnavailableException,
+} from '@nestjs/common';
+
+import { HttpService } from '@nestjs/axios';
+import { firstValueFrom } from 'rxjs';
+
+@Injectable()
+export class GatewayService {
+  private userServers = [
+    'http://localhost:3001',
+    'http://localhost:3003',
+    'http://localhost:3004',
+  ];
+
+  private currentServer = 0;
+
+  constructor(
+    private readonly http: HttpService,
+  ) {}
+
+  // Round-robin load balancing
+  private getUserServer(): string {
+    const server =
+      this.userServers[this.currentServer];
+
+    this.currentServer =
+      (this.currentServer + 1) %
+      this.userServers.length;
+
+    return server;
+  }
+
+  async getUsers() {
+    const server = this.getUserServer();
+
+    try {
+      const response = await firstValueFrom(
+        this.http.get(`${server}/users`),
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        'User service unavailable',
+      );
+    }
+  }
+
+  async getUser(id: string) {
+    const server = this.getUserServer();
+
+    try {
+      const response = await firstValueFrom(
+        this.http.get(`${server}/users/${id}`),
+      );
+
+      return response.data;
+    } catch (error) {
+      throw new ServiceUnavailableException(
+        'User service unavailable',
+      );
+    }
+  }
+}
+
+here we call same service at diffrent port by using seprate terminal:
+that way docker is very import :
+using docker we can call multiple instance of services with manually changin terminal.
+
+Reverse proxy:
+A reverse proxy mainly receives requests and forwards them to backend servers.
+
+API Gateway
+
+An API Gateway is more application-aware. It can handle:
+
+Client
+   ↓
+API Gateway
+   ├── Authentication
+   ├── Authorization
+   ├── Rate limiting
+   ├── Request validation
+   ├── Routing
+   ├── Logging
+   └── Backend calls
+          ↓
+    Microservices
+
+  Reverse Proxy = "Where should I forward this request?"
+API Gateway  = "Where should I forward it AND what should I do
+                with this request before/after forwarding?"
+
+Internet
+   ↓
+Nginx / Load Balancer
+   ↓
+API Gateway
+   ↓
+┌────────────┬────────────┬────────────┐
+User Service Loan Service Payment Service
+
+---->
+
+Remember this simple definition
+GraphQL Fragment = a reusable group of fields.
+
+And remember this syntax:
+
+fragment NAME on GraphQLTYPE {
+  fields
+}
+
+Use it with:
+
+...NAME
+
+So your code:
+fragment ReportingPeriodFields on ReportingOverviewPeriod {
+   id name username
+}
+
+means:
+Create a reusable group of ReportingOverviewPeriod fields called ReportingPeriodFields.
+
+And:
+...ReportingPeriodFields
+means:
+
+Use that group of fields here.
+Next, the important thing to learn is why on ReportingOverviewPeriod is required and where ReportingOverviewPeriod actually comes from in your backend/schema. That will make your current code much easier to understand.
+
+--->
+Arrya.from(arrayLike,mapping fun)
+Array.from({ length: 5 }, (value, index) => index)
+Array.from(map.entries())it will create array of from map.entries();
+ so first parameter is not for defining length. 
+ first parameter define length as well as value at every positions.
+Array.from(map.entries()).map()
+
+What is an array-like object?
+
+An object that has a numeric length property:
+{
+  length: 5
+}
+
+It is not actually an array, but Array.from() knows:
+
+"This object says it has 5 elements, so I'll create 5 positions."
+
+For example:
+Array.from({ length: 3 })
+
+gives:
+[undefined, undefined, undefined]
+
+Then the callback:
+
+Array.from(
+  { length: 3 },
+  (value, index) => index
+)
+
+gives:
+[0, 1, 2]
+
+but if:
+Array.from({
+  0: "A",
+  1: "B",
+  2: "C",
+  length: 3
+})
+
+Result:
+["A", "B", "C"]
+
+here: 0 1 2 index
+--->
+So remember:
+{ length: 5 }
+     ↑
+array-like object
+
+length
+  ↑
+just a property
+
+And that's why you cannot do:
+
+Array.from(length, ...)
+
+unless length is itself some variable containing an appropriate iterable/array-like value.
+
+-->
+use this structure mostly
+┌─────────────────────────────┐
+│ Queue / Background Task     │ → RabbitMQ / BullMQ
+├─────────────────────────────┤
+│ Cache                       │ → Redis
+├─────────────────────────────┤
+│Real-time browser updates/com│ → WebSocket
+├─────────────────────────────┤
+│Service-to-service events/com  → RabbitMQ / Kafka, etc.
+└─────────────────────────────┘
+
+queue/redis can handle event alos
+
+--->
+_ is the variable/name used for the Lodash library.
+
+For example:
+
+import _ from "lodash";
+
+Then:
+
+_.findKey(arr,callback)
+
+means:
+Call the findKey function from the Lodash library.
+
+Other examples:
+
+_.find()
+_.filter()
+_.map()
+_.isEmpty()
+_.findKey()
+
+So remember:
+
+_       → Lodash
+_.findKey() → Lodash's findKey function
+
+It is not a special JavaScript symbol. It's just the variable name chosen when importing Lodash.
+
+
+--->
+grid-column: 1 / -1;
+--->
+private async signKnowledgeBankFile(fileUrl: string, context: any) {
+        const url = await this.downloadCenterService.getSignedUrl(fileUrl, context).catch(() => null);
+        if (!url || url === fileUrl) return null;
+        return { url, expiry: new Date(Date.now() + SIGNED_URL_EXPIRY_DAYS * 60 * 60 * 1000) };
+    }
+
+    private async getKnowledgeBankSignedUrl(id: number, fileUrl: string, signedUrl: string, expiry: any, columns: string[], context: any) {
+        if (!fileUrl) return null;
+        if (signedUrl && new Date(expiry).getTime() - 60 * 60 * 1000 > Date.now()) return signedUrl;
+
+        const signed = await this.signKnowledgeBankFile(fileUrl, context);
+        if (!signed) return fileUrl;
+        await this.knowledgeBankVideoRepository.query(
+            `UPDATE finex_knowledge_bank_video SET ${columns[0]} = ?, ${columns[1]} = ? WHERE id = ?`,
+            [signed.url, signed.expiry, id],
+        );
+        return signed.url;
+    }
+
+
+    --->
+  const video = document.createElement("video");
+video.src = URL.createObjectURL(file);
+video.onloadedmetadata = () => setDuration(Math.round(video.duration));
+
+
+Explanation (short):
+1. document.createElement("video") — Creates a video element in memory; it isn't added to the page.
+2. URL.createObjectURL(file) — Creates a temporary URL to access the selected video file.
+3. video.onloadedmetadata — Runs when the browser loads the video's metadata, such as duration and dimensions.
+4. video.duration — Gets the video duration in seconds.
+5. Math.round(video.duration) — Rounds the duration to the nearest whole second.
+6. setDuration(...) — Updates the React state with the duration.
+
+-->
+.td-options {
+  display: grid;
+  grid-auto-flow:row;
+  grid-auto-columns: 1fr;
+  gap: 12px;
+}

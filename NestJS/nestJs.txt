@@ -9348,7 +9348,6 @@ FOR YOUR CASE
 Since your NestJS application actually uses it at runtime:
 npm install @nestjs/microservices
 ✅ Put it in "dependencies"
-<<<<<<< HEAD
 
 
 -->
@@ -9557,8 +9556,345 @@ ValidationPipe
 └── transform
        → convert input to DTO types
        
-=======
+
+------>
+When you bootstrap a Nest app on the default Express platform, 
+express.json() and express.urlencoded() are applied automatically under the hood:
+
+ts
+// main.ts
+const app = await NestFactory.create(AppModule);
+await app.listen(3000);
+
+You don't need to manually add app.use(express.json()) — it's already wired in. 
+That's why @Body() in your controllers just works out of the box.
+
+When you do need to touch it manually
+1. Increasing the payload size limit
+ts
+import * as express from "express";
+
+const app = await NestFactory.create(AppModule);
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+
+2. You need the raw body (e.g. verifying a Stripe/webhook signature, 
+which requires the unparsed buffer)
+
+Disable Nest's automatic parser, then apply your own selectively:
+ts
+const app = await NestFactory.create(AppModule, { bodyParser: false });
+
+app.use(express.json({
+  verify: (req: any, res, buf) => { req.rawBody = buf; }
+}));
+app.use(express.urlencoded({ extended: true }));
+
+Then in the controller:
+
+ts
+@Post("webhook")
+handleWebhook(@Req() req: RawBodyRequest<Request>) {
+  const signature = req.headers["stripe-signature"];
+  // use req.rawBody here
+}
+
+3. You're on Fastify instead of Express
+
+The adapter matters — body parsing is built into Fastify core, 
+so express.json()/urlencoded() don't apply there at all;
+ Fastify handles JSON parsing natively and you'd add @fastify/formbody for urlencoded 
+ support if needed.
+
+Which of these matches what you're trying to do 
+— increasing a size limit, capturing,a raw body for webhook verification, or something else? That'll tell me exactly where to point you.
+until not needed , no need to use it
 --->
+const shouldFilterByBankUser =
+  Array.isArray(user?.role_id) &&
+  user.role_id.includes(156) &&
+  !!bankerUserId;
+
+!!bankerUserId:
+if truty value then it return true
+
+if falsy value it return false
+
+in js && AND || return real comparing value
+---->
+Promise.all([p1, p2, p3])
+// wait for ALL → [result1, result2, result3]
+
+Promise.any([p1, p2, p3])
+// first SUCCESS → result
+
+Promise.race([p1, p2, p3])
+// first FINISHED (success OR failure) → result/error
+| Method           | What it does                                                      |
+| ---------------- | ----------------------------------------------------------------- |
+| `Promise.all()`  | **All must succeed**; rejects if **any one fails**                |
+| `Promise.any()`  | Returns when **first one succeeds**; rejects only if **all fail** |
+| `Promise.race()` | Returnss with the **first promise to finish/(reject/success)*              |
+----->
+| Process method/property     | What it does                                                | Example                                                    | What happens                                 |
+| --------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------- |
+| **`process.on()`**          | Listens for a process event/signal                          | `process.on('SIGTERM', () => console.log('Stopping...'));` | Runs the callback when `SIGTERM` is received |
+| **`process.exit()`**        | Immediately terminates the Node.js process                  | `process.exit(1);`                                         | Process stops with exit code `1`             |
+| **`process.exitCode`**      | Sets the exit code without immediately stopping the process | `process.exitCode = 1;`                                    | Process eventually exits with code `1`       |
+| **`process.env`**           | Reads environment variables                                 | `console.log(process.env.NODE_ENV);`                       | Could print `production`                     |
+| **`process.pid`**           | Gets current Node.js process ID                             | `console.log(process.pid);`                                | Example: `4521`                              |
+| **`process.cwd()`**         | Gets current working directory                              | `console.log(process.cwd());`                              | Example: `/home/user/my-app`                 |
+| **`process.memoryUsage()`** | Shows Node.js memory usage                                  | `console.log(process.memoryUsage());`                      | Returns `heapUsed`, `rss`, etc.              |
+| **`process.cpuUsage()`**    | Shows CPU usage of the process                              | `console.log(process.cpuUsage());`                         | Returns CPU usage in microseconds            |
+| **`process.uptime()`**      | Shows how long process has been running                     | `console.log(process.uptime());`                           | Example: `125.42` seconds                    |
+| **`process.argv`**          | Gets command-line arguments                                 | `console.log(process.argv[2]);`                            | `node app.js hello` → `hello`                |
+| **`process.nextTick()`**    | Schedules a callback for the next tick                      | `process.nextTick(() => console.log('B'));`                | Callback runs after current operation        |
+
+rocess.on() in Node.js/nestjs — Notes
+process.on() is used to listen for events emitted by the Node.js process.
+Basic syntax:
+process.on('eventName', () => {
+  // handle event
+});
+
+Think:
+
+Node.js Process
+      │
+      ├── emits event
+      │
+      ↓
+process.on(...)
+      │
+      ↓
+your handler runs
+
+1. SIGINT
+process.on('SIGINT', () => {
+  console.log('Received SIGINT');
+});
+
+Usually happens when you press:
+Ctrl + C
+
+Used for graceful shutdown.
+
+2. SIGTERM
+process.on('SIGTERM', () => {
+  console.log('Received SIGTERM');
+});
+
+This is very important in production.
+A process manager, Docker, Kubernetes, or server may send SIGTERM to tell your application:
+"Please shut down gracefully."
+
+For example:
+
+Server
+   ↓
+SIGTERM
+   ↓
+Node.js
+   ↓
+process.on('SIGTERM')
+   ↓
+close DB / RabbitMQ / Redis
+   ↓
+exit
+
+3. SIGKILL
+SIGKILL
+You cannot handle/catch SIGKILL.
+For example:
+kill -9 <pid>
+The OS immediately kills the process.
+
+So this doesn't help:
+
+process.on('SIGKILL', () => {
+  // won't work
+});
+
+4. SIGUSR1 / SIGUSR2
+These are user-defined signals.
+
+process.on('SIGUSR2', () => {
+  console.log('SIGUSR2 received');
+});
+
+Applications/tools can use them for custom behavior.
+
+5. uncaughtException
+process.on('uncaughtException', (error) => {
+  console.error(error);
+});
+
+Triggered when an exception escapes without being caught.
+
+Example:
+throw new Error('Something went wrong');
+
+Important: Don't treat this as a normal recovery mechanism. After an uncaught exception,
+ the process may be in an unsafe state. Usually you should log it, perform minimal cleanup, and restart.
+
+6. unhandledRejection
+process.on('unhandledRejection', (reason) => {
+  console.error(reason);
+});
+
+Related to a Promise rejection that has no handler.
+Promise.reject(new Error('DB failed'));
+
+| Signal/event         | Meaning                          | Can handle? |
+| -------------------- | -------------------------------- | ----------- |
+| `SIGINT`             | User pressed Ctrl+C              | ✅           |
+| `SIGTERM`            | Request graceful shutdown        | ✅           |
+| `SIGKILL`            | Force kill immediately           | ❌           |
+| `SIGUSR1`            | User-defined signal              | ✅           |
+| `SIGUSR2`            | User-defined signal              | ✅           |
+| `uncaughtException`  | Unexpected synchronous exception | ✅           |
+| `unhandledRejection` | Promise rejection wasn't handled | ✅           |
+
+Most important for backend development
+Remember these first:
+
+process.on('SIGTERM', gracefulShutdown);
+process.on('SIGINT', gracefulShutdown);
+
+For example:
+
+async function gracefulShutdown() {
+  console.log('Shutting down...');
+
+  await database.close();
+  await rabbitMQ.close();
+  await redis.quit();
+
+  process.exit(0);
+}
+
+The reason this matters in production is that you don't want this:
+
+SIGTERM
+  ↓
+process immediately dies
+  ↓
+unfinished request
+unfinished RabbitMQ job
+open DB connection
+data/state may not be cleaned up
+
+Instead:
+
+SIGTERM
+  ↓
+stop accepting new work
+  ↓
+finish/cleanup current work
+  ↓
+close DB/Redis/RabbitMQ
+  ↓
+process.exit(0)
+
+One-line interview answer:
+
+process.on() allows a Node.js application to listen for process-level events and signals, especially to implement graceful shutdown and handle unexpected process errors.
+
+--->
+|              | `localStorage`               | `sessionStorage`                               |
+| ------------ | ---------------------------- | ---------------------------------------------- |
+| Lifetime     | Stays until manually cleared | Stays only for the current browser tab/session |
+| Closing tab  | ❌ Data remains               | ✅ Data is removed                              |
+| Refresh page | ✅ Remains                    | ✅ Remains                                      |
+| Storage      | Browser                      | Browser                                        |
+| API          | Same                         | Same                                           |
+| Typical use  | Preferences, persistent data | Temporary tab-specific data                    |
+ 
+ operatons are same;
+
+ ---->
+sendGrid mail service
+
+import * as sgMail from '@sendgrid/mail';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+await sgMail.send({
+  to: 'user@example.com',
+  from: 'no-reply@yourcompany.com',
+  subject: 'Welcome',
+  text: 'Welcome to our application',
+  html: '<h1>Welcome to our application</h1>',
+});
+
+The important part is:
+sgMail.send(...)
+
+That sends the email.
+The API key comes from your SendGrid account/dashboard.
+
+Where to get it
+Log in to SendGrid
+Go to Settings → API Keys
+Click Create API Key
+Give it a name, e.g. my-nestjs-app
+Give it Mail Send permission (prefer restricted access rather than unnecessary full access)
+Create the key and copy it immediately — SendGrid doesn't show the full key again.
 
 
->>>>>>> b61a8481 (notes)
+note->
+similar to Nodemailer, but the setup is different.
+
+Nodemailer
+You usually provide an SMTP account:
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  auth: {
+    user: 'your@email.com',
+    pass: 'password/app-password'
+  }
+});
+
+Then:
+
+await transporter.sendMail({
+  from: 'abc@company.com',
+  to: 'user@gmail.com',
+  subject: 'Welcome',
+  text: 'Hello Naeem',              // plain text
+  html: '<h1>Hello Naeem</h1>',     // HTML
+});
+
+SendGrid
+
+Instead of configuring Gmail/SMTP credentials, you use a SendGrid API key:
+SendGrid account
+Verify a sender/domain
+Create an API Key
+Put the API key in your NestJS .env
+Use sgMail.send()
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+await sgMail.send({
+  to: 'user@example.com',
+  from: 'no-reply@yourcompany.com',
+  subject: 'Welcome',
+  html: '<h1>Welcome</h1>',
+});
+
+---->
+| Requirement      | Use                            |
+| ---------------- | ------------------------------ |
+| OTP via email    | Nodemailer / SendGrid          |
+| OTP via SMS      | SMS provider                   |
+| OTP via WhatsApp | WhatsApp Business/API provider |
+
+
+--->@Field()
+    @IsUrl({require_protocol:true})
+    link:string
+
+
